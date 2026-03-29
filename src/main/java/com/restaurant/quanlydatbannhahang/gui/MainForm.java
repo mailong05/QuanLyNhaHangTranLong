@@ -8,10 +8,12 @@ import java.awt.event.MouseEvent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import com.restaurant.quanlydatbannhahang.entity.TaiKhoan;
 
 public class MainForm extends javax.swing.JFrame {
 
     private String userRole;
+    private TaiKhoan taiKhoan = null; // Lưu object TaiKhoan
     private JPanel activePanel = null;
     private JLabel activeSubLabel = null;
 
@@ -26,8 +28,30 @@ public class MainForm extends javax.swing.JFrame {
 
     public MainForm(String role) {
         this.userRole = (role != null) ? role : "Quản lý";
-        initComponents();
-        initCustomComponents();
+        this.taiKhoan = null;
+        try {
+            initComponents();
+            initCustomComponents();
+        } catch (Exception e) {
+            System.out.println("❌ MainForm: Lỗi " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Lỗi khởi tạo MainForm", e);
+        }
+    }
+
+    public MainForm(TaiKhoan taiKhoan) {
+        this.taiKhoan = taiKhoan; // Set TaiKhoan TRƯỚC
+        this.userRole = (taiKhoan != null && taiKhoan.getNhanVien() != null)
+                ? taiKhoan.getNhanVien().getChucVu()
+                : "Quản lý";
+        try {
+            initComponents();
+            initCustomComponents();
+        } catch (Exception e) {
+            System.out.println("❌ MainForm: Lỗi " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Lỗi khởi tạo MainForm", e);
+        }
     }
 
     public MainForm() {
@@ -35,6 +59,9 @@ public class MainForm extends javax.swing.JFrame {
     }
 
     private void initCustomComponents() {
+        // 0. Fix missing images
+        replaceImagesWithCorrectPaths();
+
         // 1. Cấu hình cửa sổ
         this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         this.setLocationRelativeTo(null);
@@ -58,6 +85,72 @@ public class MainForm extends javax.swing.JFrame {
         showPanel(pnlTrangChu); // Đưa trang chủ vào panelBody
     }
 
+    // Helper method to load images safely
+    private javax.swing.ImageIcon loadImageOrNull(String resourcePath) {
+        try {
+            java.net.URL imageUrl = getClass().getResource(resourcePath);
+            if (imageUrl != null) {
+                return new javax.swing.ImageIcon(imageUrl);
+            } else {
+                System.out.println("⚠ Image không tìm thấy: " + resourcePath);
+                return null;
+            }
+        } catch (Exception e) {
+            System.out.println("⚠ Lỗi load image " + resourcePath + ": " + e.getMessage());
+            return null;
+        }
+    }
+
+    // Method to replace images with actual files
+    private void replaceImagesWithCorrectPaths() {
+        try {
+            // Map old paths to new paths
+            javax.swing.ImageIcon homeIcon = loadImageOrNull("/images/icon_trangchu.png");
+            if (homeIcon != null && jLabel1 != null) {
+                jLabel1.setIcon(homeIcon);
+            }
+
+            javax.swing.ImageIcon tableIcon = loadImageOrNull("/images/icon_datban.png");
+            if (tableIcon != null && jLabel3 != null) {
+                jLabel3.setIcon(tableIcon);
+            }
+
+            javax.swing.ImageIcon userIcon = loadImageOrNull("/images/logo-user.png");
+            if (userIcon != null && jLabel4 != null) {
+                jLabel4.setIcon(userIcon);
+            }
+
+            javax.swing.ImageIcon billIcon = loadImageOrNull("/images/icon_hoadon.png");
+            if (billIcon != null && jLabel10 != null) {
+                jLabel10.setIcon(billIcon);
+            }
+
+            javax.swing.ImageIcon settingsIcon = loadImageOrNull("/images/icon_quanly.png");
+            if (settingsIcon != null && jLabel11 != null) {
+                jLabel11.setIcon(settingsIcon);
+            }
+
+            javax.swing.ImageIcon chartIcon = loadImageOrNull("/images/logo-chart.png");
+            if (chartIcon != null && jLabel12 != null) {
+                jLabel12.setIcon(chartIcon);
+            }
+
+            javax.swing.ImageIcon logoutIcon = loadImageOrNull("/images/logo-logout.png");
+            if (logoutIcon != null && jLabel14 != null) {
+                jLabel14.setIcon(logoutIcon);
+            }
+
+            javax.swing.ImageIcon accountIcon = loadImageOrNull("/images/logo-user.png");
+            if (accountIcon != null && jLabel18 != null) {
+                jLabel18.setIcon(accountIcon);
+            }
+
+            System.out.println("✓ Đã load xong các image");
+        } catch (Exception e) {
+            System.out.println("⚠ Lỗi load image: " + e.getMessage());
+        }
+    }
+
     // Hàm này dùng để nạp các trang con vào vùng trống panelBody
     private void showPanel(JPanel panel) {
         panelBody.removeAll();
@@ -77,8 +170,17 @@ public class MainForm extends javax.swing.JFrame {
     }
 
     private void phanQuyenGiaoDien() {
-        jLabel17.setText("Nguyễn Đức Trí");
-        jLabel19.setText(userRole);
+        // Lấy tên nhân viên từ TaiKhoan object
+        String tenNhanVien = "Nhân viên";
+        String chucVu = userRole;
+
+        if (taiKhoan != null && taiKhoan.getNhanVien() != null) {
+            tenNhanVien = taiKhoan.getNhanVien().getHoTen();
+            chucVu = taiKhoan.getNhanVien().getChucVu();
+        }
+
+        jLabel17.setText(tenNhanVien);
+        jLabel19.setText(chucVu);
 
         if ("Nhân viên".equals(userRole)) {
             panelQuanLy.setVisible(false);
@@ -162,8 +264,11 @@ public class MainForm extends javax.swing.JFrame {
                         "Bạn có chắc chắn muốn đăng xuất?", "Xác nhận",
                         JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (opt == JOptionPane.YES_OPTION) {
-                    dispose();
-                    // new LoginForm().setVisible(true);
+                    // Quay lại LoginForm thay vì thoát
+                    LoginForm loginForm = new LoginForm();
+                    loginForm.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+                    loginForm.setVisible(true);
+                    dispose(); // Đóng MainForm
                 }
             }
 
@@ -308,8 +413,10 @@ public class MainForm extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/images/home_app_logo_25dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png"))); // NOI18N
+        // Image loading will be handled in replaceImagesWithCorrectPaths()
+        // jLabel1.setIcon(new
+        // javax.swing.ImageIcon(getClass().getResource("/images/home_app_logo_25dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png")));
+        // // NOI18N
         jLabel1.setText("Trang chủ");
         panelTrangChu.add(jLabel1);
 
@@ -327,7 +434,10 @@ public class MainForm extends javax.swing.JFrame {
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icon_datban.png"))); // NOI18N
+        // Image loading will be handled in replaceImagesWithCorrectPaths()
+        // jLabel3.setIcon(new
+        // javax.swing.ImageIcon(getClass().getResource("/images/icon_datban.png"))); //
+        // NOI18N
         jLabel3.setText("Đặt bàn");
         panelDatBan.add(jLabel3);
 
@@ -345,8 +455,10 @@ public class MainForm extends javax.swing.JFrame {
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/images/group_25dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png"))); // NOI18N
+        // Image loading will be handled in replaceImagesWithCorrectPaths()
+        // jLabel4.setIcon(new
+        // javax.swing.ImageIcon(getClass().getResource("/images/group_25dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png")));
+        // // NOI18N
         jLabel4.setText("Khách hàng");
         panelKhachHang.add(jLabel4);
 
@@ -363,8 +475,10 @@ public class MainForm extends javax.swing.JFrame {
 
         jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel10.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/images/receipt_long_25dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png"))); // NOI18N
+        // Image loading will be handled in replaceImagesWithCorrectPaths()
+        // jLabel10.setIcon(new
+        // javax.swing.ImageIcon(getClass().getResource("/images/receipt_long_25dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png")));
+        // // NOI18N
         jLabel10.setText("Hóa đơn");
         panelHoaDon.add(jLabel10);
 
@@ -381,8 +495,10 @@ public class MainForm extends javax.swing.JFrame {
 
         jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel11.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/images/settings_25dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png"))); // NOI18N
+        // Image loading will be handled in replaceImagesWithCorrectPaths()
+        // jLabel11.setIcon(new
+        // javax.swing.ImageIcon(getClass().getResource("/images/settings_25dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png")));
+        // // NOI18N
         jLabel11.setText("Quản lý");
         panelQuanLy.add(jLabel11);
 
@@ -451,8 +567,10 @@ public class MainForm extends javax.swing.JFrame {
 
         jLabel12.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel12.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/images/finance_25dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png"))); // NOI18N
+        // Image loading will be handled in replaceImagesWithCorrectPaths()
+        // jLabel12.setIcon(new
+        // javax.swing.ImageIcon(getClass().getResource("/images/finance_25dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png")));
+        // // NOI18N
         jLabel12.setText("Thống kê");
         panelThongKe.add(jLabel12);
 
@@ -468,8 +586,10 @@ public class MainForm extends javax.swing.JFrame {
 
         jLabel14.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel14.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel14.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/images/logout_25dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png"))); // NOI18N
+        // Image loading will be handled in replaceImagesWithCorrectPaths()
+        // jLabel14.setIcon(new
+        // javax.swing.ImageIcon(getClass().getResource("/images/logout_25dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png")));
+        // // NOI18N
         jLabel14.setText("Đăng xuất");
         panelDangXuat.add(jLabel14);
 
@@ -480,20 +600,24 @@ public class MainForm extends javax.swing.JFrame {
         panelMainContent.setLayout(new java.awt.BorderLayout());
 
         panelHeader.setBackground(new java.awt.Color(255, 255, 255));
-        panelHeader.setPreferredSize(new java.awt.Dimension(909, 60));
+        panelHeader.setPreferredSize(new java.awt.Dimension(909, 90));
 
         jLabel13.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel13.setText("TRANG CHỦ");
 
         jPanel5.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel5.setPreferredSize(new java.awt.Dimension(200, 60));
 
         jLabel18.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel18.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/images/account_circle_40dp_000000_FILL0_wght400_GRAD0_opsz40.png"))); // NOI18N
+        // Image loading will be handled in replaceImagesWithCorrectPaths()
+        // jLabel18.setIcon(new
+        // javax.swing.ImageIcon(getClass().getResource("/images/account_circle_40dp_000000_FILL0_wght400_GRAD0_opsz40.png")));
+        // // NOI18N
 
         jLabel17.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel17.setText("Nguyễn Văn A");
 
+        jLabel19.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
         jLabel19.setText("Nhân viên quản lý");
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
@@ -512,13 +636,15 @@ public class MainForm extends javax.swing.JFrame {
         jPanel5Layout.setVerticalGroup(
                 jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(jPanel5Layout.createSequentialGroup()
-                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(jLabel19)
-                                        .addGroup(jPanel5Layout
-                                                .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addContainerGap()
+                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 40,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(jPanel5Layout.createSequentialGroup()
                                                 .addComponent(jLabel17)
-                                                .addComponent(jLabel18)))
-                                .addGap(0, 8, Short.MAX_VALUE)));
+                                                .addGap(0, 0, 0)
+                                                .addComponent(jLabel19)))
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
         javax.swing.GroupLayout panelHeaderLayout = new javax.swing.GroupLayout(panelHeader);
         panelHeader.setLayout(panelHeaderLayout);

@@ -1,6 +1,5 @@
 package com.restaurant.quanlydatbannhahang.service;
 
-<<<<<<< Updated upstream
 import com.restaurant.quanlydatbannhahang.dao.TaiKhoanDAO;
 import com.restaurant.quanlydatbannhahang.entity.TaiKhoan;
 
@@ -61,9 +60,5 @@ public class AuthService {
     public TaiKhoan getTaiKhoanByUsername(String username) {
         return taiKhoanDAO.findByUsername(username);
     }
-=======
-
-public class AuthService {
-    
->>>>>>> Stashed changes
 }
+

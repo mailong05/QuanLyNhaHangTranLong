@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 
 package com.restaurant.quanlydatbannhahang.gui;
 
@@ -107,15 +106,5 @@ public class CtrlLoginForm {
      */
     public TaiKhoan getCurrentUser() {
         return currentUser;
-=======
-package com.restaurant.quanlydatbannhahang.gui;
-
-import com.restaurant.quanlydatbannhahang.service.AuthService;
-
-public class CtrlLoginForm {
-
-    public CtrlLoginForm(AuthService authService) {
-        // authService can be used for authentication operations
->>>>>>> Stashed changes
     }
 }

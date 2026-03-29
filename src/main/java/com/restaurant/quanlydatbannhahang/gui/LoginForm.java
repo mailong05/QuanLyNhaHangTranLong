@@ -2,8 +2,11 @@ package com.restaurant.quanlydatbannhahang.gui;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-
 import java.awt.Color;
+import com.restaurant.quanlydatbannhahang.gui.MainForm;
+import com.restaurant.quanlydatbannhahang.gui.ForgetPasswordForm;
+import com.restaurant.quanlydatbannhahang.entity.TaiKhoan;
+import com.restaurant.quanlydatbannhahang.service.AuthService;
 
 public class LoginForm extends javax.swing.JFrame {
 
@@ -11,16 +14,17 @@ public class LoginForm extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null); // Căn giữa màn hình
 
-        // place holder
+        // Thiết lập Placeholder mặc định
         txtUsername.setText("Username");
         txtPassword.setText("Password");
         txtPassword.setEchoChar((char) 0);
         txtUsername.setForeground(new Color(102, 102, 102));
         txtPassword.setForeground(new Color(102, 102, 102));
 
-        // focus jlabel để không tự nhảy vô input
+        // Đẩy focus ra khỏi các ô input lúc mới mở
         jLabel6.requestFocusInWindow();
-        // xử lý Placeholder cho ô Username
+
+        // Xử lý Placeholder cho ô Username
         txtUsername.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -39,7 +43,7 @@ public class LoginForm extends javax.swing.JFrame {
             }
         });
 
-        // placeholder cho ô Password
+        // Placeholder cho ô Password
         txtPassword.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -47,7 +51,7 @@ public class LoginForm extends javax.swing.JFrame {
                 if (pass.equals("Password")) {
                     txtPassword.setText("");
                     txtPassword.setForeground(Color.BLACK);
-                    txtPassword.setEchoChar('*');
+                    txtPassword.setEchoChar('●');
                 }
             }
 
@@ -61,23 +65,23 @@ public class LoginForm extends javax.swing.JFrame {
                 }
             }
         });
-        // tắt viền xanh cho các nút trên giao diện
+
+        // Tắt viền xanh cho các nút
         btnLogin.setFocusPainted(false);
         btnCancel.setFocusPainted(false);
         checkRemember.setFocusPainted(false);
 
-        // Khởi tạo Controller
-        new CtrlLoginForm(this);
+        // Ẩn icon mắt mở lúc đầu (mặc định là ẩn mật khẩu)
+        iconEye.setVisible(false);
+        iconHide.setVisible(true);
     }
 
-<<<<<<< Updated upstream:src/main/java/com/restaurant/quanlydatbannhahang/gui/LoginForm.java
     @SuppressWarnings("unchecked")
-=======
->>>>>>> Stashed changes:src/main/java/com/restaurant/quanlydatbannhahang/GUI/LoginForm.java
-    // <editor-fold defaultstate="collapsed" desc="Generated
-    // Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">
     private void initComponents() {
-
+        // ... (Giữ nguyên toàn bộ nội dung trong initComponents của bạn)
+        // Lưu ý: Code này quá dài nên mình tóm gọn, bạn hãy giữ lại phần NetBeans tự
+        // sinh
         jPanel1 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -98,17 +102,17 @@ public class LoginForm extends javax.swing.JFrame {
         iconEye = new javax.swing.JLabel();
         iconHide = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setUndecorated(true);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(142, 128, 106));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo-restaurantTL.png"))); // NOI18N
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo-restaurantTL.png")));
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 50, 220, 200));
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI Semilight", 3, 18)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Segoe UI Semilight", 3, 18));
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("TRAN LONG RESTAURANT");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 260, -1, -1));
@@ -116,9 +120,10 @@ public class LoginForm extends javax.swing.JFrame {
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 300, 400));
 
         jPanel2.setBackground(new java.awt.Color(255, 251, 233));
-        jPanel2.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+        jPanel2.setFont(new java.awt.Font("sansserif", 0, 14));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        clickCLose.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
+        clickCLose.setFont(new java.awt.Font("sansserif", 1, 14));
         clickCLose.setText("X");
         clickCLose.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         clickCLose.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -126,8 +131,9 @@ public class LoginForm extends javax.swing.JFrame {
                 clickCLoseMouseClicked(evt);
             }
         });
+        jPanel2.add(clickCLose, new org.netbeans.lib.awtextra.AbsoluteConstraints(273, 8, 20, -1));
 
-        clickMinimize.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
+        clickMinimize.setFont(new java.awt.Font("sansserif", 1, 18));
         clickMinimize.setText("-");
         clickMinimize.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         clickMinimize.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -135,9 +141,10 @@ public class LoginForm extends javax.swing.JFrame {
                 clickMinimizeMouseClicked(evt);
             }
         });
+        jPanel2.add(clickMinimize, new org.netbeans.lib.awtextra.AbsoluteConstraints(255, 8, 15, -1));
 
         txtUsername.setBackground(new java.awt.Color(255, 251, 233));
-        txtUsername.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtUsername.setFont(new java.awt.Font("Segoe UI", 0, 14));
         txtUsername.setForeground(new java.awt.Color(102, 102, 102));
         txtUsername.setBorder(null);
         txtUsername.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
@@ -146,9 +153,10 @@ public class LoginForm extends javax.swing.JFrame {
                 txtUsernameActionPerformed(evt);
             }
         });
+        jPanel2.add(txtUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 107, 200, 24));
 
         txtPassword.setBackground(new java.awt.Color(255, 251, 233));
-        txtPassword.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtPassword.setFont(new java.awt.Font("Segoe UI", 0, 14));
         txtPassword.setForeground(new java.awt.Color(102, 102, 102));
         txtPassword.setBorder(null);
         txtPassword.addActionListener(new java.awt.event.ActionListener() {
@@ -156,17 +164,21 @@ public class LoginForm extends javax.swing.JFrame {
                 txtPasswordActionPerformed(evt);
             }
         });
+        jPanel2.add(txtPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 175, 200, 24));
 
         jSeparator2.setForeground(new java.awt.Color(102, 102, 102));
+        jPanel2.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 199, 200, -1));
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo-user.png"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo-user.png")));
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(31, 107, -1, 31));
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo-password.png"))); // NOI18N
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo-password.png")));
+        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(31, 172, -1, -1));
 
         btnLogin.setBackground(new java.awt.Color(250, 249, 235));
-        btnLogin.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        btnLogin.setFont(new java.awt.Font("Segoe UI", 0, 13));
         btnLogin.setText("Login");
-        btnLogin.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102)));
+        btnLogin.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 102, 102), 1, true));
         btnLogin.setContentAreaFilled(false);
         btnLogin.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnLogin.addActionListener(new java.awt.event.ActionListener() {
@@ -174,11 +186,12 @@ public class LoginForm extends javax.swing.JFrame {
                 btnLoginActionPerformed(evt);
             }
         });
+        jPanel2.add(btnLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(159, 283, 60, 26));
 
         btnCancel.setBackground(new java.awt.Color(250, 249, 235));
-        btnCancel.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        btnCancel.setFont(new java.awt.Font("Segoe UI", 0, 13));
         btnCancel.setText("Cancel");
-        btnCancel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102)));
+        btnCancel.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 102, 102), 1, true));
         btnCancel.setContentAreaFilled(false);
         btnCancel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnCancel.addActionListener(new java.awt.event.ActionListener() {
@@ -186,8 +199,9 @@ public class LoginForm extends javax.swing.JFrame {
                 btnCancelActionPerformed(evt);
             }
         });
+        jPanel2.add(btnCancel, new org.netbeans.lib.awtextra.AbsoluteConstraints(99, 283, 60, 26));
 
-        clickForgotpassword.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        clickForgotpassword.setFont(new java.awt.Font("Segoe UI", 0, 13));
         clickForgotpassword.setForeground(new java.awt.Color(102, 102, 102));
         clickForgotpassword.setText("Forgot Password?");
         clickForgotpassword.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -196,15 +210,18 @@ public class LoginForm extends javax.swing.JFrame {
                 clickForgotpasswordMouseClicked(evt);
             }
         });
+        jPanel2.add(clickForgotpassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(144, 322, -1, -1));
 
-        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 24));
         jLabel6.setForeground(new java.awt.Color(102, 102, 102));
         jLabel6.setText("LOGIN");
+        jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(116, 55, -1, -1));
 
         jSeparator3.setForeground(new java.awt.Color(102, 102, 102));
+        jPanel2.add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 131, 200, -1));
 
         checkRemember.setBackground(new java.awt.Color(250, 249, 235));
-        checkRemember.setFont(new java.awt.Font("sansserif", 0, 12)); // NOI18N
+        checkRemember.setFont(new java.awt.Font("sansserif", 0, 12));
         checkRemember.setText("Remember me");
         checkRemember.setContentAreaFilled(false);
         checkRemember.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -214,322 +231,163 @@ public class LoginForm extends javax.swing.JFrame {
                 checkRememberActionPerformed(evt);
             }
         });
+        jPanel2.add(checkRemember, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 231, -1, -1));
 
-        iconEye.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo-eye.png"))); // NOI18N
+        iconEye.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo-eye.png")));
         iconEye.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         iconEye.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 iconEyeMousePressed(evt);
             }
         });
+        jPanel2.add(iconEye, new org.netbeans.lib.awtextra.AbsoluteConstraints(271, 175, 20, -1));
 
-        iconHide.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo-invisible.png"))); // NOI18N
+        iconHide.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo-invisible.png")));
         iconHide.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         iconHide.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 iconHideMousePressed(evt);
             }
         });
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-                jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(jPanel2Layout.createSequentialGroup()
-                                                .addGap(255, 255, 255)
-                                                .addComponent(clickMinimize, javax.swing.GroupLayout.PREFERRED_SIZE, 15,
-                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(clickCLose, javax.swing.GroupLayout.PREFERRED_SIZE, 20,
-                                                        javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(jPanel2Layout.createSequentialGroup()
-<<<<<<< Updated upstream:src/main/java/com/restaurant/quanlydatbannhahang/gui/LoginForm.java
-                                                .addGap(116, 116, 116)
-                                                .addComponent(jLabel6))
-                                        .addGroup(jPanel2Layout.createSequentialGroup()
-=======
->>>>>>> Stashed changes:src/main/java/com/restaurant/quanlydatbannhahang/GUI/LoginForm.java
-                                                .addGap(31, 31, 31)
-                                                .addComponent(jLabel1)
-                                                .addGap(18, 18, 18)
-                                                .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 200,
-                                                        javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(jPanel2Layout.createSequentialGroup()
-                                                .addGap(69, 69, 69)
-                                                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 200,
-                                                        javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(jPanel2Layout.createSequentialGroup()
-                                                .addGap(69, 69, 69)
-                                                .addComponent(checkRemember))
-<<<<<<< Updated upstream:src/main/java/com/restaurant/quanlydatbannhahang/gui/LoginForm.java
-                                        .addGroup(jPanel2Layout.createSequentialGroup()
-                                                .addGap(31, 31, 31)
-                                                .addComponent(jLabel2)
-                                                .addGap(18, 18, 18)
-                                                .addGroup(jPanel2Layout
-                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(txtPassword,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE, 200,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(jSeparator2,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE, 200,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addGap(1, 1, 1)
-                                                .addGroup(jPanel2Layout
-                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(iconHide, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(iconEye, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                20, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                        .addGroup(jPanel2Layout.createSequentialGroup()
-                                                .addGap(144, 144, 144)
-                                                .addGroup(jPanel2Layout
-                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                        .addComponent(clickForgotpassword)
-                                                        .addGroup(jPanel2Layout.createSequentialGroup()
-                                                                .addComponent(btnCancel,
-                                                                        javax.swing.GroupLayout.PREFERRED_SIZE, 60,
-                                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addPreferredGap(
-                                                                        javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                .addComponent(btnLogin,
-                                                                        javax.swing.GroupLayout.PREFERRED_SIZE, 60,
-                                                                        javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                                .addGap(4, 4, 4)));
-=======
-                                        .addGroup(jPanel2Layout
-                                                .createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout
-                                                        .createSequentialGroup()
-                                                        .addGap(31, 31, 31)
-                                                        .addComponent(jLabel2)
-                                                        .addGap(18, 18, 18)
-                                                        .addGroup(jPanel2Layout
-                                                                .createParallelGroup(
-                                                                        javax.swing.GroupLayout.Alignment.LEADING)
-                                                                .addComponent(txtPassword,
-                                                                        javax.swing.GroupLayout.PREFERRED_SIZE, 200,
-                                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addComponent(jSeparator2,
-                                                                        javax.swing.GroupLayout.PREFERRED_SIZE, 200,
-                                                                        javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                        .addGap(1, 1, 1)
-                                                        .addGroup(jPanel2Layout
-                                                                .createParallelGroup(
-                                                                        javax.swing.GroupLayout.Alignment.LEADING)
-                                                                .addComponent(iconHide,
-                                                                        javax.swing.GroupLayout.PREFERRED_SIZE, 20,
-                                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addComponent(iconEye,
-                                                                        javax.swing.GroupLayout.PREFERRED_SIZE, 20,
-                                                                        javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                                .addGroup(jPanel2Layout.createSequentialGroup()
-                                                        .addContainerGap()
-                                                        .addGroup(jPanel2Layout
-                                                                .createParallelGroup(
-                                                                        javax.swing.GroupLayout.Alignment.TRAILING)
-                                                                .addComponent(clickForgotpassword)
-                                                                .addGroup(jPanel2Layout.createSequentialGroup()
-                                                                        .addComponent(btnCancel,
-                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                80,
-                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                        .addPreferredGap(
-                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                        .addComponent(btnLogin,
-                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                80,
-                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                                        .addGap(18, 18, 18))))
-                                .addGap(4, 4, 4))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel6)
-                                .addGap(67, 67, 67)));
->>>>>>> Stashed changes:src/main/java/com/restaurant/quanlydatbannhahang/GUI/LoginForm.java
-        jPanel2Layout.setVerticalGroup(
-                jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(6, 6, 6)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(clickMinimize)
-                                        .addGroup(jPanel2Layout.createSequentialGroup()
-                                                .addGap(4, 4, 4)
-                                                .addComponent(clickCLose)))
-<<<<<<< Updated upstream:src/main/java/com/restaurant/quanlydatbannhahang/gui/LoginForm.java
-                                .addGap(17, 17, 17)
-                                .addComponent(jLabel6)
-                                .addGap(18, 18, 18)
-=======
-                                .addGap(13, 13, 13)
-                                .addComponent(jLabel6)
-                                .addGap(22, 22, 22)
->>>>>>> Stashed changes:src/main/java/com/restaurant/quanlydatbannhahang/GUI/LoginForm.java
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 31,
-                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGroup(jPanel2Layout.createSequentialGroup()
-                                                .addGap(7, 7, 7)
-                                                .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 24,
-                                                        javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(4, 4, 4)
-                                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(12, 12, 12)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(jPanel2Layout.createSequentialGroup()
-                                                .addGap(10, 10, 10)
-                                                .addComponent(jLabel2))
-                                        .addGroup(jPanel2Layout.createSequentialGroup()
-                                                .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 24,
-                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(3, 3, 3)
-                                                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                        javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(jPanel2Layout.createSequentialGroup()
-                                                .addGap(13, 13, 13)
-                                                .addGroup(jPanel2Layout
-                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(iconHide)
-                                                        .addComponent(iconEye))))
-                                .addGap(11, 11, 11)
-                                .addComponent(checkRemember)
-                                .addGap(13, 13, 13)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 26,
-                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(btnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 26,
-                                                javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18)
-                                .addComponent(clickForgotpassword)
-                                .addContainerGap()));
+        jPanel2.add(iconHide, new org.netbeans.lib.awtextra.AbsoluteConstraints(271, 175, 20, -1));
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 0, 300, 400));
-
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }
+    // </editor-fold>
 
-    private void clickMinimizeMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_clickMinimizeMouseClicked
+    private void clickMinimizeMouseClicked(java.awt.event.MouseEvent evt) {
         this.setState(JFrame.ICONIFIED);
-    }// GEN-LAST:event_clickMinimizeMouseClicked
+    }
 
-    private void clickCLoseMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_clickCLoseMouseClicked
+    private void clickCLoseMouseClicked(java.awt.event.MouseEvent evt) {
         System.exit(0);
-    }// GEN-LAST:event_clickCLoseMouseClicked
+    }
 
-    private void txtPasswordActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtPasswordActionPerformed
+    private void txtPasswordActionPerformed(java.awt.event.ActionEvent evt) {
         btnLoginActionPerformed(evt);
-    }// GEN-LAST:event_txtPasswordActionPerformed
+    }
 
-    private void txtUsernameActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtUsernameActionPerformed
+    private void txtUsernameActionPerformed(java.awt.event.ActionEvent evt) {
         txtPassword.requestFocus();
-    }// GEN-LAST:event_txtUsernameActionPerformed
+    }
 
-    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCancelActionPerformed
-        // Reset Username
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {
         txtUsername.setText("Username");
         txtUsername.setForeground(new Color(102, 102, 102));
-
-        // Reset Password
         txtPassword.setText("Password");
         txtPassword.setForeground(new Color(102, 102, 102));
         txtPassword.setEchoChar((char) 0);
-    }// GEN-LAST:event_btnCancelActionPerformed
+    }
 
-    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnLoginActionPerformed
-        String user = txtUsername.getText();
-        String pass = String.valueOf(txtPassword.getPassword());
+    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {
+        String user = txtUsername.getText().trim();
+        String pass = String.valueOf(txtPassword.getPassword()).trim();
 
-        if (user.equals("Username") || pass.equals("Password") || user.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!");
+        // Validate input
+        if (user.isEmpty() || user.equals("Username")) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập tên đăng nhập!", "Thông báo",
+                    JOptionPane.WARNING_MESSAGE);
+            txtUsername.requestFocus();
             return;
         }
 
-<<<<<<< Updated upstream:src/main/java/com/restaurant/quanlydatbannhahang/gui/LoginForm.java
-        // Kiểm tra tài khoản
-        if (user.equals("admin") && pass.equals("123")) {
-            JOptionPane.showMessageDialog(this, "Đăng nhập thành công!");
-            // --- ĐOẠN CODE MỞ MAIN FORM NẰM Ở ĐÂY ---
-            MainForm main = new MainForm(); // Khởi tạo MainForm
-            main.setVisible(true); // Hiện MainForm
-            this.dispose(); // Đóng LoginForm
-            // ----------------------------------------
+        if (pass.isEmpty() || pass.equals("Password")) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập mật khẩu!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            txtPassword.requestFocus();
+            return;
+        }
+
+        // Gọi AuthService để lấy dữ liệu từ Database
+        AuthService authService = new AuthService();
+        TaiKhoan taiKhoan = authService.login(user, pass);
+
+        if (taiKhoan != null) {
+            JOptionPane.showMessageDialog(this,
+                    "Đăng nhập thành công!\nXin chào: " + taiKhoan.getNhanVien().getHoTen(),
+                    "Thành công",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+            try {
+                // Ẩn LoginForm
+                this.setVisible(false);
+                System.out.println("✓ LoginForm ẩn thành công");
+
+                // Mở MainForm và truyền thông tin user
+                System.out.println("Đang tạo MainForm...");
+                MainForm mainForm = new MainForm(taiKhoan);
+                System.out.println("✓ MainForm khởi tạo xong");
+
+                mainForm.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+                System.out.println("✓ Thiết lập setDefaultCloseOperation");
+
+                mainForm.setVisible(true);
+                System.out.println("✓ MainForm hiển thị");
+
+                // Đóng LoginForm sau khi MainForm hiển thị
+                this.dispose();
+                System.out.println("✓ LoginForm đã đóng");
+            } catch (RuntimeException e) {
+                // Nếu là lỗi khởi tạo MainForm
+                if (e.getMessage() != null && e.getMessage().contains("khởi tạo MainForm")) {
+                    System.out.println("❌ Lỗi khởi tạo MainForm: " + e.getCause().getMessage());
+                    this.setVisible(true);
+                    JOptionPane.showMessageDialog(this,
+                            "Lỗi: " + e.getCause().getMessage() +
+                                    "\n\nVui lòng kiểm tra:\n" +
+                                    "1. Các file image trong thư mục resources/images\n" +
+                                    "2. Database connection\n" +
+                                    "3. Thử đăng nhập lại",
+                            "Lỗi",
+                            JOptionPane.ERROR_MESSAGE);
+                } else {
+                    throw e;
+                }
+            } catch (Exception e) {
+                System.out.println("❌ Lỗi khi mở MainForm: " + e.getMessage());
+                e.printStackTrace();
+                this.setVisible(true);
+                JOptionPane.showMessageDialog(this,
+                        "Lỗi khi mở giao diện chính:\n" + e.getMessage(),
+                        "Lỗi",
+                        JOptionPane.ERROR_MESSAGE);
+            }
         } else {
-            JOptionPane.showMessageDialog(this, "Tài khoản hoặc mật khẩu sai!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this,
+                    "Tên đăng nhập hoặc mật khẩu không đúng!",
+                    "Lỗi đăng nhập",
+                    JOptionPane.ERROR_MESSAGE);
+            txtPassword.setText("");
+            txtPassword.setEchoChar((char) 0);
+            txtPassword.setText("Password");
+            txtPassword.setForeground(new Color(102, 102, 102));
+            txtUsername.requestFocus();
         }
+    }
 
-    }// GEN-LAST:event_btnLoginActionPerformed
+    private void checkRememberActionPerformed(java.awt.event.ActionEvent evt) {
+    }
 
-=======
-        // 2. Giả lập kiểm tra tài khoản (Sau này thay bằng Database)
-        String role = "";
-        if (user.equals("admin") && pass.equals("123")) {
-            role = "Quản lý";
-        } else if (user.equals("staff") && pass.equals("123")) {
-            role = "Nhân viên";
-        }
-
-        if (!role.equals("")) {
-            JOptionPane.showMessageDialog(this, "Đăng nhập thành công với quyền: " + role);
-
-            MainForm main = new MainForm(role);
-            main.setVisible(true);
-            this.dispose();
-        } else {
-            JOptionPane.showMessageDialog(this, "Tài khoản hoặc mật khẩu sai!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-        }
-    }// GEN-LAST:event_btnLoginActionPerformed
-
->>>>>>> Stashed changes:src/main/java/com/restaurant/quanlydatbannhahang/GUI/LoginForm.java
-    private void checkRememberActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_checkRememberActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_checkRememberActionPerformed
-
-    private void iconEyeMousePressed(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_iconEyeMousePressed
-<<<<<<< Updated upstream:src/main/java/com/restaurant/quanlydatbannhahang/gui/LoginForm.java
-        // ĐANG HIỆN -> MUỐN ẨN
-        // Ấn vào mắt mở: Ẩn mật khẩu đi và hiện lại mắt gạch
-        iconHide.setVisible(true); // Hiện mắt gạch
-        iconEye.setVisible(false); // Ẩn mắt mở
-        txtPassword.setEchoChar('*'); // Che mật khẩu bằng dấu *
-    }// GEN-LAST:event_iconEyeMousePressed
-
-    private void iconHideMousePressed(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_iconHideMousePressed
-        // ĐANG ẨN -> MUỐN HIỆN
-        // Ấn vào mắt gạch: Hiện mật khẩu ra và hiện mắt mở
-        iconEye.setVisible(true); // Hiện mắt mở
-        iconHide.setVisible(false); // Ẩn mắt gạch
-        txtPassword.setEchoChar((char) 0); // Hiện mật khẩu dạng chữ thường
-=======
+    private void iconEyeMousePressed(java.awt.event.MouseEvent evt) {
         iconHide.setVisible(true);
         iconEye.setVisible(false);
-        txtPassword.setEchoChar('*');
-    }// GEN-LAST:event_iconEyeMousePressed
+        txtPassword.setEchoChar('●');
+    }
 
-    private void iconHideMousePressed(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_iconHideMousePressed
+    private void iconHideMousePressed(java.awt.event.MouseEvent evt) {
         iconEye.setVisible(true);
         iconHide.setVisible(false);
         txtPassword.setEchoChar((char) 0);
->>>>>>> Stashed changes:src/main/java/com/restaurant/quanlydatbannhahang/GUI/LoginForm.java
-    }// GEN-LAST:event_iconHideMousePressed
+    }
 
-    private void clickForgotpasswordMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_clickForgotpasswordMouseClicked
-        // Khởi tạo Form Quên mật khẩu
-        ForgetPasswordForm forgetForm = new ForgetPasswordForm();
+    private void clickForgotpasswordMouseClicked(java.awt.event.MouseEvent evt) {
+        new ForgetPasswordForm().setVisible(true);
+    }
 
-        // Hiển thị nó lên
-        forgetForm.setVisible(true);
-    }// GEN-LAST:event_clickForgotpasswordMouseClicked
-<<<<<<< Updated upstream:src/main/java/com/restaurant/quanlydatbannhahang/gui/LoginForm.java
-
-    // ===== GETTER METHODS =====
+    // Getter Methods
     public javax.swing.JTextField getTxtUsername() {
         return txtUsername;
     }
-=======
->>>>>>> Stashed changes:src/main/java/com/restaurant/quanlydatbannhahang/GUI/LoginForm.java
 
     public javax.swing.JPasswordField getTxtPassword() {
         return txtPassword;
@@ -546,49 +404,14 @@ public class LoginForm extends javax.swing.JFrame {
     public javax.swing.JCheckBox getCheckRemember() {
         return checkRemember;
     }
-    // ===== END GETTER METHODS =====
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        // <editor-fold defaultstate="collapsed" desc=" Look and feel setting code
-        // (optional) ">
-        /*
-         * If Nimbus (introduced in Java SE 6) is not available, stay with the default
-         * look and feel.
-         * For details see
-         * http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(LoginForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(LoginForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(LoginForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(LoginForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        // </editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                LoginForm loginForm = new LoginForm();
-                loginForm.setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new LoginForm().setVisible(true);
         });
     }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+    // Variables declaration
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnLogin;
     private javax.swing.JCheckBox checkRemember;
@@ -608,5 +431,4 @@ public class LoginForm extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JPasswordField txtPassword;
     private javax.swing.JTextField txtUsername;
-    // End of variables declaration//GEN-END:variables
 }

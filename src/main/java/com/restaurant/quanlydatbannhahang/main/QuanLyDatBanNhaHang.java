@@ -1,14 +1,10 @@
-<<<<<<<< Updated upstream:src/main/java/com/restaurant/quanlydatbannhahang/gui/QuanLyDatBanNhaHang.java
-package com.restaurant.quanlydatbannhahang.gui;
+package com.restaurant.quanlydatbannhahang.main;
 
 import com.restaurant.quanlydatbannhahang.connectDB.DatabaseConnection;
 import javax.swing.JOptionPane;
-========
-package com.restaurant.quanlydatbannhahang.main;
 
-import com.restaurant.quanlydatbannhahang.gui.LoginForm;
 import com.restaurant.quanlydatbannhahang.gui.LoadingScreen;
->>>>>>>> Stashed changes:src/main/java/com/restaurant/quanlydatbannhahang/main/QuanLyDatBanNhaHang.java
+import com.restaurant.quanlydatbannhahang.gui.LoginForm;
 
 public class QuanLyDatBanNhaHang {
 

@@ -1,9 +1,4 @@
 package com.restaurant.quanlydatbannhahang.gui;
-<<<<<<< Updated upstream:src/main/java/com/restaurant/quanlydatbannhahang/gui/LoadingScreen.java
-
-import javax.swing.JOptionPane;
-=======
->>>>>>> Stashed changes:src/main/java/com/restaurant/quanlydatbannhahang/GUI/LoadingScreen.java
 
 public class LoadingScreen extends javax.swing.JFrame {
 
