@@ -1,5 +1,8 @@
 package com.restaurant.quanlydatbannhahang;
 
+import com.restaurant.quanlydatbannhahang.GUI.LoginForm;
+import com.restaurant.quanlydatbannhahang.GUI.LoadingScreen;
+
 public class QuanLyDatBanNhaHang {
     
     public static void main(String[] args) {
