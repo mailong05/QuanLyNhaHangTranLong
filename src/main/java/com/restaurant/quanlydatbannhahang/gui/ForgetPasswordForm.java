@@ -1,4 +1,4 @@
-package com.restaurant.quanlydatbannhahang;
+package com.restaurant.quanlydatbannhahang.gui;
 
 import javax.swing.JFrame;
 
@@ -158,6 +158,7 @@ public class ForgetPasswordForm extends javax.swing.JFrame {
                 clickCLoseMouseClicked(evt);
             }
         });
+        
         jPanel2.add(clickCLose, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 10, -1, 20));
 
         clickMinimize.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N

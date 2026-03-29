@@ -1,5 +1,6 @@
 
-package com.restaurant.quanlydatbannhahang;
+package com.restaurant.quanlydatbannhahang.gui;
+
 public class CtrlLoginForm {
     private LoginForm view;
     private AuthService authService; 

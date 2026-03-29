@@ -1,7 +1,8 @@
-package com.restaurant.quanlydatbannhahang;
+package com.restaurant.quanlydatbannhahang.gui;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+
 import java.awt.Color;
 
 public class LoginForm extends javax.swing.JFrame {

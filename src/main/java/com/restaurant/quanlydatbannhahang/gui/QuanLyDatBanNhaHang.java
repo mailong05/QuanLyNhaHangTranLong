@@ -1,4 +1,4 @@
-package com.restaurant.quanlydatbannhahang;
+package com.restaurant.quanlydatbannhahang.gui;
 
 public class QuanLyDatBanNhaHang {
     
