@@ -1,0 +1,48 @@
+# Compiled class files
+*.class
+
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+.flattened-pom.xml
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+*.iml
+*.iws
+*.ipr
+*.sublime-workspace
+
+# NetBeans
+nbproject/
+build/
+dist/
+nbdist/
+.nb-gradle/
+*.orig
+
+# Gradle
+.gradle/
+build/
+
+# Node (if using npm/webpack)
+node_modules/
+package-lock.json
+yarn.lock
+
+# Other
+*.log
+.env
+*.bak
+database/*.bak
+database/*.sql

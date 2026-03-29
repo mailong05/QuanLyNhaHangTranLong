@@ -5,11 +5,11 @@ import javax.swing.JFrame;
 public class ForgetPasswordForm extends javax.swing.JFrame {
 
     public ForgetPasswordForm() {
-        initComponents();        
+        initComponents();
         this.setLocationRelativeTo(null); // Căn giữa màn hình khi mở
-        jLabel6.requestFocusInWindow();   // Đẩy focus ra khỏi các ô nhập liệu ban đầu
+        jLabel6.requestFocusInWindow(); // Đẩy focus ra khỏi các ô nhập liệu ban đầu
 
-        //thiết lập Font chữ đồng bộ
+        // thiết lập Font chữ đồng bộ
         java.awt.Font fontsize = new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 12);
         txtUsername.setFont(fontsize);
         txtIdcard.setFont(fontsize);
@@ -17,7 +17,7 @@ public class ForgetPasswordForm extends javax.swing.JFrame {
         txtEmail.setFont(fontsize);
         jButton1.setFont(fontsize);
         jButton2.setFont(fontsize);
-      
+
         txtUsername.setText("Username");
         txtIdcard.setText("ID Card Number");
         txtTelephone.setText("Phone Number");
@@ -25,7 +25,7 @@ public class ForgetPasswordForm extends javax.swing.JFrame {
 
         java.awt.Color placeholderColor = new java.awt.Color(102, 102, 102);
 
-        //xử lý Focus cho txtUsername
+        // xử lý Focus cho txtUsername
         txtUsername.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -34,6 +34,7 @@ public class ForgetPasswordForm extends javax.swing.JFrame {
                     txtUsername.setForeground(java.awt.Color.BLACK);
                 }
             }
+
             @Override
             public void focusLost(java.awt.event.FocusEvent evt) {
                 if (txtUsername.getText().isEmpty()) {
@@ -43,7 +44,7 @@ public class ForgetPasswordForm extends javax.swing.JFrame {
             }
         });
 
-        //xử lý Focus cho txtIdcard
+        // xử lý Focus cho txtIdcard
         txtIdcard.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -52,6 +53,7 @@ public class ForgetPasswordForm extends javax.swing.JFrame {
                     txtIdcard.setForeground(java.awt.Color.BLACK);
                 }
             }
+
             @Override
             public void focusLost(java.awt.event.FocusEvent evt) {
                 if (txtIdcard.getText().isEmpty()) {
@@ -61,7 +63,7 @@ public class ForgetPasswordForm extends javax.swing.JFrame {
             }
         });
 
-        //xử lý Focus cho txtTelephone
+        // xử lý Focus cho txtTelephone
         txtTelephone.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -70,6 +72,7 @@ public class ForgetPasswordForm extends javax.swing.JFrame {
                     txtTelephone.setForeground(java.awt.Color.BLACK);
                 }
             }
+
             @Override
             public void focusLost(java.awt.event.FocusEvent evt) {
                 if (txtTelephone.getText().isEmpty()) {
@@ -79,7 +82,7 @@ public class ForgetPasswordForm extends javax.swing.JFrame {
             }
         });
 
-        //xử lý Focus cho txtEmail
+        // xử lý Focus cho txtEmail
         txtEmail.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -88,6 +91,7 @@ public class ForgetPasswordForm extends javax.swing.JFrame {
                     txtEmail.setForeground(java.awt.Color.BLACK);
                 }
             }
+
             @Override
             public void focusLost(java.awt.event.FocusEvent evt) {
                 if (txtEmail.getText().isEmpty()) {
@@ -102,8 +106,8 @@ public class ForgetPasswordForm extends javax.swing.JFrame {
         jButton2.setFocusPainted(false);
     }
 
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jFileChooser1 = new javax.swing.JFileChooser();
@@ -274,38 +278,38 @@ public class ForgetPasswordForm extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void clickCLoseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_clickCLoseMouseClicked
+    private void clickCLoseMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_clickCLoseMouseClicked
         this.dispose();
-    }//GEN-LAST:event_clickCLoseMouseClicked
+    }// GEN-LAST:event_clickCLoseMouseClicked
 
-    private void clickMinimizeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_clickMinimizeMouseClicked
+    private void clickMinimizeMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_clickMinimizeMouseClicked
         this.setState(JFrame.ICONIFIED);
-    }//GEN-LAST:event_clickMinimizeMouseClicked
+    }// GEN-LAST:event_clickMinimizeMouseClicked
 
-    private void txtUsernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsernameActionPerformed
+    private void txtUsernameActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtUsernameActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtUsernameActionPerformed
+    }// GEN-LAST:event_txtUsernameActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
 
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }// GEN-LAST:event_jButton1ActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }// GEN-LAST:event_jButton2ActionPerformed
 
-    private void txtTelephoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTelephoneActionPerformed
+    private void txtTelephoneActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtTelephoneActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtTelephoneActionPerformed
+    }// GEN-LAST:event_txtTelephoneActionPerformed
 
-    private void txtEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEmailActionPerformed
+    private void txtEmailActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtEmailActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtEmailActionPerformed
+    }// GEN-LAST:event_txtEmailActionPerformed
 
-    private void txtIdcardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdcardActionPerformed
+    private void txtIdcardActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtIdcardActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtIdcardActionPerformed
+    }// GEN-LAST:event_txtIdcardActionPerformed
 
     /**
      * @param args the command line arguments
@@ -324,6 +328,7 @@ public class ForgetPasswordForm extends javax.swing.JFrame {
     private javax.swing.JLabel clickMinimize;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    @SuppressWarnings("unused")
     private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

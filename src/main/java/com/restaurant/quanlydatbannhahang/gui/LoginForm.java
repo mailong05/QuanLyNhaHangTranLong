@@ -70,7 +70,10 @@ public class LoginForm extends javax.swing.JFrame {
         new CtrlLoginForm(this);
     }
 
+<<<<<<< Updated upstream:src/main/java/com/restaurant/quanlydatbannhahang/gui/LoginForm.java
     @SuppressWarnings("unchecked")
+=======
+>>>>>>> Stashed changes:src/main/java/com/restaurant/quanlydatbannhahang/GUI/LoginForm.java
     // <editor-fold defaultstate="collapsed" desc="Generated
     // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -242,9 +245,12 @@ public class LoginForm extends javax.swing.JFrame {
                                                 .addComponent(clickCLose, javax.swing.GroupLayout.PREFERRED_SIZE, 20,
                                                         javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addGroup(jPanel2Layout.createSequentialGroup()
+<<<<<<< Updated upstream:src/main/java/com/restaurant/quanlydatbannhahang/gui/LoginForm.java
                                                 .addGap(116, 116, 116)
                                                 .addComponent(jLabel6))
                                         .addGroup(jPanel2Layout.createSequentialGroup()
+=======
+>>>>>>> Stashed changes:src/main/java/com/restaurant/quanlydatbannhahang/GUI/LoginForm.java
                                                 .addGap(31, 31, 31)
                                                 .addComponent(jLabel1)
                                                 .addGap(18, 18, 18)
@@ -257,6 +263,7 @@ public class LoginForm extends javax.swing.JFrame {
                                         .addGroup(jPanel2Layout.createSequentialGroup()
                                                 .addGap(69, 69, 69)
                                                 .addComponent(checkRemember))
+<<<<<<< Updated upstream:src/main/java/com/restaurant/quanlydatbannhahang/gui/LoginForm.java
                                         .addGroup(jPanel2Layout.createSequentialGroup()
                                                 .addGap(31, 31, 31)
                                                 .addComponent(jLabel2)
@@ -291,6 +298,56 @@ public class LoginForm extends javax.swing.JFrame {
                                                                         javax.swing.GroupLayout.PREFERRED_SIZE, 60,
                                                                         javax.swing.GroupLayout.PREFERRED_SIZE)))))
                                 .addGap(4, 4, 4)));
+=======
+                                        .addGroup(jPanel2Layout
+                                                .createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout
+                                                        .createSequentialGroup()
+                                                        .addGap(31, 31, 31)
+                                                        .addComponent(jLabel2)
+                                                        .addGap(18, 18, 18)
+                                                        .addGroup(jPanel2Layout
+                                                                .createParallelGroup(
+                                                                        javax.swing.GroupLayout.Alignment.LEADING)
+                                                                .addComponent(txtPassword,
+                                                                        javax.swing.GroupLayout.PREFERRED_SIZE, 200,
+                                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addComponent(jSeparator2,
+                                                                        javax.swing.GroupLayout.PREFERRED_SIZE, 200,
+                                                                        javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                        .addGap(1, 1, 1)
+                                                        .addGroup(jPanel2Layout
+                                                                .createParallelGroup(
+                                                                        javax.swing.GroupLayout.Alignment.LEADING)
+                                                                .addComponent(iconHide,
+                                                                        javax.swing.GroupLayout.PREFERRED_SIZE, 20,
+                                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addComponent(iconEye,
+                                                                        javax.swing.GroupLayout.PREFERRED_SIZE, 20,
+                                                                        javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                .addGroup(jPanel2Layout.createSequentialGroup()
+                                                        .addContainerGap()
+                                                        .addGroup(jPanel2Layout
+                                                                .createParallelGroup(
+                                                                        javax.swing.GroupLayout.Alignment.TRAILING)
+                                                                .addComponent(clickForgotpassword)
+                                                                .addGroup(jPanel2Layout.createSequentialGroup()
+                                                                        .addComponent(btnCancel,
+                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                                80,
+                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                        .addPreferredGap(
+                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                        .addComponent(btnLogin,
+                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                                80,
+                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                        .addGap(18, 18, 18))))
+                                .addGap(4, 4, 4))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel6)
+                                .addGap(67, 67, 67)));
+>>>>>>> Stashed changes:src/main/java/com/restaurant/quanlydatbannhahang/GUI/LoginForm.java
         jPanel2Layout.setVerticalGroup(
                 jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(jPanel2Layout.createSequentialGroup()
@@ -300,9 +357,15 @@ public class LoginForm extends javax.swing.JFrame {
                                         .addGroup(jPanel2Layout.createSequentialGroup()
                                                 .addGap(4, 4, 4)
                                                 .addComponent(clickCLose)))
+<<<<<<< Updated upstream:src/main/java/com/restaurant/quanlydatbannhahang/gui/LoginForm.java
                                 .addGap(17, 17, 17)
                                 .addComponent(jLabel6)
                                 .addGap(18, 18, 18)
+=======
+                                .addGap(13, 13, 13)
+                                .addComponent(jLabel6)
+                                .addGap(22, 22, 22)
+>>>>>>> Stashed changes:src/main/java/com/restaurant/quanlydatbannhahang/GUI/LoginForm.java
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 31,
                                                 javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -384,6 +447,7 @@ public class LoginForm extends javax.swing.JFrame {
             return;
         }
 
+<<<<<<< Updated upstream:src/main/java/com/restaurant/quanlydatbannhahang/gui/LoginForm.java
         // Kiểm tra tài khoản
         if (user.equals("admin") && pass.equals("123")) {
             JOptionPane.showMessageDialog(this, "Đăng nhập thành công!");
@@ -398,11 +462,33 @@ public class LoginForm extends javax.swing.JFrame {
 
     }// GEN-LAST:event_btnLoginActionPerformed
 
+=======
+        // 2. Giả lập kiểm tra tài khoản (Sau này thay bằng Database)
+        String role = "";
+        if (user.equals("admin") && pass.equals("123")) {
+            role = "Quản lý";
+        } else if (user.equals("staff") && pass.equals("123")) {
+            role = "Nhân viên";
+        }
+
+        if (!role.equals("")) {
+            JOptionPane.showMessageDialog(this, "Đăng nhập thành công với quyền: " + role);
+
+            MainForm main = new MainForm(role);
+            main.setVisible(true);
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "Tài khoản hoặc mật khẩu sai!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    }// GEN-LAST:event_btnLoginActionPerformed
+
+>>>>>>> Stashed changes:src/main/java/com/restaurant/quanlydatbannhahang/GUI/LoginForm.java
     private void checkRememberActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_checkRememberActionPerformed
         // TODO add your handling code here:
     }// GEN-LAST:event_checkRememberActionPerformed
 
     private void iconEyeMousePressed(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_iconEyeMousePressed
+<<<<<<< Updated upstream:src/main/java/com/restaurant/quanlydatbannhahang/gui/LoginForm.java
         // ĐANG HIỆN -> MUỐN ẨN
         // Ấn vào mắt mở: Ẩn mật khẩu đi và hiện lại mắt gạch
         iconHide.setVisible(true); // Hiện mắt gạch
@@ -416,6 +502,17 @@ public class LoginForm extends javax.swing.JFrame {
         iconEye.setVisible(true); // Hiện mắt mở
         iconHide.setVisible(false); // Ẩn mắt gạch
         txtPassword.setEchoChar((char) 0); // Hiện mật khẩu dạng chữ thường
+=======
+        iconHide.setVisible(true);
+        iconEye.setVisible(false);
+        txtPassword.setEchoChar('*');
+    }// GEN-LAST:event_iconEyeMousePressed
+
+    private void iconHideMousePressed(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_iconHideMousePressed
+        iconEye.setVisible(true);
+        iconHide.setVisible(false);
+        txtPassword.setEchoChar((char) 0);
+>>>>>>> Stashed changes:src/main/java/com/restaurant/quanlydatbannhahang/GUI/LoginForm.java
     }// GEN-LAST:event_iconHideMousePressed
 
     private void clickForgotpasswordMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_clickForgotpasswordMouseClicked
@@ -425,11 +522,14 @@ public class LoginForm extends javax.swing.JFrame {
         // Hiển thị nó lên
         forgetForm.setVisible(true);
     }// GEN-LAST:event_clickForgotpasswordMouseClicked
+<<<<<<< Updated upstream:src/main/java/com/restaurant/quanlydatbannhahang/gui/LoginForm.java
 
     // ===== GETTER METHODS =====
     public javax.swing.JTextField getTxtUsername() {
         return txtUsername;
     }
+=======
+>>>>>>> Stashed changes:src/main/java/com/restaurant/quanlydatbannhahang/GUI/LoginForm.java
 
     public javax.swing.JPasswordField getTxtPassword() {
         return txtPassword;

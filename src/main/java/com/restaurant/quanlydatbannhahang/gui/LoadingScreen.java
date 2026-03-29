@@ -1,6 +1,9 @@
 package com.restaurant.quanlydatbannhahang.gui;
+<<<<<<< Updated upstream:src/main/java/com/restaurant/quanlydatbannhahang/gui/LoadingScreen.java
 
 import javax.swing.JOptionPane;
+=======
+>>>>>>> Stashed changes:src/main/java/com/restaurant/quanlydatbannhahang/GUI/LoadingScreen.java
 
 public class LoadingScreen extends javax.swing.JFrame {
 
@@ -8,9 +11,9 @@ public class LoadingScreen extends javax.swing.JFrame {
         initComponents();
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 12));
     }
-    
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
@@ -47,47 +50,51 @@ public class LoadingScreen extends javax.swing.JFrame {
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(570, 570, 570)
-                .addComponent(loadingvalue))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(370, 370, 370)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(loadinglabel))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(340, 340, 340)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(390, 390, 390)
-                .addComponent(jLabel4))
-            .addComponent(jLabel3)
-            .addComponent(loadingbar, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE)
-        );
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addGap(570, 570, 570)
+                                .addComponent(loadingvalue))
+                        .addGroup(layout.createSequentialGroup()
+                                .addGap(370, 370, 370)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 210,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(loadinglabel))
+                        .addGroup(layout.createSequentialGroup()
+                                .addGap(340, 340, 340)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 260,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createSequentialGroup()
+                                .addGap(390, 390, 390)
+                                .addComponent(jLabel4))
+                        .addComponent(jLabel3)
+                        .addComponent(loadingbar, javax.swing.GroupLayout.PREFERRED_SIZE, 600,
+                                javax.swing.GroupLayout.PREFERRED_SIZE));
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(370, 370, 370)
-                        .addComponent(loadingvalue))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(200, 200, 200)
-                        .addComponent(jLabel2))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(370, 370, 370)
-                        .addComponent(loadinglabel))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(160, 160, 160)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(290, 290, 290)
-                        .addComponent(jLabel4))
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 390, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addComponent(loadingbar, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addGap(370, 370, 370)
+                                                .addComponent(loadingvalue))
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addGap(200, 200, 200)
+                                                .addComponent(jLabel2))
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addGap(370, 370, 370)
+                                                .addComponent(loadinglabel))
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addGap(160, 160, 160)
+                                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 30,
+                                                        javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addGap(290, 290, 290)
+                                                .addComponent(jLabel4))
+                                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 390,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(loadingbar, javax.swing.GroupLayout.PREFERRED_SIZE, 10,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)));
 
         pack();
         setLocationRelativeTo(null);
@@ -103,4 +110,3 @@ public class LoadingScreen extends javax.swing.JFrame {
     public javax.swing.JLabel loadingvalue;
     // End of variables declaration//GEN-END:variables
 }
-
