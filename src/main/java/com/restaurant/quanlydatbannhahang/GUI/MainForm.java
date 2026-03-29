@@ -286,7 +286,7 @@ public class MainForm extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/home_app_logo_25dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icon_trangchu.png"))); // NOI18N
         jLabel1.setText("Trang chủ");
         panelTrangChu.add(jLabel1);
 
@@ -322,7 +322,7 @@ public class MainForm extends javax.swing.JFrame {
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/group_25dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png"))); // NOI18N
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icon_khachhang.png"))); // NOI18N
         jLabel4.setText("Khách hàng");
         panelKhachHang.add(jLabel4);
 
@@ -339,7 +339,7 @@ public class MainForm extends javax.swing.JFrame {
 
         jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/receipt_long_25dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png"))); // NOI18N
+        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icon_hoadon.png"))); // NOI18N
         jLabel10.setText("Hóa đơn");
         panelHoaDon.add(jLabel10);
 
@@ -356,7 +356,7 @@ public class MainForm extends javax.swing.JFrame {
 
         jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/settings_25dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png"))); // NOI18N
+        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icon_quanly.png"))); // NOI18N
         jLabel11.setText("Quản lý");
         panelQuanLy.add(jLabel11);
 
@@ -425,7 +425,7 @@ public class MainForm extends javax.swing.JFrame {
 
         jLabel12.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/finance_25dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png"))); // NOI18N
+        jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icon_thongke.png"))); // NOI18N
         jLabel12.setText("Thống kê");
         panelThongKe.add(jLabel12);
 
@@ -441,7 +441,7 @@ public class MainForm extends javax.swing.JFrame {
 
         jLabel14.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel14.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logout_25dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png"))); // NOI18N
+        jLabel14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icon_dangxuat.png"))); // NOI18N
         jLabel14.setText("Đăng xuất");
         panelDangXuat.add(jLabel14);
 
@@ -460,7 +460,7 @@ public class MainForm extends javax.swing.JFrame {
         jPanel5.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel18.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel18.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/account_circle_40dp_000000_FILL0_wght400_GRAD0_opsz40.png"))); // NOI18N
+        jLabel18.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icon_account.png"))); // NOI18N
 
         jLabel17.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel17.setText("Nguyễn Văn A");

@@ -138,7 +138,7 @@
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/images/icon_trangchu.png"/>
+                  <Image iconType="3" name="/images/home_app_logo_25dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Trang ch&#x1ee7;"/>
               </Properties>
@@ -226,7 +226,7 @@
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/images/icon_khachhang.png"/>
+                  <Image iconType="3" name="/images/group_25dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Kh&#xe1;ch h&#xe0;ng"/>
               </Properties>
@@ -267,7 +267,7 @@
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/images/icon_hoadon.png"/>
+                  <Image iconType="3" name="/images/receipt_long_25dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="H&#xf3;a &#x111;&#x1a1;n"/>
               </Properties>
@@ -308,7 +308,7 @@
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/images/icon_quanly.png"/>
+                  <Image iconType="3" name="/images/settings_25dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Qu&#x1ea3;n l&#xfd;"/>
               </Properties>
@@ -493,7 +493,7 @@
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/images/icon_thongke.png"/>
+                  <Image iconType="3" name="/images/finance_25dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Th&#x1ed1;ng k&#xea;"/>
               </Properties>
@@ -533,7 +533,7 @@
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/images/icon_dangxuat.png"/>
+                  <Image iconType="3" name="/images/logout_25dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="&#x110;&#x103;ng xu&#x1ea5;t"/>
               </Properties>
@@ -646,7 +646,7 @@
                       <Color blue="ff" green="ff" red="ff" type="rgb"/>
                     </Property>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/images/icon_account.png"/>
+                      <Image iconType="3" name="/images/account_circle_40dp_000000_FILL0_wght400_GRAD0_opsz40.png"/>
                     </Property>
                   </Properties>
                 </Component>
