@@ -3,17 +3,45 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package com.restaurant.quanlydatbannhahang.gui;
+import javax.swing.JPanel;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.GroupLayout;
+import java.awt.FlowLayout;
+import java.awt.Color;
+import javax.swing.BoxLayout;
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
-/**
- *
- * @author nguye
- */
+
 public class PanelDatBan extends javax.swing.JPanel {
+	private JTextField textField;
 
     /**
      * Creates new form PanelDatBan
      */
     public PanelDatBan() {
+    	
+    	JPanel panelContent = new JPanel();
+    	add(panelContent);
+    	
+    	JPanel panelTimKiem = new JPanel();
+    	panelContent.add(panelTimKiem);
+    	
+    	textField = new JTextField("Tìm kiếm theo số điện thoại");
+    	panelTimKiem.add(textField);
+    	textField.setColumns(10);
+    	
+    	JButton btnNewButton = new JButton("Tìm kiếm");
+    	btnNewButton.addActionListener(new ActionListener() {
+    		public void actionPerformed(ActionEvent e) {
+    		}
+    	});
+    	panelTimKiem.add(btnNewButton);
         initComponents();
     }
 
@@ -25,17 +53,5 @@ public class PanelDatBan extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated
     // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 400, Short.MAX_VALUE));
-        layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 300, Short.MAX_VALUE));
     }// </editor-fold>//GEN-END:initComponents
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    // End of variables declaration//GEN-END:variables
 }

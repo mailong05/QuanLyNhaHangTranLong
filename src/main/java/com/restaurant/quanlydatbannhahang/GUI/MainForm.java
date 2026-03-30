@@ -674,14 +674,14 @@ public class MainForm extends javax.swing.JFrame {
 
         panelBody.setBackground(new java.awt.Color(255, 251, 233));
 
-        javax.swing.GroupLayout panelBodyLayout = new javax.swing.GroupLayout(panelBody);
-        panelBody.setLayout(panelBodyLayout);
-        panelBodyLayout.setHorizontalGroup(
-                panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 0, Short.MAX_VALUE));
-        panelBodyLayout.setVerticalGroup(
-                panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 600, Short.MAX_VALUE));
+//        javax.swing.GroupLayout panelBodyLayout = new javax.swing.GroupLayout(panelBody);
+//        panelBody.setLayout(panelBodyLayout);
+//        panelBodyLayout.setHorizontalGroup(
+//                panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+//                        .addGap(0, 0, Short.MAX_VALUE));
+//        panelBodyLayout.setVerticalGroup(
+//                panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+//                        .addGap(0, 600, Short.MAX_VALUE));
 
         panelMainContent.add(panelBody, java.awt.BorderLayout.CENTER);
 
