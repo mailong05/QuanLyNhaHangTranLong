@@ -67,6 +67,37 @@ public class ChiTietHoaDon {
     }
 
     @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((maHD == null) ? 0 : maHD.hashCode());
+        result = prime * result + ((maMonAn == null) ? 0 : maMonAn.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        ChiTietHoaDon other = (ChiTietHoaDon) obj;
+        if (maHD == null) {
+            if (other.maHD != null)
+                return false;
+        } else if (!maHD.equals(other.maHD))
+            return false;
+        if (maMonAn == null) {
+            if (other.maMonAn != null)
+                return false;
+        } else if (!maMonAn.equals(other.maMonAn))
+            return false;
+        return true;
+    }
+
+    @Override
     public String toString() {
         return "ChiTietHoaDon{" +
                 "maHD='" + maHD + '\'' +

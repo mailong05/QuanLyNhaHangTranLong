@@ -94,6 +94,31 @@ public class PhieuGoiMon {
     }
 
     @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((maPhieuGoi == null) ? 0 : maPhieuGoi.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        PhieuGoiMon other = (PhieuGoiMon) obj;
+        if (maPhieuGoi == null) {
+            if (other.maPhieuGoi != null)
+                return false;
+        } else if (!maPhieuGoi.equals(other.maPhieuGoi))
+            return false;
+        return true;
+    }
+
+    @Override
     public String toString() {
         return "PhieuGoiMon{" +
                 "maPhieuGoi='" + maPhieuGoi + '\'' +
