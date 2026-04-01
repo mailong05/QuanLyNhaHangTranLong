@@ -2,18 +2,18 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package com.restaurant.quanlydatbannhahang.GUI;
+package com.restaurant.quanlydatbannhahang.gui;
 
 /**
  *
  * @author nguye
  */
-public class PanelQuanLyBan extends javax.swing.JPanel {
+public class PanelDatMon extends javax.swing.JPanel {
 
     /**
-     * Creates new form PanelQuanLyBan
+     * Creates new form PanelDatMon
      */
-    public PanelQuanLyBan() {
+    public PanelDatMon() {
         initComponents();
     }
 

@@ -1,1 +1,30 @@
-/target/
+# === Maven ===
+target/
+*.jar
+*.war
+*.ear
+
+# === NetBeans (Máy của bạn) ===
+nbproject/private/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+build/
+
+# === Eclipse (Máy của bạn mình) ===
+.metadata/
+.settings/
+.bin/
+.classpath
+.project
+
+# === IntelliJ (Phòng hờ bạn khác dùng) ===
+.idea/
+*.iml
+
+# === Hệ thống & Log ===
+*.log
+nb-configuration.xml
+.DS_Store
+Thumbs.db

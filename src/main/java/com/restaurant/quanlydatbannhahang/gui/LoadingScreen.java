@@ -1,4 +1,4 @@
-package com.restaurant.quanlydatbannhahang.GUI;
+package com.restaurant.quanlydatbannhahang.gui;
 
 import javax.swing.JOptionPane;
 

@@ -5,17 +5,25 @@
     <artifactId>QuanLyDatBanNhaHang</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
+    
     <dependencies>
         <dependency>
             <groupId>org.netbeans.external</groupId>
             <artifactId>AbsoluteLayout</artifactId>
             <version>RELEASE220</version>
         </dependency>
+        
+        <dependency>
+            <groupId>com.microsoft.sqlserver</groupId>
+            <artifactId>mssql-jdbc</artifactId>
+            <version>11.2.3.jre17</version>
+        </dependency>
     </dependencies>
+    
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
-        <exec.mainClass>com.restaurant.quanlydatbannhahang.QuanLyDatBanNhaHang</exec.mainClass>
+        <exec.mainClass>com.restaurant.quanlydatbannhahang.main.QuanLyDatBanNhaHang</exec.mainClass>
     </properties>
 </project>

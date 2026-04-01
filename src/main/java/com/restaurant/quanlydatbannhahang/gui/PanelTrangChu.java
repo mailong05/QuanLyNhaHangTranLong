@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package com.restaurant.quanlydatbannhahang.GUI;
+package com.restaurant.quanlydatbannhahang.gui;
 
 /**
  *
@@ -26,8 +26,7 @@ public class PanelTrangChu extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        pnlThongke = new javax.swing.JPanel();
-        pnlBangHoatDong = new javax.swing.JPanel();
+        pnlThongKe = new javax.swing.JPanel();
         cardBanSuDung = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -37,18 +36,21 @@ public class PanelTrangChu extends javax.swing.JPanel {
         cardDoanhThu = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
+        pnlBangHoatDong = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+        spTableHoatDong = new javax.swing.JScrollPane();
+        tblHoatDong = new javax.swing.JTable();
 
         setMaximumSize(new java.awt.Dimension(807, 600));
         setMinimumSize(new java.awt.Dimension(807, 600));
         setPreferredSize(new java.awt.Dimension(807, 600));
         setLayout(new java.awt.BorderLayout());
 
-        pnlThongke.setBackground(new java.awt.Color(255, 251, 233));
-        pnlThongke.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 100, 20));
-        add(pnlThongke, java.awt.BorderLayout.CENTER);
-
-        pnlBangHoatDong.setBackground(new java.awt.Color(255, 251, 233));
-        pnlBangHoatDong.setForeground(new java.awt.Color(255, 255, 255));
+        pnlThongKe.setBackground(new java.awt.Color(255, 251, 233));
+        pnlThongKe.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 60, 1, 60));
+        pnlThongKe.setForeground(new java.awt.Color(255, 255, 255));
+        pnlThongKe.setLayout(new java.awt.GridLayout(1, 3, 60, 0));
 
         cardBanSuDung.setBackground(new java.awt.Color(5, 223, 114));
         cardBanSuDung.setPreferredSize(new java.awt.Dimension(250, 120));
@@ -70,7 +72,7 @@ public class PanelTrangChu extends javax.swing.JPanel {
                 .addGroup(cardBanSuDungLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
                     .addComponent(jLabel4))
-                .addContainerGap(76, Short.MAX_VALUE))
+                .addContainerGap(140, Short.MAX_VALUE))
         );
         cardBanSuDungLayout.setVerticalGroup(
             cardBanSuDungLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -81,6 +83,8 @@ public class PanelTrangChu extends javax.swing.JPanel {
                 .addComponent(jLabel4)
                 .addContainerGap(28, Short.MAX_VALUE))
         );
+
+        pnlThongKe.add(cardBanSuDung);
 
         cardBanDatTruoc.setBackground(new java.awt.Color(253, 199, 0));
         cardBanDatTruoc.setPreferredSize(new java.awt.Dimension(250, 120));
@@ -102,7 +106,7 @@ public class PanelTrangChu extends javax.swing.JPanel {
                 .addGroup(cardBanDatTruocLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel5)
                     .addComponent(jLabel2))
-                .addContainerGap(114, Short.MAX_VALUE))
+                .addContainerGap(178, Short.MAX_VALUE))
         );
         cardBanDatTruocLayout.setVerticalGroup(
             cardBanDatTruocLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -113,6 +117,8 @@ public class PanelTrangChu extends javax.swing.JPanel {
                 .addComponent(jLabel5)
                 .addContainerGap(29, Short.MAX_VALUE))
         );
+
+        pnlThongKe.add(cardBanDatTruoc);
 
         cardDoanhThu.setBackground(new java.awt.Color(255, 100, 103));
         cardDoanhThu.setForeground(new java.awt.Color(255, 255, 255));
@@ -134,7 +140,7 @@ public class PanelTrangChu extends javax.swing.JPanel {
                 .addGroup(cardDoanhThuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
                     .addComponent(jLabel6))
-                .addContainerGap(63, Short.MAX_VALUE))
+                .addContainerGap(127, Short.MAX_VALUE))
         );
         cardDoanhThuLayout.setVerticalGroup(
             cardDoanhThuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -146,31 +152,46 @@ public class PanelTrangChu extends javax.swing.JPanel {
                 .addContainerGap(30, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout pnlBangHoatDongLayout = new javax.swing.GroupLayout(pnlBangHoatDong);
-        pnlBangHoatDong.setLayout(pnlBangHoatDongLayout);
-        pnlBangHoatDongLayout.setHorizontalGroup(
-            pnlBangHoatDongLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlBangHoatDongLayout.createSequentialGroup()
-                .addGap(64, 64, 64)
-                .addComponent(cardBanSuDung, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(70, 70, 70)
-                .addComponent(cardBanDatTruoc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(40, 40, 40)
-                .addComponent(cardDoanhThu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(97, Short.MAX_VALUE))
-        );
-        pnlBangHoatDongLayout.setVerticalGroup(
-            pnlBangHoatDongLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlBangHoatDongLayout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addGroup(pnlBangHoatDongLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(cardDoanhThu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cardBanDatTruoc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cardBanSuDung, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(27, Short.MAX_VALUE))
-        );
+        pnlThongKe.add(cardDoanhThu);
 
-        add(pnlBangHoatDong, java.awt.BorderLayout.PAGE_START);
+        add(pnlThongKe, java.awt.BorderLayout.PAGE_START);
+
+        pnlBangHoatDong.setBackground(new java.awt.Color(255, 251, 233));
+        pnlBangHoatDong.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 60, 20, 60));
+        pnlBangHoatDong.setLayout(new java.awt.BorderLayout());
+
+        jPanel1.setBackground(new java.awt.Color(254, 243, 198));
+        jPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 30, 30, 20));
+        jPanel1.setLayout(new java.awt.BorderLayout(0, 10));
+
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(148, 134, 111));
+        jLabel7.setText("Hoạt động gần đây");
+        jPanel1.add(jLabel7, java.awt.BorderLayout.PAGE_START);
+
+        spTableHoatDong.setBorder(null);
+
+        tblHoatDong.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "Khách hàng", "Khu vực", "Bàn", "Thời gian", "Trạng thái"
+            }
+        ));
+        tblHoatDong.setRowHeight(35);
+        tblHoatDong.setSelectionBackground(new java.awt.Color(240, 240, 240));
+        tblHoatDong.setShowGrid(false);
+        spTableHoatDong.setViewportView(tblHoatDong);
+
+        jPanel1.add(spTableHoatDong, java.awt.BorderLayout.CENTER);
+
+        pnlBangHoatDong.add(jPanel1, java.awt.BorderLayout.CENTER);
+
+        add(pnlBangHoatDong, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
 
@@ -184,7 +205,11 @@ public class PanelTrangChu extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel pnlBangHoatDong;
-    private javax.swing.JPanel pnlThongke;
+    private javax.swing.JPanel pnlThongKe;
+    private javax.swing.JScrollPane spTableHoatDong;
+    private javax.swing.JTable tblHoatDong;
     // End of variables declaration//GEN-END:variables
 }

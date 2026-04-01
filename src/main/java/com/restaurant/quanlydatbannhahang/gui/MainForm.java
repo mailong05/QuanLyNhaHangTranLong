@@ -1,4 +1,4 @@
-package com.restaurant.quanlydatbannhahang.GUI;
+package com.restaurant.quanlydatbannhahang.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -8,26 +8,50 @@ import java.awt.event.MouseEvent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import com.restaurant.quanlydatbannhahang.entity.TaiKhoan;
 
 public class MainForm extends javax.swing.JFrame {
 
     private String userRole;
-    private JPanel activePanel = null; 
-    private JLabel activeSubLabel = null; 
-    
+    private TaiKhoan taiKhoan = null; // Lưu object TaiKhoan
+    private JPanel activePanel = null;
+    private JLabel activeSubLabel = null;
+
     // Khởi tạo các Panel chức năng
-    private PanelTrangChu pnlTrangChu; 
+    private PanelTrangChu pnlTrangChu;
 
     // Định nghĩa màu sắc chuẩn
-    private final Color COLOR_MENU_BG = new Color(142, 128, 106);    
-    private final Color COLOR_MENU_HOVER = new Color(165, 150, 125); 
-    private final Color COLOR_TEXT_NORMAL = new Color(255, 255, 255); 
-    private final Color COLOR_TEXT_ACTIVE = new Color(255, 240, 150); 
+    private final Color COLOR_MENU_BG = new Color(142, 128, 106);
+    private final Color COLOR_MENU_HOVER = new Color(165, 150, 125);
+    private final Color COLOR_TEXT_NORMAL = new Color(255, 255, 255);
+    private final Color COLOR_TEXT_ACTIVE = new Color(255, 240, 150);
 
     public MainForm(String role) {
-        this.userRole = (role != null) ? role : "Quản lý"; 
-        initComponents(); 
-        initCustomComponents(); 
+        this.userRole = (role != null) ? role : "Quản lý";
+        this.taiKhoan = null;
+        try {
+            initComponents();
+            initCustomComponents();
+        } catch (Exception e) {
+            System.out.println("❌ MainForm: Lỗi " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Lỗi khởi tạo MainForm", e);
+        }
+    }
+
+    public MainForm(TaiKhoan taiKhoan) {
+        this.taiKhoan = taiKhoan; // Set TaiKhoan TRƯỚC
+        this.userRole = (taiKhoan != null && taiKhoan.getNhanVien() != null)
+                ? taiKhoan.getNhanVien().getChucVu()
+                : "Quản lý";
+        try {
+            initComponents();
+            initCustomComponents();
+        } catch (Exception e) {
+            System.out.println("❌ MainForm: Lỗi " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Lỗi khởi tạo MainForm", e);
+        }
     }
 
     public MainForm() {
@@ -35,29 +59,98 @@ public class MainForm extends javax.swing.JFrame {
     }
 
     private void initCustomComponents() {
+        // 0. Fix missing images
+        replaceImagesWithCorrectPaths();
+
         // 1. Cấu hình cửa sổ
         this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         this.setLocationRelativeTo(null);
         this.setTitle("Hệ thống quản lý đặt bàn nhà hàng");
-        
+
         // 2. Thiết lập Layout cho vùng nội dung (Quan trọng)
         // Đảm bảo panelBody dùng BorderLayout để các trang con lấp đầy diện tích
         panelBody.setLayout(new BorderLayout());
-        
+
         // 3. Khởi tạo các Panel chức năng
         pnlTrangChu = new PanelTrangChu();
-        
+
         // 4. Thiết lập trạng thái menu ban đầu
         panelSubQuanLy.setVisible(false);
         batSuKienMenu();
         phanQuyenGiaoDien();
-        
+
         // 5. Hiển thị mặc định: Trang chủ
         updateActivePanel(panelTrangChu);
         jLabel13.setText("TRANG CHỦ");
         showPanel(pnlTrangChu); // Đưa trang chủ vào panelBody
     }
-    
+
+    // Helper method to load images safely
+    private javax.swing.ImageIcon loadImageOrNull(String resourcePath) {
+        try {
+            java.net.URL imageUrl = getClass().getResource(resourcePath);
+            if (imageUrl != null) {
+                return new javax.swing.ImageIcon(imageUrl);
+            } else {
+                System.out.println("⚠ Image không tìm thấy: " + resourcePath);
+                return null;
+            }
+        } catch (Exception e) {
+            System.out.println("⚠ Lỗi load image " + resourcePath + ": " + e.getMessage());
+            return null;
+        }
+    }
+
+    // Method to replace images with actual files
+    private void replaceImagesWithCorrectPaths() {
+        try {
+            // Map old paths to new paths
+            javax.swing.ImageIcon homeIcon = loadImageOrNull("/images/icon_trangchu.png");
+            if (homeIcon != null && jLabel1 != null) {
+                jLabel1.setIcon(homeIcon);
+            }
+
+            javax.swing.ImageIcon tableIcon = loadImageOrNull("/images/icon_datban.png");
+            if (tableIcon != null && jLabel3 != null) {
+                jLabel3.setIcon(tableIcon);
+            }
+
+            javax.swing.ImageIcon userIcon = loadImageOrNull("/images/logo-user.png");
+            if (userIcon != null && jLabel4 != null) {
+                jLabel4.setIcon(userIcon);
+            }
+
+            javax.swing.ImageIcon billIcon = loadImageOrNull("/images/icon_hoadon.png");
+            if (billIcon != null && jLabel10 != null) {
+                jLabel10.setIcon(billIcon);
+            }
+
+            javax.swing.ImageIcon settingsIcon = loadImageOrNull("/images/icon_quanly.png");
+            if (settingsIcon != null && jLabel11 != null) {
+                jLabel11.setIcon(settingsIcon);
+            }
+
+            javax.swing.ImageIcon chartIcon = loadImageOrNull("/images/logo-chart.png");
+            if (chartIcon != null && jLabel12 != null) {
+                jLabel12.setIcon(chartIcon);
+            }
+
+            javax.swing.ImageIcon logoutIcon = loadImageOrNull("/images/logo-logout.png");
+            if (logoutIcon != null && jLabel14 != null) {
+                jLabel14.setIcon(logoutIcon);
+            }
+
+            javax.swing.ImageIcon accountIcon = loadImageOrNull("/images/logo-user.png");
+            if (accountIcon != null && jLabel18 != null) {
+                jLabel18.setIcon(accountIcon);
+            }
+
+            System.out.println("✓ Đã load xong các image");
+        } catch (Exception e) {
+            System.out.println("⚠ Lỗi load image: " + e.getMessage());
+        }
+    }
+
     // Hàm này dùng để nạp các trang con vào vùng trống panelBody
     private void showPanel(JPanel panel) {
         panelBody.removeAll();
@@ -77,8 +170,17 @@ public class MainForm extends javax.swing.JFrame {
     }
 
     private void phanQuyenGiaoDien() {
-        jLabel17.setText("Nguyễn Đức Trí"); 
-        jLabel19.setText(userRole);
+        // Lấy tên nhân viên từ TaiKhoan object
+        String tenNhanVien = "Nhân viên";
+        String chucVu = userRole;
+
+        if (taiKhoan != null && taiKhoan.getNhanVien() != null) {
+            tenNhanVien = taiKhoan.getNhanVien().getHoTen();
+            chucVu = taiKhoan.getNhanVien().getChucVu();
+        }
+
+        jLabel17.setText(tenNhanVien);
+        jLabel19.setText(chucVu);
 
         if ("Nhân viên".equals(userRole)) {
             panelQuanLy.setVisible(false);
@@ -89,13 +191,13 @@ public class MainForm extends javax.swing.JFrame {
 
     private void batSuKienMenu() {
         // --- 1. NHÓM PANEL CHUYỂN TRANG CHÍNH ---
-        JPanel[] pagePanels = {panelTrangChu, panelDatBan, panelKhachHang, panelHoaDon, panelThongKe};
+        JPanel[] pagePanels = { panelTrangChu, panelDatBan, panelKhachHang, panelHoaDon, panelThongKe };
         for (JPanel pnl : pagePanels) {
             pnl.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent evt) {
                     updateActivePanel(pnl);
-                    
+
                     String title = "";
                     // Lấy text của Label đầu tiên trong Panel để hiển thị lên Header
                     if (pnl.getComponent(0) instanceof JLabel) {
@@ -109,13 +211,17 @@ public class MainForm extends javax.swing.JFrame {
                         showPanel(createTempPanel(title));
                     }
                 }
+
                 @Override
                 public void mouseEntered(MouseEvent evt) {
-                    if (pnl != activePanel) pnl.setBackground(COLOR_MENU_HOVER);
+                    if (pnl != activePanel)
+                        pnl.setBackground(COLOR_MENU_HOVER);
                 }
+
                 @Override
                 public void mouseExited(MouseEvent evt) {
-                    if (pnl != activePanel) pnl.setBackground(COLOR_MENU_BG);
+                    if (pnl != activePanel)
+                        pnl.setBackground(COLOR_MENU_BG);
                 }
             });
         }
@@ -128,11 +234,17 @@ public class MainForm extends javax.swing.JFrame {
                 panelSubQuanLy.setVisible(!isVisible);
                 panelMenu.revalidate();
             }
-            @Override public void mouseEntered(MouseEvent evt) { 
-                if (activePanel != panelQuanLy) panelQuanLy.setBackground(COLOR_MENU_HOVER); 
+
+            @Override
+            public void mouseEntered(MouseEvent evt) {
+                if (activePanel != panelQuanLy)
+                    panelQuanLy.setBackground(COLOR_MENU_HOVER);
             }
-            @Override public void mouseExited(MouseEvent evt) { 
-                if (activePanel != panelQuanLy) panelQuanLy.setBackground(COLOR_MENU_BG); 
+
+            @Override
+            public void mouseExited(MouseEvent evt) {
+                if (activePanel != panelQuanLy)
+                    panelQuanLy.setBackground(COLOR_MENU_BG);
             }
         });
 
@@ -148,16 +260,27 @@ public class MainForm extends javax.swing.JFrame {
         panelDangXuat.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                int opt = JOptionPane.showConfirmDialog(MainForm.this, 
-                        "Bạn có chắc chắn muốn đăng xuất?", "Xác nhận", 
+                int opt = JOptionPane.showConfirmDialog(MainForm.this,
+                        "Bạn có chắc chắn muốn đăng xuất?", "Xác nhận",
                         JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (opt == JOptionPane.YES_OPTION) {
-                    dispose();
-                    // new LoginForm().setVisible(true); 
+                    // Quay lại LoginForm thay vì thoát
+                    LoginForm loginForm = new LoginForm();
+                    loginForm.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+                    loginForm.setVisible(true);
+                    dispose(); // Đóng MainForm
                 }
             }
-            @Override public void mouseEntered(MouseEvent evt) { panelDangXuat.setBackground(new Color(200, 80, 80)); }
-            @Override public void mouseExited(MouseEvent evt) { panelDangXuat.setBackground(COLOR_MENU_BG); }
+
+            @Override
+            public void mouseEntered(MouseEvent evt) {
+                panelDangXuat.setBackground(new Color(200, 80, 80));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent evt) {
+                panelDangXuat.setBackground(COLOR_MENU_BG);
+            }
         });
     }
 
@@ -165,11 +288,11 @@ public class MainForm extends javax.swing.JFrame {
         if (activePanel != null) {
             activePanel.setBackground(COLOR_MENU_BG);
         }
-        
+
         if (newActive != panelQuanLy && activeSubLabel != null) {
             activeSubLabel.setForeground(COLOR_TEXT_NORMAL);
             activeSubLabel.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-            activeSubLabel = null; 
+            activeSubLabel = null;
         }
 
         activePanel = newActive;
@@ -184,23 +307,27 @@ public class MainForm extends javax.swing.JFrame {
                     activeSubLabel.setForeground(COLOR_TEXT_NORMAL);
                     activeSubLabel.setFont(new Font("Segoe UI", Font.PLAIN, 15));
                 }
-                
+
                 activeSubLabel = label;
                 activeSubLabel.setForeground(COLOR_TEXT_ACTIVE);
                 activeSubLabel.setFont(new Font("Segoe UI", Font.BOLD, 15));
 
                 jLabel13.setText("QUẢN LÝ " + menuName.toUpperCase());
                 updateActivePanel(panelQuanLy);
-                
+
                 showPanel(createTempPanel("Quản lý " + menuName));
             }
+
             @Override
             public void mouseEntered(MouseEvent evt) {
-                if (label != activeSubLabel) label.setForeground(COLOR_TEXT_ACTIVE);
+                if (label != activeSubLabel)
+                    label.setForeground(COLOR_TEXT_ACTIVE);
             }
+
             @Override
             public void mouseExited(MouseEvent evt) {
-                if (label != activeSubLabel) label.setForeground(COLOR_TEXT_NORMAL);
+                if (label != activeSubLabel)
+                    label.setForeground(COLOR_TEXT_NORMAL);
             }
         });
     }
@@ -217,12 +344,16 @@ public class MainForm extends javax.swing.JFrame {
         jLabel16 = new javax.swing.JLabel();
         panelTrangChu = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 7), new java.awt.Dimension(0, 7), new java.awt.Dimension(0, 7));
         panelDatBan = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 7), new java.awt.Dimension(0, 7), new java.awt.Dimension(0, 7));
         panelKhachHang = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
+        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 7), new java.awt.Dimension(0, 7), new java.awt.Dimension(0, 7));
         panelHoaDon = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
+        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 7), new java.awt.Dimension(0, 7), new java.awt.Dimension(0, 7));
         panelQuanLy = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         panelSubQuanLy = new javax.swing.JPanel();
@@ -232,8 +363,10 @@ public class MainForm extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
+        filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 7), new java.awt.Dimension(0, 7), new java.awt.Dimension(0, 7));
         panelThongKe = new javax.swing.JPanel();
         jLabel12 = new javax.swing.JLabel();
+        filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
         panelDangXuat = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
         panelMainContent = new javax.swing.JPanel();
@@ -248,13 +381,14 @@ public class MainForm extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         panelMenu.setBackground(new java.awt.Color(142, 128, 106));
-        panelMenu.setMaximumSize(new java.awt.Dimension(200, 600));
+        panelMenu.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 5, 10, 5));
+        panelMenu.setMaximumSize(new java.awt.Dimension(200, 32767));
         panelMenu.setMinimumSize(new java.awt.Dimension(200, 600));
         panelMenu.setPreferredSize(new java.awt.Dimension(200, 600));
         panelMenu.setLayout(new javax.swing.BoxLayout(panelMenu, javax.swing.BoxLayout.Y_AXIS));
 
         jPanel4.setBackground(new java.awt.Color(142, 128, 106));
-        jPanel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(8, 8, 1, 1));
+        jPanel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 8, 1, 1));
         jPanel4.setAlignmentX(0.0F);
         jPanel4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jPanel4.setMaximumSize(new java.awt.Dimension(200, 70));
@@ -265,7 +399,7 @@ public class MainForm extends javax.swing.JFrame {
         jLabel15.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel15.setForeground(new java.awt.Color(255, 255, 255));
         jLabel15.setText("Trần Long");
-        jLabel15.setMaximumSize(new java.awt.Dimension(150, 27));
+        jLabel15.setMaximumSize(new java.awt.Dimension(150, 32));
         jPanel4.add(jLabel15);
 
         jLabel16.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
@@ -276,8 +410,8 @@ public class MainForm extends javax.swing.JFrame {
         panelMenu.add(jPanel4);
 
         panelTrangChu.setBackground(new java.awt.Color(142, 128, 106));
+        panelTrangChu.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         panelTrangChu.setAlignmentX(0.0F);
-        panelTrangChu.setAlignmentY(0.0F);
         panelTrangChu.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         panelTrangChu.setMaximumSize(new java.awt.Dimension(200, 40));
         panelTrangChu.setMinimumSize(new java.awt.Dimension(200, 40));
@@ -291,8 +425,10 @@ public class MainForm extends javax.swing.JFrame {
         panelTrangChu.add(jLabel1);
 
         panelMenu.add(panelTrangChu);
+        panelMenu.add(filler2);
 
         panelDatBan.setBackground(new java.awt.Color(142, 128, 106));
+        panelDatBan.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         panelDatBan.setAlignmentX(0.0F);
         panelDatBan.setAlignmentY(0.0F);
         panelDatBan.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -309,6 +445,7 @@ public class MainForm extends javax.swing.JFrame {
         panelDatBan.add(jLabel3);
 
         panelMenu.add(panelDatBan);
+        panelMenu.add(filler1);
 
         panelKhachHang.setBackground(new java.awt.Color(142, 128, 106));
         panelKhachHang.setAlignmentX(0.0F);
@@ -327,6 +464,7 @@ public class MainForm extends javax.swing.JFrame {
         panelKhachHang.add(jLabel4);
 
         panelMenu.add(panelKhachHang);
+        panelMenu.add(filler3);
 
         panelHoaDon.setBackground(new java.awt.Color(142, 128, 106));
         panelHoaDon.setAlignmentX(0.0F);
@@ -344,6 +482,7 @@ public class MainForm extends javax.swing.JFrame {
         panelHoaDon.add(jLabel10);
 
         panelMenu.add(panelHoaDon);
+        panelMenu.add(filler4);
 
         panelQuanLy.setBackground(new java.awt.Color(142, 128, 106));
         panelQuanLy.setAlignmentX(0.0F);
@@ -414,6 +553,7 @@ public class MainForm extends javax.swing.JFrame {
         panelSubQuanLy.add(jLabel9);
 
         panelMenu.add(panelSubQuanLy);
+        panelMenu.add(filler6);
 
         panelThongKe.setBackground(new java.awt.Color(142, 128, 106));
         panelThongKe.setAlignmentX(0.0F);
@@ -430,6 +570,7 @@ public class MainForm extends javax.swing.JFrame {
         panelThongKe.add(jLabel12);
 
         panelMenu.add(panelThongKe);
+        panelMenu.add(filler5);
 
         panelDangXuat.setBackground(new java.awt.Color(142, 128, 106));
         panelDangXuat.setAlignmentX(0.0F);
@@ -498,7 +639,7 @@ public class MainForm extends javax.swing.JFrame {
             .addGroup(panelHeaderLayout.createSequentialGroup()
                 .addGap(17, 17, 17)
                 .addComponent(jLabel13)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 469, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 643, Short.MAX_VALUE)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(16, 16, 16))
         );
@@ -522,11 +663,11 @@ public class MainForm extends javax.swing.JFrame {
         panelBody.setLayout(panelBodyLayout);
         panelBodyLayout.setHorizontalGroup(
             panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 981, Short.MAX_VALUE)
         );
         panelBodyLayout.setVerticalGroup(
             panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 600, Short.MAX_VALUE)
+            .addGap(0, 562, Short.MAX_VALUE)
         );
 
         panelMainContent.add(panelBody, java.awt.BorderLayout.CENTER);
@@ -536,6 +677,12 @@ public class MainForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.Box.Filler filler1;
+    private javax.swing.Box.Filler filler2;
+    private javax.swing.Box.Filler filler3;
+    private javax.swing.Box.Filler filler4;
+    private javax.swing.Box.Filler filler5;
+    private javax.swing.Box.Filler filler6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

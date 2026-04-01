@@ -1,8 +1,12 @@
-package com.restaurant.quanlydatbannhahang.GUI;
+package com.restaurant.quanlydatbannhahang.gui;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import java.awt.Color;
+import com.restaurant.quanlydatbannhahang.gui.MainForm;
+import com.restaurant.quanlydatbannhahang.gui.ForgetPasswordForm;
+import com.restaurant.quanlydatbannhahang.entity.TaiKhoan;
+import com.restaurant.quanlydatbannhahang.service.AuthService;
 
 public class LoginForm extends javax.swing.JFrame {
 
@@ -10,16 +14,17 @@ public class LoginForm extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null); // Căn giữa màn hình
 
-        // place holder
+        // Thiết lập Placeholder mặc định
         txtUsername.setText("Username");
         txtPassword.setText("Password");
         txtPassword.setEchoChar((char) 0);
         txtUsername.setForeground(new Color(102, 102, 102));
         txtPassword.setForeground(new Color(102, 102, 102));
 
-        // focus jlabel để không tự nhảy vô input
-        jLabel6.requestFocusInWindow(); 
-        //xử lý Placeholder cho ô Username
+        // Đẩy focus ra khỏi các ô input lúc mới mở
+        jLabel6.requestFocusInWindow();
+
+        // Xử lý Placeholder cho ô Username
         txtUsername.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -28,6 +33,7 @@ public class LoginForm extends javax.swing.JFrame {
                     txtUsername.setForeground(Color.BLACK);
                 }
             }
+
             @Override
             public void focusLost(java.awt.event.FocusEvent evt) {
                 if (txtUsername.getText().isEmpty()) {
@@ -37,7 +43,7 @@ public class LoginForm extends javax.swing.JFrame {
             }
         });
 
-        //placeholder cho ô Password
+        // Placeholder cho ô Password
         txtPassword.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -45,9 +51,10 @@ public class LoginForm extends javax.swing.JFrame {
                 if (pass.equals("Password")) {
                     txtPassword.setText("");
                     txtPassword.setForeground(Color.BLACK);
-                    txtPassword.setEchoChar('*');
+                    txtPassword.setEchoChar('●');
                 }
             }
+
             @Override
             public void focusLost(java.awt.event.FocusEvent evt) {
                 String pass = String.valueOf(txtPassword.getPassword());
@@ -58,10 +65,15 @@ public class LoginForm extends javax.swing.JFrame {
                 }
             }
         });
-        //tắt viền xanh cho các nút trên giao diện
+
+        // Tắt viền xanh cho các nút
         btnLogin.setFocusPainted(false);
         btnCancel.setFocusPainted(false);
         checkRemember.setFocusPainted(false);
+
+        // Ẩn icon mắt mở lúc đầu (mặc định là ẩn mật khẩu)
+        iconEye.setVisible(false);
+        iconHide.setVisible(true);
     }
     
     @SuppressWarnings("unchecked")
@@ -332,42 +344,97 @@ public class LoginForm extends javax.swing.JFrame {
     }//GEN-LAST:event_txtUsernameActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-        // Reset Username
         txtUsername.setText("Username");
         txtUsername.setForeground(new Color(102, 102, 102));
-
-        // Reset Password
         txtPassword.setText("Password");
         txtPassword.setForeground(new Color(102, 102, 102));
         txtPassword.setEchoChar((char) 0);
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-    String user = txtUsername.getText();
-        String pass = String.valueOf(txtPassword.getPassword());
+        String user = txtUsername.getText().trim();
+        String pass = String.valueOf(txtPassword.getPassword()).trim();
 
-        if (user.equals("Username") || pass.equals("Password") || user.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!");
+        // Validate input
+        if (user.isEmpty() || user.equals("Username")) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập tên đăng nhập!", "Thông báo",
+                    JOptionPane.WARNING_MESSAGE);
+            txtUsername.requestFocus();
             return;
         }
 
-        // 2. Giả lập kiểm tra tài khoản (Sau này thay bằng Database)
-        String role = ""; 
-        if (user.equals("admin") && pass.equals("123")) {
-            role = "Quản lý";
-        } else if (user.equals("staff") && pass.equals("123")) {
-            role = "Nhân viên";
+        if (pass.isEmpty() || pass.equals("Password")) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập mật khẩu!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            txtPassword.requestFocus();
+            return;
         }
 
-        if (!role.equals("")) {
-            JOptionPane.showMessageDialog(this, "Đăng nhập thành công với quyền: " + role);
+        // Gọi AuthService để lấy dữ liệu từ Database
+        AuthService authService = new AuthService();
+        TaiKhoan taiKhoan = authService.login(user, pass);
 
-            MainForm main = new MainForm(role); 
-            main.setVisible(true);
-            this.dispose();
+        if (taiKhoan != null) {
+            JOptionPane.showMessageDialog(this,
+                    "Đăng nhập thành công!\nXin chào: " + taiKhoan.getNhanVien().getHoTen(),
+                    "Thành công",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+            try {
+                // Ẩn LoginForm
+                this.setVisible(false);
+                System.out.println("✓ LoginForm ẩn thành công");
+
+                // Mở MainForm và truyền thông tin user
+                System.out.println("Đang tạo MainForm...");
+                MainForm mainForm = new MainForm(taiKhoan);
+                System.out.println("✓ MainForm khởi tạo xong");
+
+                mainForm.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+                System.out.println("✓ Thiết lập setDefaultCloseOperation");
+
+                mainForm.setVisible(true);
+                System.out.println("✓ MainForm hiển thị");
+
+                // Đóng LoginForm sau khi MainForm hiển thị
+                this.dispose();
+                System.out.println("✓ LoginForm đã đóng");
+            } catch (RuntimeException e) {
+                // Nếu là lỗi khởi tạo MainForm
+                if (e.getMessage() != null && e.getMessage().contains("khởi tạo MainForm")) {
+                    System.out.println("❌ Lỗi khởi tạo MainForm: " + e.getCause().getMessage());
+                    this.setVisible(true);
+                    JOptionPane.showMessageDialog(this,
+                            "Lỗi: " + e.getCause().getMessage() +
+                                    "\n\nVui lòng kiểm tra:\n" +
+                                    "1. Các file image trong thư mục resources/images\n" +
+                                    "2. Database connection\n" +
+                                    "3. Thử đăng nhập lại",
+                            "Lỗi",
+                            JOptionPane.ERROR_MESSAGE);
+                } else {
+                    throw e;
+                }
+            } catch (Exception e) {
+                System.out.println("❌ Lỗi khi mở MainForm: " + e.getMessage());
+                e.printStackTrace();
+                this.setVisible(true);
+                JOptionPane.showMessageDialog(this,
+                        "Lỗi khi mở giao diện chính:\n" + e.getMessage(),
+                        "Lỗi",
+                        JOptionPane.ERROR_MESSAGE);
+            }
         } else {
-            JOptionPane.showMessageDialog(this, "Tài khoản hoặc mật khẩu sai!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-        }      
+            JOptionPane.showMessageDialog(this,
+                    "Tên đăng nhập hoặc mật khẩu không đúng!",
+                    "Lỗi đăng nhập",
+                    JOptionPane.ERROR_MESSAGE);
+            txtPassword.setText("");
+            txtPassword.setEchoChar((char) 0);
+            txtPassword.setText("Password");
+            txtPassword.setForeground(new Color(102, 102, 102));
+            txtUsername.requestFocus();
+        }
+
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void checkRememberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkRememberActionPerformed
@@ -377,7 +444,7 @@ public class LoginForm extends javax.swing.JFrame {
     private void iconEyeMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_iconEyeMousePressed
         iconHide.setVisible(true);
         iconEye.setVisible(false);
-        txtPassword.setEchoChar('*');
+        txtPassword.setEchoChar('●');
     }//GEN-LAST:event_iconEyeMousePressed
 
     private void iconHideMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_iconHideMousePressed
@@ -387,43 +454,33 @@ public class LoginForm extends javax.swing.JFrame {
     }//GEN-LAST:event_iconHideMousePressed
 
     private void clickForgotpasswordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_clickForgotpasswordMouseClicked
-        // Khởi tạo Form Quên mật khẩu
-        ForgetPasswordForm forgetForm = new ForgetPasswordForm();
-
-        // Hiển thị nó lên
-        forgetForm.setVisible(true);      
+        new ForgetPasswordForm().setVisible(true);     
     }//GEN-LAST:event_clickForgotpasswordMouseClicked
 
+    // Getter Methods
+    public javax.swing.JTextField getTxtUsername() {
+        return txtUsername;
+    }
+
+    public javax.swing.JPasswordField getTxtPassword() {
+        return txtPassword;
+    }
+
+    public javax.swing.JButton getBtnLogin() {
+        return btnLogin;
+    }
+
+    public javax.swing.JButton getBtnCancel() {
+        return btnCancel;
+    }
+
+    public javax.swing.JCheckBox getCheckRemember() {
+        return checkRemember;
+    }
 
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(LoginForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(LoginForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(LoginForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(LoginForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new LoginForm().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new LoginForm().setVisible(true);
         });
     }
 
