@@ -1,4 +1,4 @@
-package com.restaurant.quanlydatbannhahang;
+package com.restaurant.quanlydatbannhahang.main;
 
 import com.restaurant.quanlydatbannhahang.connectDB.DatabaseConnection;
 import javax.swing.JOptionPane;
