@@ -3,19 +3,18 @@ package com.restaurant.quanlydatbannhahang.entity;
 public class TaiKhoan {
     private String username;
     private String password;
-    private String maNV;
+    private NhanVien nhanVien;
     private String quyenHan;
-    private NhanVien nhanVien; // Để lưu thông tin nhân viên
 
     // Constructor không tham số
     public TaiKhoan() {
     }
 
     // Constructor đầy đủ
-    public TaiKhoan(String username, String password, String maNV, String quyenHan) {
+    public TaiKhoan(String username, String password, NhanVien nhanVien, String quyenHan) {
         this.username = username;
         this.password = password;
-        this.maNV = maNV;
+        this.nhanVien = nhanVien;
         this.quyenHan = quyenHan;
     }
 
@@ -36,12 +35,12 @@ public class TaiKhoan {
         this.password = password;
     }
 
-    public String getMaNV() {
-        return maNV;
+    public NhanVien getNhanVien() {
+        return nhanVien;
     }
 
-    public void setMaNV(String maNV) {
-        this.maNV = maNV;
+    public void setNhanVien(NhanVien nhanVien) {
+        this.nhanVien = nhanVien;
     }
 
     public String getQuyenHan() {
@@ -52,20 +51,40 @@ public class TaiKhoan {
         this.quyenHan = quyenHan;
     }
 
-    public NhanVien getNhanVien() {
-        return nhanVien;
+    // Các phương thức cần thiết
+    public boolean kiemTraDangNhap() {
+        return username != null && !username.isEmpty() && password != null && !password.isEmpty();
     }
 
-    public void setNhanVien(NhanVien nhanVien) {
-        this.nhanVien = nhanVien;
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((username == null) ? 0 : username.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        TaiKhoan other = (TaiKhoan) obj;
+        if (username == null) {
+            if (other.username != null)
+                return false;
+        } else if (!username.equals(other.username))
+            return false;
+        return true;
     }
 
     @Override
     public String toString() {
-        return "TaiKhoan{" +
-                "username='" + username + '\'' +
-                ", maNV='" + maNV + '\'' +
-                ", quyenHan='" + quyenHan + '\'' +
-                '}';
+        return "TaiKhoan [username=" + username + ", password=" + password + ", nhanVien=" + nhanVien + ", quyenHan="
+                + quyenHan + "]";
     }
+
 }

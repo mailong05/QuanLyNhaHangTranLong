@@ -8,13 +8,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 
 public class TaiKhoanDAO {
     private Connection connection;
+    private NhanVienDAO nv_dao;
 
     public TaiKhoanDAO() {
         this.connection = DatabaseConnection.getConnection();
+        nv_dao = new NhanVienDAO();
     }
 
     /**
@@ -51,7 +52,8 @@ public class TaiKhoanDAO {
                     TaiKhoan taiKhoan = new TaiKhoan();
                     taiKhoan.setUsername(rs.getString("username"));
                     taiKhoan.setPassword(rs.getString("password"));
-                    taiKhoan.setMaNV(rs.getString("maNV"));
+                    NhanVien nv = nv_dao.getNhanVienTheoMa(rs.getString("maNV"));
+                    taiKhoan.setNhanVien(nv);
                     taiKhoan.setQuyenHan(rs.getString("quyenHan"));
                     taiKhoan.setNhanVien(nhanVien);
 
@@ -92,7 +94,8 @@ public class TaiKhoanDAO {
                     TaiKhoan taiKhoan = new TaiKhoan();
                     taiKhoan.setUsername(rs.getString("username"));
                     taiKhoan.setPassword(rs.getString("password"));
-                    taiKhoan.setMaNV(rs.getString("maNV"));
+                    NhanVien nv = nv_dao.getNhanVienTheoMa(rs.getString("maNV"));
+                    taiKhoan.setNhanVien(nv);
                     taiKhoan.setQuyenHan(rs.getString("quyenHan"));
                     taiKhoan.setNhanVien(nhanVien);
 
