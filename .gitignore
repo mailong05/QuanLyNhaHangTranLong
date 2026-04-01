@@ -1,2 +1,35 @@
+<<<<<<< HEAD
 /target/
 /bin/
+=======
+# === Maven ===
+target/
+*.jar
+*.war
+*.ear
+
+# === NetBeans ===
+nbproject/private/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+build/
+
+# === Eclipse ===
+.metadata/
+bin/
+.settings/
+.classpath
+.project
+
+# === IntelliJ ===
+.idea/
+*.iml
+
+# === Hệ thống & Log ===
+*.log
+nb-configuration.xml
+.DS_Store
+Thumbs.db
+>>>>>>> ban-cap-nhat-moi

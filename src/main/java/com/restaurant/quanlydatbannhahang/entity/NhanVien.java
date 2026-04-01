@@ -68,14 +68,6 @@ public class NhanVien {
         this.sdt = sdt;
     }
 
-    public LocalDate getngayVaoLam() {
-        return ngayVaoLam;
-    }
-
-    public void setngayVaoLam(LocalDate ngayVaoLam) {
-        this.ngayVaoLam = ngayVaoLam;
-    }
-
     public double getLuongCoBan() {
         return luongCoBan;
     }

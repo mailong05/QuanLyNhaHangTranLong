@@ -6,12 +6,11 @@ import java.sql.SQLException;
 
 public class DatabaseConnection {
     private static final String URL = "jdbc:sqlserver://localhost:1433;databaseName=QuanLyDatBan;encrypt=true;trustServerCertificate=true";
-    private static final String USERNAME = "sa"; 
-    private static final String PASSWORD = "sapassword"; 
+    private static final String USERNAME = "sa";
+    private static final String PASSWORD = "sapassword";
 
     private static Connection connection = null;
 
-  
     public static Connection getConnection() {
         if (connection == null) {
             try {
@@ -34,7 +33,6 @@ public class DatabaseConnection {
         return connection;
     }
 
-   
     public static void closeConnection() {
         try {
             if (connection != null && !connection.isClosed()) {
@@ -47,7 +45,6 @@ public class DatabaseConnection {
         }
     }
 
- 
     public static boolean isConnected() {
         try {
             return connection != null && !connection.isClosed();
