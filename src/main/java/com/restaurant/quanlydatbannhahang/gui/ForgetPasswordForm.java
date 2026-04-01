@@ -1,6 +1,10 @@
 package com.restaurant.quanlydatbannhahang.gui;
 
 import javax.swing.JFrame;
+import javax.swing.JTextField;
+import javax.swing.JLabel;
+import javax.swing.ImageIcon;
+import java.awt.Font;
 
 public class ForgetPasswordForm extends javax.swing.JFrame {
 
@@ -12,16 +16,10 @@ public class ForgetPasswordForm extends javax.swing.JFrame {
         // thiết lập Font chữ đồng bộ
         java.awt.Font fontsize = new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 12);
         txtUsername.setFont(fontsize);
-        txtIdcard.setFont(fontsize);
-        txtTelephone.setFont(fontsize);
-        txtEmail.setFont(fontsize);
         jButton1.setFont(fontsize);
         jButton2.setFont(fontsize);
 
         txtUsername.setText("Username");
-        txtIdcard.setText("ID Card Number");
-        txtTelephone.setText("Phone Number");
-        txtEmail.setText("Email Address");
 
         java.awt.Color placeholderColor = new java.awt.Color(102, 102, 102);
 
@@ -44,70 +42,13 @@ public class ForgetPasswordForm extends javax.swing.JFrame {
             }
         });
 
-        // xử lý Focus cho txtIdcard
-        txtIdcard.addFocusListener(new java.awt.event.FocusAdapter() {
-            @Override
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                if (txtIdcard.getText().equals("ID Card Number")) {
-                    txtIdcard.setText("");
-                    txtIdcard.setForeground(java.awt.Color.BLACK);
-                }
-            }
-
-            @Override
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                if (txtIdcard.getText().isEmpty()) {
-                    txtIdcard.setForeground(placeholderColor);
-                    txtIdcard.setText("ID Card Number");
-                }
-            }
-        });
-
-        // xử lý Focus cho txtTelephone
-        txtTelephone.addFocusListener(new java.awt.event.FocusAdapter() {
-            @Override
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                if (txtTelephone.getText().equals("Phone Number")) {
-                    txtTelephone.setText("");
-                    txtTelephone.setForeground(java.awt.Color.BLACK);
-                }
-            }
-
-            @Override
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                if (txtTelephone.getText().isEmpty()) {
-                    txtTelephone.setForeground(placeholderColor);
-                    txtTelephone.setText("Phone Number");
-                }
-            }
-        });
-
-        // xử lý Focus cho txtEmail
-        txtEmail.addFocusListener(new java.awt.event.FocusAdapter() {
-            @Override
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                if (txtEmail.getText().equals("Email Address")) {
-                    txtEmail.setText("");
-                    txtEmail.setForeground(java.awt.Color.BLACK);
-                }
-            }
-
-            @Override
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                if (txtEmail.getText().isEmpty()) {
-                    txtEmail.setForeground(placeholderColor);
-                    txtEmail.setText("Email Address");
-                }
-            }
-        });
-
         // khử viền xanh khi click nút
         jButton1.setFocusPainted(false);
         jButton2.setFocusPainted(false);
     }
 
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jFileChooser1 = new javax.swing.JFileChooser();
@@ -124,14 +65,8 @@ public class ForgetPasswordForm extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         jSeparator3 = new javax.swing.JSeparator();
-        jLabel7 = new javax.swing.JLabel();
-        jSeparator4 = new javax.swing.JSeparator();
-        jLabel9 = new javax.swing.JLabel();
-        jSeparator6 = new javax.swing.JSeparator();
         jButton2 = new javax.swing.JButton();
-        txtTelephone = new javax.swing.JTextField();
-        txtEmail = new javax.swing.JTextField();
-        txtIdcard = new javax.swing.JTextField();
+        txtPhone = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -162,7 +97,6 @@ public class ForgetPasswordForm extends javax.swing.JFrame {
                 clickCLoseMouseClicked(evt);
             }
         });
-        
         jPanel2.add(clickCLose, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 10, -1, 20));
 
         clickMinimize.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
@@ -177,6 +111,8 @@ public class ForgetPasswordForm extends javax.swing.JFrame {
 
         txtUsername.setBackground(new java.awt.Color(255, 251, 233));
         txtUsername.setForeground(new java.awt.Color(102, 102, 102));
+        txtUsername.setText("username");
+        txtUsername.setToolTipText("");
         txtUsername.setBorder(null);
         txtUsername.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         txtUsername.addActionListener(new java.awt.event.ActionListener() {
@@ -184,7 +120,7 @@ public class ForgetPasswordForm extends javax.swing.JFrame {
                 txtUsernameActionPerformed(evt);
             }
         });
-        jPanel2.add(txtUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 126, 200, 24));
+        jPanel2.add(txtUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 130, 200, 24));
 
         jSeparator2.setForeground(new java.awt.Color(102, 102, 102));
         jPanel2.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 195, 200, -1));
@@ -192,8 +128,8 @@ public class ForgetPasswordForm extends javax.swing.JFrame {
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo-user.png"))); // NOI18N
         jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, -1, 31));
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo-idcard.png"))); // NOI18N
-        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(31, 178, -1, -1));
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo-phone.png"))); // NOI18N
+        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 170, -1, -1));
 
         jButton1.setBackground(new java.awt.Color(250, 249, 235));
         jButton1.setText("Continue");
@@ -215,18 +151,6 @@ public class ForgetPasswordForm extends javax.swing.JFrame {
         jSeparator3.setForeground(new java.awt.Color(102, 102, 102));
         jPanel2.add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 156, 200, -1));
 
-        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo-phone.png"))); // NOI18N
-        jPanel2.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(31, 226, -1, -1));
-
-        jSeparator4.setForeground(new java.awt.Color(102, 102, 102));
-        jPanel2.add(jSeparator4, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 240, 200, -1));
-
-        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo-email.png"))); // NOI18N
-        jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(31, 268, -1, -1));
-
-        jSeparator6.setForeground(new java.awt.Color(102, 102, 102));
-        jPanel2.add(jSeparator6, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 290, 200, -1));
-
         jButton2.setBackground(new java.awt.Color(250, 249, 235));
         jButton2.setText("Cancel");
         jButton2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102)));
@@ -239,38 +163,17 @@ public class ForgetPasswordForm extends javax.swing.JFrame {
         });
         jPanel2.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(143, 321, 60, 26));
 
-        txtTelephone.setBackground(new java.awt.Color(255, 251, 233));
-        txtTelephone.setForeground(new java.awt.Color(102, 102, 102));
-        txtTelephone.setBorder(null);
-        txtTelephone.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        txtTelephone.addActionListener(new java.awt.event.ActionListener() {
+        txtPhone.setBackground(new java.awt.Color(255, 251, 233));
+        txtPhone.setForeground(new java.awt.Color(102, 102, 102));
+        txtPhone.setText("phone");
+        txtPhone.setBorder(null);
+        txtPhone.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        txtPhone.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtTelephoneActionPerformed(evt);
+                txtPhoneActionPerformed(evt);
             }
         });
-        jPanel2.add(txtTelephone, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 210, 200, 24));
-
-        txtEmail.setBackground(new java.awt.Color(255, 251, 233));
-        txtEmail.setForeground(new java.awt.Color(102, 102, 102));
-        txtEmail.setBorder(null);
-        txtEmail.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        txtEmail.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtEmailActionPerformed(evt);
-            }
-        });
-        jPanel2.add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 264, 200, 24));
-
-        txtIdcard.setBackground(new java.awt.Color(255, 251, 233));
-        txtIdcard.setForeground(new java.awt.Color(102, 102, 102));
-        txtIdcard.setBorder(null);
-        txtIdcard.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        txtIdcard.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtIdcardActionPerformed(evt);
-            }
-        });
-        jPanel2.add(txtIdcard, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 165, 200, 24));
+        jPanel2.add(txtPhone, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 170, 200, 24));
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 0, 300, 400));
 
@@ -292,7 +195,7 @@ public class ForgetPasswordForm extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-
+        
     }// GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton2ActionPerformed
@@ -303,11 +206,9 @@ public class ForgetPasswordForm extends javax.swing.JFrame {
         // TODO add your handling code here:
     }// GEN-LAST:event_txtTelephoneActionPerformed
 
-    private void txtEmailActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtEmailActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_txtEmailActionPerformed
 
-    private void txtIdcardActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtIdcardActionPerformed
+
+    private void txtPhoneActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtIdcardActionPerformed
         // TODO add your handling code here:
     }// GEN-LAST:event_txtIdcardActionPerformed
 
@@ -328,24 +229,17 @@ public class ForgetPasswordForm extends javax.swing.JFrame {
     private javax.swing.JLabel clickMinimize;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    @SuppressWarnings("unused")
     private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
-    private javax.swing.JSeparator jSeparator4;
-    private javax.swing.JSeparator jSeparator6;
-    private javax.swing.JTextField txtEmail;
-    private javax.swing.JTextField txtIdcard;
-    private javax.swing.JTextField txtTelephone;
+    private javax.swing.JTextField txtPhone;
     private javax.swing.JTextField txtUsername;
     // End of variables declaration//GEN-END:variables
 }

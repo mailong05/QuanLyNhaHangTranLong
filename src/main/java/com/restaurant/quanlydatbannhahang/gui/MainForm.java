@@ -19,6 +19,12 @@ public class MainForm extends javax.swing.JFrame {
 
     // Khởi tạo các Panel chức năng
     private PanelTrangChu pnlTrangChu;
+    private PanelDatBan pnlDatBan;
+    private PanelHoaDon pnlHoaDon;
+    private PanelKhachHang pnlKhachHang;
+    private PanelQuanLyBan pnlQuanLyBan;
+    private PanelQuanLyMonAn pnlQuanLyMonAn;
+    private PanelThongKe pnlThongKe;
 
     // Định nghĩa màu sắc chuẩn
     private final Color COLOR_MENU_BG = new Color(142, 128, 106);
@@ -73,6 +79,12 @@ public class MainForm extends javax.swing.JFrame {
 
         // 3. Khởi tạo các Panel chức năng
         pnlTrangChu = new PanelTrangChu();
+        pnlDatBan = new PanelDatBan();
+        pnlHoaDon = new PanelHoaDon();
+        pnlKhachHang = new PanelKhachHang();
+        pnlQuanLyBan = new PanelQuanLyBan();
+        pnlQuanLyMonAn = new PanelQuanLyMonAn();
+        pnlThongKe = new PanelThongKe();
 
         // 4. Thiết lập trạng thái menu ban đầu
         panelSubQuanLy.setVisible(false);
@@ -207,6 +219,14 @@ public class MainForm extends javax.swing.JFrame {
 
                     if (pnl == panelTrangChu) {
                         showPanel(pnlTrangChu);
+                    } else if (pnl == panelDatBan) {
+                        showPanel(pnlDatBan);
+                    } else if (pnl == panelKhachHang) {
+                        showPanel(pnlKhachHang);
+                    } else if (pnl == panelHoaDon) {
+                        showPanel(pnlHoaDon);
+                    } else if (pnl == panelThongKe) {
+                        showPanel(pnlThongKe);
                     } else {
                         showPanel(createTempPanel(title));
                     }
@@ -249,12 +269,12 @@ public class MainForm extends javax.swing.JFrame {
         });
 
         // --- 3. GÁN SỰ KIỆN CHO SUB-MENU ---
-        attachSubMenuEvents(jLabel2, "Bàn");
-        attachSubMenuEvents(jLabel5, "Món ăn");
-        attachSubMenuEvents(jLabel6, "Khu vực");
-        attachSubMenuEvents(jLabel7, "Tài khoản");
-        attachSubMenuEvents(jLabel8, "Khuyến mãi");
-        attachSubMenuEvents(jLabel9, "Thuế");
+        attachSubMenuEvents(jLabel2, "Bàn", pnlQuanLyBan);
+        attachSubMenuEvents(jLabel5, "Món ăn", pnlQuanLyMonAn);
+        attachSubMenuEvents(jLabel6, "Khu vực", null);
+        attachSubMenuEvents(jLabel7, "Tài khoản", null);
+        attachSubMenuEvents(jLabel8, "Khuyến mãi", null);
+        attachSubMenuEvents(jLabel9, "Thuế", null);
 
         // --- 4. ĐĂNG XUẤT ---
         panelDangXuat.addMouseListener(new MouseAdapter() {
@@ -299,7 +319,7 @@ public class MainForm extends javax.swing.JFrame {
         activePanel.setBackground(COLOR_MENU_HOVER);
     }
 
-    private void attachSubMenuEvents(JLabel label, String menuName) {
+    private void attachSubMenuEvents(JLabel label, String menuName, JPanel panelContent) {
         label.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
@@ -315,7 +335,11 @@ public class MainForm extends javax.swing.JFrame {
                 jLabel13.setText("QUẢN LÝ " + menuName.toUpperCase());
                 updateActivePanel(panelQuanLy);
 
-                showPanel(createTempPanel("Quản lý " + menuName));
+                if (panelContent != null) {
+                    showPanel(panelContent);
+                } else {
+                    showPanel(createTempPanel("Quản lý " + menuName));
+                }
             }
 
             @Override
@@ -674,14 +698,15 @@ public class MainForm extends javax.swing.JFrame {
 
         panelBody.setBackground(new java.awt.Color(255, 251, 233));
 
-//        javax.swing.GroupLayout panelBodyLayout = new javax.swing.GroupLayout(panelBody);
-//        panelBody.setLayout(panelBodyLayout);
-//        panelBodyLayout.setHorizontalGroup(
-//                panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-//                        .addGap(0, 0, Short.MAX_VALUE));
-//        panelBodyLayout.setVerticalGroup(
-//                panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-//                        .addGap(0, 600, Short.MAX_VALUE));
+        // javax.swing.GroupLayout panelBodyLayout = new
+        // javax.swing.GroupLayout(panelBody);
+        // panelBody.setLayout(panelBodyLayout);
+        // panelBodyLayout.setHorizontalGroup(
+        // panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        // .addGap(0, 0, Short.MAX_VALUE));
+        // panelBodyLayout.setVerticalGroup(
+        // panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        // .addGap(0, 600, Short.MAX_VALUE));
 
         panelMainContent.add(panelBody, java.awt.BorderLayout.CENTER);
 
