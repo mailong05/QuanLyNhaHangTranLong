@@ -1,5 +1,7 @@
-package com.restaurant.quanlydatbannhahang.gui;
+package com.restaurant.quanlydatbannhahang.controller;
 
+import com.restaurant.quanlydatbannhahang.gui.LoginForm;
+import com.restaurant.quanlydatbannhahang.gui.MainForm;
 import com.restaurant.quanlydatbannhahang.entity.TaiKhoan;
 import com.restaurant.quanlydatbannhahang.service.AuthService;
 

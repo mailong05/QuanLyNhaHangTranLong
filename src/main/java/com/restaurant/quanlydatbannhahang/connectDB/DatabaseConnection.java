@@ -5,13 +5,12 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DatabaseConnection {
-    private static final String SERVER_NAME = "localhost\\SQLEXPRESS03"; 
-    private static final String DB_NAME = "QuanLyDatBan";
-    private static final String URL = "jdbc:sqlserver://localhost;instanceName=SQLEXPRESS03;databaseName=QuanLyDatBan;encrypt=true;trustServerCertificate=true;";
+    private static final String URL = "jdbc:sqlserver://localhost:1433;databaseName=QuanLyDatBan;encrypt=true;trustServerCertificate=true";
     private static final String USERNAME = "sa"; 
     private static final String PASSWORD = "sapassword"; 
 
     private static Connection connection = null;
+
   
     public static Connection getConnection() {
         if (connection == null) {

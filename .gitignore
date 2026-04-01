@@ -4,7 +4,7 @@ target/
 *.war
 *.ear
 
-# === NetBeans (Máy của bạn) ===
+# === NetBeans ===
 nbproject/private/
 nbbuild/
 dist/
@@ -12,14 +12,14 @@ nbdist/
 .nb-gradle/
 build/
 
-# === Eclipse (Máy của bạn mình) ===
+# === Eclipse ===
 .metadata/
+bin/
 .settings/
-.bin/
 .classpath
 .project
 
-# === IntelliJ (Phòng hờ bạn khác dùng) ===
+# === IntelliJ ===
 .idea/
 *.iml
 

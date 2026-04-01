@@ -16,7 +16,7 @@
         <dependency>
             <groupId>com.microsoft.sqlserver</groupId>
             <artifactId>mssql-jdbc</artifactId>
-            <version>11.2.3.jre17</version>
+            <version>12.2.0.jre11</version>
         </dependency>
     </dependencies>
     
@@ -24,6 +24,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
-        <exec.mainClass>com.restaurant.quanlydatbannhahang.main.QuanLyDatBanNhaHang</exec.mainClass>
+        <exec.mainClass>com.restaurant.quanlydatbannhahang.QuanLyDatBanNhaHang</exec.mainClass>
     </properties>
 </project>

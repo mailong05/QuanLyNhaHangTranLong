@@ -26,19 +26,75 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
+        pnlHeader = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        btnThemMon = new javax.swing.JButton();
+        scrTableMonAn = new javax.swing.JScrollPane();
+        tableMonAn = new javax.swing.JTable();
+
+        setBackground(new java.awt.Color(255, 251, 233));
+        setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 60, 20, 60));
+        setLayout(new java.awt.BorderLayout());
+
+        pnlHeader.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 25, 1));
+        pnlHeader.setOpaque(false);
+        pnlHeader.setLayout(new java.awt.BorderLayout());
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel1.setText("Quản lý thông tin món ăn trong nhà hàng");
+        pnlHeader.add(jLabel1, java.awt.BorderLayout.WEST);
+
+        btnThemMon.setBackground(new java.awt.Color(143, 126, 101));
+        btnThemMon.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnThemMon.setForeground(new java.awt.Color(255, 255, 255));
+        btnThemMon.setText("+ Thêm món mới");
+        btnThemMon.setBorder(null);
+        btnThemMon.setMaximumSize(new java.awt.Dimension(150, 40));
+        btnThemMon.setMinimumSize(new java.awt.Dimension(150, 40));
+        btnThemMon.setOpaque(true);
+        btnThemMon.setPreferredSize(new java.awt.Dimension(150, 40));
+        btnThemMon.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnThemMonActionPerformed(evt);
+            }
+        });
+        pnlHeader.add(btnThemMon, java.awt.BorderLayout.EAST);
+
+        add(pnlHeader, java.awt.BorderLayout.PAGE_START);
+
+        tableMonAn.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
+            },
+            new String [] {
+                "Tên món", "Danh mục", "Giá", "Mô tả", "Trạng thái", "Thao tác"
+            }
+        ));
+        tableMonAn.setRowHeight(35);
+        scrTableMonAn.setViewportView(tableMonAn);
+
+        add(scrTableMonAn, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnThemMonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemMonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnThemMonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnThemMon;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel pnlHeader;
+    private javax.swing.JScrollPane scrTableMonAn;
+    private javax.swing.JTable tableMonAn;
     // End of variables declaration//GEN-END:variables
 }

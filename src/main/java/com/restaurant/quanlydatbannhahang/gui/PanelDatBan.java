@@ -3,208 +3,213 @@ package com.restaurant.quanlydatbannhahang.gui;
 import javax.swing.*;
 import java.awt.*;
 
-/**
- * @author Duc Tri
- */
-
 public class PanelDatBan extends javax.swing.JPanel {
 
+    /**
+     * Constructor
+     */
     public PanelDatBan() {
         initComponents();
-        
-        // Tối ưu thanh cuộn và loại bỏ viền
-        jScrollPane1.getVerticalScrollBar().setUnitIncrement(20);
-        jScrollPane1.setBorder(null);
-
-        // Gọi nạp dữ liệu
-        testData();
+        // Cần chỉnh lại JScrollPane để Viewport có màu nền trùng với app
+        scrSoDoBan.getViewport().setBackground(new java.awt.Color(255, 251, 233));
+        loadSoDoBan(""); // Mặc định hiện tất cả khu vực như hình mẫu
     }
 
-    private void testData() {
-        panelDanhSachBan.removeAll();
-        
-        // Thiết lập Layout cho panel chính là BoxLayout theo chiều dọc (Y_AXIS)
-        panelDanhSachBan.setLayout(new javax.swing.BoxLayout(panelDanhSachBan, javax.swing.BoxLayout.Y_AXIS));
+    public void loadSoDoBan(String khuVucFilter) {
+        // 1. Xóa bàn cũ
+        panelSoDoBan.removeAll();
 
-        String[] dsKhuVuc = {"Khu vực A", "Khu vực B", "Khu vực C"};
+        // 2. Sử dụng BoxLayout theo trục Y để xếp các "Cụm khu vực" từ trên xuống
+        panelSoDoBan.setLayout(new BoxLayout(panelSoDoBan, BoxLayout.Y_AXIS));
 
-        for (String kv : dsKhuVuc) {
-            // 1. Tiêu đề khu vực
-            JLabel lblTitle = new JLabel(kv);
-            lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 22));
-            lblTitle.setForeground(new Color(142, 128, 106));
-            lblTitle.setAlignmentX(Component.LEFT_ALIGNMENT);
-            lblTitle.setBorder(BorderFactory.createEmptyBorder(20, 0, 10, 0));
-            panelDanhSachBan.add(lblTitle);
+        // 3. Danh sách các khu vực cần hiển thị
+        String[] khuVucs = {"A", "B", "C"};
 
-            // 2. Grid chứa bàn (5 cột cố định)
-            JPanel pnlGrid = new JPanel(new GridLayout(0, 5, 20, 20));
-            pnlGrid.setOpaque(false);
-            pnlGrid.setAlignmentX(Component.LEFT_ALIGNMENT);
-
-            // Giả lập 10 bàn mỗi khu vực
-            for (int i = 1; i <= 10; i++) {
-                String kyTu = kv.substring(kv.length() - 1);
-                String maBan = "Bàn " + kyTu + "." + i;
-                
-                JPanel item;
-                if (maBan.equals("Bàn A.7")) {
-                    item = createBanItem(maBan, "Đang dùng", new Color(0, 200, 83));
-                    setWhiteText(item);
-                } else if (i == 3) {
-                    item = createBanItem(maBan, "Đã đặt", new Color(255, 137, 4));
-                    setWhiteText(item);
-                } else {
-                    item = createBanItem(maBan, "Trống", Color.WHITE);
-                }
-                pnlGrid.add(item);
+        for (String kv : khuVucs) {
+            // Nếu có lọc khu vực mà không trùng thì bỏ qua
+            if (!khuVucFilter.isEmpty() && !khuVucFilter.equals("Tất cả") && !khuVucFilter.equals(kv)) {
+                continue;
             }
 
-            // Tính toán chiều cao cần thiết cho Grid (mỗi hàng khoảng 180px + 20px gap)
-            int rows = (int) Math.ceil(pnlGrid.getComponentCount() / 5.0);
-            int prefHeight = (rows * 180) + ((rows - 1) * 20); 
-            
-            // Ép kích thước để BoxLayout không làm co panel về 0
-            pnlGrid.setMaximumSize(new Dimension(Integer.MAX_VALUE, prefHeight));
-            pnlGrid.setPreferredSize(new Dimension(pnlGrid.getPreferredSize().width, prefHeight));
+            // --- TẠO CỤM KHU VỰC ---
+            JPanel pnlGroup = new JPanel();
+            pnlGroup.setLayout(new BorderLayout());
+            pnlGroup.setBackground(new java.awt.Color(255, 251, 233));
+            pnlGroup.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
 
-            panelDanhSachBan.add(pnlGrid);
-            
-            // Khoảng cách giữa các khu vực
-            panelDanhSachBan.add(Box.createRigidArea(new Dimension(0, 30)));
+            // Tiêu đề khu vực (Khu vực A, Khu vực B...)
+            JLabel lblTitle = new JLabel("Khu vực " + kv);
+            lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 18));
+            lblTitle.setForeground(new Color(153, 153, 102)); // Màu xám nâu giống mẫu
+            lblTitle.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+            pnlGroup.add(lblTitle, BorderLayout.NORTH);
+
+            // Panel chứa các bàn (Grid 5 cột)
+            JPanel pnlTables = new JPanel(new GridLayout(0, 5, 20, 20));
+            pnlTables.setBackground(new java.awt.Color(255, 251, 233));
+
+            for (int i = 1; i <= 10; i++) {
+                String maBan = kv + "." + String.format("%03d", i);
+                String trangThai = "Trống";
+                pnlTables.add(createTableCard(maBan, trangThai));
+            }
+
+            pnlGroup.add(pnlTables, BorderLayout.CENTER);
+            panelSoDoBan.add(pnlGroup);
         }
 
-        panelDanhSachBan.revalidate();
-        panelDanhSachBan.repaint();
+        // 4. Vẽ lại giao diện
+        panelSoDoBan.revalidate();
+        panelSoDoBan.repaint();
     }
 
-    private JPanel createBanItem(String soBan, String trangThai, Color bgColor) {
-        JPanel pnl = new JPanel(new BorderLayout());
-        pnl.setBackground(bgColor);
-        pnl.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-        // Viền và khoảng cách bên trong cho bàn
-        pnl.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(230, 230, 230), 1, true),
-            BorderFactory.createEmptyBorder(25, 10, 25, 10)
+    /**
+     * Tạo Card bàn với nội dung CĂN GIỮA TUYỆT ĐỐI và BO GÓC
+     */
+    private JPanel createTableCard(String name, String status) {
+        // Sử dụng JPanel với GridBagLayout để căn giữa nội dung hoàn hảo
+        JPanel card = new JPanel(new GridBagLayout());
+        card.setPreferredSize(new Dimension(150, 120));
+        card.setBackground(Color.WHITE);
+        
+        // Tạo viền bo góc nhẹ và màu nhạt giống mẫu
+        card.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(200, 200, 200), 1, true),
+                BorderFactory.createEmptyBorder(10, 10, 10, 10)
         ));
 
-        JLabel lblSoBan = new JLabel(soBan, SwingConstants.CENTER);
-        lblSoBan.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        JLabel lblTrangThai = new JLabel(trangThai, SwingConstants.CENTER);
-        lblTrangThai.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        // --- Label Tên bàn ---
+        JLabel lblName = new JLabel(name, SwingConstants.CENTER);
+        lblName.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        lblName.setForeground(Color.BLACK);
+        gbc.gridy = 0;
+        gbc.weighty = 0.6;
+        card.add(lblName, gbc);
 
-        JPanel pnlText = new JPanel(new GridLayout(2, 1));
-        pnlText.setOpaque(false);
-        pnlText.add(lblSoBan);
-        pnlText.add(lblTrangThai);
+        // --- Label Trạng thái ---
+        JLabel lblStatus = new JLabel(status, SwingConstants.CENTER);
+        lblStatus.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        lblStatus.setForeground(Color.GRAY);
+        gbc.gridy = 1;
+        gbc.weighty = 0.4;
+        card.add(lblStatus, gbc);
 
-        pnl.add(pnlText, BorderLayout.CENTER);
-        return pnl;
-    }
-
-    private void setWhiteText(JPanel pnl) {
-        for (Component comp : pnl.getComponents()) {
-            if (comp instanceof JPanel) {
-                for (Component lbl : ((JPanel) comp).getComponents()) {
-                    lbl.setForeground(Color.WHITE);
-                }
+        // Hiệu ứng hover và click
+        card.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        card.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                JOptionPane.showMessageDialog(null, "Bạn đã chọn bàn: " + name);
             }
-        }
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent e) {
+                card.setBorder(BorderFactory.createLineBorder(new Color(153, 153, 102), 2, true));
+            }
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent e) {
+                card.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1, true));
+            }
+        });
+
+        return card;
     }
 
+    // từ đây trở xuống không sửa
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel2 = new javax.swing.JPanel();
         panelTimKiem = new javax.swing.JPanel();
-        jPanel3 = new javax.swing.JPanel();
-        jTextField1 = new javax.swing.JTextField();
-        btnTimKiem = new javax.swing.JButton();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        txtSearch = new javax.swing.JTextField();
+        btnSearch = new javax.swing.JButton();
+        cmbFilterKhuVuc = new javax.swing.JComboBox<>();
+        cmbFilterTrangThai = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
-        jPanel4 = new javax.swing.JPanel();
-        jPanel5 = new javax.swing.JPanel();
-        jPanel6 = new javax.swing.JPanel();
+        pnlStatusTrong = new javax.swing.JPanel();
+        pnlStatusServing = new javax.swing.JPanel();
+        pnlStatusReserved = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        panelDanhSachBan = new javax.swing.JPanel();
+        scrSoDoBan = new javax.swing.JScrollPane();
+        panelSoDoBan = new javax.swing.JPanel();
 
         setLayout(new java.awt.BorderLayout());
 
-        panelTimKiem.setBackground(new java.awt.Color(255, 251, 233));
-        panelTimKiem.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 60, 1, 60));
-        panelTimKiem.setLayout(new java.awt.GridLayout(1, 0));
+        jPanel2.setBackground(new java.awt.Color(255, 251, 233));
+        jPanel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 60, 1, 60));
+        jPanel2.setLayout(new java.awt.GridLayout(1, 0));
 
-        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+        panelTimKiem.setBackground(new java.awt.Color(255, 255, 255));
 
-        jTextField1.setText("Tìm kiếm theo số điện thoại");
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        txtSearch.setText("Tìm kiếm theo số điện thoại");
+        txtSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                txtSearchActionPerformed(evt);
             }
         });
 
-        btnTimKiem.setText("Tim Kiếm");
-        btnTimKiem.addActionListener(new java.awt.event.ActionListener() {
+        btnSearch.setText("Tim Kiếm");
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnTimKiemActionPerformed(evt);
+                btnSearchActionPerformed(evt);
             }
         });
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất cả", "A", "B", "C" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        cmbFilterKhuVuc.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất cả", "A", "B", "C" }));
+        cmbFilterKhuVuc.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                cmbFilterKhuVucActionPerformed(evt);
             }
         });
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất cả", "Trống", "Đang dùng", "Đã đặt" }));
+        cmbFilterTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất cả", "Trống", "Đang dùng", "Đã đặt" }));
 
         jLabel1.setText("Trống");
 
-        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204), 2));
+        pnlStatusTrong.setBackground(new java.awt.Color(255, 255, 255));
+        pnlStatusTrong.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204), 2));
 
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout pnlStatusTrongLayout = new javax.swing.GroupLayout(pnlStatusTrong);
+        pnlStatusTrong.setLayout(pnlStatusTrongLayout);
+        pnlStatusTrongLayout.setHorizontalGroup(
+            pnlStatusTrongLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 16, Short.MAX_VALUE)
         );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        pnlStatusTrongLayout.setVerticalGroup(
+            pnlStatusTrongLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 16, Short.MAX_VALUE)
         );
 
-        jPanel5.setBackground(new java.awt.Color(0, 201, 80));
+        pnlStatusServing.setBackground(new java.awt.Color(0, 201, 80));
 
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout pnlStatusServingLayout = new javax.swing.GroupLayout(pnlStatusServing);
+        pnlStatusServing.setLayout(pnlStatusServingLayout);
+        pnlStatusServingLayout.setHorizontalGroup(
+            pnlStatusServingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 20, Short.MAX_VALUE)
         );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        pnlStatusServingLayout.setVerticalGroup(
+            pnlStatusServingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        jPanel6.setBackground(new java.awt.Color(255, 137, 4));
+        pnlStatusReserved.setBackground(new java.awt.Color(255, 137, 4));
 
-        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
-        jPanel6.setLayout(jPanel6Layout);
-        jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout pnlStatusReservedLayout = new javax.swing.GroupLayout(pnlStatusReserved);
+        pnlStatusReserved.setLayout(pnlStatusReservedLayout);
+        pnlStatusReservedLayout.setHorizontalGroup(
+            pnlStatusReservedLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 20, Short.MAX_VALUE)
         );
-        jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        pnlStatusReservedLayout.setVerticalGroup(
+            pnlStatusReservedLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 20, Short.MAX_VALUE)
         );
 
@@ -216,111 +221,127 @@ public class PanelDatBan extends javax.swing.JPanel {
 
         jLabel5.setText("Trạng thái:");
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+        javax.swing.GroupLayout panelTimKiemLayout = new javax.swing.GroupLayout(panelTimKiem);
+        panelTimKiem.setLayout(panelTimKiemLayout);
+        panelTimKiemLayout.setHorizontalGroup(
+            panelTimKiemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelTimKiemLayout.createSequentialGroup()
                 .addGap(41, 41, 41)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(panelTimKiemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelTimKiemLayout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cmbFilterKhuVuc, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(40, 40, 40)
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 399, Short.MAX_VALUE)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cmbFilterTrangThai, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 302, Short.MAX_VALUE)
+                        .addComponent(pnlStatusTrong, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(pnlStatusServing, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(pnlStatusReserved, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jTextField1)
+                    .addGroup(panelTimKiemLayout.createSequentialGroup()
+                        .addComponent(txtSearch)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(37, 37, 37))
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+        panelTimKiemLayout.setVerticalGroup(
+            panelTimKiemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelTimKiemLayout.createSequentialGroup()
                 .addGap(23, 23, 23)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(panelTimKiemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(panelTimKiemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(panelTimKiemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTimKiemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(pnlStatusTrong, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(panelTimKiemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addComponent(jLabel3)
-                                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
+                                .addComponent(pnlStatusReserved, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(panelTimKiemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(pnlStatusServing, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelTimKiemLayout.createSequentialGroup()
                                     .addGap(4, 4, 4)
                                     .addComponent(jLabel1))))
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(panelTimKiemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cmbFilterKhuVuc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cmbFilterTrangThai, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel4)
                             .addComponent(jLabel5)))
                     .addComponent(jLabel2))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        panelTimKiem.add(jPanel3);
+        jPanel2.add(panelTimKiem);
 
-        add(panelTimKiem, java.awt.BorderLayout.PAGE_START);
+        add(jPanel2, java.awt.BorderLayout.NORTH);
 
-        panelDanhSachBan.setBackground(new java.awt.Color(255, 251, 233));
-        panelDanhSachBan.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 60, 1, 40));
-        panelDanhSachBan.setLayout(new java.awt.GridLayout(0, 5, 15, 15));
-        jScrollPane1.setViewportView(panelDanhSachBan);
-        panelDanhSachBan.getAccessibleContext().setAccessibleName("");
-        panelDanhSachBan.getAccessibleContext().setAccessibleDescription("");
+        scrSoDoBan.setBorder(null);
 
-        add(jScrollPane1, java.awt.BorderLayout.CENTER);
+        panelSoDoBan.setBackground(new java.awt.Color(255, 251, 233));
+        panelSoDoBan.setBorder(javax.swing.BorderFactory.createEmptyBorder(15, 60, 20, 40));
+
+        javax.swing.GroupLayout panelSoDoBanLayout = new javax.swing.GroupLayout(panelSoDoBan);
+        panelSoDoBan.setLayout(panelSoDoBanLayout);
+        panelSoDoBanLayout.setHorizontalGroup(
+            panelSoDoBanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1091, Short.MAX_VALUE)
+        );
+        panelSoDoBanLayout.setVerticalGroup(
+            panelSoDoBanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 492, Short.MAX_VALUE)
+        );
+
+        scrSoDoBan.setViewportView(panelSoDoBan);
+
+        add(scrSoDoBan, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_txtSearchActionPerformed
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private void cmbFilterKhuVucActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbFilterKhuVucActionPerformed
+        String selected = cmbFilterKhuVuc.getSelectedItem().toString();
+        if (selected.equals("Tất cả")) {
+            loadSoDoBan(""); // Hiển thị hết
+        } else {
+            loadSoDoBan(selected); // Lọc theo A, B hoặc C
+        }
+    }//GEN-LAST:event_cmbFilterKhuVucActionPerformed
+
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    }//GEN-LAST:event_btnSearchActionPerformed
 
-    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnTimKiemActionPerformed
-
-
+    //Không sửa bên dưới
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnTimKiem;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
+    private javax.swing.JButton btnSearch;
+    private javax.swing.JComboBox<String> cmbFilterKhuVuc;
+    private javax.swing.JComboBox<String> cmbFilterTrangThai;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JPanel panelDanhSachBan;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel panelSoDoBan;
     private javax.swing.JPanel panelTimKiem;
+    private javax.swing.JPanel pnlStatusReserved;
+    private javax.swing.JPanel pnlStatusServing;
+    private javax.swing.JPanel pnlStatusTrong;
+    private javax.swing.JScrollPane scrSoDoBan;
+    private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
 }

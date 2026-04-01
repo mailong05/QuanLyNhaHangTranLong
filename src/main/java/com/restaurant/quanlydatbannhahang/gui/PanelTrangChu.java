@@ -29,17 +29,17 @@ public class PanelTrangChu extends javax.swing.JPanel {
         pnlThongKe = new javax.swing.JPanel();
         cardBanSuDung = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        lblCountBanSuDung = new javax.swing.JLabel();
         cardBanDatTruoc = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        lblCountBanDatTruoc = new javax.swing.JLabel();
         cardDoanhThu = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
+        lblSumDoanhThu = new javax.swing.JLabel();
         pnlBangHoatDong = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
-        spTableHoatDong = new javax.swing.JScrollPane();
+        scrTableHoatDong = new javax.swing.JScrollPane();
         tblHoatDong = new javax.swing.JTable();
 
         setMaximumSize(new java.awt.Dimension(807, 600));
@@ -59,9 +59,9 @@ public class PanelTrangChu extends javax.swing.JPanel {
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Bàn đang sử dụng");
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 28)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setText("0");
+        lblCountBanSuDung.setFont(new java.awt.Font("Segoe UI", 1, 28)); // NOI18N
+        lblCountBanSuDung.setForeground(new java.awt.Color(255, 255, 255));
+        lblCountBanSuDung.setText("0");
 
         javax.swing.GroupLayout cardBanSuDungLayout = new javax.swing.GroupLayout(cardBanSuDung);
         cardBanSuDung.setLayout(cardBanSuDungLayout);
@@ -71,7 +71,7 @@ public class PanelTrangChu extends javax.swing.JPanel {
                 .addGap(24, 24, 24)
                 .addGroup(cardBanSuDungLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
-                    .addComponent(jLabel4))
+                    .addComponent(lblCountBanSuDung))
                 .addContainerGap(140, Short.MAX_VALUE))
         );
         cardBanSuDungLayout.setVerticalGroup(
@@ -80,7 +80,7 @@ public class PanelTrangChu extends javax.swing.JPanel {
                 .addGap(23, 23, 23)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel4)
+                .addComponent(lblCountBanSuDung)
                 .addContainerGap(28, Short.MAX_VALUE))
         );
 
@@ -93,9 +93,9 @@ public class PanelTrangChu extends javax.swing.JPanel {
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Bàn đặt trước");
 
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 28)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setText("0");
+        lblCountBanDatTruoc.setFont(new java.awt.Font("Segoe UI", 1, 28)); // NOI18N
+        lblCountBanDatTruoc.setForeground(new java.awt.Color(255, 255, 255));
+        lblCountBanDatTruoc.setText("0");
 
         javax.swing.GroupLayout cardBanDatTruocLayout = new javax.swing.GroupLayout(cardBanDatTruoc);
         cardBanDatTruoc.setLayout(cardBanDatTruocLayout);
@@ -104,7 +104,7 @@ public class PanelTrangChu extends javax.swing.JPanel {
             .addGroup(cardBanDatTruocLayout.createSequentialGroup()
                 .addGap(25, 25, 25)
                 .addGroup(cardBanDatTruocLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5)
+                    .addComponent(lblCountBanDatTruoc)
                     .addComponent(jLabel2))
                 .addContainerGap(178, Short.MAX_VALUE))
         );
@@ -114,7 +114,7 @@ public class PanelTrangChu extends javax.swing.JPanel {
                 .addGap(22, 22, 22)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel5)
+                .addComponent(lblCountBanDatTruoc)
                 .addContainerGap(29, Short.MAX_VALUE))
         );
 
@@ -127,9 +127,9 @@ public class PanelTrangChu extends javax.swing.JPanel {
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Doanh thu hôm nay");
 
-        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 28)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel6.setText("0");
+        lblSumDoanhThu.setFont(new java.awt.Font("Segoe UI", 1, 28)); // NOI18N
+        lblSumDoanhThu.setForeground(new java.awt.Color(255, 255, 255));
+        lblSumDoanhThu.setText("0");
 
         javax.swing.GroupLayout cardDoanhThuLayout = new javax.swing.GroupLayout(cardDoanhThu);
         cardDoanhThu.setLayout(cardDoanhThuLayout);
@@ -139,7 +139,7 @@ public class PanelTrangChu extends javax.swing.JPanel {
                 .addGap(26, 26, 26)
                 .addGroup(cardDoanhThuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
-                    .addComponent(jLabel6))
+                    .addComponent(lblSumDoanhThu))
                 .addContainerGap(127, Short.MAX_VALUE))
         );
         cardDoanhThuLayout.setVerticalGroup(
@@ -148,7 +148,7 @@ public class PanelTrangChu extends javax.swing.JPanel {
                 .addGap(21, 21, 21)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel6)
+                .addComponent(lblSumDoanhThu)
                 .addContainerGap(30, Short.MAX_VALUE))
         );
 
@@ -169,25 +169,29 @@ public class PanelTrangChu extends javax.swing.JPanel {
         jLabel7.setText("Hoạt động gần đây");
         jPanel1.add(jLabel7, java.awt.BorderLayout.PAGE_START);
 
-        spTableHoatDong.setBorder(null);
+        scrTableHoatDong.setBorder(null);
 
         tblHoatDong.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Khách hàng", "Khu vực", "Bàn", "Thời gian", "Trạng thái"
+                "Khách hàng", "Khu vực", "Thời gian", "Trạng thái"
             }
         ));
         tblHoatDong.setRowHeight(35);
-        tblHoatDong.setSelectionBackground(new java.awt.Color(240, 240, 240));
-        tblHoatDong.setShowGrid(false);
-        spTableHoatDong.setViewportView(tblHoatDong);
+        scrTableHoatDong.setViewportView(tblHoatDong);
 
-        jPanel1.add(spTableHoatDong, java.awt.BorderLayout.CENTER);
+        jPanel1.add(scrTableHoatDong, java.awt.BorderLayout.CENTER);
 
         pnlBangHoatDong.add(jPanel1, java.awt.BorderLayout.CENTER);
 
@@ -202,14 +206,14 @@ public class PanelTrangChu extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel lblCountBanDatTruoc;
+    private javax.swing.JLabel lblCountBanSuDung;
+    private javax.swing.JLabel lblSumDoanhThu;
     private javax.swing.JPanel pnlBangHoatDong;
     private javax.swing.JPanel pnlThongKe;
-    private javax.swing.JScrollPane spTableHoatDong;
+    private javax.swing.JScrollPane scrTableHoatDong;
     private javax.swing.JTable tblHoatDong;
     // End of variables declaration//GEN-END:variables
 }
