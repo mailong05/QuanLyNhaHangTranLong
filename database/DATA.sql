@@ -31,33 +31,35 @@ INSERT INTO Thue (maThue, tenThue, thueSuat, trangThai) VALUES
 ('TH004', N'Thuế đồ uống có cồn', 0.15, N'CON_AP_DUNG');
 
 -- 2.4. BẢNG KHÁCH HÀNG
+-- Cập nhật dữ liệu mẫu KhachHang khớp với CHECK constraint
 INSERT INTO KhachHang (maKH, hoTen, sdt, diemTichLuy, loaiThanhVien) VALUES 
-('KH001', N'Nguyễn Hoàng Nam', '0901234567', 120, N'Bạc'),
-('KH002', N'Lê Thị Tuyết Mai', '0912345678', 550, N'Vàng'),
-('KH003', N'Trần Minh Tâm', '0987654321', 25, N'Đồng'),
-('KH004', N'Phạm Thu Hà', '0933444555', 1200, N'VIP'),
-('KH005', N'Đặng Văn Hùng', '0966777888', 300, N'Bạc'),
-('KH006', N'Vũ Bích Ngọc', '0944555666', 800, N'Vàng');
+('KH001', N'Nguyễn Hoàng Nam', '0901234567', 120, N'BAC'),  
+('KH002', N'Lê Thị Tuyết Mai', '0912345678', 550, N'VANG'), 
+('KH003', N'Trần Minh Tâm', '0987654321', 25, N'DONG'),     
+('KH004', N'Phạm Thu Hà', '0933444555', 1200, N'VIP'),      
+('KH005', N'Đặng Văn Hùng', '0966777888', 300, N'BAC'),
+('KH006', N'Vũ Bích Ngọc', '0944555666', 800, N'VANG');
+
 
 -- 2.5. BẢNG NHÂN VIÊN
 INSERT INTO NhanVien (maNV, hoTen, sdt, chucVu, ngayVaoLam, luongCoBan, trangThai) VALUES 
 ('NV001', N'Trịnh Xuân Hùng', '0981112223', N'QUAN_LY', '2024-01-01', 25000000, N'DANG_LAM_VIEC'),
 ('NV002', N'Lý Mỹ Lan', '0984445556', N'THU_NGAN', '2025-03-15', 9500000, N'DANG_LAM_VIEC'),
 ('NV003', N'Vũ Đình Phục', '0987778889', N'PHUC_VU', '2025-06-20', 7000000, N'DANG_LAM_VIEC'),
-('NV004', N'Phạm Văn Bếp', '0980009991', N'BEP', '2024-12-10', 18000000, N'DANG_LAM_VIEC'),
+('NV004', N'Phạm Văn Chiến', '0980009991', N'BEP', '2024-12-10', 18000000, N'DANG_LAM_VIEC'),
 ('NV005', N'Hoàng Thu Ngân', '0982223334', N'THU_NGAN', '2025-07-01', 9000000, N'DANG_LAM_VIEC'),
-('NV006', N'Nguyễn Chạy Bàn', '0985556667', N'PHUC_VU', '2025-08-15', 7000000, N'DANG_LAM_VIEC'),
-('NV007', N'Trần Bếp Phó', '0989990001', N'BEP', '2025-01-20', 15000000, N'DANG_LAM_VIEC'),
-('NV008', N'Đỗ Quản Lý Ca', '0981234567', N'QUAN_LY', '2024-05-05', 20000000, N'DANG_LAM_VIEC');
+('NV006', N'Nguyễn Văn Chiến', '0985556667', N'PHUC_VU', '2025-08-15', 7000000, N'DANG_LAM_VIEC'),
+('NV007', N'Trần Văn Nam', '0989990001', N'BEP', '2025-01-20', 15000000, N'DANG_LAM_VIEC'),
+('NV008', N'Đỗ Hùng Dũng', '0981234567', N'QUAN_LY', '2024-05-05', 20000000, N'DANG_LAM_VIEC');
 
 -- 2.6. BẢNG TÀI KHOẢN
 INSERT INTO TaiKhoan (username, password, maNV, quyenHan) VALUES 
-('admin_hung', 'pass1', 'NV001', 'ADMIN'),
-('thungan_lan', 'pass2', 'NV002', 'USER'),
-('phucvu_dinh', 'pass3', 'NV003', 'USER'),
-('thungan_hoang', 'pass4', 'NV005', 'USER'),
-('phucvu_nguyen', 'pass5', 'NV006', 'USER'),
-('admin_do', 'pass6', 'NV008', 'ADMIN');
+('admin_hung', '123456', 'NV001', 'MANAGER'),
+('thungan_lan', '888888', 'NV002', 'STAFF'),
+('phucvu_dinh', '123456', 'NV003', 'STAFF'),
+('thungan_hoang', '343242', 'NV005', 'STAFF'),
+('phucvu_nguyen', '123456', 'NV006', 'STAFF'),
+('admin_do', '123456', 'NV008', 'MANAGER');
 
 -- 2.7. BẢNG MÓN ĂN (30 Món ăn)
 INSERT INTO MonAn (maMon, tenMon, donGia, donViTinh, tenLoai, trangThai, urlHinhAnh) VALUES 

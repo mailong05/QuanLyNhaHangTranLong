@@ -53,9 +53,11 @@ CREATE TABLE KhachHang (
     maKH VARCHAR(20) PRIMARY KEY,
     hoTen NVARCHAR(100) NOT NULL,
     sdt VARCHAR(15) NOT NULL,
-    diemTichLuy INT DEFAULT 0,
-    loaiThanhVien NVARCHAR(50)
+    diemTichLuy INT DEFAULT 0 CHECK (diemTichLuy >= 0),
+    loaiThanhVien NVARCHAR(50) NOT NULL
+        CHECK (loaiThanhVien IN (N'DONG', N'BAC', N'VANG', N'VIP')) -- Enum cho phân hạng thành viên
 );
+GO
 
 -- =========================================================
 -- 4. BẢNG NHÂN VIÊN & TÀI KHOẢN
@@ -76,10 +78,10 @@ CREATE TABLE TaiKhoan (
     username VARCHAR(50) PRIMARY KEY,
     password VARCHAR(255) NOT NULL,
     maNV VARCHAR(20) UNIQUE NOT NULL,
-    quyenHan NVARCHAR(50), 
+    quyenHan NVARCHAR(50) NOT NULL 
+        CHECK (quyenHan IN ('STAFF', 'MANAGER')), -- Enum mới theo yêu cầu
     CONSTRAINT FK_TaiKhoan_NhanVien FOREIGN KEY (maNV) REFERENCES NhanVien(maNV) ON DELETE CASCADE
 );
-
 -- =========================================================
 -- 5. BẢNG MÓN ĂN (Đã cập nhật tenLoai khớp Enum LoaiMonAn)
 -- =========================================================

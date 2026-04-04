@@ -2,7 +2,6 @@ package com.restaurant.quanlydatbannhahang.service;
 
 import com.restaurant.quanlydatbannhahang.dao.TaiKhoanDAO;
 import com.restaurant.quanlydatbannhahang.entity.TaiKhoan;
-import com.restaurant.quanlydatbannhahang.entity.TrangThaiNhanVien;
 
 public class AuthService {
     private TaiKhoanDAO taiKhoanDAO;
@@ -39,10 +38,11 @@ public class AuthService {
         }
 
         // Kiểm tra nhân viên có hoạt động không
-        if (taiKhoan.getNhanVien().getTrangThai() != TrangThaiNhanVien.DANG_LAM_VIEC) {
-            System.out.println("❌ Nhân viên này đã bị vô hiệu hóa!");
-            return null;
-        }
+        // if (taiKhoan.getNhanVien().getTrangThai() != TrangThaiNhanVien.DANG_LAM_VIEC)
+        // {
+        // System.out.println("❌ Nhân viên này đã bị vô hiệu hóa!");
+        // return null;
+        // }
 
         System.out.println("✓ Đăng nhập thành công: " + taiKhoan.getNhanVien().getHoTen());
         return taiKhoan;

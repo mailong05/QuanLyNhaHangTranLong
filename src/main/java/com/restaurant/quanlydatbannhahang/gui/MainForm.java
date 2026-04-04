@@ -143,7 +143,7 @@ public class MainForm extends javax.swing.JFrame {
         String chucVu = userRole;
         if (taiKhoan != null && taiKhoan.getNhanVien() != null) {
             tenNhanVien = taiKhoan.getNhanVien().getHoTen();
-            chucVu = taiKhoan.getNhanVien().getChucVu().name();
+            chucVu = taiKhoan.getNhanVien().getChucVu().getDisplayName();
         }
         lblTenNhanVien.setText(tenNhanVien);
         lblPhanQuyen.setText(chucVu);

@@ -4,14 +4,14 @@ public class TaiKhoan {
     private String username;
     private String password;
     private NhanVien nhanVien;
-    private String quyenHan;
+    private QuyenHan quyenHan;
 
     // Constructor không tham số
     public TaiKhoan() {
     }
 
     // Constructor đầy đủ
-    public TaiKhoan(String username, String password, NhanVien nhanVien, String quyenHan) {
+    public TaiKhoan(String username, String password, NhanVien nhanVien, QuyenHan quyenHan) {
         this.username = username;
         this.password = password;
         this.nhanVien = nhanVien;
@@ -43,11 +43,11 @@ public class TaiKhoan {
         this.nhanVien = nhanVien;
     }
 
-    public String getQuyenHan() {
+    public QuyenHan getQuyenHan() {
         return quyenHan;
     }
 
-    public void setQuyenHan(String quyenHan) {
+    public void setQuyenHan(QuyenHan quyenHan) {
         this.quyenHan = quyenHan;
     }
 
@@ -97,7 +97,8 @@ public class TaiKhoan {
     @Override
     public String toString() {
         return "TaiKhoan [username=" + username + ", password=" + password + ", nhanVien="
-                + (nhanVien != null ? nhanVien.getMaNV() : "null") + ", quyenHan=" + quyenHan + "]";
+                + (nhanVien != null ? nhanVien.getMaNV() : "null") + ", quyenHan="
+                + (quyenHan != null ? quyenHan.name() : "null") + "]";
     }
 
 }

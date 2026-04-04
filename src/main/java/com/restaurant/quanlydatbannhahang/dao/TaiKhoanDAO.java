@@ -3,6 +3,7 @@ package com.restaurant.quanlydatbannhahang.dao;
 import com.restaurant.quanlydatbannhahang.connectDB.DatabaseConnection;
 import com.restaurant.quanlydatbannhahang.entity.NhanVien;
 import com.restaurant.quanlydatbannhahang.entity.TaiKhoan;
+import com.restaurant.quanlydatbannhahang.entity.QuyenHan;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -38,13 +39,24 @@ public class TaiKhoanDAO {
 
             try (ResultSet rs = pstm.executeQuery()) {
                 if (rs.next()) {
+                    // Tạo object NhanVien từ ResultSet (sử dụng buildNhanVienFromResultSet)
+                    NhanVien nhanVien = nv_dao.buildNhanVienFromResultSet(rs);
+
                     // Tạo object TaiKhoan
                     TaiKhoan taiKhoan = new TaiKhoan();
                     taiKhoan.setUsername(rs.getString("username"));
                     taiKhoan.setPassword(rs.getString("password"));
-                    NhanVien nhanVien = nv_dao.getNhanVienTheoMa(rs.getString("maNV"));
                     taiKhoan.setNhanVien(nhanVien);
-                    taiKhoan.setQuyenHan(rs.getString("quyenHan"));
+
+                    String quyenHanStr = rs.getString("quyenHan");
+                    if (quyenHanStr != null && !quyenHanStr.isEmpty()) {
+                        try {
+                            taiKhoan.setQuyenHan(QuyenHan.valueOf(quyenHanStr));
+                        } catch (IllegalArgumentException e) {
+                            System.out.println("❌ Giá trị quền hạn không hợp lệ: " + quyenHanStr);
+                            taiKhoan.setQuyenHan(QuyenHan.MANAGER); // Mặc định là Manager
+                        }
+                    }
 
                     return taiKhoan;
                 }
@@ -71,12 +83,23 @@ public class TaiKhoanDAO {
 
             try (ResultSet rs = pstm.executeQuery()) {
                 if (rs.next()) {
+                    // Tạo object NhanVien từ ResultSet
+                    NhanVien nhanVien = nv_dao.buildNhanVienFromResultSet(rs);
+
                     TaiKhoan taiKhoan = new TaiKhoan();
                     taiKhoan.setUsername(rs.getString("username"));
                     taiKhoan.setPassword(rs.getString("password"));
-                    NhanVien nhanVien = nv_dao.getNhanVienTheoMa(rs.getString("maNV"));
                     taiKhoan.setNhanVien(nhanVien);
-                    taiKhoan.setQuyenHan(rs.getString("quyenHan"));
+
+                    String quyenHanStr = rs.getString("quyenHan");
+                    if (quyenHanStr != null && !quyenHanStr.isEmpty()) {
+                        try {
+                            taiKhoan.setQuyenHan(QuyenHan.valueOf(quyenHanStr));
+                        } catch (IllegalArgumentException e) {
+                            System.out.println("❌ Giá trị quền hạn không hợp lệ: " + quyenHanStr);
+                            taiKhoan.setQuyenHan(QuyenHan.MANAGER); // Mặc định là Manager
+                        }
+                    }
 
                     return taiKhoan;
                 }
