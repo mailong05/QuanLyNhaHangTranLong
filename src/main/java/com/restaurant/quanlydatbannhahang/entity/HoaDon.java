@@ -1,37 +1,45 @@
 package com.restaurant.quanlydatbannhahang.entity;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class HoaDon {
     private String maHD;
-    private PhieuGoiMon phieuGoiMon;
+    private Ban ban;
     private NhanVien nhanVien;
     private KhuyenMai khuyenMai;
     private Thue thue;
     private LocalDate ngayTao;
+    private LocalTime gioVao;
+    private LocalTime gioRa;
     private double tongTienGoc;
     private double tienGiamGia;
     private double tongThanhToan;
-    private String phuongThucTT;
+    private PhuongThucTT phuongThucTT;
+    private TrangThaiHoaDon trangThaiThanhToan;
 
     // Constructor không tham số
     public HoaDon() {
     }
 
-    // Constructor đầy đủ
-    public HoaDon(String maHD, PhieuGoiMon phieuGoiMon, NhanVien nhanVien, KhuyenMai khuyenMai,
-            Thue thue, LocalDate ngayTao, double tongTienGoc, double tienGiamGia,
-            double tongThanhToan, String phuongThucTT) {
+    // Constructor đầy đủ tham số
+    public HoaDon(String maHD, Ban ban, NhanVien nhanVien, KhuyenMai khuyenMai, Thue thue,
+            LocalDate ngayTao, LocalTime gioVao, LocalTime gioRa,
+            double tongTienGoc, double tienGiamGia, double tongThanhToan,
+            PhuongThucTT phuongThucTT, TrangThaiHoaDon trangThaiThanhToan) {
         this.maHD = maHD;
-        this.phieuGoiMon = phieuGoiMon;
+        this.ban = ban;
         this.nhanVien = nhanVien;
         this.khuyenMai = khuyenMai;
         this.thue = thue;
         this.ngayTao = ngayTao;
+        this.gioVao = gioVao;
+        this.gioRa = gioRa;
         this.tongTienGoc = tongTienGoc;
         this.tienGiamGia = tienGiamGia;
         this.tongThanhToan = tongThanhToan;
         this.phuongThucTT = phuongThucTT;
+        this.trangThaiThanhToan = trangThaiThanhToan;
     }
 
     // Getter và Setter
@@ -39,16 +47,12 @@ public class HoaDon {
         return maHD;
     }
 
-    public void setMaHD(String maHD) {
-        this.maHD = maHD;
+    public Ban getBan() {
+        return ban;
     }
 
-    public PhieuGoiMon getPhieuGoiMon() {
-        return phieuGoiMon;
-    }
-
-    public void setPhieuGoiMon(PhieuGoiMon phieuGoiMon) {
-        this.phieuGoiMon = phieuGoiMon;
+    public void setBan(Ban ban) {
+        this.ban = ban;
     }
 
     public NhanVien getNhanVien() {
@@ -83,6 +87,22 @@ public class HoaDon {
         this.ngayTao = ngayTao;
     }
 
+    public LocalTime getGioVao() {
+        return gioVao;
+    }
+
+    public void setGioVao(LocalTime gioVao) {
+        this.gioVao = gioVao;
+    }
+
+    public LocalTime getGioRa() {
+        return gioRa;
+    }
+
+    public void setGioRa(LocalTime gioRa) {
+        this.gioRa = gioRa;
+    }
+
     public double getTongTienGoc() {
         return tongTienGoc;
     }
@@ -107,12 +127,20 @@ public class HoaDon {
         this.tongThanhToan = tongThanhToan;
     }
 
-    public String getPhuongThucTT() {
+    public PhuongThucTT getPhuongThucTT() {
         return phuongThucTT;
     }
 
-    public void setPhuongThucTT(String phuongThucTT) {
+    public void setPhuongThucTT(PhuongThucTT phuongThucTT) {
         this.phuongThucTT = phuongThucTT;
+    }
+
+    public TrangThaiHoaDon getTrangThaiThanhToan() {
+        return trangThaiThanhToan;
+    }
+
+    public void setTrangThaiThanhToan(TrangThaiHoaDon trangThaiThanhToan) {
+        this.trangThaiThanhToan = trangThaiThanhToan;
     }
 
     // Các phương thức cần thiết
@@ -169,9 +197,16 @@ public class HoaDon {
     public String toString() {
         return "HoaDon{" +
                 "maHD='" + maHD + '\'' +
+                ", ban=" + (ban != null ? ban.getMaBan() : "null") +
+                ", nhanVien=" + (nhanVien != null ? nhanVien.getMaNV() : "null") +
                 ", ngayTao=" + ngayTao +
+                ", gioVao=" + gioVao +
+                ", gioRa=" + gioRa +
                 ", tongTienGoc=" + tongTienGoc +
+                ", tienGiamGia=" + tienGiamGia +
                 ", tongThanhToan=" + tongThanhToan +
+                ", phuongThucTT=" + phuongThucTT +
+                ", trangThaiThanhToan=" + trangThaiThanhToan +
                 '}';
     }
 }

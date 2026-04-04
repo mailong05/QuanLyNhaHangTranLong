@@ -1,40 +1,40 @@
 package com.restaurant.quanlydatbannhahang.entity;
 
 public class ChiTietHoaDon {
-    private String maHD;
-    private String maMonAn;
+    private HoaDon hoaDon;
+    private MonAn monAn;
     private int soLuong;
-    private double donGia;
-    private double thanhTien;
+    private double donGiaLuuTru;
+    private String ghiChu;
 
     // Constructor không tham số
     public ChiTietHoaDon() {
     }
 
     // Constructor đầy đủ
-    public ChiTietHoaDon(String maHD, String maMonAn, int soLuong, double donGia, double thanhTien) {
-        this.maHD = maHD;
-        this.maMonAn = maMonAn;
+    public ChiTietHoaDon(HoaDon hoaDon, MonAn monAn, int soLuong, double donGiaLuuTru, String ghiChu) {
+        this.hoaDon = hoaDon;
+        this.monAn = monAn;
         this.soLuong = soLuong;
-        this.donGia = donGia;
-        this.thanhTien = thanhTien;
+        this.donGiaLuuTru = donGiaLuuTru;
+        this.ghiChu = ghiChu;
     }
 
     // Getter và Setter
-    public String getMaHD() {
-        return maHD;
+    public HoaDon getHoaDon() {
+        return hoaDon;
     }
 
-    public void setMaHD(String maHD) {
-        this.maHD = maHD;
+    public void setHoaDon(HoaDon hoaDon) {
+        this.hoaDon = hoaDon;
     }
 
-    public String getMaMonAn() {
-        return maMonAn;
+    public MonAn getMonAn() {
+        return monAn;
     }
 
-    public void setMaMonAn(String maMonAn) {
-        this.maMonAn = maMonAn;
+    public void setMonAn(MonAn monAn) {
+        this.monAn = monAn;
     }
 
     public int getSoLuong() {
@@ -45,33 +45,41 @@ public class ChiTietHoaDon {
         this.soLuong = soLuong;
     }
 
-    public double getDonGia() {
-        return donGia;
+    public double getDonGiaLuuTru() {
+        return donGiaLuuTru;
     }
 
-    public void setDonGia(double donGia) {
-        this.donGia = donGia;
+    public void setDonGiaLuuTru(double donGiaLuuTru) {
+        this.donGiaLuuTru = donGiaLuuTru;
     }
 
-    public double getThanhTien() {
-        return thanhTien;
+    public String getGhiChu() {
+        return ghiChu;
     }
 
-    public void setThanhTien(double thanhTien) {
-        this.thanhTien = thanhTien;
+    public void setGhiChu(String ghiChu) {
+        this.ghiChu = ghiChu;
     }
 
     // Các phương thức cần thiết
-    public void tinhThanhTien() {
-        this.thanhTien = soLuong * donGia;
+    public double tinhThanhTien() {
+        return soLuong * donGiaLuuTru;
+    }
+
+    public boolean tangSoLuong(int n) {
+        if (n > 0) {
+            this.soLuong += n;
+            return true;
+        }
+        return false;
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((maHD == null) ? 0 : maHD.hashCode());
-        result = prime * result + ((maMonAn == null) ? 0 : maMonAn.hashCode());
+        result = prime * result + ((hoaDon == null) ? 0 : hoaDon.hashCode());
+        result = prime * result + ((monAn == null) ? 0 : monAn.hashCode());
         return result;
     }
 
@@ -84,15 +92,15 @@ public class ChiTietHoaDon {
         if (getClass() != obj.getClass())
             return false;
         ChiTietHoaDon other = (ChiTietHoaDon) obj;
-        if (maHD == null) {
-            if (other.maHD != null)
+        if (hoaDon == null) {
+            if (other.hoaDon != null)
                 return false;
-        } else if (!maHD.equals(other.maHD))
+        } else if (!hoaDon.equals(other.hoaDon))
             return false;
-        if (maMonAn == null) {
-            if (other.maMonAn != null)
+        if (monAn == null) {
+            if (other.monAn != null)
                 return false;
-        } else if (!maMonAn.equals(other.maMonAn))
+        } else if (!monAn.equals(other.monAn))
             return false;
         return true;
     }
@@ -100,11 +108,11 @@ public class ChiTietHoaDon {
     @Override
     public String toString() {
         return "ChiTietHoaDon{" +
-                "maHD='" + maHD + '\'' +
-                ", maMonAn='" + maMonAn + '\'' +
+                "hoaDon=" + (hoaDon != null ? hoaDon.getMaHD() : "null") +
+                ", monAn=" + (monAn != null ? monAn.getTenMon() : "null") +
                 ", soLuong=" + soLuong +
-                ", donGia=" + donGia +
-                ", thanhTien=" + thanhTien +
+                ", donGiaLuuTru=" + donGiaLuuTru +
+                ", ghiChu='" + ghiChu + '\'' +
                 '}';
     }
 }

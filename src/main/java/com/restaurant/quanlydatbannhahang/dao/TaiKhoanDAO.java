@@ -38,24 +38,13 @@ public class TaiKhoanDAO {
 
             try (ResultSet rs = pstm.executeQuery()) {
                 if (rs.next()) {
-                    // Tạo object NhanVien
-                    NhanVien nhanVien = new NhanVien();
-                    nhanVien.setMaNV(rs.getString("maNV"));
-                    nhanVien.setHoTen(rs.getString("hoTen"));
-                    nhanVien.setSdt(rs.getString("sdt"));
-                    nhanVien.setChucVu(rs.getString("chucVu"));
-                    nhanVien.setNgayVaoLam(rs.getDate("ngayVaoLam").toLocalDate());
-                    nhanVien.setLuongCoBan(rs.getDouble("luongCoBan"));
-                    nhanVien.setTrangThai(rs.getBoolean("trangThai"));
-
                     // Tạo object TaiKhoan
                     TaiKhoan taiKhoan = new TaiKhoan();
                     taiKhoan.setUsername(rs.getString("username"));
                     taiKhoan.setPassword(rs.getString("password"));
-                    NhanVien nv = nv_dao.getNhanVienTheoMa(rs.getString("maNV"));
-                    taiKhoan.setNhanVien(nv);
-                    taiKhoan.setQuyenHan(rs.getString("quyenHan"));
+                    NhanVien nhanVien = nv_dao.getNhanVienTheoMa(rs.getString("maNV"));
                     taiKhoan.setNhanVien(nhanVien);
+                    taiKhoan.setQuyenHan(rs.getString("quyenHan"));
 
                     return taiKhoan;
                 }
@@ -82,22 +71,12 @@ public class TaiKhoanDAO {
 
             try (ResultSet rs = pstm.executeQuery()) {
                 if (rs.next()) {
-                    NhanVien nhanVien = new NhanVien();
-                    nhanVien.setMaNV(rs.getString("maNV"));
-                    nhanVien.setHoTen(rs.getString("hoTen"));
-                    nhanVien.setSdt(rs.getString("sdt"));
-                    nhanVien.setChucVu(rs.getString("chucVu"));
-                    nhanVien.setNgayVaoLam(rs.getDate("ngayVaoLam").toLocalDate());
-                    nhanVien.setLuongCoBan(rs.getDouble("luongCoBan"));
-                    nhanVien.setTrangThai(rs.getBoolean("trangThai"));
-
                     TaiKhoan taiKhoan = new TaiKhoan();
                     taiKhoan.setUsername(rs.getString("username"));
                     taiKhoan.setPassword(rs.getString("password"));
-                    NhanVien nv = nv_dao.getNhanVienTheoMa(rs.getString("maNV"));
-                    taiKhoan.setNhanVien(nv);
-                    taiKhoan.setQuyenHan(rs.getString("quyenHan"));
+                    NhanVien nhanVien = nv_dao.getNhanVienTheoMa(rs.getString("maNV"));
                     taiKhoan.setNhanVien(nhanVien);
+                    taiKhoan.setQuyenHan(rs.getString("quyenHan"));
 
                     return taiKhoan;
                 }

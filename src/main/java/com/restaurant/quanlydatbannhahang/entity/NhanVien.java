@@ -6,18 +6,18 @@ public class NhanVien {
     private String maNV;
     private String hoTen;
     private String sdt;
-    private String chucVu;
+    private ChucVu chucVu;
     private LocalDate ngayVaoLam;
     private double luongCoBan;
-    private boolean trangThai;
+    private TrangThaiNhanVien trangThai;
 
     // Constructor không tham số
     public NhanVien() {
     }
 
     // Constructor đầy đủ
-    public NhanVien(String maNV, String hoTen, String sdt, String chucVu, LocalDate ngayVaoLam,
-            double luongCoBan, boolean trangThai) {
+    public NhanVien(String maNV, String hoTen, String sdt, ChucVu chucVu, LocalDate ngayVaoLam,
+            double luongCoBan, TrangThaiNhanVien trangThai) {
         this.maNV = maNV;
         this.hoTen = hoTen;
         this.sdt = sdt;
@@ -48,11 +48,11 @@ public class NhanVien {
         return sdt;
     }
 
-    public String getChucVu() {
+    public ChucVu getChucVu() {
         return chucVu;
     }
 
-    public void setChucVu(String chucVu) {
+    public void setChucVu(ChucVu chucVu) {
         this.chucVu = chucVu;
     }
 
@@ -76,15 +76,26 @@ public class NhanVien {
         this.luongCoBan = luongCoBan;
     }
 
-    public boolean isTrangThai() {
+    public TrangThaiNhanVien getTrangThai() {
         return trangThai;
     }
 
-    public void setTrangThai(boolean trangThai) {
+    public void setTrangThai(TrangThaiNhanVien trangThai) {
         this.trangThai = trangThai;
     }
 
     // Các phương thức cần thiết
+    public double tinhLuong() {
+        if (trangThai == TrangThaiNhanVien.DANG_LAM_VIEC) {
+            return luongCoBan;
+        }
+        return 0.0;
+    }
+
+    public boolean kiemTraDangNhap() {
+        return trangThai == TrangThaiNhanVien.DANG_LAM_VIEC;
+    }
+
     public void nhanThuong(double soTienThuong) {
         this.luongCoBan += soTienThuong;
     }

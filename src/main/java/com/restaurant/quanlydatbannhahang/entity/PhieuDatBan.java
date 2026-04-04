@@ -1,25 +1,27 @@
 package com.restaurant.quanlydatbannhahang.entity;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class PhieuDatBan {
     private String maPhieuDat;
     private KhachHang khachHang;
+    private NhanVien nhanVien;
     private Ban ban;
-    private LocalDate thoiGianDen;
+    private LocalDateTime thoiGianDen;
     private int soLuongNguoi;
     private String ghiChu;
-    private String trangThai;
+    private TrangThaiPhieuDat trangThai;
 
     // Constructor không tham số
     public PhieuDatBan() {
     }
 
     // Constructor đầy đủ
-    public PhieuDatBan(String maPhieuDat, KhachHang khachHang, Ban ban, LocalDate thoiGianDen,
-            int soLuongNguoi, String ghiChu, String trangThai) {
+    public PhieuDatBan(String maPhieuDat, KhachHang khachHang, NhanVien nhanVien, Ban ban, LocalDateTime thoiGianDen,
+            int soLuongNguoi, String ghiChu, TrangThaiPhieuDat trangThai) {
         this.maPhieuDat = maPhieuDat;
         this.khachHang = khachHang;
+        this.nhanVien = nhanVien;
         this.ban = ban;
         this.thoiGianDen = thoiGianDen;
         this.soLuongNguoi = soLuongNguoi;
@@ -44,6 +46,14 @@ public class PhieuDatBan {
         this.khachHang = khachHang;
     }
 
+    public NhanVien getNhanVien() {
+        return nhanVien;
+    }
+
+    public void setNhanVien(NhanVien nhanVien) {
+        this.nhanVien = nhanVien;
+    }
+
     public Ban getBan() {
         return ban;
     }
@@ -52,11 +62,11 @@ public class PhieuDatBan {
         this.ban = ban;
     }
 
-    public LocalDate getThoiGianDen() {
+    public LocalDateTime getThoiGianDen() {
         return thoiGianDen;
     }
 
-    public void setThoiGianDen(LocalDate thoiGianDen) {
+    public void setThoiGianDen(LocalDateTime thoiGianDen) {
         this.thoiGianDen = thoiGianDen;
     }
 
@@ -76,26 +86,26 @@ public class PhieuDatBan {
         this.ghiChu = ghiChu;
     }
 
-    public String getTrangThai() {
+    public TrangThaiPhieuDat getTrangThai() {
         return trangThai;
     }
 
-    public void setTrangThai(String trangThai) {
+    public void setTrangThai(TrangThaiPhieuDat trangThai) {
         this.trangThai = trangThai;
     }
 
     // Các phương thức cần thiết
     public boolean taoPhieuDat() {
         if (khachHang != null && ban != null && ban.kiemTraBanTrong()) {
-            this.trangThai = "Chờ xác nhận";
+            this.trangThai = TrangThaiPhieuDat.CHO_XAC_NHAN;
             return true;
         }
         return false;
     }
 
     public boolean xacNhanDen() {
-        if ("Chờ xác nhận".equals(trangThai)) {
-            this.trangThai = "Đã xác nhận";
+        if (trangThai == TrangThaiPhieuDat.CHO_XAC_NHAN) {
+            this.trangThai = TrangThaiPhieuDat.DA_XAC_NHAN;
             ban.datBan();
             return true;
         }
@@ -103,8 +113,8 @@ public class PhieuDatBan {
     }
 
     public boolean huyPhieu() {
-        if (!"Đã hủy".equals(trangThai)) {
-            this.trangThai = "Đã hủy";
+        if (trangThai != TrangThaiPhieuDat.DA_HUY) {
+            this.trangThai = TrangThaiPhieuDat.DA_HUY;
             if (ban != null) {
                 ban.huyDat();
             }
@@ -142,9 +152,12 @@ public class PhieuDatBan {
     public String toString() {
         return "PhieuDatBan{" +
                 "maPhieuDat='" + maPhieuDat + '\'' +
+                ", khachHang=" + (khachHang != null ? khachHang.getMaKH() : "null") +
+                ", nhanVien=" + (nhanVien != null ? nhanVien.getMaNV() : "null") +
+                ", ban=" + (ban != null ? ban.getMaBan() : "null") +
                 ", thoiGianDen=" + thoiGianDen +
                 ", soLuongNguoi=" + soLuongNguoi +
-                ", trangThai='" + trangThai + '\'' +
+                ", trangThai=" + trangThai +
                 '}';
     }
 }

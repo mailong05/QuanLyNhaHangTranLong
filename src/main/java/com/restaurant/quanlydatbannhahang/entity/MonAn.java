@@ -5,8 +5,8 @@ public class MonAn {
     private String tenMon;
     private double donGia;
     private String donViTinh;
-    private LoaiMonAn loaiMonAn;
-    private boolean trangThai;
+    private LoaiMonAn tenLoai;
+    private TrangThaiMonAn trangThai;
     private String urlHinhAnh;
 
     // Constructor không tham số
@@ -15,12 +15,12 @@ public class MonAn {
 
     // Constructor đầy đủ
     public MonAn(String maMon, String tenMon, double donGia, String donViTinh,
-            LoaiMonAn loaiMonAn, boolean trangThai, String urlHinhAnh) {
+            LoaiMonAn tenLoai, TrangThaiMonAn trangThai, String urlHinhAnh) {
         this.maMon = maMon;
         this.tenMon = tenMon;
         this.donGia = donGia;
         this.donViTinh = donViTinh;
-        this.loaiMonAn = loaiMonAn;
+        this.tenLoai = tenLoai;
         this.trangThai = trangThai;
         this.urlHinhAnh = urlHinhAnh;
     }
@@ -58,19 +58,19 @@ public class MonAn {
         this.donViTinh = donViTinh;
     }
 
-    public LoaiMonAn getLoaiMonAn() {
-        return loaiMonAn;
+    public LoaiMonAn getTenLoai() {
+        return tenLoai;
     }
 
-    public void setLoaiMonAn(LoaiMonAn loaiMonAn) {
-        this.loaiMonAn = loaiMonAn;
+    public void setTenLoai(LoaiMonAn tenLoai) {
+        this.tenLoai = tenLoai;
     }
 
-    public boolean isTrangThai() {
+    public TrangThaiMonAn getTrangThai() {
         return trangThai;
     }
 
-    public void setTrangThai(boolean trangThai) {
+    public void setTrangThai(TrangThaiMonAn trangThai) {
         this.trangThai = trangThai;
     }
 
@@ -84,7 +84,7 @@ public class MonAn {
 
     // Các phương thức cần thiết
     public boolean kiemTraConHang() {
-        return trangThai;
+        return trangThai == TrangThaiMonAn.CON;
     }
 
     public boolean capNhatGia(double giaMoi) {

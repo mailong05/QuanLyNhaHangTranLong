@@ -5,14 +5,14 @@ public class Ban {
     private int soGhe;
     private String viTri;
     private KhuVuc khuVuc;
-    private boolean trangThai;
+    private TrangThaiBan trangThai;
 
     // Constructor không tham số
     public Ban() {
     }
 
     // Constructor đầy đủ
-    public Ban(String maBan, int soGhe, String viTri, KhuVuc khuVuc, boolean trangThai) {
+    public Ban(String maBan, int soGhe, String viTri, KhuVuc khuVuc, TrangThaiBan trangThai) {
         this.maBan = maBan;
         this.soGhe = soGhe;
         this.viTri = viTri;
@@ -53,30 +53,30 @@ public class Ban {
         this.khuVuc = khuVuc;
     }
 
-    public boolean isTrangThai() {
+    public TrangThaiBan getTrangThai() {
         return trangThai;
     }
 
-    public void setTrangThai(boolean trangThai) {
+    public void setTrangThai(TrangThaiBan trangThai) {
         this.trangThai = trangThai;
     }
 
     // Các phương thức cần thiết
     public boolean kiemTraBanTrong() {
-        return !trangThai;
+        return trangThai == TrangThaiBan.TRONG;
     }
 
     public boolean datBan() {
         if (kiemTraBanTrong()) {
-            this.trangThai = true;
+            this.trangThai = TrangThaiBan.DA_DAT;
             return true;
         }
         return false;
     }
 
     public boolean huyDat() {
-        if (trangThai) {
-            this.trangThai = false;
+        if (trangThai != TrangThaiBan.TRONG) {
+            this.trangThai = TrangThaiBan.TRONG;
             return true;
         }
         return false;
@@ -113,6 +113,7 @@ public class Ban {
                 "maBan='" + maBan + '\'' +
                 ", soGhe=" + soGhe +
                 ", viTri='" + viTri + '\'' +
+                ", khuVuc=" + (khuVuc != null ? khuVuc.getMaKhuVuc() : "null") +
                 ", trangThai=" + trangThai +
                 '}';
     }

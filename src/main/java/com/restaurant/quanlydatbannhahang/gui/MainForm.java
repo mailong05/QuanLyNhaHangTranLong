@@ -53,8 +53,8 @@ public class MainForm extends javax.swing.JFrame {
     public MainForm(TaiKhoan taiKhoan) {
         this.taiKhoan = taiKhoan;
         this.userRole = (taiKhoan != null && taiKhoan.getNhanVien() != null)
-                ? taiKhoan.getNhanVien().getChucVu()
-                : "Quản lý";
+                ? taiKhoan.getNhanVien().getChucVu().name()
+                : "QUAN_LY";
         try {
             initComponents();
             initCustomComponents();
@@ -143,11 +143,11 @@ public class MainForm extends javax.swing.JFrame {
         String chucVu = userRole;
         if (taiKhoan != null && taiKhoan.getNhanVien() != null) {
             tenNhanVien = taiKhoan.getNhanVien().getHoTen();
-            chucVu = taiKhoan.getNhanVien().getChucVu();
+            chucVu = taiKhoan.getNhanVien().getChucVu().name();
         }
         lblTenNhanVien.setText(tenNhanVien);
         lblPhanQuyen.setText(chucVu);
-        if ("Nhân viên".equals(userRole)) {
+        if ("PHUC_VU".equals(userRole)) {
             panelQuanLy.setVisible(false);
             panelSubQuanLy.setVisible(false);
             panelThongKe.setVisible(false);

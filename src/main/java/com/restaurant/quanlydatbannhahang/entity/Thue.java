@@ -4,16 +4,18 @@ public class Thue {
     private String maThue;
     private String tenThue;
     private double thueSuat;
+    private TrangThaiThue trangThai;
 
     // Constructor không tham số
     public Thue() {
     }
 
     // Constructor đầy đủ
-    public Thue(String maThue, String tenThue, double thueSuat) {
+    public Thue(String maThue, String tenThue, double thueSuat, TrangThaiThue trangThai) {
         this.maThue = maThue;
         this.tenThue = tenThue;
         this.thueSuat = thueSuat;
+        this.trangThai = trangThai;
     }
 
     // Getter và Setter
@@ -39,6 +41,14 @@ public class Thue {
 
     public void setThueSuat(double thueSuat) {
         this.thueSuat = thueSuat;
+    }
+
+    public TrangThaiThue getTrangThai() {
+        return trangThai;
+    }
+
+    public void setTrangThai(TrangThaiThue trangThai) {
+        this.trangThai = trangThai;
     }
 
     // Các phương thức cần thiết

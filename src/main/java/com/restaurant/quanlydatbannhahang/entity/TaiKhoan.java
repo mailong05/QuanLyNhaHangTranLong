@@ -56,6 +56,19 @@ public class TaiKhoan {
         return username != null && !username.isEmpty() && password != null && !password.isEmpty();
     }
 
+    public boolean doiMatKhau(String passMoi) {
+        if (passMoi != null && !passMoi.isEmpty()) {
+            this.password = passMoi;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean resetMatKhau() {
+        this.password = "123456"; // Mật khẩu mặc định
+        return true;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -83,8 +96,8 @@ public class TaiKhoan {
 
     @Override
     public String toString() {
-        return "TaiKhoan [username=" + username + ", password=" + password + ", nhanVien=" + nhanVien + ", quyenHan="
-                + quyenHan + "]";
+        return "TaiKhoan [username=" + username + ", password=" + password + ", nhanVien="
+                + (nhanVien != null ? nhanVien.getMaNV() : "null") + ", quyenHan=" + quyenHan + "]";
     }
 
 }

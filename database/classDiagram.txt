@@ -1,0 +1,161 @@
+classDiagram
+    direction RL
+
+    class NhanVien {
+        - maNV: String
+        - hoTen: String
+        - sdt: String
+        - chucVu: ChucVu
+        - ngayVaoLam: LocalDate
+        - luongCoBan: Double
+        - trangThai: TrangThaiNhanVien
+        + tinhLuong(): double
+        + kiemTraDangNhap(): boolean
+    }
+
+    class TaiKhoan {
+        - username: String
+        - password: String
+        - maNV: String
+        - quyenHan: String
+        + doiMatKhau(passMoi: String): boolean
+        + resetMatKhau(): boolean
+    }
+
+    class KhachHang {
+        - maKH: String
+        - hoTen: String
+        - sdt: String
+        - diemTichLuy: int
+        - loaiThanhVien: String
+        + tichDiem(tongTien: double)
+        + layPhanTramGiamGia(): double
+        + kiemTraThanhVienVIP(): boolean
+    }
+
+    class KhuVuc {
+        - maKhuVuc: String
+        - tenKhuVuc: String
+        + themKhuVuc()
+        + capNhatKhuVuc()
+    }
+
+    class BanAn {
+        - maBan: String
+        - soGhe: int
+        - viTri: String
+        - maKhuVuc: String
+        - trangThai: TrangThaiBan
+        + kiemTraBanTrong(): boolean
+        + datBan(): boolean
+        + huyDat(): boolean
+    }
+
+    class PhieuDatBan {
+        - maPhieuDat: String
+        - maKH: String
+        - maNV: String
+        - thoiGianDen: LocalDateTime
+        - soLuongNguoi: int
+        - ghiChu: String
+        - trangThai: TrangThaiPhieuDat
+        + taoPhieuDat(): boolean
+        + xacNhanDen(): boolean
+        + huyPhieu(): boolean
+    }
+
+    class ChiTietPhieuDatBan {
+        - maPhieuDat: String
+        - maBan: String
+        - ghiChu: String
+    }
+
+    class MonAn {
+        - maMon: String
+        - tenMon: String
+        - donGia: double
+        - donViTinh: String
+        - tenLoai: LoaiMonAn
+        - trangThai: TrangThaiMonAn
+        - urlHinhAnh: String
+        + kiemTraConHang(): boolean
+        + capNhatGia(giaMoi: double): boolean
+    }
+
+    class HoaDon {
+        - maHD: String
+        - maBan: String
+        - maNV: String
+        - maKM: String
+        - maThue: String
+        - ngayTao: LocalDateTime
+        - gioVao: LocalTime
+        - gioRa: LocalTime
+        - tongTienGoc: double
+        - tienGiamGia: double
+        - tongThanhToan: double
+        - phuongThucTT: PhuongThucTT
+        - trangThaiThanhToan: TrangThaiHoaDon
+        + tinhTongThanhToan(): double
+        + inHoaDon(): void
+        + luuDoanhThu(): void
+    }
+
+    class ChiTietHoaDon {
+        - maHD: String
+        - maMon: String
+        - soLuong: int
+        - donGiaLuuTru: double
+        - ghiChu: String
+        + tinhThanhTien(): double
+        + tangSoLuong(n: int): boolean
+    }
+
+    class KhuyenMai {
+        - maKM: String
+        - tenKM: String
+        - giaTriGiam: double
+        - ngayBatDau: LocalDate
+        - ngayKetThuc: LocalDate
+        - dieuKienToiThieu: double
+        - trangThai: TrangThaiKhuyenMai
+        + kiemTraHieuLuc(ngayHienTai: Date): boolean
+        + tinhSoTienGiam(double tongTien): double
+    }
+
+    class Thue {
+        - maThue: String
+        - tenThue: String
+        - thueSuat: double
+        - trangThai: TrangThaiThue
+        + updateThueSuat(): boolean
+    }
+
+    %% Relationships
+    NhanVien "1" -- "1" TaiKhoan : sở hữu
+    NhanVien "1" -- "0..*" HoaDon : lập
+    NhanVien "1" -- "0..*" PhieuDatBan : tạo
+    
+    KhachHang "1" -- "0..*" PhieuDatBan : đặt
+    PhieuDatBan "1" *-- "1..*" ChiTietPhieuDatBan : bao gồm
+    ChiTietPhieuDatBan "0..*" -- "1" BanAn : chọn
+    
+    KhuVuc "1" -- "0..*" BanAn : thuộc về
+    BanAn "1" -- "0..*" HoaDon : phục vụ tại
+    
+    HoaDon "1" *-- "1..*" ChiTietHoaDon : chi tiết
+    MonAn "1" -- "0..*" ChiTietHoaDon : xuất hiện trong
+    
+    KhuyenMai "0..1" -- "0..*" HoaDon : áp dụng
+    Thue "0..*" -- "0..*" HoaDon : áp dụng
+
+    %% class ChucVu { <<enumeration>> QUAN_LY, BEP, THU_NGAN, PHUC_VU }
+    %% class TrangThaiNhanVien { <<enumeration>> DANG_LAM_VIEC, DA_NGHI_VIEC }
+    %% class TrangThaiBan { <<enumeration>> TRONG, DANG_DUNG, DA_DAT }
+    %% class LoaiMonAn { <<enumeration>> KHAI_VI, MON_CHINH, HAI_SAN, DO_UONG }
+    %% class TrangThaiPhieuDat { <<enumeration>> CHO_XAC_NHAN, DA_XAC_NHAN, DA_DEN, DA_HUY }
+    %% class TrangThaiHoaDon { <<enumeration>> CHUA_THANH_TOAN, DA_THANH_TOAN, DA_HUY }
+    %% class PhuongThucTT { <<enumeration>> TIEN_MAT, CHUYEN_KHOAN, THE }
+    %% class TrangThaiMonAn {<<enumeration>> CON, HET}
+    %% class TrangThaiThue {<<enumeration>> NGUNG_AP_DUNG, CON_AP_DUNG}
+    %% class TrangThaiKhuyenMai {<<enumeration>> NGUNG_AP_DUNG, CON_AP_DUNG}

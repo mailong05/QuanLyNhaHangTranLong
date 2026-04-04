@@ -9,6 +9,7 @@ public class KhuyenMai {
     private LocalDate ngayBatDau;
     private LocalDate ngayKetThuc;
     private double dieuKienToiThieu;
+    private TrangThaiKhuyenMai trangThai;
 
     // Constructor không tham số
     public KhuyenMai() {
@@ -16,13 +17,15 @@ public class KhuyenMai {
 
     // Constructor đầy đủ
     public KhuyenMai(String maKM, String tenKM, double giaTriGiam,
-            LocalDate ngayBatDau, LocalDate ngayKetThuc, double dieuKienToiThieu) {
+            LocalDate ngayBatDau, LocalDate ngayKetThuc, double dieuKienToiThieu,
+            TrangThaiKhuyenMai trangThai) {
         this.maKM = maKM;
         this.tenKM = tenKM;
         this.giaTriGiam = giaTriGiam;
         this.ngayBatDau = ngayBatDau;
         this.ngayKetThuc = ngayKetThuc;
         this.dieuKienToiThieu = dieuKienToiThieu;
+        this.trangThai = trangThai;
     }
 
     // Getter và Setter
@@ -70,17 +73,24 @@ public class KhuyenMai {
         return ngayKetThuc;
     }
 
-    public void setNgayKetThuc(LocalDate ngayKetThuc) {
-        this.ngayKetThuc = ngayKetThuc;
+    public TrangThaiKhuyenMai getTrangThai() {
+        return trangThai;
+    }
+
+    public void setTrangThai(TrangThaiKhuyenMai trangThai) {
+        this.trangThai = trangThai;
     }
 
     // Các phương thức cần thiết
     public boolean kiemTraHieuLuc(LocalDate ngayHienTai) {
+        if (trangThai != TrangThaiKhuyenMai.CON_AP_DUNG) {
+            return false;
+        }
         return !ngayHienTai.isBefore(ngayBatDau) && !ngayHienTai.isAfter(ngayKetThuc);
     }
 
     public double tinhSoTienGiam(double tongTien) {
-        if (tongTien >= dieuKienToiThieu) {
+        if (tongTien >= dieuKienToiThieu && trangThai == TrangThaiKhuyenMai.CON_AP_DUNG) {
             return giaTriGiam;
         }
         return 0.0;
