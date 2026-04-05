@@ -127,8 +127,8 @@ public class PanelDatBan extends javax.swing.JPanel {
         panelTimKiem = new javax.swing.JPanel();
         txtSearch = new javax.swing.JTextField();
         btnSearch = new javax.swing.JButton();
-        cmbFilterKhuVuc = new javax.swing.JComboBox<>();
-        cmbFilterTrangThai = new javax.swing.JComboBox<>();
+        cbFilterKhuVuc = new javax.swing.JComboBox<>();
+        cbFilterTrangThai = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
         pnlStatusTrong = new javax.swing.JPanel();
         pnlStatusServing = new javax.swing.JPanel();
@@ -161,14 +161,14 @@ public class PanelDatBan extends javax.swing.JPanel {
             }
         });
 
-        cmbFilterKhuVuc.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất cả", "A", "B", "C" }));
-        cmbFilterKhuVuc.addActionListener(new java.awt.event.ActionListener() {
+        cbFilterKhuVuc.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất cả", "A", "B", "C" }));
+        cbFilterKhuVuc.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbFilterKhuVucActionPerformed(evt);
+                cbFilterKhuVucActionPerformed(evt);
             }
         });
 
-        cmbFilterTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất cả", "Trống", "Đang dùng", "Đã đặt" }));
+        cbFilterTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất cả", "Trống", "Đang dùng", "Đã đặt" }));
 
         jLabel1.setText("Trống");
 
@@ -230,11 +230,11 @@ public class PanelDatBan extends javax.swing.JPanel {
                     .addGroup(panelTimKiemLayout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cmbFilterKhuVuc, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cbFilterKhuVuc, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(40, 40, 40)
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cmbFilterTrangThai, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cbFilterTrangThai, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 342, Short.MAX_VALUE)
                         .addComponent(pnlStatusTrong, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -274,8 +274,8 @@ public class PanelDatBan extends javax.swing.JPanel {
                                     .addGap(4, 4, 4)
                                     .addComponent(jLabel1))))
                         .addGroup(panelTimKiemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cmbFilterKhuVuc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cmbFilterTrangThai, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cbFilterKhuVuc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cbFilterTrangThai, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel4)
                             .addComponent(jLabel5)))
                     .addComponent(jLabel2))
@@ -311,14 +311,14 @@ public class PanelDatBan extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtSearchActionPerformed
 
-    private void cmbFilterKhuVucActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbFilterKhuVucActionPerformed
-        String selected = cmbFilterKhuVuc.getSelectedItem().toString();
+    private void cbFilterKhuVucActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbFilterKhuVucActionPerformed
+        String selected = cbFilterKhuVuc.getSelectedItem().toString();
         if (selected.equals("Tất cả")) {
             loadSoDoBan(""); // Hiển thị hết
         } else {
             loadSoDoBan(selected); // Lọc theo A, B hoặc C
         }
-    }//GEN-LAST:event_cmbFilterKhuVucActionPerformed
+    }//GEN-LAST:event_cbFilterKhuVucActionPerformed
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
         // TODO add your handling code here:
@@ -327,8 +327,8 @@ public class PanelDatBan extends javax.swing.JPanel {
     //Không sửa bên dưới
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSearch;
-    private javax.swing.JComboBox<String> cmbFilterKhuVuc;
-    private javax.swing.JComboBox<String> cmbFilterTrangThai;
+    private javax.swing.JComboBox<String> cbFilterKhuVuc;
+    private javax.swing.JComboBox<String> cbFilterTrangThai;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

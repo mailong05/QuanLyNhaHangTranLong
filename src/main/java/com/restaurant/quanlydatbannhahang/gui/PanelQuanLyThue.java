@@ -92,10 +92,10 @@ public class PanelQuanLyThue extends javax.swing.JPanel {
         txtTenThue = new javax.swing.JTextField();
         txtThueSuat = new javax.swing.JTextField();
         lblThueSuat = new javax.swing.JLabel();
-        txtTrangThai = new javax.swing.JTextField();
         lblTrangThai = new javax.swing.JLabel();
         txtTimKiem = new javax.swing.JTextField();
         btnTimKiem = new javax.swing.JButton();
+        cbTrangThai = new javax.swing.JComboBox<>();
         scrTableThue = new javax.swing.JScrollPane();
         tableThue = new javax.swing.JTable();
         pnlButton = new javax.swing.JPanel();
@@ -143,8 +143,6 @@ public class PanelQuanLyThue extends javax.swing.JPanel {
         lblThueSuat.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblThueSuat.setText("Thuế suất:");
 
-        txtTrangThai.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-
         lblTrangThai.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblTrangThai.setText("Trạng thái:");
 
@@ -152,6 +150,13 @@ public class PanelQuanLyThue extends javax.swing.JPanel {
 
         btnTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnTimKiem.setText("Tìm kiếm");
+
+        cbTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbTrangThai.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbTrangThaiActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pnlThongTinThueLayout = new javax.swing.GroupLayout(pnlThongTinThue);
         pnlThongTinThue.setLayout(pnlThongTinThueLayout);
@@ -175,9 +180,9 @@ public class PanelQuanLyThue extends javax.swing.JPanel {
                             .addComponent(lblThueSuat)
                             .addComponent(lblTrangThai))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(pnlThongTinThueLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtThueSuat, javax.swing.GroupLayout.DEFAULT_SIZE, 365, Short.MAX_VALUE)
-                            .addComponent(txtTrangThai))
+                        .addGroup(pnlThongTinThueLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtThueSuat, javax.swing.GroupLayout.PREFERRED_SIZE, 365, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cbTrangThai, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 18, Short.MAX_VALUE))
                     .addGroup(pnlThongTinThueLayout.createSequentialGroup()
                         .addComponent(txtTimKiem)
@@ -194,10 +199,10 @@ public class PanelQuanLyThue extends javax.swing.JPanel {
                         .addGroup(pnlThongTinThueLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblThueSuat, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtThueSuat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(11, 11, 11)
+                        .addGap(14, 14, 14)
                         .addGroup(pnlThongTinThueLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtTrangThai, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblTrangThai)))
+                            .addComponent(lblTrangThai)
+                            .addComponent(cbTrangThai, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(pnlThongTinThueLayout.createSequentialGroup()
                         .addGroup(pnlThongTinThueLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblMaThue, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -219,31 +224,27 @@ public class PanelQuanLyThue extends javax.swing.JPanel {
 
         tableThue.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
                 "Mã thuế", "Tên thuế", "Thuế suất", "Trạng thái"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tableThue.setRowHeight(35);
         scrTableThue.setViewportView(tableThue);
 
@@ -302,6 +303,10 @@ public class PanelQuanLyThue extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtThueSuatActionPerformed
 
+    private void cbTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbTrangThaiActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbTrangThaiActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCapNhat;
@@ -309,6 +314,7 @@ public class PanelQuanLyThue extends javax.swing.JPanel {
     private javax.swing.JButton btnTimKiem;
     private javax.swing.JButton btnTrangChu;
     private javax.swing.JButton btnXoa;
+    private javax.swing.JComboBox<String> cbTrangThai;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JLabel lblMaThue;
@@ -325,6 +331,5 @@ public class PanelQuanLyThue extends javax.swing.JPanel {
     private javax.swing.JTextField txtTenThue;
     private javax.swing.JTextField txtThueSuat;
     private javax.swing.JTextField txtTimKiem;
-    private javax.swing.JTextField txtTrangThai;
     // End of variables declaration//GEN-END:variables
 }

@@ -93,12 +93,12 @@ public class PanelKhachHang extends javax.swing.JPanel {
         txtHoTen = new javax.swing.JTextField();
         txtDiemTichLuy = new javax.swing.JTextField();
         lblDiemTichLuy = new javax.swing.JLabel();
-        txtLoaiThanhVien = new javax.swing.JTextField();
         lblLoaiThanhVien = new javax.swing.JLabel();
         lblSoDienThoai = new javax.swing.JLabel();
         txtSoDienThoai = new javax.swing.JTextField();
         txtTimKiem = new javax.swing.JTextField();
         btnTimKiem = new javax.swing.JButton();
+        cbLoaiThanhVien = new javax.swing.JComboBox<>();
         lblTitle = new javax.swing.JLabel();
         scrTableKhachHang = new javax.swing.JScrollPane();
         tableKhachHang = new javax.swing.JTable();
@@ -144,8 +144,6 @@ public class PanelKhachHang extends javax.swing.JPanel {
         lblDiemTichLuy.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblDiemTichLuy.setText("Điểm tích lũy:");
 
-        txtLoaiThanhVien.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-
         lblLoaiThanhVien.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblLoaiThanhVien.setText("Loại thành viên:");
 
@@ -158,6 +156,8 @@ public class PanelKhachHang extends javax.swing.JPanel {
 
         btnTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnTimKiem.setText("Tìm kiếm");
+
+        cbLoaiThanhVien.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout pnlThongTinKhachHangLayout = new javax.swing.GroupLayout(pnlThongTinKhachHang);
         pnlThongTinKhachHang.setLayout(pnlThongTinKhachHangLayout);
@@ -185,9 +185,9 @@ public class PanelKhachHang extends javax.swing.JPanel {
                             .addComponent(lblLoaiThanhVien))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(pnlThongTinKhachHangLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtLoaiThanhVien, javax.swing.GroupLayout.PREFERRED_SIZE, 390, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtDiemTichLuy, javax.swing.GroupLayout.PREFERRED_SIZE, 390, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(0, 27, Short.MAX_VALUE))
+                            .addComponent(txtDiemTichLuy, javax.swing.GroupLayout.PREFERRED_SIZE, 390, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cbLoaiThanhVien, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(0, 28, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlThongTinKhachHangLayout.createSequentialGroup()
                 .addGap(1, 1, 1)
                 .addComponent(txtTimKiem)
@@ -206,9 +206,9 @@ public class PanelKhachHang extends javax.swing.JPanel {
                             .addComponent(txtDiemTichLuy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(pnlThongTinKhachHangLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtLoaiThanhVien, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblLoaiThanhVien)
-                            .addComponent(txtHoTen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txtHoTen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cbLoaiThanhVien, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(pnlThongTinKhachHangLayout.createSequentialGroup()
                         .addGroup(pnlThongTinKhachHangLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblMaKhachHang, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -236,31 +236,27 @@ public class PanelKhachHang extends javax.swing.JPanel {
 
         tableKhachHang.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+
             },
             new String [] {
                 "Mã KH", "Họ tên", "Số điện thoại", "Điểm tích lũy", "Loại thành viên"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tableKhachHang.setRowHeight(35);
         scrTableKhachHang.setViewportView(tableKhachHang);
 
@@ -326,6 +322,7 @@ public class PanelKhachHang extends javax.swing.JPanel {
     private javax.swing.JButton btnTimKiem;
     private javax.swing.JButton btnTrangChu;
     private javax.swing.JButton btnXoa;
+    private javax.swing.JComboBox<String> cbLoaiThanhVien;
     private javax.swing.JLabel lblDiemTichLuy;
     private javax.swing.JLabel lblHoTen;
     private javax.swing.JLabel lblLoaiThanhVien;
@@ -340,7 +337,6 @@ public class PanelKhachHang extends javax.swing.JPanel {
     private javax.swing.JTable tableKhachHang;
     private javax.swing.JTextField txtDiemTichLuy;
     private javax.swing.JTextField txtHoTen;
-    private javax.swing.JTextField txtLoaiThanhVien;
     private javax.swing.JTextField txtMaKhachHang;
     private javax.swing.JTextField txtSoDienThoai;
     private javax.swing.JTextField txtTimKiem;
