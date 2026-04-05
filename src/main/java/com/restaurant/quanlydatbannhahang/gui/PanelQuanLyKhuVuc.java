@@ -5,9 +5,9 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 
-public class PanelCapNhatKhuVuc extends javax.swing.JPanel {
+public class PanelQuanLyKhuVuc extends javax.swing.JPanel {
 
-    public PanelCapNhatKhuVuc() {
+    public PanelQuanLyKhuVuc() {
         initComponents();
         customUI();
     }

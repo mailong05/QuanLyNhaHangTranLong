@@ -4,12 +4,12 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 
-public class PanelKhachHang extends javax.swing.JPanel {
+public class PanelQuanLyKhachHang extends javax.swing.JPanel {
 
     /**
      * Creates new form PanelKhachHang
      */
-    public PanelKhachHang() {
+    public PanelQuanLyKhachHang() {
         initComponents();
         customUI();
     }
