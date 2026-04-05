@@ -214,7 +214,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel {
                             .addComponent(txtMaNhanVien, javax.swing.GroupLayout.PREFERRED_SIZE, 390, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(pnlThongTinBanLayout.createSequentialGroup()
                             .addComponent(lblMaKhachHang)
-                            .addGap(18, 18, 18)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(txtSoDienThoai, javax.swing.GroupLayout.PREFERRED_SIZE, 390, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(pnlThongTinBanLayout.createSequentialGroup()
                             .addComponent(lblSoLuong, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
