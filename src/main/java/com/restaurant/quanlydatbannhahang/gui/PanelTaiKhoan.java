@@ -4,30 +4,23 @@
  */
 package com.restaurant.quanlydatbannhahang.gui;
 
+/**
+ *
+ * @author nguye
+ */
+public class PanelTaiKhoan extends javax.swing.JPanel {
 
-public class PanelHoaDon extends javax.swing.JPanel {
-
-
-    public PanelHoaDon() {
+    public PanelTaiKhoan() {
         initComponents();
     }
+
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         setBackground(new java.awt.Color(255, 251, 233));
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1076, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 619, Short.MAX_VALUE)
-        );
+        setLayout(new java.awt.BorderLayout());
     }// </editor-fold>//GEN-END:initComponents
 
 

@@ -1,7 +1,9 @@
 
-package com.restaurant.quanlydatbannhahang.gui;
+package com.restaurant.quanlydatbannhahang.dao;
 
 import com.restaurant.quanlydatbannhahang.entity.TaiKhoan;
+import com.restaurant.quanlydatbannhahang.gui.LoginForm;
+import com.restaurant.quanlydatbannhahang.gui.MainForm;
 import com.restaurant.quanlydatbannhahang.service.AuthService;
 
 import javax.swing.JOptionPane;

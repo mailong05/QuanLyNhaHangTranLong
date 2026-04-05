@@ -33,11 +33,5 @@ public class PanelThongKe extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JPanel pnlHeader;
-    private javax.swing.JPanel pnlHeader1;
     // End of variables declaration//GEN-END:variables
 }
