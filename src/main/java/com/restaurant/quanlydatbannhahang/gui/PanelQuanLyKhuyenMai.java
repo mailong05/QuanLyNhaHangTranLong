@@ -121,31 +121,34 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel {
 
         pnlThongTinKhuyenMai.setBackground(new java.awt.Color(255, 251, 233));
 
-        lblMaKhuyenMai.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblMaKhuyenMai.setText("Mã khuyến mãi:");
+        lblMaKhuyenMai.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         txtMaKhuyenMai.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtMaKhuyenMai.setPreferredSize(new java.awt.Dimension(64, 35));
         txtMaKhuyenMai.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtMaKhuyenMaiActionPerformed(evt);
             }
         });
 
-        lblTenKhuyenMai.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblTenKhuyenMai.setText("Tên khuyến mãi:");
+        lblTenKhuyenMai.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         txtTenKhuyenMai.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtTenKhuyenMai.setPreferredSize(new java.awt.Dimension(64, 35));
 
-        lblNgayBatDau.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblNgayBatDau.setText("Ngày bắt đầu:");
+        lblNgayBatDau.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
-        lblNgayKetThuc.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblNgayKetThuc.setText("Ngày kết thúc:");
+        lblNgayKetThuc.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
-        lblGiaTriGiam.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblGiaTriGiam.setText("Giá trị giảm:");
+        lblGiaTriGiam.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         txtGiaTriGiam.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtGiaTriGiam.setPreferredSize(new java.awt.Dimension(64, 35));
         txtGiaTriGiam.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtGiaTriGiamActionPerformed(evt);
@@ -153,24 +156,31 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel {
         });
 
         txtTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtTimKiem.setPreferredSize(new java.awt.Dimension(64, 35));
 
-        btnTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnTimKiem.setText("Tìm kiếm");
+        btnTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnTimKiem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTimKiemActionPerformed(evt);
             }
         });
 
-        lblDieuKienToiThieu.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblDieuKienToiThieu.setText("Điều kiện tối thiểu:");
+        lblDieuKienToiThieu.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         txtDieuKienToiThieu.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtDieuKienToiThieu.setPreferredSize(new java.awt.Dimension(64, 35));
 
-        lblTrangThai.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblTrangThai.setText("Trạng thái:");
+        lblTrangThai.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         cbTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbTrangThai.setPreferredSize(new java.awt.Dimension(72, 35));
+
+        dbNgayKetThuc.setPreferredSize(new java.awt.Dimension(143, 35));
+
+        dpNgayBatDau.setPreferredSize(new java.awt.Dimension(143, 35));
 
         javax.swing.GroupLayout pnlThongTinKhuyenMaiLayout = new javax.swing.GroupLayout(pnlThongTinKhuyenMai);
         pnlThongTinKhuyenMai.setLayout(pnlThongTinKhuyenMaiLayout);
@@ -210,7 +220,7 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel {
                             .addComponent(dpNgayBatDau, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(0, 15, Short.MAX_VALUE))
             .addGroup(pnlThongTinKhuyenMaiLayout.createSequentialGroup()
-                .addComponent(txtTimKiem)
+                .addComponent(txtTimKiem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(24, 24, 24)
                 .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -249,9 +259,9 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel {
                             .addComponent(lblTrangThai)
                             .addComponent(cbTrangThai, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(16, 16, 16)
-                .addGroup(pnlThongTinKhuyenMaiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(pnlThongTinKhuyenMaiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnTimKiem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtTimKiem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 

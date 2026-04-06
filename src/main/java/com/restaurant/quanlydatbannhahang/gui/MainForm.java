@@ -305,8 +305,6 @@ public class MainForm extends javax.swing.JFrame {
                     showPanel(new PanelQuanLyThue());
                 } else if (lbl == subQuanLyBan) {
                     showPanel(new PanelQuanLyBan());
-                } else if (lbl == subTaiKhoanNhanVien) {
-                    showPanel(new PanelTaiKhoan());
                 } else if (lbl == subQuanLyKhachHang) {
                     showPanel(new PanelQuanLyKhachHang());
                 } else if (lbl == subQuanLyKhuyenMai) {
@@ -334,6 +332,8 @@ public class MainForm extends javax.swing.JFrame {
                     showPanel(new PanelDanhSachThue());
                 }else if (lbl == subDanhSachMonAn) {
                     showPanel(new PanelDanhSachMonAn());
+                }else if (lbl == subLichSuHoaDon) {
+                    showPanel(new PanelLichSuHoaDon());
                 }
                 
                 
@@ -388,7 +388,6 @@ public class MainForm extends javax.swing.JFrame {
         groupSubNhanVien = new javax.swing.JPanel();
         subDanhSachNhanVien = new javax.swing.JLabel();
         subQuanLyNhanVien = new javax.swing.JLabel();
-        subTaiKhoanNhanVien = new javax.swing.JLabel();
         filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 7), new java.awt.Dimension(0, 7), new java.awt.Dimension(0, 7));
         panelKhachHang = new javax.swing.JPanel();
         lblKhachHang = new javax.swing.JLabel();
@@ -425,7 +424,7 @@ public class MainForm extends javax.swing.JFrame {
         panelMainContent = new javax.swing.JPanel();
         panelHeader = new javax.swing.JPanel();
         lblTenTrang = new javax.swing.JLabel();
-        jPanel5 = new javax.swing.JPanel();
+        panelTaiKhoan = new javax.swing.JPanel();
         jLabel18 = new javax.swing.JLabel();
         lblTenNhanVien = new javax.swing.JLabel();
         lblPhanQuyen = new javax.swing.JLabel();
@@ -597,7 +596,7 @@ public class MainForm extends javax.swing.JFrame {
         groupSubNhanVien.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 40, 0, 1));
         groupSubNhanVien.setAlignmentY(0.0F);
         groupSubNhanVien.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        groupSubNhanVien.setPreferredSize(new java.awt.Dimension(190, 85));
+        groupSubNhanVien.setPreferredSize(new java.awt.Dimension(190, 60));
         groupSubNhanVien.setLayout(new javax.swing.BoxLayout(groupSubNhanVien, javax.swing.BoxLayout.Y_AXIS));
 
         subDanhSachNhanVien.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -611,12 +610,6 @@ public class MainForm extends javax.swing.JFrame {
         subQuanLyNhanVien.setText("+ Quản lý");
         subQuanLyNhanVien.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 1, 5, 1));
         groupSubNhanVien.add(subQuanLyNhanVien);
-
-        subTaiKhoanNhanVien.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        subTaiKhoanNhanVien.setForeground(new java.awt.Color(255, 255, 255));
-        subTaiKhoanNhanVien.setText("+ Tài khoản");
-        subTaiKhoanNhanVien.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 1, 5, 1));
-        groupSubNhanVien.add(subTaiKhoanNhanVien);
 
         panelMenu.add(groupSubNhanVien);
         panelMenu.add(filler4);
@@ -839,7 +832,12 @@ public class MainForm extends javax.swing.JFrame {
         lblTenTrang.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblTenTrang.setText("TRANG CHỦ");
 
-        jPanel5.setBackground(new java.awt.Color(255, 255, 255));
+        panelTaiKhoan.setBackground(new java.awt.Color(255, 255, 255));
+        panelTaiKhoan.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                panelTaiKhoanMouseClicked(evt);
+            }
+        });
 
         jLabel18.setForeground(new java.awt.Color(255, 255, 255));
         jLabel18.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icon_account.png"))); // NOI18N
@@ -849,25 +847,25 @@ public class MainForm extends javax.swing.JFrame {
 
         lblPhanQuyen.setText("Nhân viên quản lý");
 
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
+        javax.swing.GroupLayout panelTaiKhoanLayout = new javax.swing.GroupLayout(panelTaiKhoan);
+        panelTaiKhoan.setLayout(panelTaiKhoanLayout);
+        panelTaiKhoanLayout.setHorizontalGroup(
+            panelTaiKhoanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelTaiKhoanLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(panelTaiKhoanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblTenNhanVien)
                     .addComponent(lblPhanQuyen))
                 .addGap(0, 27, Short.MAX_VALUE))
         );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+        panelTaiKhoanLayout.setVerticalGroup(
+            panelTaiKhoanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelTaiKhoanLayout.createSequentialGroup()
+                .addGroup(panelTaiKhoanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(lblPhanQuyen)
-                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelTaiKhoanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(lblTenNhanVien)
                         .addComponent(jLabel18)))
                 .addGap(0, 8, Short.MAX_VALUE))
@@ -881,14 +879,14 @@ public class MainForm extends javax.swing.JFrame {
                 .addGap(17, 17, 17)
                 .addComponent(lblTenTrang)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 623, Short.MAX_VALUE)
-                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(panelTaiKhoan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(16, 16, 16))
         );
         panelHeaderLayout.setVerticalGroup(
             panelHeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelHeaderLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(panelTaiKhoan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(panelHeaderLayout.createSequentialGroup()
                 .addGap(18, 18, 18)
@@ -917,6 +915,28 @@ public class MainForm extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void panelTaiKhoanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelTaiKhoanMouseClicked
+        // 1. Khởi tạo Dialog
+            TaiKhoanDialog popup = new TaiKhoanDialog(this, true);
+
+            // 2. Lấy vị trí và kích thước của cụm tài khoản (thay panelHeaderTaiKhoan bằng tên biến của bạn)
+            java.awt.Point location = panelTaiKhoan.getLocationOnScreen();
+            int componentWidth = panelTaiKhoan.getWidth();
+            int componentHeight = panelTaiKhoan.getHeight();
+
+            // 3. Tính toán vị trí X (Căn lề phải)
+            // Lấy tọa độ X của cụm + chiều rộng của nó - chiều rộng của Popup
+            int x = location.x + componentWidth - popup.getPreferredSize().width;
+
+            // 4. Tính toán vị trí Y (Ngay dưới chữ)
+            int y = location.y + componentHeight;
+
+            // 5. Đặt vị trí và hiển thị
+            popup.setLocation(x, y);
+            popup.setVisible(true);
+    }//GEN-LAST:event_panelTaiKhoanMouseClicked
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel PanelKhuyenMai;
     private javax.swing.JPanel PanelMonAn;
@@ -942,7 +962,6 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JLabel lblBan;
     private javax.swing.JLabel lblHoaDon;
     private javax.swing.JLabel lblKhachHang;
@@ -966,6 +985,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JPanel panelMainContent;
     private javax.swing.JPanel panelMenu;
     private javax.swing.JPanel panelNhanVien;
+    private javax.swing.JPanel panelTaiKhoan;
     private javax.swing.JPanel panelThue;
     private javax.swing.JPanel panelTrangChu;
     private javax.swing.JLabel subDanhSachBan;
@@ -985,7 +1005,6 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JLabel subQuanLyMonAn;
     private javax.swing.JLabel subQuanLyNhanVien;
     private javax.swing.JLabel subQuanLyThue;
-    private javax.swing.JLabel subTaiKhoanNhanVien;
     private javax.swing.JLabel subThongKeDoanhThu;
     // End of variables declaration//GEN-END:variables
 }

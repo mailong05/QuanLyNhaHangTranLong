@@ -134,6 +134,7 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel {
         lblMaMon.setText("Mã món:");
 
         txtMaMon.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtMaMon.setPreferredSize(new java.awt.Dimension(64, 35));
         txtMaMon.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtMaMonActionPerformed(evt);
@@ -144,6 +145,7 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel {
         lblTenMon.setText("Tên món:");
 
         txtTenMon.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtTenMon.setPreferredSize(new java.awt.Dimension(64, 35));
         txtTenMon.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtTenMonActionPerformed(evt);
@@ -160,6 +162,7 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel {
         lblDonGia.setText("Đơn giá:");
 
         txtDonGia.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtDonGia.setPreferredSize(new java.awt.Dimension(64, 35));
         txtDonGia.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtDonGiaActionPerformed(evt);
@@ -183,6 +186,7 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel {
         lblDonViTinh.setText("Đơn vị tính:");
 
         cbDonViTinh.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbDonViTinh.setPreferredSize(new java.awt.Dimension(72, 35));
         cbDonViTinh.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbDonViTinhActionPerformed(evt);
@@ -190,6 +194,7 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel {
         });
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox1.setPreferredSize(new java.awt.Dimension(72, 35));
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox1ActionPerformed(evt);
@@ -197,6 +202,7 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel {
         });
 
         btnChonFileAnh.setText("Chọn ảnh");
+        btnChonFileAnh.setPreferredSize(new java.awt.Dimension(82, 35));
         btnChonFileAnh.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnChonFileAnhActionPerformed(evt);
@@ -204,6 +210,7 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel {
         });
 
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox2.setPreferredSize(new java.awt.Dimension(72, 35));
 
         javax.swing.GroupLayout pnlThongTinKhuyenMaiLayout = new javax.swing.GroupLayout(pnlThongTinKhuyenMai);
         pnlThongTinKhuyenMai.setLayout(pnlThongTinKhuyenMaiLayout);
@@ -235,7 +242,7 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlThongTinKhuyenMaiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jComboBox2, 0, 110, Short.MAX_VALUE)
-                    .addComponent(btnChonFileAnh)
+                    .addComponent(btnChonFileAnh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(0, 333, Short.MAX_VALUE))
             .addGroup(pnlThongTinKhuyenMaiLayout.createSequentialGroup()
@@ -260,7 +267,7 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(pnlThongTinKhuyenMaiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblHinhAnh)
-                            .addComponent(btnChonFileAnh)))
+                            .addComponent(btnChonFileAnh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(pnlThongTinKhuyenMaiLayout.createSequentialGroup()
                         .addGroup(pnlThongTinKhuyenMaiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblMaMon, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)

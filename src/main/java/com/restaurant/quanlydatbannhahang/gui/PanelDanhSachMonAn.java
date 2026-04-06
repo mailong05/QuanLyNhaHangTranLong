@@ -23,7 +23,7 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
         setBackground(new Color(255, 251, 233));
         
         // 2. Tùy chỉnh các nút bấm
-        JButton[] buttons = {btnTimKiem, btnThem, btnXoa, btnCapNhat, btnTrangChu};
+        JButton[] buttons = {btnTimKiem, btnTrangChu};
         for (JButton btn : buttons) {
             btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
             btn.setFocusPainted(false);
@@ -99,10 +99,6 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
         tableMonAn = new javax.swing.JTable();
         pnlButton = new javax.swing.JPanel();
         btnTrangChu = new javax.swing.JButton();
-        pnlRightButtons = new javax.swing.JPanel();
-        btnCapNhat = new javax.swing.JButton();
-        btnXoa = new javax.swing.JButton();
-        btnThem = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 251, 233));
         setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 60, 20, 60));
@@ -139,21 +135,23 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
         pnlThongTinKhuyenMaiLayout.setHorizontalGroup(
             pnlThongTinKhuyenMaiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlThongTinKhuyenMaiLayout.createSequentialGroup()
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 452, Short.MAX_VALUE)
-                .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jComboBox1, 0, 140, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 756, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         pnlThongTinKhuyenMaiLayout.setVerticalGroup(
             pnlThongTinKhuyenMaiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlThongTinKhuyenMaiLayout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(pnlThongTinKhuyenMaiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, 0))
+                    .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(pnlThongTinKhuyenMaiLayout.createSequentialGroup()
+                .addGap(1, 1, 1)
+                .addComponent(jComboBox1)
+                .addContainerGap())
         );
 
         pnlHeader.add(pnlThongTinKhuyenMai, java.awt.BorderLayout.PAGE_END);
@@ -194,43 +192,8 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
         btnTrangChu.setText("Trang Chủ");
         pnlButton.add(btnTrangChu, java.awt.BorderLayout.WEST);
 
-        pnlRightButtons.setBackground(new java.awt.Color(255, 251, 233));
-        pnlRightButtons.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 15, 0));
-
-        btnCapNhat.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        btnCapNhat.setText("Cập nhật");
-        btnCapNhat.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCapNhatActionPerformed(evt);
-            }
-        });
-        pnlRightButtons.add(btnCapNhat);
-
-        btnXoa.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        btnXoa.setText("Xóa");
-        pnlRightButtons.add(btnXoa);
-
-        btnThem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        btnThem.setText("Thêm");
-        btnThem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnThemActionPerformed(evt);
-            }
-        });
-        pnlRightButtons.add(btnThem);
-
-        pnlButton.add(pnlRightButtons, java.awt.BorderLayout.EAST);
-
         add(pnlButton, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCapNhatActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnCapNhatActionPerformed
-
-    private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnThemActionPerformed
 
     private void scrTableMonAnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_scrTableMonAnMouseClicked
         // TODO add your handling code here:
@@ -246,16 +209,12 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnCapNhat;
-    private javax.swing.JButton btnThem;
     private javax.swing.JButton btnTimKiem;
     private javax.swing.JButton btnTrangChu;
-    private javax.swing.JButton btnXoa;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel pnlButton;
     private javax.swing.JPanel pnlHeader;
-    private javax.swing.JPanel pnlRightButtons;
     private javax.swing.JPanel pnlThongTinKhuyenMai;
     private javax.swing.JScrollPane scrTableMonAn;
     private javax.swing.JTable tableMonAn;
