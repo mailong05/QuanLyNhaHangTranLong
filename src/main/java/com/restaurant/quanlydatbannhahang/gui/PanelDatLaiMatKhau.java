@@ -2,9 +2,9 @@ package com.restaurant.quanlydatbannhahang.gui;
 
 import javax.swing.JFrame;
 
-public class ForgetPasswordForm extends javax.swing.JFrame {
+public class PanelDatLaiMatKhau extends javax.swing.JFrame {
 
-    public ForgetPasswordForm() {
+    public PanelDatLaiMatKhau() {
         initComponents();
 
         // khử viền xanh khi click nút
@@ -25,15 +25,13 @@ public class ForgetPasswordForm extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         clickCLose = new javax.swing.JLabel();
         clickMinimize = new javax.swing.JLabel();
-        txtUsername = new javax.swing.JTextField();
         btnContinue = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
-        jSeparator3 = new javax.swing.JSeparator();
-        jSeparator4 = new javax.swing.JSeparator();
         btnCancel = new javax.swing.JButton();
-        txtPhone = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        lblNhapLaiMK = new javax.swing.JLabel();
+        lblMatKhauMoi = new javax.swing.JLabel();
+        jPasswordField1 = new javax.swing.JPasswordField();
+        jPasswordField2 = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -73,16 +71,6 @@ public class ForgetPasswordForm extends javax.swing.JFrame {
             }
         });
 
-        txtUsername.setBackground(new java.awt.Color(255, 251, 233));
-        txtUsername.setForeground(new java.awt.Color(102, 102, 102));
-        txtUsername.setBorder(null);
-        txtUsername.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        txtUsername.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtUsernameActionPerformed(evt);
-            }
-        });
-
         btnContinue.setBackground(new java.awt.Color(250, 249, 235));
         btnContinue.setForeground(new java.awt.Color(0, 0, 0));
         btnContinue.setText("Tiếp tục");
@@ -97,11 +85,7 @@ public class ForgetPasswordForm extends javax.swing.JFrame {
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(102, 102, 102));
-        jLabel6.setText("QUÊN MẬT KHẨU");
-
-        jSeparator3.setForeground(new java.awt.Color(102, 102, 102));
-
-        jSeparator4.setForeground(new java.awt.Color(102, 102, 102));
+        jLabel6.setText("ĐẶT LẠI MẬT KHẨU");
 
         btnCancel.setBackground(new java.awt.Color(250, 249, 235));
         btnCancel.setForeground(new java.awt.Color(0, 0, 0));
@@ -115,23 +99,19 @@ public class ForgetPasswordForm extends javax.swing.JFrame {
             }
         });
 
-        txtPhone.setBackground(new java.awt.Color(255, 251, 233));
-        txtPhone.setForeground(new java.awt.Color(102, 102, 102));
-        txtPhone.setBorder(null);
-        txtPhone.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        txtPhone.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtPhoneActionPerformed(evt);
-            }
-        });
+        lblNhapLaiMK.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblNhapLaiMK.setForeground(new java.awt.Color(0, 0, 0));
+        lblNhapLaiMK.setText("Nhập lại mật khẩu mới:");
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel2.setText("Số điện thoại:");
+        lblMatKhauMoi.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblMatKhauMoi.setForeground(new java.awt.Color(0, 0, 0));
+        lblMatKhauMoi.setText("Nhập mật khẩu mới:");
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel3.setText("Username:");
+        jPasswordField1.setBackground(new java.awt.Color(255, 255, 255));
+        jPasswordField1.setForeground(new java.awt.Color(0, 0, 0));
+
+        jPasswordField2.setBackground(new java.awt.Color(255, 255, 255));
+        jPasswordField2.setForeground(new java.awt.Color(0, 0, 0));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -145,26 +125,24 @@ public class ForgetPasswordForm extends javax.swing.JFrame {
                         .addGap(10, 10, 10)
                         .addComponent(clickCLose))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(60, 60, 60)
+                        .addGap(31, 31, 31)
                         .addComponent(jLabel6))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(143, 143, 143)
-                        .addComponent(btnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(6, 6, 6)
-                        .addComponent(btnContinue, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtUsername, javax.swing.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE)
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jSeparator4)
-                                .addComponent(jSeparator3)
-                                .addComponent(txtPhone, javax.swing.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE)))))
-                .addContainerGap(11, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addGap(20, 20, 20)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(lblNhapLaiMK)
+                                .addComponent(lblMatKhauMoi))
+                            .addGap(18, 18, 18)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jPasswordField2)
+                                .addComponent(jPasswordField1)))
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addGap(143, 143, 143)
+                            .addComponent(btnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(6, 6, 6)
+                            .addComponent(btnContinue, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(11, 11, 11))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -173,27 +151,23 @@ public class ForgetPasswordForm extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(clickMinimize, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(clickCLose, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
+                .addGap(29, 29, 29)
                 .addComponent(jLabel6)
-                .addGap(47, 47, 47)
+                .addGap(61, 61, 61)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel3)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(lblNhapLaiMK)
+                        .addComponent(jPasswordField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(14, 14, 14)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(txtPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel2))
-                .addGap(82, 82, 82)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblMatKhauMoi)
+                            .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(28, 28, 28)))
+                .addGap(28, 28, 28)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnContinue, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(73, 73, 73))
+                .addContainerGap())
         );
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 0, 300, 400));
@@ -220,7 +194,7 @@ public class ForgetPasswordForm extends javax.swing.JFrame {
 
     private void btnContinueActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnContinueActionPerformed
         // TODO add your handling code here:
-        new PanelDatLaiMatKhau().setVisible(true);
+        new PanelDatLaiMatKhau();
     }// GEN-LAST:event_btnContinueActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCancelActionPerformed
@@ -242,7 +216,7 @@ public class ForgetPasswordForm extends javax.swing.JFrame {
 
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ForgetPasswordForm().setVisible(true);
+                new PanelDatLaiMatKhau().setVisible(true);
             }
         });
     }
@@ -253,16 +227,14 @@ public class ForgetPasswordForm extends javax.swing.JFrame {
     private javax.swing.JLabel clickCLose;
     private javax.swing.JLabel clickMinimize;
     private javax.swing.JFileChooser jFileChooser1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JSeparator jSeparator3;
-    private javax.swing.JSeparator jSeparator4;
+    private javax.swing.JPasswordField jPasswordField1;
+    private javax.swing.JPasswordField jPasswordField2;
     private javax.swing.JLabel lblLogo;
+    private javax.swing.JLabel lblMatKhauMoi;
+    private javax.swing.JLabel lblNhapLaiMK;
     private javax.swing.JLabel lblRestaurantName;
-    private javax.swing.JTextField txtPhone;
-    private javax.swing.JTextField txtUsername;
     // End of variables declaration//GEN-END:variables
 }

@@ -94,7 +94,7 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
         pnlThongTinKhuyenMai = new javax.swing.JPanel();
         txtTimKiem = new javax.swing.JTextField();
         btnTimKiem = new javax.swing.JButton();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cbTrangThai = new javax.swing.JComboBox<>();
         scrTableMonAn = new javax.swing.JScrollPane();
         tableMonAn = new javax.swing.JTable();
         pnlButton = new javax.swing.JPanel();
@@ -123,10 +123,10 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
             }
         });
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        cbTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbTrangThai.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                cbTrangThaiActionPerformed(evt);
             }
         });
 
@@ -135,7 +135,7 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
         pnlThongTinKhuyenMaiLayout.setHorizontalGroup(
             pnlThongTinKhuyenMaiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlThongTinKhuyenMaiLayout.createSequentialGroup()
-                .addComponent(jComboBox1, 0, 140, Short.MAX_VALUE)
+                .addComponent(cbTrangThai, 0, 140, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 756, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -150,7 +150,7 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(pnlThongTinKhuyenMaiLayout.createSequentialGroup()
                 .addGap(1, 1, 1)
-                .addComponent(jComboBox1)
+                .addComponent(cbTrangThai)
                 .addContainerGap())
         );
 
@@ -199,9 +199,9 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_scrTableMonAnMouseClicked
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private void cbTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbTrangThaiActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    }//GEN-LAST:event_cbTrangThaiActionPerformed
 
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
         // TODO add your handling code here:
@@ -211,7 +211,7 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnTimKiem;
     private javax.swing.JButton btnTrangChu;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> cbTrangThai;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel pnlButton;
     private javax.swing.JPanel pnlHeader;

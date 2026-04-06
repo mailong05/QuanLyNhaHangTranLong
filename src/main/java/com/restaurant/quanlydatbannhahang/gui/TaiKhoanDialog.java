@@ -58,8 +58,6 @@ public class TaiKhoanDialog extends javax.swing.JDialog {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(6, 38, 0, 0);
         jPanel1.add(jLabel8, gridBagConstraints);
-
-        lblMaNhanVien.setText("NV000");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 1;
@@ -103,8 +101,6 @@ public class TaiKhoanDialog extends javax.swing.JDialog {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(9, 6, 0, 0);
         jPanel1.add(jLabel3, gridBagConstraints);
-
-        lblTenTaiKhoan.setText("abcdefghjkl");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 2;
@@ -136,8 +132,6 @@ public class TaiKhoanDialog extends javax.swing.JDialog {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 0);
         jPanel1.add(jLabel6, gridBagConstraints);
-
-        lblQuyenHan.setText("ADMIN");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 4;
@@ -240,8 +234,6 @@ public class TaiKhoanDialog extends javax.swing.JDialog {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 0);
         jPanel1.add(jLabel13, gridBagConstraints);
-
-        lblChucVu.setText("Nhân viên quản lý");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 15;
