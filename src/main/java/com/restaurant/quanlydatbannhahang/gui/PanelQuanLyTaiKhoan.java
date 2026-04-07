@@ -4,9 +4,9 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 
-public class PanelTaiKhoan extends javax.swing.JPanel {
+public class PanelQuanLyTaiKhoan extends javax.swing.JPanel {
 
-    public PanelTaiKhoan() {
+    public PanelQuanLyTaiKhoan() {
         initComponents();
         customUI();
     }

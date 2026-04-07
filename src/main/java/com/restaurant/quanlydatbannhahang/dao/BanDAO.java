@@ -36,6 +36,7 @@ public class BanDAO {
     }
 
     public List<Ban> getAllBan() {
+
         return null;
     }
 
