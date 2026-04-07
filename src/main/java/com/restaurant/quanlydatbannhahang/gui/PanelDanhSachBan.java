@@ -108,18 +108,18 @@ public class PanelDanhSachBan extends javax.swing.JPanel {
             }
         });
 
-        btnTimKiem.setText("Tìm kiếm");
         btnTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnTimKiem.setText("Tìm kiếm");
         btnTimKiem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTimKiemActionPerformed(evt);
             }
         });
 
-        cbKhuVuc.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbKhuVuc.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Khu vực", "A", "B", "C" }));
         cbKhuVuc.setPreferredSize(new java.awt.Dimension(72, 35));
 
-        cbTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Trạng thái", "Trống", "Đang sử dụng", "Đang chờ", " " }));
         cbTrangThai.setPreferredSize(new java.awt.Dimension(72, 35));
 
         javax.swing.GroupLayout pnlThongTinBanLayout = new javax.swing.GroupLayout(pnlThongTinBan);

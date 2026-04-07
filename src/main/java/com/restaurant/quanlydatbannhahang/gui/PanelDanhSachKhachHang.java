@@ -110,7 +110,7 @@ public class PanelDanhSachKhachHang extends javax.swing.JPanel {
         btnTimKiem.setText("Tìm kiếm");
         btnTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
-        cbLoaiThanhVien.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbLoaiThanhVien.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Loại thành viên", "Vip", "Vàng", "Bạc ", "Đồng" }));
         cbLoaiThanhVien.setPreferredSize(new java.awt.Dimension(72, 35));
         cbLoaiThanhVien.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

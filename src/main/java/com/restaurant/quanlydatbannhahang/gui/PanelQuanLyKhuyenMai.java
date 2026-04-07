@@ -175,7 +175,6 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel {
         lblTrangThai.setText("Trạng thái:");
         lblTrangThai.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
-        cbTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cbTrangThai.setPreferredSize(new java.awt.Dimension(72, 35));
 
         dbNgayKetThuc.setPreferredSize(new java.awt.Dimension(143, 35));

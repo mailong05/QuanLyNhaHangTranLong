@@ -114,7 +114,7 @@ public class PanelDanhSachKhuyenMai extends javax.swing.JPanel {
             }
         });
 
-        cbTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Trạng thái", "Còn áp dụng", "Ngưng áp dụng", " " }));
 
         javax.swing.GroupLayout pnlThongTinKhuyenMaiLayout = new javax.swing.GroupLayout(pnlThongTinKhuyenMai);
         pnlThongTinKhuyenMai.setLayout(pnlThongTinKhuyenMaiLayout);

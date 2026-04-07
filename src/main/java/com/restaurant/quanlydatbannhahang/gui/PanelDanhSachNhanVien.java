@@ -115,7 +115,7 @@ public class PanelDanhSachNhanVien extends javax.swing.JPanel {
             }
         });
 
-        cbChucVu.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbChucVu.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Chức vụ", "Quản lý", "Thu ngân", "Phục vụ", "Bếp", " " }));
         cbChucVu.setPreferredSize(new java.awt.Dimension(72, 35));
         cbChucVu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

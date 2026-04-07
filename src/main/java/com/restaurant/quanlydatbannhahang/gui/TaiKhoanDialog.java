@@ -23,11 +23,9 @@ public class TaiKhoanDialog extends javax.swing.JDialog {
         jLabel16 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         lblTenTaiKhoan = new javax.swing.JLabel();
-        txtMatKhauHienTai = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         lblQuyenHan = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
-        txtMatKhauMoi = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         txtHoTen = new javax.swing.JTextField();
@@ -39,8 +37,10 @@ public class TaiKhoanDialog extends javax.swing.JDialog {
         lblNgayVaoLam = new javax.swing.JLabel();
         btnSuaThongTinCaNhan = new javax.swing.JButton();
         jLabel18 = new javax.swing.JLabel();
-        txtNhapLaiMatKhauMoi = new javax.swing.JTextField();
         btnDoiMatKhau = new javax.swing.JButton();
+        txtMatKhauHienTai = new javax.swing.JPasswordField();
+        txtMatKhauMoi = new javax.swing.JPasswordField();
+        txtXacNhanMatKhau = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new java.awt.GridBagLayout());
@@ -52,17 +52,18 @@ public class TaiKhoanDialog extends javax.swing.JDialog {
         jLabel8.setText("Đổi mật khẩu:");
         jLabel8.setAutoscrolls(true);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 31;
+        gridBagConstraints.gridx = 105;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(6, 38, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 19, 0, 0);
         jPanel1.add(jLabel8, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridx = 21;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 18;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(6, 9, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(6, 3, 0, 0);
         jPanel1.add(lblMaNhanVien, gridBagConstraints);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -70,59 +71,44 @@ public class TaiKhoanDialog extends javax.swing.JDialog {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 13;
+        gridBagConstraints.gridwidth = 62;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 7, 0, 0);
         jPanel1.add(jLabel1, gridBagConstraints);
 
         jLabel2.setText("Mã nhân viên:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.gridwidth = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(6, 7, 0, 0);
         jPanel1.add(jLabel2, gridBagConstraints);
 
         jLabel16.setText("Mật khẩu hiện tại:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 31;
+        gridBagConstraints.gridx = 105;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(6, 38, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(6, 19, 0, 0);
         jPanel1.add(jLabel16, gridBagConstraints);
 
         jLabel3.setText("Tên tài khoản:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridwidth = 11;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(9, 6, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(9, 7, 0, 0);
         jPanel1.add(jLabel3, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridx = 21;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 23;
+        gridBagConstraints.gridwidth = 19;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(9, 10, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(9, 4, 0, 0);
         jPanel1.add(lblTenTaiKhoan, gridBagConstraints);
-
-        txtMatKhauHienTai.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtMatKhauHienTaiActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 31;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 6;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.ipadx = 113;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(6, 38, 0, 12);
-        jPanel1.add(txtMatKhauHienTai, gridBagConstraints);
 
         jLabel6.setText("Quyền hạn:");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -130,41 +116,33 @@ public class TaiKhoanDialog extends javax.swing.JDialog {
         gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(6, 7, 0, 0);
         jPanel1.add(jLabel6, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridwidth = 17;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(6, 10, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 0);
         jPanel1.add(lblQuyenHan, gridBagConstraints);
 
         jLabel17.setText("Mật khẩu mới:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 31;
+        gridBagConstraints.gridx = 105;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(6, 38, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(6, 19, 0, 0);
         jPanel1.add(jLabel17, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 31;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = 6;
-        gridBagConstraints.ipadx = 113;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(6, 38, 0, 12);
-        jPanel1.add(txtMatKhauMoi, gridBagConstraints);
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel9.setText("Thông tin cá nhân:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = 9;
+        gridBagConstraints.gridwidth = 42;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(19, 6, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(19, 7, 0, 0);
         jPanel1.add(jLabel9, gridBagConstraints);
 
         jLabel10.setText("Họ tên:");
@@ -173,7 +151,7 @@ public class TaiKhoanDialog extends javax.swing.JDialog {
         gridBagConstraints.gridy = 21;
         gridBagConstraints.ipadx = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(9, 6, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(9, 7, 0, 0);
         jPanel1.add(jLabel10, gridBagConstraints);
 
         txtHoTen.addActionListener(new java.awt.event.ActionListener() {
@@ -182,9 +160,9 @@ public class TaiKhoanDialog extends javax.swing.JDialog {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridx = 21;
         gridBagConstraints.gridy = 21;
-        gridBagConstraints.gridwidth = 25;
+        gridBagConstraints.gridwidth = 84;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.ipadx = 96;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -195,9 +173,9 @@ public class TaiKhoanDialog extends javax.swing.JDialog {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 24;
-        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.gridwidth = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(4, 6, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(4, 7, 0, 0);
         jPanel1.add(jLabel11, gridBagConstraints);
 
         txtSoDienThoai.addActionListener(new java.awt.event.ActionListener() {
@@ -206,9 +184,9 @@ public class TaiKhoanDialog extends javax.swing.JDialog {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridx = 21;
         gridBagConstraints.gridy = 24;
-        gridBagConstraints.gridwidth = 25;
+        gridBagConstraints.gridwidth = 84;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.ipadx = 96;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -219,10 +197,10 @@ public class TaiKhoanDialog extends javax.swing.JDialog {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 8;
-        gridBagConstraints.gridwidth = 6;
+        gridBagConstraints.gridwidth = 16;
         gridBagConstraints.gridheight = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(6, 7, 0, 0);
         jPanel1.add(jLabel12, gridBagConstraints);
 
         jLabel13.setText("Chức vụ:");
@@ -232,25 +210,23 @@ public class TaiKhoanDialog extends javax.swing.JDialog {
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.gridheight = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(6, 7, 0, 0);
         jPanel1.add(jLabel13, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 15;
-        gridBagConstraints.gridwidth = 16;
+        gridBagConstraints.gridwidth = 4;
         gridBagConstraints.gridheight = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 0);
         jPanel1.add(lblChucVu, gridBagConstraints);
-
-        lblNgayVaoLam.setText("00/00/0000");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridx = 21;
         gridBagConstraints.gridy = 8;
-        gridBagConstraints.gridwidth = 24;
+        gridBagConstraints.gridwidth = 20;
         gridBagConstraints.gridheight = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(6, 12, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 0);
         jPanel1.add(lblNgayVaoLam, gridBagConstraints);
 
         btnSuaThongTinCaNhan.setText("Lưu thông tin cá nhân");
@@ -262,29 +238,20 @@ public class TaiKhoanDialog extends javax.swing.JDialog {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 26;
-        gridBagConstraints.gridwidth = 22;
+        gridBagConstraints.gridwidth = 83;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(12, 6, 16, 0);
+        gridBagConstraints.insets = new java.awt.Insets(12, 7, 6, 0);
         jPanel1.add(btnSuaThongTinCaNhan, gridBagConstraints);
 
         jLabel18.setText("Nhập lại mật khẩu mới:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 31;
+        gridBagConstraints.gridx = 105;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 4;
         gridBagConstraints.gridheight = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(6, 38, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(6, 19, 0, 0);
         jPanel1.add(jLabel18, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 31;
-        gridBagConstraints.gridy = 11;
-        gridBagConstraints.gridwidth = 6;
-        gridBagConstraints.gridheight = 5;
-        gridBagConstraints.ipadx = 113;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(6, 38, 0, 12);
-        jPanel1.add(txtNhapLaiMatKhauMoi, gridBagConstraints);
 
         btnDoiMatKhau.setText("Đổi mật khẩu");
         btnDoiMatKhau.addActionListener(new java.awt.event.ActionListener() {
@@ -293,7 +260,7 @@ public class TaiKhoanDialog extends javax.swing.JDialog {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 31;
+        gridBagConstraints.gridx = 105;
         gridBagConstraints.gridy = 21;
         gridBagConstraints.gridwidth = 5;
         gridBagConstraints.gridheight = 3;
@@ -301,11 +268,43 @@ public class TaiKhoanDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(7, 79, 0, 0);
         jPanel1.add(btnDoiMatKhau, gridBagConstraints);
 
+        txtMatKhauHienTai.setPreferredSize(new java.awt.Dimension(80, 22));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 105;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 6;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.ipadx = 115;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(6, 19, 0, 25);
+        jPanel1.add(txtMatKhauHienTai, gridBagConstraints);
+
+        txtMatKhauMoi.setPreferredSize(new java.awt.Dimension(80, 22));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 105;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 6;
+        gridBagConstraints.ipadx = 115;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(6, 19, 0, 25);
+        jPanel1.add(txtMatKhauMoi, gridBagConstraints);
+
+        txtXacNhanMatKhau.setPreferredSize(new java.awt.Dimension(80, 22));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 105;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridwidth = 6;
+        gridBagConstraints.gridheight = 5;
+        gridBagConstraints.ipadx = 115;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(6, 19, 0, 25);
+        jPanel1.add(txtXacNhanMatKhau, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 6;
-        gridBagConstraints.ipady = -6;
+        gridBagConstraints.ipadx = 26;
+        gridBagConstraints.ipady = 12;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         getContentPane().add(jPanel1, gridBagConstraints);
 
@@ -319,10 +318,6 @@ public class TaiKhoanDialog extends javax.swing.JDialog {
     private void btnSuaThongTinCaNhanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaThongTinCaNhanActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnSuaThongTinCaNhanActionPerformed
-
-    private void txtMatKhauHienTaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMatKhauHienTaiActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtMatKhauHienTaiActionPerformed
 
     private void txtSoDienThoaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSoDienThoaiActionPerformed
         // TODO add your handling code here:
@@ -397,9 +392,9 @@ public class TaiKhoanDialog extends javax.swing.JDialog {
     private javax.swing.JLabel lblQuyenHan;
     private javax.swing.JLabel lblTenTaiKhoan;
     private javax.swing.JTextField txtHoTen;
-    private javax.swing.JTextField txtMatKhauHienTai;
-    private javax.swing.JTextField txtMatKhauMoi;
-    private javax.swing.JTextField txtNhapLaiMatKhauMoi;
+    private javax.swing.JPasswordField txtMatKhauHienTai;
+    private javax.swing.JPasswordField txtMatKhauMoi;
     private javax.swing.JTextField txtSoDienThoai;
+    private javax.swing.JPasswordField txtXacNhanMatKhau;
     // End of variables declaration//GEN-END:variables
 }

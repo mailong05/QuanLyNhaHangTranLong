@@ -130,8 +130,8 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel {
 
         pnlThongTinKhuyenMai.setBackground(new java.awt.Color(255, 251, 233));
 
-        lblMaMon.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblMaMon.setText("Mã món:");
+        lblMaMon.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         txtMaMon.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtMaMon.setPreferredSize(new java.awt.Dimension(64, 35));
@@ -141,8 +141,8 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel {
             }
         });
 
-        lblTenMon.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblTenMon.setText("Tên món:");
+        lblTenMon.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         txtTenMon.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtTenMon.setPreferredSize(new java.awt.Dimension(64, 35));
@@ -152,14 +152,14 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel {
             }
         });
 
-        lblLoaiMon.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblLoaiMon.setText("Loại món:");
+        lblLoaiMon.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
-        lblTrangThai.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblTrangThai.setText("Trạng thái:");
+        lblTrangThai.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
-        lblDonGia.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblDonGia.setText("Đơn giá:");
+        lblDonGia.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         txtDonGia.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtDonGia.setPreferredSize(new java.awt.Dimension(64, 35));
@@ -171,19 +171,19 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel {
 
         txtTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
-        btnTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnTimKiem.setText("Tìm kiếm");
+        btnTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnTimKiem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTimKiemActionPerformed(evt);
             }
         });
 
-        lblHinhAnh.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblHinhAnh.setText("Hình ảnh:");
+        lblHinhAnh.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
-        lblDonViTinh.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblDonViTinh.setText("Đơn vị tính:");
+        lblDonViTinh.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         cbDonViTinh.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cbDonViTinh.setPreferredSize(new java.awt.Dimension(72, 35));
@@ -309,9 +309,16 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel {
                 "Mã món", "Tên món", "Đơn giá", "Đơn vị tính", "Mã loại", "Trạng thái", "Hình ảnh"
             }
         ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
+            };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false, false, false, false
             };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];

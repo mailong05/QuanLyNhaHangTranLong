@@ -68,8 +68,7 @@ public class MainForm extends javax.swing.JFrame {
     }
 
     private void initCustomComponents() {
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        this.setSize((int) screenSize.getWidth(), (int) (screenSize.getHeight() * 0.95));
+        this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         this.setLocationRelativeTo(null);
         this.setTitle("Hệ thống quản lý đặt bàn nhà hàng");
         panelBody.setLayout(new BorderLayout());
@@ -244,8 +243,14 @@ public class MainForm extends javax.swing.JFrame {
         panelDangXuat.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (JOptionPane.showConfirmDialog(null, "Xác nhận đăng xuất?", "Xác nhận", 0) == 0)
-                    dispose();
+                if (JOptionPane.showConfirmDialog(null, "Xác nhận đăng xuất?", "Xác nhận", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                    // 1. Đóng cửa sổ chính hiện tại
+                    dispose(); 
+                    // 2. Khởi tạo và hiển thị lại màn hình Đăng nhập                   
+                    java.awt.EventQueue.invokeLater(() -> {
+                        new LoginForm().setVisible(true); 
+                    });
+                }
             }
 
             @Override
@@ -317,8 +322,7 @@ public class MainForm extends javax.swing.JFrame {
                     showPanel(new PanelQuanLyMonAn());
                 } else if (lbl == subDanhSachBan) {
                     showPanel(new PanelDanhSachBan());
-                }
-                else if (lbl == subQuanLyDatBanTruoc) {
+                }else if (lbl == subQuanLyDatBanTruoc) {
                     showPanel(new PanelQuanLyDatBanTruoc());
                 } else if (lbl == subDanhSachKhuVuc) {
                     showPanel(new PanelDanhSachKhuVuc());
@@ -334,11 +338,9 @@ public class MainForm extends javax.swing.JFrame {
                     showPanel(new PanelDanhSachMonAn());
                 }else if (lbl == subLichSuHoaDon) {
                     showPanel(new PanelLichSuHoaDon());
-                }
-                
-                
-                
-                
+                }else if (lbl == subQuanLyTaiKhoan) {
+                    showPanel(new PanelTaiKhoan());
+                }   
             }
 
             @Override
@@ -388,6 +390,7 @@ public class MainForm extends javax.swing.JFrame {
         groupSubNhanVien = new javax.swing.JPanel();
         subDanhSachNhanVien = new javax.swing.JLabel();
         subQuanLyNhanVien = new javax.swing.JLabel();
+        subQuanLyTaiKhoan = new javax.swing.JLabel();
         filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 7), new java.awt.Dimension(0, 7), new java.awt.Dimension(0, 7));
         panelKhachHang = new javax.swing.JPanel();
         lblKhachHang = new javax.swing.JLabel();
@@ -596,7 +599,7 @@ public class MainForm extends javax.swing.JFrame {
         groupSubNhanVien.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 40, 0, 1));
         groupSubNhanVien.setAlignmentY(0.0F);
         groupSubNhanVien.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        groupSubNhanVien.setPreferredSize(new java.awt.Dimension(190, 60));
+        groupSubNhanVien.setPreferredSize(new java.awt.Dimension(190, 90));
         groupSubNhanVien.setLayout(new javax.swing.BoxLayout(groupSubNhanVien, javax.swing.BoxLayout.Y_AXIS));
 
         subDanhSachNhanVien.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -607,9 +610,15 @@ public class MainForm extends javax.swing.JFrame {
 
         subQuanLyNhanVien.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         subQuanLyNhanVien.setForeground(new java.awt.Color(255, 255, 255));
-        subQuanLyNhanVien.setText("+ Quản lý");
+        subQuanLyNhanVien.setText("+ Quản lý nhân viên");
         subQuanLyNhanVien.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 1, 5, 1));
         groupSubNhanVien.add(subQuanLyNhanVien);
+
+        subQuanLyTaiKhoan.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        subQuanLyTaiKhoan.setForeground(new java.awt.Color(255, 255, 255));
+        subQuanLyTaiKhoan.setText("+ Quản lý tài khoản");
+        subQuanLyTaiKhoan.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 1, 5, 1));
+        groupSubNhanVien.add(subQuanLyTaiKhoan);
 
         panelMenu.add(groupSubNhanVien);
         panelMenu.add(filler4);
@@ -918,23 +927,23 @@ public class MainForm extends javax.swing.JFrame {
 
     private void panelTaiKhoanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelTaiKhoanMouseClicked
         // 1. Khởi tạo Dialog
-            TaiKhoanDialog popup = new TaiKhoanDialog(this, true);
+        TaiKhoanDialog popup = new TaiKhoanDialog(this, true);
 
-            // 2. Lấy vị trí và kích thước của cụm tài khoản (thay panelHeaderTaiKhoan bằng tên biến của bạn)
-            java.awt.Point location = panelTaiKhoan.getLocationOnScreen();
-            int componentWidth = panelTaiKhoan.getWidth();
-            int componentHeight = panelTaiKhoan.getHeight();
+        // 2. Lấy vị trí và kích thước của cụm tài khoản (thay panelHeaderTaiKhoan bằng tên biến của bạn)
+        java.awt.Point location = panelTaiKhoan.getLocationOnScreen();
+        int componentWidth = panelTaiKhoan.getWidth();
+        int componentHeight = panelTaiKhoan.getHeight();
 
-            // 3. Tính toán vị trí X (Căn lề phải)
-            // Lấy tọa độ X của cụm + chiều rộng của nó - chiều rộng của Popup
-            int x = location.x + componentWidth - popup.getPreferredSize().width;
+        // 3. Tính toán vị trí X (Căn lề phải)
+        // Lấy tọa độ X của cụm + chiều rộng của nó - chiều rộng của Popup
+        int x = location.x + componentWidth - popup.getPreferredSize().width;
 
-            // 4. Tính toán vị trí Y (Ngay dưới chữ)
-            int y = location.y + componentHeight;
+        // 4. Tính toán vị trí Y (Ngay dưới chữ)
+        int y = location.y + componentHeight;
 
-            // 5. Đặt vị trí và hiển thị
-            popup.setLocation(x, y);
-            popup.setVisible(true);
+        // 5. Đặt vị trí và hiển thị
+        popup.setLocation(x, y);
+        popup.setVisible(true);
     }//GEN-LAST:event_panelTaiKhoanMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1004,6 +1013,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JLabel subQuanLyKhuyenMai;
     private javax.swing.JLabel subQuanLyMonAn;
     private javax.swing.JLabel subQuanLyNhanVien;
+    private javax.swing.JLabel subQuanLyTaiKhoan;
     private javax.swing.JLabel subQuanLyThue;
     private javax.swing.JLabel subThongKeDoanhThu;
     // End of variables declaration//GEN-END:variables

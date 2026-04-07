@@ -119,8 +119,8 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel {
 
         pnlThongTinKhachHang.setBackground(new java.awt.Color(255, 251, 233));
 
-        lblMaKhachHang.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblMaKhachHang.setText("Mã khách hàng:");
+        lblMaKhachHang.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         txtMaKhachHang.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtMaKhachHang.setPreferredSize(new java.awt.Dimension(64, 35));
@@ -130,8 +130,8 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel {
             }
         });
 
-        lblHoTen.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblHoTen.setText("Họ tên:");
+        lblHoTen.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         txtHoTen.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtHoTen.setPreferredSize(new java.awt.Dimension(64, 35));
@@ -143,14 +143,14 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel {
             }
         });
 
-        lblDiemTichLuy.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblDiemTichLuy.setText("Điểm tích lũy:");
+        lblDiemTichLuy.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
-        lblLoaiThanhVien.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblLoaiThanhVien.setText("Loại thành viên:");
+        lblLoaiThanhVien.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
-        lblSoDienThoai.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblSoDienThoai.setText("Số điện thoại:");
+        lblSoDienThoai.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         txtSoDienThoai.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtSoDienThoai.setPreferredSize(new java.awt.Dimension(64, 35));
@@ -158,10 +158,10 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel {
         txtTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtTimKiem.setPreferredSize(new java.awt.Dimension(64, 35));
 
-        btnTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnTimKiem.setText("Tìm kiếm");
+        btnTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
-        cbLoaiThanhVien.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbLoaiThanhVien.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
         cbLoaiThanhVien.setPreferredSize(new java.awt.Dimension(72, 35));
 
         javax.swing.GroupLayout pnlThongTinKhachHangLayout = new javax.swing.GroupLayout(pnlThongTinKhachHang);
