@@ -125,7 +125,7 @@ public class MainForm extends javax.swing.JFrame {
         }
     }
 
-    private void showTrangChuPanel() {
+    public void showTrangChuPanel() {
         PanelTrangChu panel = new PanelTrangChu();
         currentTrangChuPanel = panel;
         showPanel(panel);
@@ -133,6 +133,17 @@ public class MainForm extends javax.swing.JFrame {
             panel.refreshData();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public void goToTrangChuFromPanel() {
+        updateActivePanel(panelTrangChu);
+        lblTenTrang.setText("TRANG CHỦ");
+        showTrangChuPanel();
+        if (activeSubLabel != null) {
+            activeSubLabel.setForeground(Color.WHITE);
+            activeSubLabel.setFont(activeSubLabel.getFont().deriveFont(Font.PLAIN));
+            activeSubLabel = null;
         }
     }
 

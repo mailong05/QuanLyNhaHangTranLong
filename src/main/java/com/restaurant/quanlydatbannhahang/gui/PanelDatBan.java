@@ -22,28 +22,49 @@ public class PanelDatBan extends javax.swing.JPanel {
     }
 
     private void setUpDatBanButton() {
+        // Button Trang chủ - bên trái
+        JButton btnTrangChu = new JButton("Trang chủ");
+        btnTrangChu.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        btnTrangChu.setBackground(new Color(200, 200, 200));
+        btnTrangChu.setForeground(Color.BLACK);
+        btnTrangChu.setFocusPainted(false);
+        btnTrangChu.setOpaque(true);
+        btnTrangChu.setBorder(BorderFactory.createEmptyBorder());
+        btnTrangChu.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnTrangChu.setPreferredSize(new Dimension(150, 50));
+        btnTrangChu.addActionListener(e -> {
+            java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
+            if (parentFrame instanceof MainForm) {
+                ((MainForm) parentFrame).goToTrangChuFromPanel();
+            }
+        });
+
+        // Button Đặt bàn - bên phải
         btnDatBan = new JButton("Đặt bàn");
         btnDatBan.setFont(new Font("Segoe UI", Font.BOLD, 14));
         btnDatBan.setBackground(new Color(5, 223, 114));
-        btnDatBan.setForeground(Color.WHITE);
+        btnDatBan.setForeground(Color.BLACK);
         btnDatBan.setFocusPainted(false);
+        btnDatBan.setOpaque(true);
+        btnDatBan.setBorder(BorderFactory.createEmptyBorder());
         btnDatBan.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnDatBan.setPreferredSize(new Dimension(150, 50));
         btnDatBan.addActionListener(e -> onButtonDatBanClicked());
 
         JPanel bottomPanel = new JPanel(new BorderLayout());
         bottomPanel.setBackground(new java.awt.Color(255, 251, 233));
-        bottomPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 20, 60));
+        bottomPanel.setBorder(BorderFactory.createEmptyBorder(10, 60, 20, 60));
 
-        JPanel spacer = new JPanel();
-        spacer.setBackground(new java.awt.Color(255, 251, 233));
+        JPanel leftButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        leftButtonPanel.setBackground(new java.awt.Color(255, 251, 233));
+        leftButtonPanel.add(btnTrangChu);
 
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        buttonPanel.setBackground(new java.awt.Color(255, 251, 233));
-        buttonPanel.add(btnDatBan);
+        JPanel rightButtonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        rightButtonPanel.setBackground(new java.awt.Color(255, 251, 233));
+        rightButtonPanel.add(btnDatBan);
 
-        bottomPanel.add(spacer, BorderLayout.CENTER);
-        bottomPanel.add(buttonPanel, BorderLayout.EAST);
+        bottomPanel.add(leftButtonPanel, BorderLayout.WEST);
+        bottomPanel.add(rightButtonPanel, BorderLayout.EAST);
 
         this.add(bottomPanel, BorderLayout.SOUTH);
     }
