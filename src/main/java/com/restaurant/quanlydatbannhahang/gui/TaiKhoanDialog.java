@@ -253,7 +253,7 @@ public class TaiKhoanDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(6, 12, 0, 0);
         jPanel1.add(lblNgayVaoLam, gridBagConstraints);
 
-        btnSuaThongTinCaNhan.setText("Sửa thông tin cá nhân");
+        btnSuaThongTinCaNhan.setText("Lưu thông tin cá nhân");
         btnSuaThongTinCaNhan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSuaThongTinCaNhanActionPerformed(evt);
