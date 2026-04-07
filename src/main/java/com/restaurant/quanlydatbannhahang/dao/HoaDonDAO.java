@@ -2,6 +2,7 @@ package com.restaurant.quanlydatbannhahang.dao;
 
 import com.restaurant.quanlydatbannhahang.connectDB.DatabaseConnection;
 import com.restaurant.quanlydatbannhahang.entity.HoaDon;
+import com.restaurant.quanlydatbannhahang.entity.TrangThaiHoaDon;
 import java.sql.Connection;
 import java.time.LocalDate;
 import java.util.List;
@@ -59,5 +60,13 @@ public class HoaDonDAO {
 
     public double tinhTongDoanhThuTheoGian(LocalDate tuNgay, LocalDate denNgay) {
         return 0;
+    }
+
+    public List<HoaDon> getHoaDonTheoMaBan(String maBan) {
+        return null;
+    }
+
+    public List<HoaDon> getHoaDonTheoTrangThai(TrangThaiHoaDon trangThai) {
+        return null;
     }
 }

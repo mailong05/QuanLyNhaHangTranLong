@@ -32,11 +32,19 @@ public class ChiTietGoiMonDAO {
         return false;
     }
 
+    public boolean capNhatTrangThaiChiTietGoiMon(String maPhieu, String maMon, String trangThai) {
+        return false;
+    }
+
     public boolean capNhatSoLuong(String maPhieuGoi, String maMon, int soLuongMoi) {
         return false;
     }
 
     public boolean xoaChiTietGoiMon(String maPhieuGoi, String maMon) {
+        return false;
+    }
+
+    public boolean xoaAllChiTietByMaPhieu(String maPhieu) {
         return false;
     }
 

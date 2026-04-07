@@ -2,6 +2,7 @@ package com.restaurant.quanlydatbannhahang.dao;
 
 import com.restaurant.quanlydatbannhahang.connectDB.DatabaseConnection;
 import com.restaurant.quanlydatbannhahang.entity.PhieuDatBan;
+import com.restaurant.quanlydatbannhahang.entity.TrangThaiPhieuDat;
 import java.sql.Connection;
 import java.time.LocalDate;
 import java.util.List;
@@ -54,6 +55,10 @@ public class PhieuDatBanDAO {
     }
 
     public List<PhieuDatBan> getPhieuDatBanChoXacNhan() {
+        return null;
+    }
+
+    public List<PhieuDatBan> getPhieuDatBanTheoTrangThai(TrangThaiPhieuDat trangThai) {
         return null;
     }
 }

@@ -2,6 +2,7 @@ package com.restaurant.quanlydatbannhahang.dao;
 
 import com.restaurant.quanlydatbannhahang.connectDB.DatabaseConnection;
 import com.restaurant.quanlydatbannhahang.entity.Thue;
+import com.restaurant.quanlydatbannhahang.entity.TrangThaiThue;
 import java.sql.Connection;
 import java.util.List;
 
@@ -37,6 +38,10 @@ public class ThueDAO {
     }
 
     public Thue getThueTheoTen(String tenThue) {
+        return null;
+    }
+
+    public List<Thue> getThueTheoTrangThai(TrangThaiThue trangThai) {
         return null;
     }
 }

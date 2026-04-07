@@ -2,6 +2,7 @@ package com.restaurant.quanlydatbannhahang.dao;
 
 import com.restaurant.quanlydatbannhahang.connectDB.DatabaseConnection;
 import com.restaurant.quanlydatbannhahang.entity.KhuyenMai;
+import com.restaurant.quanlydatbannhahang.entity.TrangThaiKhuyenMai;
 import java.sql.Connection;
 import java.time.LocalDate;
 import java.util.List;
@@ -42,6 +43,14 @@ public class KhuyenMaiDAO {
     }
 
     public List<KhuyenMai> timKhuyenMaiTheoTen(String tenKM) {
+        return null;
+    }
+
+    public List<KhuyenMai> getKhuyenMaiTheoTrangThai(TrangThaiKhuyenMai trangThai) {
+        return null;
+    }
+
+    public List<KhuyenMai> getKhuyenMaiTheoNgay(LocalDate ngayBatDau, LocalDate ngayKetThuc) {
         return null;
     }
 }

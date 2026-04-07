@@ -20,12 +20,12 @@ public class AuthService {
     public TaiKhoan login(String username, String password) {
         // Validation
         if (username == null || username.trim().isEmpty()) {
-            System.out.println("❌ Tên đăng nhập không được để trống!");
+            System.out.println(" Tên đăng nhập không được để trống!");
             return null;
         }
 
         if (password == null || password.trim().isEmpty()) {
-            System.out.println("❌ Mật khẩu không được để trống!");
+            System.out.println(" Mật khẩu không được để trống!");
             return null;
         }
 
@@ -33,18 +33,18 @@ public class AuthService {
         TaiKhoan taiKhoan = taiKhoanDAO.findByUsernameAndPassword(username, password);
 
         if (taiKhoan == null) {
-            System.out.println("❌ Tên đăng nhập hoặc mật khẩu không đúng");
+            System.out.println(" Tên đăng nhập hoặc mật khẩu không đúng");
             return null;
         }
 
         // Kiểm tra nhân viên có hoạt động không
         // if (taiKhoan.getNhanVien().getTrangThai() != TrangThaiNhanVien.DANG_LAM_VIEC)
         // {
-        // System.out.println("❌ Nhân viên này đã bị vô hiệu hóa!");
+        // System.out.println(" Nhân viên này đã bị vô hiệu hóa!");
         // return null;
         // }
 
-        System.out.println("✓ Đăng nhập thành công: " + taiKhoan.getNhanVien().getHoTen());
+        System.out.println(" Đăng nhập thành công: " + taiKhoan.getNhanVien().getHoTen());
         return taiKhoan;
     }
 
