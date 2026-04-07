@@ -3,6 +3,10 @@ package com.restaurant.quanlydatbannhahang.gui;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
+
+import com.restaurant.quanlydatbannhahang.entity.TrangThaiBan;
+import com.restaurant.quanlydatbannhahang.service.BanService;
+
 import javax.swing.border.EmptyBorder;
 
 public class PanelTrangChu extends javax.swing.JPanel {
@@ -10,8 +14,17 @@ public class PanelTrangChu extends javax.swing.JPanel {
     public PanelTrangChu() {
         initComponents();
         customUI();
+        loadDuLieu();
     }
 
+    private void loadDuLieu(){
+        BanService banService  = new BanService();
+
+//        int countBanDatTruoc = (int) banService.get
+        
+        int countBanDangSuDung = (int) banService.getBanDangSuDung().size();
+        lblCountBanDatTruoc.setText(String.valueOf(countBanDangSuDung));
+    }
     private void customUI() {
         // 1. Bo góc các Card thống kê
         applyCardStyle(cardBanSuDung, 30);
