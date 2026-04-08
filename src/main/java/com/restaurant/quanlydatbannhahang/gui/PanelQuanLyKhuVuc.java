@@ -9,60 +9,9 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel {
 
     public PanelQuanLyKhuVuc() {
         initComponents();
-        customUI();
     }
 
-    private void customUI() {
-        // 1. Màu nền chủ đạo
-        setBackground(new Color(255, 251, 233));
-        
-        // 2. Tùy chỉnh hiệu ứng cho các nút bấm
-        btnTrangChu.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnThem.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnXoa.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnCapNhat.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-        // 3. Tùy chỉnh ScrollPane và Viền bảng
-        // Tạo viền màu nâu nhạt mảnh bao quanh bảng
-        scrTableKhuVuc.setBorder(BorderFactory.createLineBorder(new Color(200, 190, 170), 1)); 
-        scrTableKhuVuc.setViewportBorder(null);
-        scrTableKhuVuc.setOpaque(false);
-        scrTableKhuVuc.getViewport().setOpaque(false);
-
-        // Sửa lỗi góc phải ScrollBar (khử ô vuông trắng)
-        JPanel corner = new JPanel();
-        corner.setBackground(new Color(255, 251, 235)); 
-        scrTableKhuVuc.setCorner(JScrollPane.UPPER_RIGHT_CORNER, corner);
-
-        // 4. Tùy chỉnh Table (Bảng Khu Vực)
-        tableKhuVuc.setShowGrid(false);
-        tableKhuVuc.setIntercellSpacing(new Dimension(0, 0));
-        tableKhuVuc.setRowHeight(45); 
-        tableKhuVuc.setSelectionBackground(new Color(245, 240, 220));
-        
-        // Header Table (Tiêu đề bảng)
-        tableKhuVuc.getTableHeader().setPreferredSize(new Dimension(tableKhuVuc.getTableHeader().getWidth(), 45));
-        tableKhuVuc.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                label.setBackground(new Color(255, 251, 235)); 
-                label.setForeground(new Color(148, 134, 111));
-                label.setFont(new Font("Segoe UI", Font.BOLD, 14));
-                label.setHorizontalAlignment(JLabel.CENTER);
-                // Đường kẻ mảnh dưới chân tiêu đề
-                label.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(230, 230, 230)));
-                return label;
-            }
-        });
-
-        // Căn giữa nội dung các cột trong bảng
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        for (int i = 0; i < tableKhuVuc.getColumnCount(); i++) {
-            tableKhuVuc.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
-        }
-    }
+    
 
     private void applyCardStyle(JPanel panel, int radius) {
         panel.setOpaque(false);

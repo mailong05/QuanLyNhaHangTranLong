@@ -9,56 +9,6 @@ public class PanelDanhSachBan extends javax.swing.JPanel {
 
     public PanelDanhSachBan() {
         initComponents();
-        customUI();
-    }
-
-    private void customUI() {
-        // 1. Màu nền chủ đạo
-        setBackground(new Color(255, 251, 233));
-        
-
-        // 3. Tùy chỉnh ScrollPane (Giống PanelTrangChu)
-        // Thay Border Empty bằng Border màu nâu/xám nhạt để tạo khung cho bảng
-        scrTableBan.setBorder(BorderFactory.createLineBorder(new Color(200, 190, 170), 1)); 
-        scrTableBan.setViewportBorder(null);
-        scrTableBan.setOpaque(false);
-        scrTableBan.getViewport().setOpaque(false);
-
-        // Sửa lỗi góc phải ScrollBar
-        JPanel corner = new JPanel();
-        corner.setBackground(new Color(255, 251, 235)); 
-        scrTableBan.setCorner(JScrollPane.UPPER_RIGHT_CORNER, corner);
-
-        // 4. Tùy chỉnh Table
-        tableBan.setShowGrid(false);
-        tableBan.setIntercellSpacing(new Dimension(0, 0));
-        tableBan.setRowHeight(45); 
-        tableBan.setSelectionBackground(new Color(245, 240, 220));
-        
-        // Header Table
-        tableBan.getTableHeader().setPreferredSize(new Dimension(tableBan.getTableHeader().getWidth(), 45));
-        tableBan.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                label.setBackground(new Color(255, 251, 235)); 
-                label.setForeground(new Color(148, 134, 111));
-                label.setFont(new Font("Segoe UI", Font.BOLD, 14));
-                label.setHorizontalAlignment(JLabel.CENTER);
-                label.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(230, 230, 230)));
-                return label;
-            }
-        });
-
-        // Căn giữa các cột
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        for (int i = 0; i < tableBan.getColumnCount(); i++) {
-            tableBan.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
-        }
-
-        // 5. Thêm hiệu ứng bo góc cho container chứa bảng (nếu cần bao bọc bảng trong 1 tấm card)
-        // Hiện tại table đang add thẳng vào Center của PanelQuanLyBan
     }
 
     private void applyCardStyle(JPanel panel, int radius) {
@@ -74,18 +24,19 @@ public class PanelDanhSachBan extends javax.swing.JPanel {
             }
         });
     }
-    
-    //Từ đây không chỉnh sửa bên dưới
+
+    // Từ đây không chỉnh sửa bên dưới
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         pnlHeader = new javax.swing.JPanel();
         pnlThongTinBan = new javax.swing.JPanel();
         txtTimKiem = new javax.swing.JTextField();
         btnTimKiem = new javax.swing.JButton();
-        cbKhuVuc = new javax.swing.JComboBox<>();
-        cbTrangThai = new javax.swing.JComboBox<>();
+        cbFilterKhuVuc = new javax.swing.JComboBox<>();
+        cbFilterTrangThai = new javax.swing.JComboBox<>();
         scrTableBan = new javax.swing.JScrollPane();
         tableBan = new javax.swing.JTable();
         pnlButton = new javax.swing.JPanel();
@@ -116,65 +67,78 @@ public class PanelDanhSachBan extends javax.swing.JPanel {
             }
         });
 
-        cbKhuVuc.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Khu vực", "A", "B", "C" }));
-        cbKhuVuc.setPreferredSize(new java.awt.Dimension(72, 35));
+        cbFilterKhuVuc.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Khu vực", "A", "B", "C" }));
+        cbFilterKhuVuc.setPreferredSize(new java.awt.Dimension(72, 35));
 
-        cbTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Trạng thái", "Trống", "Đang sử dụng", "Đang chờ", " " }));
-        cbTrangThai.setPreferredSize(new java.awt.Dimension(72, 35));
+        cbFilterTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(
+                new String[] { "Trạng thái", "Trống", "Đang sử dụng", "Đang chờ", " " }));
+        cbFilterTrangThai.setPreferredSize(new java.awt.Dimension(72, 35));
 
         javax.swing.GroupLayout pnlThongTinBanLayout = new javax.swing.GroupLayout(pnlThongTinBan);
         pnlThongTinBan.setLayout(pnlThongTinBanLayout);
         pnlThongTinBanLayout.setHorizontalGroup(
-            pnlThongTinBanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlThongTinBanLayout.createSequentialGroup()
-                .addComponent(cbKhuVuc, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(cbTrangThai, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(28, 28, 28)
-                .addComponent(txtTimKiem, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
+                pnlThongTinBanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(pnlThongTinBanLayout.createSequentialGroup()
+                                .addComponent(cbFilterKhuVuc, javax.swing.GroupLayout.PREFERRED_SIZE, 132,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(cbFilterTrangThai, javax.swing.GroupLayout.PREFERRED_SIZE, 132,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(28, 28, 28)
+                                .addComponent(txtTimKiem, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 134,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)));
         pnlThongTinBanLayout.setVerticalGroup(
-            pnlThongTinBanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlThongTinBanLayout.createSequentialGroup()
-                .addGroup(pnlThongTinBanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlThongTinBanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(cbKhuVuc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(cbTrangThai, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(pnlThongTinBanLayout.createSequentialGroup()
-                        .addGap(3, 3, 3)
-                        .addGroup(pnlThongTinBanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap())
-        );
+                pnlThongTinBanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(pnlThongTinBanLayout.createSequentialGroup()
+                                .addGroup(pnlThongTinBanLayout
+                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlThongTinBanLayout
+                                                .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                .addComponent(cbFilterKhuVuc, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(cbFilterTrangThai, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                        javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addGroup(pnlThongTinBanLayout.createSequentialGroup()
+                                                .addGap(3, 3, 3)
+                                                .addGroup(pnlThongTinBanLayout
+                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(btnTimKiem,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE, 35,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(txtTimKiem,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addContainerGap()));
 
         pnlHeader.add(pnlThongTinBan, java.awt.BorderLayout.PAGE_END);
 
         add(pnlHeader, java.awt.BorderLayout.PAGE_START);
 
         tableBan.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+                new Object[][] {
 
-            },
-            new String [] {
-                "Mã bàn", "Số ghế", "Vị trí", "Mã khu vực", "Trạng thái"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                },
+                new String[] {
+                        "Mã bàn", "Số ghế", "Vị trí", "Mã khu vực", "Trạng thái"
+                }) {
+            Class[] types = new Class[] {
+                    java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class,
+                    java.lang.String.class
             };
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+            boolean[] canEdit = new boolean[] {
+                    false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
+                return types[columnIndex];
             }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
+                return canEdit[columnIndex];
             }
         });
         tableBan.setRowHeight(35);
@@ -194,20 +158,19 @@ public class PanelDanhSachBan extends javax.swing.JPanel {
         add(pnlButton, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
+    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTimKiemActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnTimKiemActionPerformed
+    }// GEN-LAST:event_btnTimKiemActionPerformed
 
-    private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTimKiemActionPerformed
+    private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtTimKiemActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtTimKiemActionPerformed
-
+    }// GEN-LAST:event_txtTimKiemActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnTimKiem;
     private javax.swing.JButton btnTrangChu;
-    private javax.swing.JComboBox<String> cbKhuVuc;
-    private javax.swing.JComboBox<String> cbTrangThai;
+    private javax.swing.JComboBox<String> cbFilterKhuVuc;
+    private javax.swing.JComboBox<String> cbFilterTrangThai;
     private javax.swing.JPanel pnlButton;
     private javax.swing.JPanel pnlHeader;
     private javax.swing.JPanel pnlThongTinBan;

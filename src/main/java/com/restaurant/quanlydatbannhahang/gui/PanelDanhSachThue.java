@@ -8,61 +8,9 @@ public class PanelDanhSachThue extends javax.swing.JPanel {
 
     public PanelDanhSachThue() {
         initComponents();
-        customUI();
     }
 
-    private void customUI() {
-        // 1. Màu nền chủ đạo (Earth-tone)
-        setBackground(new Color(255, 251, 233));
-        
-        // 2. Tùy chỉnh các nút bấm
-        JButton[] buttons = {btnTrangChu, btnTimKiem};
-        for (JButton btn : buttons) {
-            btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-            btn.setFocusPainted(false);
-        }
-
-        // 3. Tùy chỉnh ScrollPane và Bảng
-        scrTableThue.setBorder(BorderFactory.createLineBorder(new Color(200, 190, 170), 1));
-        scrTableThue.setOpaque(false);
-        scrTableThue.getViewport().setOpaque(false);
-        
-        // Khử góc trắng ScrollBar
-        JPanel corner = new JPanel();
-        corner.setBackground(new Color(255, 251, 235));
-        scrTableThue.setCorner(JScrollPane.UPPER_RIGHT_CORNER, corner);
-
-        // 4. Định dạng Table
-        tableThue.setShowGrid(false);
-        tableThue.setIntercellSpacing(new Dimension(0, 0));
-        tableThue.setRowHeight(45);
-        tableThue.setSelectionBackground(new Color(245, 240, 220));
-
-        // Header Table hiện đại
-        tableThue.getTableHeader().setPreferredSize(new Dimension(tableThue.getTableHeader().getWidth(), 45));
-        tableThue.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                label.setBackground(new Color(255, 251, 235));
-                label.setForeground(new Color(148, 134, 111)); // Màu chữ nâu trầm
-                label.setFont(new Font("Segoe UI", Font.BOLD, 14));
-                label.setHorizontalAlignment(JLabel.CENTER);
-                label.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(230, 230, 230)));
-                return label;
-            }
-        });
-
-        // Căn giữa nội dung bảng
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        for (int i = 0; i < tableThue.getColumnCount(); i++) {
-            tableThue.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
-        }
-
-        // 5. Bo góc cho Panel nhập liệu (Card style)
-        applyCardStyle(pnlThongTinThue, 20);
-    }
+    
 
     private void applyCardStyle(JPanel panel, int radius) {
         panel.setOpaque(false);
@@ -88,7 +36,7 @@ public class PanelDanhSachThue extends javax.swing.JPanel {
         pnlThongTinThue = new javax.swing.JPanel();
         txtTimKiem = new javax.swing.JTextField();
         btnTimKiem = new javax.swing.JButton();
-        cbTrangThai = new javax.swing.JComboBox<>();
+        cbFilterTrangThai = new javax.swing.JComboBox<>();
         scrTableThue = new javax.swing.JScrollPane();
         tableThue = new javax.swing.JTable();
         pnlButton = new javax.swing.JPanel();
@@ -112,10 +60,10 @@ public class PanelDanhSachThue extends javax.swing.JPanel {
         btnTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnTimKiem.setText("Tìm kiếm");
 
-        cbTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Trạng thái", "Còn áp dụng", "Ngưng áp dụng", " " }));
-        cbTrangThai.addActionListener(new java.awt.event.ActionListener() {
+        cbFilterTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Trạng thái", "Còn áp dụng", "Ngưng áp dụng", " " }));
+        cbFilterTrangThai.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbTrangThaiActionPerformed(evt);
+                cbFilterTrangThaiActionPerformed(evt);
             }
         });
 
@@ -124,7 +72,7 @@ public class PanelDanhSachThue extends javax.swing.JPanel {
         pnlThongTinThueLayout.setHorizontalGroup(
             pnlThongTinThueLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlThongTinThueLayout.createSequentialGroup()
-                .addComponent(cbTrangThai, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(cbFilterTrangThai, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txtTimKiem, javax.swing.GroupLayout.DEFAULT_SIZE, 679, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -135,7 +83,7 @@ public class PanelDanhSachThue extends javax.swing.JPanel {
             .addGroup(pnlThongTinThueLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlThongTinThueLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(cbTrangThai)
+                    .addComponent(cbFilterTrangThai)
                     .addGroup(pnlThongTinThueLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))))
@@ -183,15 +131,15 @@ public class PanelDanhSachThue extends javax.swing.JPanel {
         add(pnlButton, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void cbTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbTrangThaiActionPerformed
+    private void cbFilterTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbFilterTrangThaiActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cbTrangThaiActionPerformed
+    }//GEN-LAST:event_cbFilterTrangThaiActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnTimKiem;
     private javax.swing.JButton btnTrangChu;
-    private javax.swing.JComboBox<String> cbTrangThai;
+    private javax.swing.JComboBox<String> cbFilterTrangThai;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JPanel pnlButton;

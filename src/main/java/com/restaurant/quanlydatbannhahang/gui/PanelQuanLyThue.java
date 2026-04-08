@@ -8,61 +8,9 @@ public class PanelQuanLyThue extends javax.swing.JPanel {
 
     public PanelQuanLyThue() {
         initComponents();
-        customUI();
     }
 
-    private void customUI() {
-        // 1. Màu nền chủ đạo (Earth-tone)
-        setBackground(new Color(255, 251, 233));
-        
-        // 2. Tùy chỉnh các nút bấm
-        JButton[] buttons = {btnTrangChu, btnThem, btnXoa, btnCapNhat, btnTimKiem};
-        for (JButton btn : buttons) {
-            btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-            btn.setFocusPainted(false);
-        }
-
-        // 3. Tùy chỉnh ScrollPane và Bảng
-        scrTableThue.setBorder(BorderFactory.createLineBorder(new Color(200, 190, 170), 1));
-        scrTableThue.setOpaque(false);
-        scrTableThue.getViewport().setOpaque(false);
-        
-        // Khử góc trắng ScrollBar
-        JPanel corner = new JPanel();
-        corner.setBackground(new Color(255, 251, 235));
-        scrTableThue.setCorner(JScrollPane.UPPER_RIGHT_CORNER, corner);
-
-        // 4. Định dạng Table
-        tableThue.setShowGrid(false);
-        tableThue.setIntercellSpacing(new Dimension(0, 0));
-        tableThue.setRowHeight(45);
-        tableThue.setSelectionBackground(new Color(245, 240, 220));
-
-        // Header Table hiện đại
-        tableThue.getTableHeader().setPreferredSize(new Dimension(tableThue.getTableHeader().getWidth(), 45));
-        tableThue.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                label.setBackground(new Color(255, 251, 235));
-                label.setForeground(new Color(148, 134, 111)); // Màu chữ nâu trầm
-                label.setFont(new Font("Segoe UI", Font.BOLD, 14));
-                label.setHorizontalAlignment(JLabel.CENTER);
-                label.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(230, 230, 230)));
-                return label;
-            }
-        });
-
-        // Căn giữa nội dung bảng
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        for (int i = 0; i < tableThue.getColumnCount(); i++) {
-            tableThue.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
-        }
-
-        // 5. Bo góc cho Panel nhập liệu (Card style)
-        applyCardStyle(pnlThongTinThue, 20);
-    }
+    
 
     private void applyCardStyle(JPanel panel, int radius) {
         panel.setOpaque(false);

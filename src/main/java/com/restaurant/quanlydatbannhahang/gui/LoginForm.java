@@ -190,7 +190,7 @@ public class LoginForm extends javax.swing.JFrame {
             }
         });
 
-        lblForgotPassword.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        lblForgotPassword.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblForgotPassword.setForeground(new java.awt.Color(102, 102, 102));
         lblForgotPassword.setText("Quên mật khẩu?");
         lblForgotPassword.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));

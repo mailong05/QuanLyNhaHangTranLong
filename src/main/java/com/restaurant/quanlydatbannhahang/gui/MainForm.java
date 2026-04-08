@@ -15,6 +15,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.AbstractBorder;
 import com.restaurant.quanlydatbannhahang.entity.TaiKhoan;
+import com.restaurant.quanlydatbannhahang.session.SessionManager;
 
 public class MainForm extends javax.swing.JFrame {
 
@@ -55,6 +56,10 @@ public class MainForm extends javax.swing.JFrame {
                 && taiKhoan.getNhanVien().getChucVu() != null)
                         ? taiKhoan.getNhanVien().getChucVu().getDisplayName()
                         : "Quản lý";
+
+        // Lưu thông tin tài khoản vào SessionManager để các module khác truy cập
+        SessionManager.setCurrentTaiKhoan(taiKhoan);
+
         initAll();
     }
 

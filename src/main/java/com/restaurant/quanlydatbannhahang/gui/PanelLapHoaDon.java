@@ -171,10 +171,15 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
 
         lblNgayTao.setText("Ngày tạo:");
 
+        txtMaHoaDon.setEditable(false);
+
         lblMaNhanVien.setText("Mã nhân viên:");
 
         lblMaBan.setText("Mã bàn:");
 
+        txtMaBan.setEditable(false);
+
+        txtMaNhanVien.setEditable(false);
         txtMaNhanVien.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtMaNhanVienActionPerformed(evt);
@@ -182,6 +187,8 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         });
 
         lblTenKhachHang.setText("Tên khách hàng:");
+
+        txtTenKhachHang.setEditable(false);
 
         javax.swing.GroupLayout panelThongTinHoaDonLayout = new javax.swing.GroupLayout(panelThongTinHoaDon);
         panelThongTinHoaDon.setLayout(panelThongTinHoaDonLayout);

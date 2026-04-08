@@ -15,61 +15,9 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
      */
     public PanelDanhSachMonAn() {
         initComponents();
-        customUI();
     }
 
-    private void customUI() {
-        // 1. Màu nền chủ đạo
-        setBackground(new Color(255, 251, 233));
-        
-        // 2. Tùy chỉnh các nút bấm
-        JButton[] buttons = {btnTimKiem, btnTrangChu};
-        for (JButton btn : buttons) {
-            btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-            btn.setFocusPainted(false);
-        }
-        
-        // 3. Tùy chỉnh ScrollPane và Bảng
-        scrTableMonAn.setBorder(BorderFactory.createLineBorder(new Color(200, 190, 170), 1));
-        scrTableMonAn.setOpaque(false);
-        scrTableMonAn.getViewport().setOpaque(false);
-        
-        // Khử góc trắng ScrollBar
-        JPanel corner = new JPanel();
-        corner.setBackground(new Color(255, 251, 233));
-        scrTableMonAn.setCorner(JScrollPane.UPPER_RIGHT_CORNER, corner);
-
-        // 4. Định dạng Table hiện đại
-        tableMonAn.setShowGrid(false);
-        tableMonAn.setIntercellSpacing(new Dimension(0, 0));
-        tableMonAn.setRowHeight(40);
-        tableMonAn.setSelectionBackground(new Color(245, 240, 220));
-
-        // Header Table
-        tableMonAn.getTableHeader().setPreferredSize(new Dimension(tableMonAn.getTableHeader().getWidth(), 45));
-        tableMonAn.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                label.setBackground(new Color(255, 251, 233));
-                label.setForeground(new Color(148, 134, 111));
-                label.setFont(new Font("Segoe UI", Font.BOLD, 13));
-                label.setHorizontalAlignment(JLabel.CENTER);
-                label.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(220, 210, 190)));
-                return label;
-            }
-        });
-
-        // Căn giữa nội dung các cột trong bảng
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        for (int i = 0; i < tableMonAn.getColumnCount(); i++) {
-            tableMonAn.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
-        }
-
-        // 5. Bo góc cho khu vực nhập liệu
-        applyCardStyle(pnlThongTinKhuyenMai, 20);
-    }
+    
 
     private void applyCardStyle(JPanel panel, int radius) {
         panel.setOpaque(false);
@@ -94,7 +42,7 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
         pnlThongTinKhuyenMai = new javax.swing.JPanel();
         txtTimKiem = new javax.swing.JTextField();
         btnTimKiem = new javax.swing.JButton();
-        cbTrangThai = new javax.swing.JComboBox<>();
+        cbFilterTrangThai = new javax.swing.JComboBox<>();
         scrTableMonAn = new javax.swing.JScrollPane();
         tableMonAn = new javax.swing.JTable();
         pnlButton = new javax.swing.JPanel();
@@ -123,10 +71,10 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
             }
         });
 
-        cbTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        cbTrangThai.addActionListener(new java.awt.event.ActionListener() {
+        cbFilterTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbFilterTrangThai.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbTrangThaiActionPerformed(evt);
+                cbFilterTrangThaiActionPerformed(evt);
             }
         });
 
@@ -135,7 +83,7 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
         pnlThongTinKhuyenMaiLayout.setHorizontalGroup(
             pnlThongTinKhuyenMaiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlThongTinKhuyenMaiLayout.createSequentialGroup()
-                .addComponent(cbTrangThai, 0, 140, Short.MAX_VALUE)
+                .addComponent(cbFilterTrangThai, 0, 140, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 756, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -150,7 +98,7 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(pnlThongTinKhuyenMaiLayout.createSequentialGroup()
                 .addGap(1, 1, 1)
-                .addComponent(cbTrangThai)
+                .addComponent(cbFilterTrangThai)
                 .addContainerGap())
         );
 
@@ -199,9 +147,9 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_scrTableMonAnMouseClicked
 
-    private void cbTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbTrangThaiActionPerformed
+    private void cbFilterTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbFilterTrangThaiActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cbTrangThaiActionPerformed
+    }//GEN-LAST:event_cbFilterTrangThaiActionPerformed
 
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
         // TODO add your handling code here:
@@ -211,7 +159,7 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnTimKiem;
     private javax.swing.JButton btnTrangChu;
-    private javax.swing.JComboBox<String> cbTrangThai;
+    private javax.swing.JComboBox<String> cbFilterTrangThai;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel pnlButton;
     private javax.swing.JPanel pnlHeader;

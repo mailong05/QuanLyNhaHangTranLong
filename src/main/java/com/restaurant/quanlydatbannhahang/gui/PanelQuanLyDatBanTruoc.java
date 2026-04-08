@@ -14,7 +14,6 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel {
 
     public PanelQuanLyDatBanTruoc() {
         initComponents();
-        customUI();
 //        loadDataToTable(null);
     }
 
@@ -37,54 +36,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel {
         }
     }
 
-	private void customUI() {
-        // 1. Màu nền chủ đạo
-        setBackground(new Color(255, 251, 233));
-        
-
-        // 3. Tùy chỉnh ScrollPane (Giống PanelTrangChu)
-        // Thay Border Empty bằng Border màu nâu/xám nhạt để tạo khung cho bảng
-        scrTableBan.setBorder(BorderFactory.createLineBorder(new Color(200, 190, 170), 1)); 
-        scrTableBan.setViewportBorder(null);
-        scrTableBan.setOpaque(false);
-        scrTableBan.getViewport().setOpaque(false);
-
-        // Sửa lỗi góc phải ScrollBar
-        JPanel corner = new JPanel();
-        corner.setBackground(new Color(255, 251, 235)); 
-        scrTableBan.setCorner(JScrollPane.UPPER_RIGHT_CORNER, corner);
-
-        // 4. Tùy chỉnh Table
-        tableBan.setShowGrid(false);
-        tableBan.setIntercellSpacing(new Dimension(0, 0));
-        tableBan.setRowHeight(45); 
-        tableBan.setSelectionBackground(new Color(245, 240, 220));
-        
-        // Header Table
-        tableBan.getTableHeader().setPreferredSize(new Dimension(tableBan.getTableHeader().getWidth(), 45));
-        tableBan.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                label.setBackground(new Color(255, 251, 235)); 
-                label.setForeground(new Color(148, 134, 111));
-                label.setFont(new Font("Segoe UI", Font.BOLD, 14));
-                label.setHorizontalAlignment(JLabel.CENTER);
-                label.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(230, 230, 230)));
-                return label;
-            }
-        });
-
-        // Căn giữa các cột
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        for (int i = 0; i < tableBan.getColumnCount(); i++) {
-            tableBan.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
-        }
-
-        // 5. Thêm hiệu ứng bo góc cho container chứa bảng (nếu cần bao bọc bảng trong 1 tấm card)
-        // Hiện tại table đang add thẳng vào Center của PanelQuanLyBan
-    }
+	
 
     private void applyCardStyle(JPanel panel, int radius) {
         panel.setOpaque(false);
@@ -119,11 +71,11 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel {
         txtTimKiem = new javax.swing.JTextField();
         btnTimKiem = new javax.swing.JButton();
         lblSoLuong = new javax.swing.JLabel();
-        txtSoLuong = new javax.swing.JTextField();
         dtpThoiGianDen = new com.github.lgooddatepicker.components.DateTimePicker();
         jComboBox1 = new javax.swing.JComboBox<>();
         txtMaBan = new javax.swing.JTextField();
         lblMaBan = new javax.swing.JLabel();
+        spSoNguoi = new javax.swing.JSpinner();
         scrTableBan = new javax.swing.JScrollPane();
         tableBan = new javax.swing.JTable();
         pnlButton = new javax.swing.JPanel();
@@ -193,9 +145,6 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel {
         lblSoLuong.setText("Số người:");
         lblSoLuong.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
-        txtSoLuong.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        txtSoLuong.setPreferredSize(new java.awt.Dimension(64, 35));
-
         dtpThoiGianDen.setPreferredSize(new java.awt.Dimension(228, 35));
 
         jComboBox1.setPreferredSize(new java.awt.Dimension(72, 35));
@@ -250,9 +199,9 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel {
                         .addComponent(dtpThoiGianDen, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(180, Short.MAX_VALUE))
                     .addGroup(pnlThongTinBanLayout.createSequentialGroup()
-                        .addGroup(pnlThongTinBanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(txtSoLuong, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jComboBox1, 0, 127, Short.MAX_VALUE))
+                        .addGroup(pnlThongTinBanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jComboBox1, 0, 127, Short.MAX_VALUE)
+                            .addComponent(spSoNguoi))
                         .addGap(0, 0, Short.MAX_VALUE))))
         );
         pnlThongTinBanLayout.setVerticalGroup(
@@ -280,8 +229,8 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel {
                 .addGroup(pnlThongTinBanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlThongTinBanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(txtMaNhanVien, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtSoLuong, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(lblSoLuong))
+                        .addComponent(lblSoLuong)
+                        .addComponent(spSoNguoi, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(lblMaNhanVien))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(pnlThongTinBanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -420,12 +369,12 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel {
     private javax.swing.JPanel pnlRightButtons;
     private javax.swing.JPanel pnlThongTinBan;
     private javax.swing.JScrollPane scrTableBan;
+    private javax.swing.JSpinner spSoNguoi;
     private javax.swing.JTable tableBan;
     private javax.swing.JTextField txtMaBan;
     private javax.swing.JTextField txtMaNhanVien;
     private javax.swing.JTextField txtMaPhieuDat;
     private javax.swing.JTextField txtSoDienThoai;
-    private javax.swing.JTextField txtSoLuong;
     private javax.swing.JTextField txtTimKiem;
     // End of variables declaration//GEN-END:variables
 }

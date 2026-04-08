@@ -6,7 +6,7 @@ public class LoadingScreen extends javax.swing.JFrame {
 
         public LoadingScreen() {
                 initComponents();
-                lblSystemName.setFont(new java.awt.Font("Segoe UI", 0, 12));
+                lblSystemName.setFont(new java.awt.Font("Segoe UI", 0, 14));
         }
 
         @SuppressWarnings("unchecked")

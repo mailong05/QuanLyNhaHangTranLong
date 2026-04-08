@@ -9,58 +9,9 @@ public class PanelDanhSachKhuyenMai extends javax.swing.JPanel {
 
     public PanelDanhSachKhuyenMai() {
         initComponents();
-        customUI();
     }
 
-    private void customUI() {
-        // 1. Màu nền chủ đạo
-        setBackground(new Color(255, 251, 233));
-        
-        // 2. Tùy chỉnh nút Tìm kiếm
-        btnTimKiem.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnTimKiem.setFocusPainted(false);
-        
-        // 3. Tùy chỉnh ScrollPane và Bảng
-        scrTableKhuyenMai.setBorder(BorderFactory.createLineBorder(new Color(200, 190, 170), 1));
-        scrTableKhuyenMai.setOpaque(false);
-        scrTableKhuyenMai.getViewport().setOpaque(false);
-        
-        // Khử góc trắng ScrollBar
-        JPanel corner = new JPanel();
-        corner.setBackground(new Color(255, 251, 233));
-        scrTableKhuyenMai.setCorner(JScrollPane.UPPER_RIGHT_CORNER, corner);
-
-        // 4. Định dạng Table hiện đại
-        tableKhuyenMai.setShowGrid(false);
-        tableKhuyenMai.setIntercellSpacing(new Dimension(0, 0));
-        tableKhuyenMai.setRowHeight(40);
-        tableKhuyenMai.setSelectionBackground(new Color(245, 240, 220));
-
-        // Header Table
-        tableKhuyenMai.getTableHeader().setPreferredSize(new Dimension(tableKhuyenMai.getTableHeader().getWidth(), 45));
-        tableKhuyenMai.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                label.setBackground(new Color(255, 251, 233));
-                label.setForeground(new Color(148, 134, 111));
-                label.setFont(new Font("Segoe UI", Font.BOLD, 13));
-                label.setHorizontalAlignment(JLabel.CENTER);
-                label.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(220, 210, 190)));
-                return label;
-            }
-        });
-
-        // Căn giữa nội dung các cột trong bảng
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        for (int i = 0; i < tableKhuyenMai.getColumnCount(); i++) {
-            tableKhuyenMai.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
-        }
-
-        // 5. Card style cho khu vực nhập liệu
-        applyCardStyle(pnlThongTinKhuyenMai, 20);
-    }
+    
 
     private void applyCardStyle(JPanel panel, int radius) {
         panel.setOpaque(false);
@@ -85,7 +36,7 @@ public class PanelDanhSachKhuyenMai extends javax.swing.JPanel {
         pnlThongTinKhuyenMai = new javax.swing.JPanel();
         txtTimKiem = new javax.swing.JTextField();
         btnTimKiem = new javax.swing.JButton();
-        cbTrangThai = new javax.swing.JComboBox<>();
+        cbFilterTrangThai = new javax.swing.JComboBox<>();
         scrTableKhuyenMai = new javax.swing.JScrollPane();
         tableKhuyenMai = new javax.swing.JTable();
         pnlButton = new javax.swing.JPanel();
@@ -114,14 +65,14 @@ public class PanelDanhSachKhuyenMai extends javax.swing.JPanel {
             }
         });
 
-        cbTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Trạng thái", "Còn áp dụng", "Ngưng áp dụng", " " }));
+        cbFilterTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Trạng thái", "Còn áp dụng", "Ngưng áp dụng", " " }));
 
         javax.swing.GroupLayout pnlThongTinKhuyenMaiLayout = new javax.swing.GroupLayout(pnlThongTinKhuyenMai);
         pnlThongTinKhuyenMai.setLayout(pnlThongTinKhuyenMaiLayout);
         pnlThongTinKhuyenMaiLayout.setHorizontalGroup(
             pnlThongTinKhuyenMaiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlThongTinKhuyenMaiLayout.createSequentialGroup()
-                .addComponent(cbTrangThai, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(cbFilterTrangThai, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(txtTimKiem, javax.swing.GroupLayout.DEFAULT_SIZE, 750, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -136,7 +87,7 @@ public class PanelDanhSachKhuyenMai extends javax.swing.JPanel {
                             .addGap(0, 1, Short.MAX_VALUE)
                             .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addComponent(btnTimKiem, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE))
-                    .addComponent(cbTrangThai, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cbFilterTrangThai, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 14, Short.MAX_VALUE))
         );
 
@@ -190,7 +141,7 @@ public class PanelDanhSachKhuyenMai extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnTimKiem;
     private javax.swing.JButton btnTrangChu;
-    private javax.swing.JComboBox<String> cbTrangThai;
+    private javax.swing.JComboBox<String> cbFilterTrangThai;
     private javax.swing.JLabel lblTitle;
     private javax.swing.JPanel pnlButton;
     private javax.swing.JPanel pnlHeader;

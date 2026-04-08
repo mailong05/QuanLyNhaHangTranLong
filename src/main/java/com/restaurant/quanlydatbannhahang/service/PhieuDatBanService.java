@@ -2,20 +2,30 @@ package com.restaurant.quanlydatbannhahang.service;
 
 import com.restaurant.quanlydatbannhahang.dao.PhieuDatBanDAO;
 import com.restaurant.quanlydatbannhahang.dao.ChiTietPhieuDatBanDAO;
+import com.restaurant.quanlydatbannhahang.dao.KhachHangDAO;
+import com.restaurant.quanlydatbannhahang.dao.BanDAO;
 import com.restaurant.quanlydatbannhahang.entity.PhieuDatBan;
 import com.restaurant.quanlydatbannhahang.entity.ChiTietPhieuDatBan;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiPhieuDat;
+import com.restaurant.quanlydatbannhahang.entity.KhachHang;
+import com.restaurant.quanlydatbannhahang.entity.Ban;
+import com.restaurant.quanlydatbannhahang.session.SessionManager;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class PhieuDatBanService {
     private PhieuDatBanDAO phieuDatBanDAO;
     private ChiTietPhieuDatBanDAO chiTietPhieuDatBanDAO;
+    private KhachHangDAO khachHangDAO;
+    private BanDAO banDAO;
 
     public PhieuDatBanService() {
         this.phieuDatBanDAO = new PhieuDatBanDAO();
         this.chiTietPhieuDatBanDAO = new ChiTietPhieuDatBanDAO();
+        this.khachHangDAO = new KhachHangDAO();
+        this.banDAO = new BanDAO();
     }
 
     /**
@@ -185,5 +195,76 @@ public class PhieuDatBanService {
      */
     public boolean existPhieu(String maPhieu) {
         return getPhieuDatBanTheoMa(maPhieu) != null;
+    }
+
+    /**
+     * Tạo phiếu đặt bàn trước mới từ DatBanTruocDialog
+     * Bao gồm: validate, tạo khách hàng (nếu cần), tạo phiếu, tạo chi tiết
+     */
+    public String taoPhieuDatBanMoi(String soDienThoai, int soLuongNguoi,
+            LocalDateTime thoiGianDen, String ghiChu) {
+
+        // ===== BƯỚC 1: VALIDATION =====
+        String validationError = DatBanTruocService.validatePhieuDatBan(soDienThoai, String.valueOf(soLuongNguoi));
+        if (validationError != null) {
+            throw new IllegalArgumentException(validationError);
+        }
+
+        if (thoiGianDen == null) {
+            throw new IllegalArgumentException("Vui lòng chọn thời gian đến!");
+        }
+
+        if (LocalDateTime.now().isAfter(thoiGianDen)) {
+            throw new IllegalArgumentException("Thời gian đến không được trong quá khứ!");
+        }
+
+        try {
+            // ===== BƯỚC 2: TÌM HOẶC TẠO KHÁCH HÀNG =====
+            KhachHang khachHang = khachHangDAO.getKhachHangTheoSDT(soDienThoai);
+
+            if (khachHang == null) {
+                // Tạo khách hàng mới
+                khachHang = new KhachHang();
+                khachHang.setHoTen("Khách hàng " + soDienThoai);
+                khachHang.setSdt(soDienThoai);
+                khachHang.setDiemTichLuy(0);
+                khachHang.setLoaiThanhVien("THUONG");
+            }
+
+            // ===== BƯỚC 3: TẠO PHIẾU ĐẶT BÀN =====
+            PhieuDatBan phieuDatBan = new PhieuDatBan();
+            phieuDatBan.setKhachHang(khachHang);
+            phieuDatBan.setNhanVien(SessionManager.getCurrentNhanVien());
+            phieuDatBan.setThoiGianDen(thoiGianDen);
+            phieuDatBan.setSoLuongNguoi(soLuongNguoi);
+            phieuDatBan.setGhiChu(ghiChu != null && !ghiChu.isEmpty() ? ghiChu : "");
+            phieuDatBan.setTrangThai(TrangThaiPhieuDat.CHO_XAC_NHAN);
+
+            // Lưu phiếu đặt bàn
+            boolean phieuSaved = phieuDatBanDAO.themPhieuDatBan(phieuDatBan);
+
+            if (!phieuSaved) {
+                throw new RuntimeException("Không thể lưu phiếu đặt bàn!");
+            }
+
+            // Lấy mã phiếu đặt vừa tạo
+            String maPhieuDat = phieuDatBan.getMaPhieuDat();
+            if (maPhieuDat == null || maPhieuDat.isEmpty()) {
+                // Nếu chưa có, tìm phiếu mới nhất (fallback)
+                List<PhieuDatBan> allPhieus = phieuDatBanDAO.getAllPhieuDatBan();
+                if (!allPhieus.isEmpty()) {
+                    PhieuDatBan lastPhieu = allPhieus.get(allPhieus.size() - 1);
+                    maPhieuDat = lastPhieu.getMaPhieuDat();
+                }
+            }
+
+            System.out.println("✓ Tạo phiếu đặt bàn thành công! Mã: " + maPhieuDat);
+            return maPhieuDat;
+
+        } catch (IllegalArgumentException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException("Lỗi khi tạo phiếu đặt bàn: " + e.getMessage(), e);
+        }
     }
 }

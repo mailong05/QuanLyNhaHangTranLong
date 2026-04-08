@@ -13,9 +13,9 @@ public class LuaChonDatBanDialog extends javax.swing.JDialog {
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
     // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
 
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -33,7 +33,9 @@ public class LuaChonDatBanDialog extends javax.swing.JDialog {
         jLabel1.setText("VUI LÒNG CHỌN PHƯƠNG THỨC ĐẶT BÀN");
         jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 10, -1, 50));
 
+        btnDatBanTruoc.setBackground(new java.awt.Color(204, 204, 204));
         btnDatBanTruoc.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnDatBanTruoc.setForeground(new java.awt.Color(0, 0, 0));
         btnDatBanTruoc.setText("ĐẶT BÀN TRƯỚC");
         btnDatBanTruoc.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -42,8 +44,15 @@ public class LuaChonDatBanDialog extends javax.swing.JDialog {
         });
         jPanel2.add(btnDatBanTruoc, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 90, 180, 40));
 
+        btnDatBanDungNgay.setBackground(new java.awt.Color(204, 204, 204));
         btnDatBanDungNgay.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnDatBanDungNgay.setForeground(new java.awt.Color(0, 0, 0));
         btnDatBanDungNgay.setText("ĐẶT BÀN DÙNG NGAY");
+        btnDatBanDungNgay.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDatBanDungNgayActionPerformed(evt);
+            }
+        });
         jPanel2.add(btnDatBanDungNgay, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 90, 190, 40));
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 480, 200));
@@ -51,8 +60,22 @@ public class LuaChonDatBanDialog extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnDatBanTruocActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnDatBanTruocActionPerformed
+    private void btnDatBanDungNgayActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnDatBanDungNgayActionPerformed
         // TODO add your handling code here:
+
+    }// GEN-LAST:event_btnDatBanDungNgayActionPerformed
+
+    private void btnDatBanTruocActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnDatBanTruocActionPerformed
+        java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
+        DatBanTruocDialog dialog = new DatBanTruocDialog(parentFrame, true);
+        dialog.setVisible(true);
+
+        // Sau khi dialog đóng, kiểm tra xem đặt bàn có thành công không
+        if (dialog.isDatBanThanhCong()) {
+            // Nếu thành công, đóng luôn dialog lựa chọn
+            this.dispose();
+        }
+        // Nếu không thành công (người dùng bấn X), vẫn giữ dialog lựa chọn mở
     }// GEN-LAST:event_btnDatBanTruocActionPerformed
 
     /**

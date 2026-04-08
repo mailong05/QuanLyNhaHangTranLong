@@ -32,8 +32,8 @@ public class ForgetPasswordForm extends javax.swing.JFrame {
         jSeparator4 = new javax.swing.JSeparator();
         btnCancel = new javax.swing.JButton();
         txtPhone = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        lblPhone = new javax.swing.JLabel();
+        lblUsername = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -55,83 +55,83 @@ public class ForgetPasswordForm extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(255, 251, 233));
         jPanel2.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
 
-        clickCLose.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
         clickCLose.setText("X");
         clickCLose.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        clickCLose.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
         clickCLose.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 clickCLoseMouseClicked(evt);
             }
         });
 
-        clickMinimize.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
         clickMinimize.setText("-");
         clickMinimize.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        clickMinimize.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
         clickMinimize.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 clickMinimizeMouseClicked(evt);
             }
         });
 
-        txtUsername.setBackground(new java.awt.Color(255, 251, 233));
         txtUsername.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        txtUsername.setForeground(new java.awt.Color(102, 102, 102));
+        txtUsername.setBackground(new java.awt.Color(255, 251, 233));
         txtUsername.setBorder(null);
         txtUsername.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        txtUsername.setForeground(new java.awt.Color(102, 102, 102));
         txtUsername.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtUsernameActionPerformed(evt);
             }
         });
 
-        btnContinue.setBackground(new java.awt.Color(250, 249, 235));
-        btnContinue.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnContinue.setText("Tiếp tục");
+        btnContinue.setBackground(new java.awt.Color(250, 249, 235));
         btnContinue.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102)));
         btnContinue.setContentAreaFilled(false);
         btnContinue.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnContinue.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnContinue.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnContinueActionPerformed(evt);
             }
         });
 
+        jLabel6.setText("QUÊN MẬT KHẨU");
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(102, 102, 102));
-        jLabel6.setText("QUÊN MẬT KHẨU");
 
         jSeparator3.setForeground(new java.awt.Color(102, 102, 102));
 
         jSeparator4.setForeground(new java.awt.Color(102, 102, 102));
 
-        btnCancel.setBackground(new java.awt.Color(250, 249, 235));
-        btnCancel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnCancel.setText("Quay lại");
+        btnCancel.setBackground(new java.awt.Color(250, 249, 235));
         btnCancel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102)));
         btnCancel.setContentAreaFilled(false);
         btnCancel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnCancel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelActionPerformed(evt);
             }
         });
 
-        txtPhone.setBackground(new java.awt.Color(255, 251, 233));
         txtPhone.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        txtPhone.setForeground(new java.awt.Color(102, 102, 102));
+        txtPhone.setBackground(new java.awt.Color(255, 251, 233));
         txtPhone.setBorder(null);
         txtPhone.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        txtPhone.setForeground(new java.awt.Color(102, 102, 102));
         txtPhone.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtPhoneActionPerformed(evt);
             }
         });
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel2.setText("Số điện thoại:");
+        lblPhone.setText("Số điện thoại:");
+        lblPhone.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel3.setText("Username:");
+        lblUsername.setText("Username:");
+        lblUsername.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -156,8 +156,8 @@ public class ForgetPasswordForm extends javax.swing.JFrame {
                                 .addComponent(btnContinue, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel3))
+                                    .addComponent(lblPhone)
+                                    .addComponent(lblUsername))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(txtUsername)
@@ -177,7 +177,7 @@ public class ForgetPasswordForm extends javax.swing.JFrame {
                 .addComponent(jLabel6)
                 .addGap(47, 47, 47)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel3)
+                    .addComponent(lblUsername)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, 0)
@@ -188,7 +188,7 @@ public class ForgetPasswordForm extends javax.swing.JFrame {
                         .addComponent(txtPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, 0)
                         .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 3, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel2))
+                    .addComponent(lblPhone))
                 .addGap(27, 27, 27)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnContinue, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -253,15 +253,15 @@ public class ForgetPasswordForm extends javax.swing.JFrame {
     private javax.swing.JLabel clickCLose;
     private javax.swing.JLabel clickMinimize;
     private javax.swing.JFileChooser jFileChooser1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
     private javax.swing.JLabel lblLogo;
+    private javax.swing.JLabel lblPhone;
     private javax.swing.JLabel lblRestaurantName;
+    private javax.swing.JLabel lblUsername;
     private javax.swing.JTextField txtPhone;
     private javax.swing.JTextField txtUsername;
     // End of variables declaration//GEN-END:variables
