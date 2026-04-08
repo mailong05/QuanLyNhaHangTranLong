@@ -9,9 +9,47 @@ public class PanelDanhSachKhuVuc extends javax.swing.JPanel {
 
     public PanelDanhSachKhuVuc() {
         initComponents();
+        customUI();
     }
 
-    
+    private void customUI() {
+        // Placeholder cho txtTimKiem
+        setupPlaceholder(txtTimKiem, "Nhập tên hoặc mã khu vực");
+    }
+
+    /**
+     * Tao placeholder cho TextField
+     * Khi focus vao, placeholder bien mat
+     * Khi focus out va trong, placeholder xuat hien lai
+     */
+    private void setupPlaceholder(JTextField textField, String placeholder) {
+        Color placeholderColor = new Color(153, 153, 153);
+        Color textColor = new Color(0, 0, 0);
+
+        // Set text mac dinh va mau
+        textField.setText(placeholder);
+        textField.setForeground(placeholderColor);
+
+        textField.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                // Khi focus vao, neu la placeholder thi xoa
+                if (textField.getText().equals(placeholder)) {
+                    textField.setText("");
+                    textField.setForeground(textColor);
+                }
+            }
+
+            @Override
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                // Khi focus out, neu trong thi hien thi placeholder
+                if (textField.getText().isEmpty()) {
+                    textField.setText(placeholder);
+                    textField.setForeground(placeholderColor);
+                }
+            }
+        });
+    }
 
     private void applyCardStyle(JPanel panel, int radius) {
         panel.setOpaque(false);
@@ -26,9 +64,10 @@ public class PanelDanhSachKhuVuc extends javax.swing.JPanel {
             }
         });
     }
-    
+
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         pnlHeader = new javax.swing.JPanel();
@@ -57,40 +96,41 @@ public class PanelDanhSachKhuVuc extends javax.swing.JPanel {
         javax.swing.GroupLayout pnlThongTinKhuVucLayout = new javax.swing.GroupLayout(pnlThongTinKhuVuc);
         pnlThongTinKhuVuc.setLayout(pnlThongTinKhuVucLayout);
         pnlThongTinKhuVucLayout.setHorizontalGroup(
-            pnlThongTinKhuVucLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlThongTinKhuVucLayout.createSequentialGroup()
-                .addComponent(txtTimKiem, javax.swing.GroupLayout.DEFAULT_SIZE, 863, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
+                pnlThongTinKhuVucLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(pnlThongTinKhuVucLayout.createSequentialGroup()
+                                .addComponent(txtTimKiem, javax.swing.GroupLayout.DEFAULT_SIZE, 863, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 129,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)));
         pnlThongTinKhuVucLayout.setVerticalGroup(
-            pnlThongTinKhuVucLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlThongTinKhuVucLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(pnlThongTinKhuVucLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
+                pnlThongTinKhuVucLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(pnlThongTinKhuVucLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(pnlThongTinKhuVucLayout
+                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 0, Short.MAX_VALUE)));
 
         pnlHeader.add(pnlThongTinKhuVuc, java.awt.BorderLayout.PAGE_END);
 
         add(pnlHeader, java.awt.BorderLayout.PAGE_START);
 
         tableKhuVuc.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+                new Object[][] {
 
-            },
-            new String [] {
-                "Mã khu vực", "Tên khu vực"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false
+                },
+                new String[] {
+                        "Mã khu vực", "Tên khu vực"
+                }) {
+            boolean[] canEdit = new boolean[] {
+                    false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
+                return canEdit[columnIndex];
             }
         });
         tableKhuVuc.setRowHeight(35);
@@ -107,7 +147,6 @@ public class PanelDanhSachKhuVuc extends javax.swing.JPanel {
 
         add(pnlButton, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnTimKiem;

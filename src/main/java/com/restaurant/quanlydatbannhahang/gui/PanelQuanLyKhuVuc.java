@@ -9,9 +9,47 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel {
 
     public PanelQuanLyKhuVuc() {
         initComponents();
+        customUI();
     }
 
-    
+    private void customUI() {
+        // Placeholder cho txtTimKiem
+        setupPlaceholder(txtTimKiem, "Nhập tên hoặc mã khu vực");
+    }
+
+    /**
+     * Tao placeholder cho TextField
+     * Khi focus vao, placeholder bien mat
+     * Khi focus out va trong, placeholder xuat hien lai
+     */
+    private void setupPlaceholder(JTextField textField, String placeholder) {
+        Color placeholderColor = new Color(153, 153, 153);
+        Color textColor = new Color(0, 0, 0);
+
+        // Set text mac dinh va mau
+        textField.setText(placeholder);
+        textField.setForeground(placeholderColor);
+
+        textField.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                // Khi focus vao, neu la placeholder thi xoa
+                if (textField.getText().equals(placeholder)) {
+                    textField.setText("");
+                    textField.setForeground(textColor);
+                }
+            }
+
+            @Override
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                // Khi focus out, neu trong thi hien thi placeholder
+                if (textField.getText().isEmpty()) {
+                    textField.setText(placeholder);
+                    textField.setForeground(placeholderColor);
+                }
+            }
+        });
+    }
 
     private void applyCardStyle(JPanel panel, int radius) {
         panel.setOpaque(false);
@@ -26,9 +64,10 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel {
             }
         });
     }
-    
+
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         pnlHeader = new javax.swing.JPanel();
@@ -88,59 +127,76 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel {
         javax.swing.GroupLayout pnlThongTinKhuVucLayout = new javax.swing.GroupLayout(pnlThongTinKhuVuc);
         pnlThongTinKhuVuc.setLayout(pnlThongTinKhuVucLayout);
         pnlThongTinKhuVucLayout.setHorizontalGroup(
-            pnlThongTinKhuVucLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlThongTinKhuVucLayout.createSequentialGroup()
-                .addGroup(pnlThongTinKhuVucLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlThongTinKhuVucLayout.createSequentialGroup()
-                        .addComponent(txtTimKiem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(pnlThongTinKhuVucLayout.createSequentialGroup()
-                        .addGroup(pnlThongTinKhuVucLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblTenKhuVuc)
-                            .addComponent(lblMaKhuVuc))
-                        .addGap(25, 25, 25)
-                        .addGroup(pnlThongTinKhuVucLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtTenKhuVuc, javax.swing.GroupLayout.PREFERRED_SIZE, 390, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtMaKhuVuc, javax.swing.GroupLayout.PREFERRED_SIZE, 390, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 504, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
+                pnlThongTinKhuVucLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(pnlThongTinKhuVucLayout.createSequentialGroup()
+                                .addGroup(pnlThongTinKhuVucLayout
+                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(pnlThongTinKhuVucLayout.createSequentialGroup()
+                                                .addComponent(txtTimKiem, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                        javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 123,
+                                                        javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(pnlThongTinKhuVucLayout.createSequentialGroup()
+                                                .addGroup(pnlThongTinKhuVucLayout
+                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(lblTenKhuVuc)
+                                                        .addComponent(lblMaKhuVuc))
+                                                .addGap(25, 25, 25)
+                                                .addGroup(pnlThongTinKhuVucLayout
+                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(txtTenKhuVuc,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE, 390,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(txtMaKhuVuc,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE, 390,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGap(0, 504, Short.MAX_VALUE)))
+                                .addContainerGap()));
         pnlThongTinKhuVucLayout.setVerticalGroup(
-            pnlThongTinKhuVucLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlThongTinKhuVucLayout.createSequentialGroup()
-                .addGroup(pnlThongTinKhuVucLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtMaKhuVuc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblMaKhuVuc, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(pnlThongTinKhuVucLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtTenKhuVuc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblTenKhuVuc, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(pnlThongTinKhuVucLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, 0))
-        );
+                pnlThongTinKhuVucLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(pnlThongTinKhuVucLayout.createSequentialGroup()
+                                .addGroup(pnlThongTinKhuVucLayout
+                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(txtMaKhuVuc, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(lblMaKhuVuc, javax.swing.GroupLayout.PREFERRED_SIZE, 26,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(pnlThongTinKhuVucLayout
+                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(txtTenKhuVuc, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(lblTenKhuVuc, javax.swing.GroupLayout.PREFERRED_SIZE, 26,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(pnlThongTinKhuVucLayout
+                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 0, 0)));
 
         pnlHeader.add(pnlThongTinKhuVuc, java.awt.BorderLayout.PAGE_END);
 
         add(pnlHeader, java.awt.BorderLayout.PAGE_START);
 
         tableKhuVuc.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+                new Object[][] {
 
-            },
-            new String [] {
-                "Mã khu vực", "Tên khu vực"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false
+                },
+                new String[] {
+                        "Mã khu vực", "Tên khu vực"
+                }) {
+            boolean[] canEdit = new boolean[] {
+                    false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
+                return canEdit[columnIndex];
             }
         });
         tableKhuVuc.setRowHeight(35);
@@ -185,18 +241,17 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel {
         add(pnlButton, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCapNhatActionPerformed
+    private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCapNhatActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnCapNhatActionPerformed
+    }// GEN-LAST:event_btnCapNhatActionPerformed
 
-    private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
+    private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnThemActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnThemActionPerformed
+    }// GEN-LAST:event_btnThemActionPerformed
 
-    private void txtMaKhuVucActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMaKhuVucActionPerformed
+    private void txtMaKhuVucActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtMaKhuVucActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtMaKhuVucActionPerformed
-
+    }// GEN-LAST:event_txtMaKhuVucActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCapNhat;

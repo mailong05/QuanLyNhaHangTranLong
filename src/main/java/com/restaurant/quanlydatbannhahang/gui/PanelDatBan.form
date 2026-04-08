@@ -58,7 +58,7 @@
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="cbFilterTrangThai" min="-2" pref="100" max="-2" attributes="0"/>
                       <EmptySpace pref="60" max="32767" attributes="0"/>
-                      <Component id="txtSearch" min="-2" pref="509" max="-2" attributes="0"/>
+                      <Component id="txtTimKiem" min="-2" pref="509" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="btnSearch" min="-2" pref="103" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
@@ -89,7 +89,7 @@
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="txtSearch" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
+                                      <Component id="txtTimKiem" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
                                       <Component id="btnSearch" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="103" alignment="1" groupAlignment="3" attributes="0">
@@ -117,9 +117,9 @@
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JTextField" name="txtSearch">
+            <Component class="javax.swing.JTextField" name="txtTimKiem">
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtSearchActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtTimKiemActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JButton" name="btnSearch">

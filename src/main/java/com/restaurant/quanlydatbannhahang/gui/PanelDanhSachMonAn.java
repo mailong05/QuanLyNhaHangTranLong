@@ -15,9 +15,47 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
      */
     public PanelDanhSachMonAn() {
         initComponents();
+        customUI();
     }
 
-    
+    private void customUI() {
+        // Placeholder cho txtTimKiem
+        setupPlaceholder(txtTimKiem, "Nhập tên món ăn");
+    }
+
+    /**
+     * Tao placeholder cho TextField
+     * Khi focus vao, placeholder bien mat
+     * Khi focus out va trong, placeholder xuat hien lai
+     */
+    private void setupPlaceholder(JTextField textField, String placeholder) {
+        Color placeholderColor = new Color(153, 153, 153);
+        Color textColor = new Color(0, 0, 0);
+
+        // Set text mac dinh va mau
+        textField.setText(placeholder);
+        textField.setForeground(placeholderColor);
+
+        textField.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                // Khi focus vao, neu la placeholder thi xoa
+                if (textField.getText().equals(placeholder)) {
+                    textField.setText("");
+                    textField.setForeground(textColor);
+                }
+            }
+
+            @Override
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                // Khi focus out, neu trong thi hien thi placeholder
+                if (textField.getText().isEmpty()) {
+                    textField.setText(placeholder);
+                    textField.setForeground(placeholderColor);
+                }
+            }
+        });
+    }
 
     private void applyCardStyle(JPanel panel, int radius) {
         panel.setOpaque(false);
@@ -32,9 +70,10 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
             }
         });
     }
-    
+
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         pnlHeader = new javax.swing.JPanel();
@@ -71,7 +110,8 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
             }
         });
 
-        cbFilterTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbFilterTrangThai.setModel(
+                new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cbFilterTrangThai.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbFilterTrangThaiActionPerformed(evt);
@@ -81,26 +121,29 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
         javax.swing.GroupLayout pnlThongTinKhuyenMaiLayout = new javax.swing.GroupLayout(pnlThongTinKhuyenMai);
         pnlThongTinKhuyenMai.setLayout(pnlThongTinKhuyenMaiLayout);
         pnlThongTinKhuyenMaiLayout.setHorizontalGroup(
-            pnlThongTinKhuyenMaiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlThongTinKhuyenMaiLayout.createSequentialGroup()
-                .addComponent(cbFilterTrangThai, 0, 140, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 756, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
+                pnlThongTinKhuyenMaiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(pnlThongTinKhuyenMaiLayout.createSequentialGroup()
+                                .addComponent(cbFilterTrangThai, 0, 140, Short.MAX_VALUE)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 756,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 123,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)));
         pnlThongTinKhuyenMaiLayout.setVerticalGroup(
-            pnlThongTinKhuyenMaiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlThongTinKhuyenMaiLayout.createSequentialGroup()
-                .addGroup(pnlThongTinKhuyenMaiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(pnlThongTinKhuyenMaiLayout.createSequentialGroup()
-                .addGap(1, 1, 1)
-                .addComponent(cbFilterTrangThai)
-                .addContainerGap())
-        );
+                pnlThongTinKhuyenMaiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(pnlThongTinKhuyenMaiLayout.createSequentialGroup()
+                                .addGroup(pnlThongTinKhuyenMaiLayout
+                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(pnlThongTinKhuyenMaiLayout.createSequentialGroup()
+                                .addGap(1, 1, 1)
+                                .addComponent(cbFilterTrangThai)
+                                .addContainerGap()));
 
         pnlHeader.add(pnlThongTinKhuyenMai, java.awt.BorderLayout.PAGE_END);
 
@@ -113,19 +156,18 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
         });
 
         tableMonAn.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+                new Object[][] {
 
-            },
-            new String [] {
-                "Mã món", "Tên món", "Đơn giá", "Đơn vị tính", "Mã loại", "Trạng thái", "Hình ảnh"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                },
+                new String[] {
+                        "Mã món", "Tên món", "Đơn giá", "Đơn vị tính", "Mã loại", "Trạng thái", "Hình ảnh"
+                }) {
+            boolean[] canEdit = new boolean[] {
+                    false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
+                return canEdit[columnIndex];
             }
         });
         tableMonAn.setRowHeight(35);
@@ -143,18 +185,17 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
         add(pnlButton, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void scrTableMonAnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_scrTableMonAnMouseClicked
+    private void scrTableMonAnMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_scrTableMonAnMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_scrTableMonAnMouseClicked
+    }// GEN-LAST:event_scrTableMonAnMouseClicked
 
-    private void cbFilterTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbFilterTrangThaiActionPerformed
+    private void cbFilterTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterTrangThaiActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cbFilterTrangThaiActionPerformed
+    }// GEN-LAST:event_cbFilterTrangThaiActionPerformed
 
-    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
+    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTimKiemActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnTimKiemActionPerformed
-
+    }// GEN-LAST:event_btnTimKiemActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnTimKiem;
