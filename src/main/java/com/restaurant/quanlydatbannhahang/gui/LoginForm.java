@@ -392,7 +392,7 @@ public class LoginForm extends javax.swing.JFrame {
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnLoginActionPerformed
         String user = txtUsername.getText().trim();
         String pass = String.valueOf(txtPassword.getPassword()).trim();
-
+        System.out.println(user + pass);
         // Validate input
         if (user.isEmpty() || user.equals("Username")) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập tên đăng nhập!", "Thông báo",
