@@ -19,56 +19,42 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel {
     }
 
     private void customUI() {
-        // 1. Màu nền chủ đạo
-        setBackground(new Color(255, 251, 233));
-        
-        // 2. Tùy chỉnh các nút bấm
-        JButton[] buttons = {btnTimKiem, btnThem, btnXoa, btnCapNhat, btnTrangChu};
-        for (JButton btn : buttons) {
-            btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-            btn.setFocusPainted(false);
-        }
-        
-        // 3. Tùy chỉnh ScrollPane và Bảng
-        scrTableMonAn.setBorder(BorderFactory.createLineBorder(new Color(200, 190, 170), 1));
-        scrTableMonAn.setOpaque(false);
-        scrTableMonAn.getViewport().setOpaque(false);
-        
-        // Khử góc trắng ScrollBar
-        JPanel corner = new JPanel();
-        corner.setBackground(new Color(255, 251, 233));
-        scrTableMonAn.setCorner(JScrollPane.UPPER_RIGHT_CORNER, corner);
+        // Placeholder cho txtTimKiem
+        setupPlaceholder(txtTimKiem, "Nhập tên món ăn");
+    }
 
-        // 4. Định dạng Table hiện đại
-        tableMonAn.setShowGrid(false);
-        tableMonAn.setIntercellSpacing(new Dimension(0, 0));
-        tableMonAn.setRowHeight(40);
-        tableMonAn.setSelectionBackground(new Color(245, 240, 220));
+    /**
+     * Tao placeholder cho TextField
+     * Khi focus vao, placeholder bien mat
+     * Khi focus out va trong, placeholder xuat hien lai
+     */
+    private void setupPlaceholder(JTextField textField, String placeholder) {
+        Color placeholderColor = new Color(153, 153, 153);
+        Color textColor = new Color(0, 0, 0);
 
-        // Header Table
-        tableMonAn.getTableHeader().setPreferredSize(new Dimension(tableMonAn.getTableHeader().getWidth(), 45));
-        tableMonAn.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
+        // Set text mac dinh va mau
+        textField.setText(placeholder);
+        textField.setForeground(placeholderColor);
+
+        textField.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                label.setBackground(new Color(255, 251, 233));
-                label.setForeground(new Color(148, 134, 111));
-                label.setFont(new Font("Segoe UI", Font.BOLD, 13));
-                label.setHorizontalAlignment(JLabel.CENTER);
-                label.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(220, 210, 190)));
-                return label;
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                // Khi focus vao, neu la placeholder thi xoa
+                if (textField.getText().equals(placeholder)) {
+                    textField.setText("");
+                    textField.setForeground(textColor);
+                }
+            }
+
+            @Override
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                // Khi focus out, neu trong thi hien thi placeholder
+                if (textField.getText().isEmpty()) {
+                    textField.setText(placeholder);
+                    textField.setForeground(placeholderColor);
+                }
             }
         });
-
-        // Căn giữa nội dung các cột trong bảng
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        for (int i = 0; i < tableMonAn.getColumnCount(); i++) {
-            tableMonAn.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
-        }
-
-        // 5. Bo góc cho khu vực nhập liệu
-        applyCardStyle(pnlThongTinKhuyenMai, 20);
     }
 
     private void applyCardStyle(JPanel panel, int radius) {
@@ -84,8 +70,9 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel {
             }
         });
     }
-    
+
     @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -130,36 +117,39 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel {
 
         pnlThongTinKhuyenMai.setBackground(new java.awt.Color(255, 251, 233));
 
-        lblMaMon.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblMaMon.setText("Mã món:");
+        lblMaMon.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         txtMaMon.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtMaMon.setPreferredSize(new java.awt.Dimension(64, 35));
         txtMaMon.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtMaMonActionPerformed(evt);
             }
         });
 
-        lblTenMon.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblTenMon.setText("Tên món:");
+        lblTenMon.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         txtTenMon.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtTenMon.setPreferredSize(new java.awt.Dimension(64, 35));
         txtTenMon.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtTenMonActionPerformed(evt);
             }
         });
 
-        lblLoaiMon.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblLoaiMon.setText("Loại món:");
+        lblLoaiMon.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
-        lblTrangThai.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblTrangThai.setText("Trạng thái:");
+        lblTrangThai.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
-        lblDonGia.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblDonGia.setText("Đơn giá:");
+        lblDonGia.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         txtDonGia.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtDonGia.setPreferredSize(new java.awt.Dimension(64, 35));
         txtDonGia.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtDonGiaActionPerformed(evt);
@@ -168,21 +158,22 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel {
 
         txtTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
-        btnTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnTimKiem.setText("Tìm kiếm");
+        btnTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnTimKiem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTimKiemActionPerformed(evt);
             }
         });
 
-        lblHinhAnh.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblHinhAnh.setText("Hình ảnh:");
+        lblHinhAnh.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
-        lblDonViTinh.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblDonViTinh.setText("Đơn vị tính:");
+        lblDonViTinh.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         cbDonViTinh.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbDonViTinh.setPreferredSize(new java.awt.Dimension(72, 35));
         cbDonViTinh.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbDonViTinhActionPerformed(evt);
@@ -190,6 +181,7 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel {
         });
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox1.setPreferredSize(new java.awt.Dimension(72, 35));
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox1ActionPerformed(evt);
@@ -197,6 +189,7 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel {
         });
 
         btnChonFileAnh.setText("Chọn ảnh");
+        btnChonFileAnh.setPreferredSize(new java.awt.Dimension(82, 35));
         btnChonFileAnh.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnChonFileAnhActionPerformed(evt);
@@ -204,6 +197,7 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel {
         });
 
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox2.setPreferredSize(new java.awt.Dimension(72, 35));
 
         javax.swing.GroupLayout pnlThongTinKhuyenMaiLayout = new javax.swing.GroupLayout(pnlThongTinKhuyenMai);
         pnlThongTinKhuyenMai.setLayout(pnlThongTinKhuyenMaiLayout);
@@ -235,7 +229,7 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlThongTinKhuyenMaiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jComboBox2, 0, 110, Short.MAX_VALUE)
-                    .addComponent(btnChonFileAnh)
+                    .addComponent(btnChonFileAnh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(0, 333, Short.MAX_VALUE))
             .addGroup(pnlThongTinKhuyenMaiLayout.createSequentialGroup()
@@ -260,7 +254,7 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(pnlThongTinKhuyenMaiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblHinhAnh)
-                            .addComponent(btnChonFileAnh)))
+                            .addComponent(btnChonFileAnh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(pnlThongTinKhuyenMaiLayout.createSequentialGroup()
                         .addGroup(pnlThongTinKhuyenMaiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblMaMon, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -299,12 +293,19 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Mã món", "Tên món", "Đơn giá", "Đơn vị tính", "Mã loại", "Trạng thái", "Hình ảnh"
+                "Hình ảnh", "Mã món", "Tên món", "Đơn giá", "Đơn vị tính", "Mã loại", "Trạng thái"
             }
         ) {
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false, false, false, false
             };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
@@ -352,46 +353,45 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel {
         add(pnlButton, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtMaMonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMaMonActionPerformed
+    private void txtMaMonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtMaMonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtMaMonActionPerformed
+    }// GEN-LAST:event_txtMaMonActionPerformed
 
-    private void txtDonGiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDonGiaActionPerformed
+    private void txtDonGiaActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtDonGiaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtDonGiaActionPerformed
+    }// GEN-LAST:event_txtDonGiaActionPerformed
 
-    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
+    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTimKiemActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnTimKiemActionPerformed
+    }// GEN-LAST:event_btnTimKiemActionPerformed
 
-    private void txtTenMonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTenMonActionPerformed
+    private void txtTenMonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtTenMonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtTenMonActionPerformed
+    }// GEN-LAST:event_txtTenMonActionPerformed
 
-    private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCapNhatActionPerformed
+    private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCapNhatActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnCapNhatActionPerformed
+    }// GEN-LAST:event_btnCapNhatActionPerformed
 
-    private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
+    private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnThemActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnThemActionPerformed
+    }// GEN-LAST:event_btnThemActionPerformed
 
-    private void scrTableMonAnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_scrTableMonAnMouseClicked
+    private void scrTableMonAnMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_scrTableMonAnMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_scrTableMonAnMouseClicked
+    }// GEN-LAST:event_scrTableMonAnMouseClicked
 
-    private void btnChonFileAnhActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChonFileAnhActionPerformed
+    private void btnChonFileAnhActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnChonFileAnhActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnChonFileAnhActionPerformed
+    }// GEN-LAST:event_btnChonFileAnhActionPerformed
 
-    private void cbDonViTinhActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbDonViTinhActionPerformed
+    private void cbDonViTinhActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbDonViTinhActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cbDonViTinhActionPerformed
+    }// GEN-LAST:event_cbDonViTinhActionPerformed
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jComboBox1ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
-
+    }// GEN-LAST:event_jComboBox1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCapNhat;

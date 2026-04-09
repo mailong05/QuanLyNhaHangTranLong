@@ -47,19 +47,19 @@ INSERT INTO NhanVien (maNV, hoTen, sdt, chucVu, ngayVaoLam, luongCoBan, trangTha
 ('NV002', N'Lý Mỹ Lan', '0984445556', N'THU_NGAN', '2025-03-15', 9500000, N'DANG_LAM_VIEC'),
 ('NV003', N'Vũ Đình Phục', '0987778889', N'PHUC_VU', '2025-06-20', 7000000, N'DANG_LAM_VIEC'),
 ('NV004', N'Phạm Văn Chiến', '0980009991', N'BEP', '2024-12-10', 18000000, N'DANG_LAM_VIEC'),
-('NV005', N'Hoàng Thu Ngân', '0982223334', N'THU_NGAN', '2025-07-01', 9000000, N'DANG_LAM_VIEC'),
+('NV005', N'Hoàng Thu', '0982223334', N'THU_NGAN', '2025-07-01', 9000000, N'DANG_LAM_VIEC'),
 ('NV006', N'Nguyễn Văn Chiến', '0985556667', N'PHUC_VU', '2025-08-15', 7000000, N'DANG_LAM_VIEC'),
 ('NV007', N'Trần Văn Nam', '0989990001', N'BEP', '2025-01-20', 15000000, N'DANG_LAM_VIEC'),
 ('NV008', N'Đỗ Hùng Dũng', '0981234567', N'QUAN_LY', '2024-05-05', 20000000, N'DANG_LAM_VIEC');
 
 -- 2.6. BẢNG TÀI KHOẢN
 INSERT INTO TaiKhoan (username, password, maNV, quyenHan) VALUES 
-('admin_hung', '123456', 'NV001', 'MANAGER'),
+('xuanhung', '342334', 'NV001', 'MANAGER'),
 ('thungan_lan', '888888', 'NV002', 'STAFF'),
-('phucvu_dinh', '123456', 'NV003', 'STAFF'),
-('thungan_hoang', '343242', 'NV005', 'STAFF'),
-('phucvu_nguyen', '123456', 'NV006', 'STAFF'),
-('admin_do', '123456', 'NV008', 'MANAGER');
+('dinhphuc', '123456', 'NV003', 'STAFF'),
+('hoangthu', '343242', 'NV005', 'STAFF'),
+('chiennguyen', '222222', 'NV006', 'STAFF'),
+('dodung', '123456', 'NV008', 'MANAGER');
 
 -- 2.7. BẢNG MÓN ĂN (30 Món ăn)
 INSERT INTO MonAn (maMon, tenMon, donGia, donViTinh, tenLoai, trangThai, urlHinhAnh) VALUES 

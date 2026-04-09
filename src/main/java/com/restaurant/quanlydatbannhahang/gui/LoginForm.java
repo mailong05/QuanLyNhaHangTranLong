@@ -190,7 +190,7 @@ public class LoginForm extends javax.swing.JFrame {
             }
         });
 
-        lblForgotPassword.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        lblForgotPassword.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblForgotPassword.setForeground(new java.awt.Color(102, 102, 102));
         lblForgotPassword.setText("Quên mật khẩu?");
         lblForgotPassword.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -392,7 +392,7 @@ public class LoginForm extends javax.swing.JFrame {
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnLoginActionPerformed
         String user = txtUsername.getText().trim();
         String pass = String.valueOf(txtPassword.getPassword()).trim();
-
+        System.out.println(user + pass);
         // Validate input
         if (user.isEmpty() || user.equals("Username")) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập tên đăng nhập!", "Thông báo",

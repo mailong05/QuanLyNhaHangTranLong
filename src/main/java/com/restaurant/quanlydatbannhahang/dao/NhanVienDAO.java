@@ -51,11 +51,95 @@ public class NhanVienDAO {
 				return buildNhanVienFromResultSet(rs);
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
-
 		}
 		return null;
+	}
+
+	public java.util.List<NhanVien> getAllNhanVien() {
+		java.util.List<NhanVien> list = new java.util.ArrayList<>();
+		String sql = "Select * from NhanVien";
+		try {
+			PreparedStatement pstm = connection.prepareStatement(sql);
+			ResultSet rs = pstm.executeQuery();
+			while (rs.next()) {
+				NhanVien nv = buildNhanVienFromResultSet(rs);
+				if (nv != null) {
+					list.add(nv);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	public boolean themNhanVien(NhanVien nhanVien) {
+		String sql = "INSERT INTO NhanVien (maNV, hoTen, sdt, chucVu, ngayVaoLam, luongCoBan, trangThai) "
+				+ "VALUES (?, ?, ?, ?, ?, ?, ?)";
+		try {
+			PreparedStatement pstm = connection.prepareStatement(sql);
+			pstm.setString(1, nhanVien.getMaNV());
+			pstm.setString(2, nhanVien.getHoTen());
+			pstm.setString(3, nhanVien.getSdt());
+			pstm.setString(4, nhanVien.getChucVu().name());
+			pstm.setDate(5, java.sql.Date.valueOf(nhanVien.getNgayVaoLam()));
+			pstm.setDouble(6, nhanVien.getLuongCoBan());
+			pstm.setBoolean(7, nhanVien.getTrangThai() == TrangThaiNhanVien.DANG_LAM_VIEC);
+			return pstm.executeUpdate() > 0;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	public boolean capNhatNhanVien(NhanVien nhanVien) {
+		String sql = "UPDATE NhanVien SET hoTen = ?, sdt = ?, chucVu = ?, ngayVaoLam = ?, luongCoBan = ?, trangThai = ? "
+				+ "WHERE maNV = ?";
+		try {
+			PreparedStatement pstm = connection.prepareStatement(sql);
+			pstm.setString(1, nhanVien.getHoTen());
+			pstm.setString(2, nhanVien.getSdt());
+			pstm.setString(3, nhanVien.getChucVu().name());
+			pstm.setDate(4, java.sql.Date.valueOf(nhanVien.getNgayVaoLam()));
+			pstm.setDouble(5, nhanVien.getLuongCoBan());
+			pstm.setBoolean(6, nhanVien.getTrangThai() == TrangThaiNhanVien.DANG_LAM_VIEC);
+			pstm.setString(7, nhanVien.getMaNV());
+			return pstm.executeUpdate() > 0;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	public boolean xoaNhanVien(String maNV) {
+		String sql = "DELETE FROM NhanVien WHERE maNV = ?";
+		try {
+			PreparedStatement pstm = connection.prepareStatement(sql);
+			pstm.setString(1, maNV);
+			return pstm.executeUpdate() > 0;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	public java.util.List<NhanVien> getNhanVienDangLamViec() {
+		java.util.List<NhanVien> list = new java.util.ArrayList<>();
+		String sql = "Select * from NhanVien where trangThai = 1";
+		try {
+			PreparedStatement pstm = connection.prepareStatement(sql);
+			ResultSet rs = pstm.executeQuery();
+			while (rs.next()) {
+				NhanVien nv = buildNhanVienFromResultSet(rs);
+				if (nv != null) {
+					list.add(nv);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
 	}
 
 }
