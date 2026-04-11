@@ -356,15 +356,15 @@
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                       <Component id="txtMaBan" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="dtpNgayTao" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="txtMaHoaDon" min="-2" pref="228" max="-2" attributes="0"/>
+                                      <Component id="txtMaHoaDon" pref="228" max="32767" attributes="0"/>
+                                      <Component id="txtNgayTao" max="32767" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" alignment="0" attributes="0">
                                           <Component id="lblTenKhachHang" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="txtTenKhachHang" pref="75" max="32767" attributes="0"/>
+                                          <Component id="txtTenKhachHang" pref="74" max="32767" attributes="0"/>
                                       </Group>
                                       <Group type="102" alignment="0" attributes="0">
                                           <Component id="lblMaNhanVien" min="-2" max="-2" attributes="0"/>
@@ -389,9 +389,9 @@
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="3" attributes="0">
                                       <Component id="lblNgayTao" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="dtpNgayTao" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="lblTenKhachHang" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="txtTenKhachHang" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="txtNgayTao" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="3" attributes="0">
@@ -429,8 +429,6 @@
                             <Property name="text" type="java.lang.String" value="M&#xe3; b&#xe0;n:"/>
                           </Properties>
                         </Component>
-                        <Component class="com.github.lgooddatepicker.components.DateTimePicker" name="dtpNgayTao">
-                        </Component>
                         <Component class="javax.swing.JTextField" name="txtMaBan">
                           <Properties>
                             <Property name="editable" type="boolean" value="false"/>
@@ -450,6 +448,11 @@
                           </Properties>
                         </Component>
                         <Component class="javax.swing.JTextField" name="txtTenKhachHang">
+                          <Properties>
+                            <Property name="editable" type="boolean" value="false"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JTextField" name="txtNgayTao">
                           <Properties>
                             <Property name="editable" type="boolean" value="false"/>
                           </Properties>
@@ -531,7 +534,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <Component id="btnTrangChu" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="920" max="32767" attributes="0"/>
+                  <EmptySpace pref="928" max="32767" attributes="0"/>
                   <Component id="btnInHoaDon" min="-2" max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -557,7 +560,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnTrangChu">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Trang ch&#x1ee7;"/>
+            <Property name="text" type="java.lang.String" value="Quay l&#x1ea1;i"/>
           </Properties>
         </Component>
       </SubComponents>

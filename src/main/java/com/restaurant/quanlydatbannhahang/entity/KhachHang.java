@@ -5,14 +5,14 @@ public class KhachHang {
     private String hoTen;
     private String sdt;
     private int diemTichLuy;
-    private String loaiThanhVien;
+    private LoaiThanhVien loaiThanhVien;
 
     // Constructor không tham số
     public KhachHang() {
     }
 
     // Constructor đầy đủ
-    public KhachHang(String maKH, String hoTen, String sdt, int diemTichLuy, String loaiThanhVien) {
+    public KhachHang(String maKH, String hoTen, String sdt, int diemTichLuy, LoaiThanhVien loaiThanhVien) {
         this.maKH = maKH;
         this.hoTen = hoTen;
         this.sdt = sdt;
@@ -54,10 +54,10 @@ public class KhachHang {
     }
 
     public String getLoaiThanhVien() {
-        return loaiThanhVien;
+        return LoaiThanhVien.ĐONG.getDisplayName();
     }
 
-    public void setLoaiThanhVien(String loaiThanhVien) {
+    public void setLoaiThanhVien(LoaiThanhVien loaiThanhVien) {
         this.loaiThanhVien = loaiThanhVien;
     }
 
@@ -68,16 +68,18 @@ public class KhachHang {
     }
 
     public double layPhanTramGiamGia() {
-        if ("VIP".equals(loaiThanhVien)) {
-            return 15.0;
-        } else if ("Thường xuyên".equals(loaiThanhVien)) {
+        if (loaiThanhVien == LoaiThanhVien.VIP) {
             return 10.0;
+        } else if (loaiThanhVien == LoaiThanhVien.VANG) {
+            return 7.0;
         }
+        else if(loaiThanhVien == LoaiThanhVien.BAC)
+        	return 5.0;
         return 0.0;
     }
 
     public boolean kiemTraThanhVienVIP() {
-        return "VIP".equals(loaiThanhVien);
+        return loaiThanhVien == LoaiThanhVien.VIP;
     }
 
     @Override
@@ -112,7 +114,7 @@ public class KhachHang {
                 ", hoTen='" + hoTen + '\'' +
                 ", sdt='" + sdt + '\'' +
                 ", diemTichLuy=" + diemTichLuy +
-                ", loaiThanhVien='" + loaiThanhVien + '\'' +
+                ", loaiThanhVien='" + loaiThanhVien.getDisplayName() + '\'' +
                 '}';
     }
 }

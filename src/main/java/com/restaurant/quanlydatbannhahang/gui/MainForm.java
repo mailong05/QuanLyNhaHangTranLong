@@ -152,6 +152,12 @@ public class MainForm extends javax.swing.JFrame {
         }
     }
 
+    public void openPanelDatMon() {
+        PanelDatMon panel = new PanelDatMon();
+        showPanel(panel);
+        lblTenTrang.setText("ĐẶT MÓN");
+    }
+
     private void paintRoundedPanel(JPanel panel, Color color, boolean forceDown) {
         panel.setOpaque(false);
         panel.setBorder(new AbstractBorder() {

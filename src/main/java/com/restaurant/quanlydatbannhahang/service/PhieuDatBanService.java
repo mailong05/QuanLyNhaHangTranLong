@@ -8,6 +8,7 @@ import com.restaurant.quanlydatbannhahang.entity.PhieuDatBan;
 import com.restaurant.quanlydatbannhahang.entity.ChiTietPhieuDatBan;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiPhieuDat;
 import com.restaurant.quanlydatbannhahang.entity.KhachHang;
+import com.restaurant.quanlydatbannhahang.entity.LoaiThanhVien;
 import com.restaurant.quanlydatbannhahang.entity.Ban;
 import com.restaurant.quanlydatbannhahang.session.SessionManager;
 
@@ -228,7 +229,7 @@ public class PhieuDatBanService {
                 khachHang.setHoTen("Khách hàng " + soDienThoai);
                 khachHang.setSdt(soDienThoai);
                 khachHang.setDiemTichLuy(0);
-                khachHang.setLoaiThanhVien("THUONG");
+                khachHang.setLoaiThanhVien(LoaiThanhVien.ĐONG);
             }
 
             // ===== BƯỚC 3: TẠO PHIẾU ĐẶT BÀN =====

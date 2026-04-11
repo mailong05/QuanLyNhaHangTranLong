@@ -16,7 +16,7 @@ public class PanelDanhSachKhachHang extends javax.swing.JPanel {
 
     private void customUI() {
         // Placeholder cho txtTimKiem
-        setupPlaceholder(txtTimKiem, "Nhap so dien thoai hoac ten");
+        setupPlaceholder(txtTimKiem, "Nhập số điện thoại hoặc tên");
 
         // 1. Màu nền chủ đạo
         setBackground(new Color(255, 251, 233));

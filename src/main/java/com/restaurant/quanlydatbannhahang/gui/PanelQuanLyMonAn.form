@@ -379,7 +379,7 @@
                 <Column editable="false" title="T&#xea;n m&#xf3;n" type="java.lang.String"/>
                 <Column editable="false" title="&#x110;&#x1a1;n gi&#xe1;" type="java.lang.Double"/>
                 <Column editable="false" title="&#x110;&#x1a1;n v&#x1ecb; t&#xed;nh" type="java.lang.String"/>
-                <Column editable="false" title="M&#xe3; lo&#x1ea1;i" type="java.lang.String"/>
+                <Column editable="false" title="Lo&#x1ea1;i m&#xf3;n &#x103;n" type="java.lang.String"/>
                 <Column editable="false" title="Tr&#x1ea1;ng th&#xe1;i" type="java.lang.String"/>
               </Table>
             </Property>

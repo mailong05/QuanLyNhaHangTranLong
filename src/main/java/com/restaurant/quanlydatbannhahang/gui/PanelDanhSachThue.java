@@ -13,7 +13,7 @@ public class PanelDanhSachThue extends javax.swing.JPanel {
 
     private void customUI() {
         // Placeholder cho txtTimKiem
-        setupPlaceholder(txtTimKiem, "Nhập tên thuế");
+        setupPlaceholder(txtTimKiem, "Nhập tên hoặc mã thuế");
     }
 
     /**

@@ -49,11 +49,11 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         txtMaHoaDon = new javax.swing.JTextField();
         lblMaNhanVien = new javax.swing.JLabel();
         lblMaBan = new javax.swing.JLabel();
-        dtpNgayTao = new com.github.lgooddatepicker.components.DateTimePicker();
         txtMaBan = new javax.swing.JTextField();
         txtMaNhanVien = new javax.swing.JTextField();
         lblTenKhachHang = new javax.swing.JLabel();
         txtTenKhachHang = new javax.swing.JTextField();
+        txtNgayTao = new javax.swing.JTextField();
         scrTableThongTinHoaDon = new javax.swing.JScrollPane();
         tableThongTinHoaDon = new javax.swing.JTable();
         panelButton = new javax.swing.JPanel();
@@ -190,6 +190,8 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
 
         txtTenKhachHang.setEditable(false);
 
+        txtNgayTao.setEditable(false);
+
         javax.swing.GroupLayout panelThongTinHoaDonLayout = new javax.swing.GroupLayout(panelThongTinHoaDon);
         panelThongTinHoaDon.setLayout(panelThongTinHoaDonLayout);
         panelThongTinHoaDonLayout.setHorizontalGroup(
@@ -203,14 +205,14 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panelThongTinHoaDonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(txtMaBan)
-                    .addComponent(dtpNgayTao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txtMaHoaDon, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtMaHoaDon, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
+                    .addComponent(txtNgayTao))
                 .addGap(23, 23, 23)
                 .addGroup(panelThongTinHoaDonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelThongTinHoaDonLayout.createSequentialGroup()
                         .addComponent(lblTenKhachHang)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtTenKhachHang, javax.swing.GroupLayout.DEFAULT_SIZE, 75, Short.MAX_VALUE))
+                        .addComponent(txtTenKhachHang, javax.swing.GroupLayout.DEFAULT_SIZE, 74, Short.MAX_VALUE))
                     .addGroup(panelThongTinHoaDonLayout.createSequentialGroup()
                         .addComponent(lblMaNhanVien)
                         .addGap(18, 18, 18)
@@ -229,9 +231,9 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelThongTinHoaDonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblNgayTao)
-                    .addComponent(dtpNgayTao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblTenKhachHang)
-                    .addComponent(txtTenKhachHang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtTenKhachHang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtNgayTao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panelThongTinHoaDonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblMaBan)
@@ -280,7 +282,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
 
         btnInHoaDon.setText("In hóa đơn");
 
-        btnTrangChu.setText("Trang chủ");
+        btnTrangChu.setText("Quay lại");
 
         javax.swing.GroupLayout panelButtonLayout = new javax.swing.GroupLayout(panelButton);
         panelButton.setLayout(panelButtonLayout);
@@ -288,7 +290,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
             panelButtonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelButtonLayout.createSequentialGroup()
                 .addComponent(btnTrangChu)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 920, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 928, Short.MAX_VALUE)
                 .addComponent(btnInHoaDon))
         );
         panelButtonLayout.setVerticalGroup(
@@ -319,7 +321,6 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
     private javax.swing.JButton btnTaoTaiKhoan;
     private javax.swing.JButton btnTimKiem;
     private javax.swing.JButton btnTrangChu;
-    private com.github.lgooddatepicker.components.DateTimePicker dtpNgayTao;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel2;
@@ -345,6 +346,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
     private javax.swing.JTextField txtMaBan;
     private javax.swing.JTextField txtMaHoaDon;
     private javax.swing.JTextField txtMaNhanVien;
+    private javax.swing.JTextField txtNgayTao;
     private javax.swing.JTextField txtTenKhachHang;
     private javax.swing.JTextField txtTimKiem;
     // End of variables declaration//GEN-END:variables

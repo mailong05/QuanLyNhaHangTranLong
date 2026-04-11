@@ -81,7 +81,7 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
         pnlThongTinKhuyenMai = new javax.swing.JPanel();
         txtTimKiem = new javax.swing.JTextField();
         btnTimKiem = new javax.swing.JButton();
-        cbFilterTrangThai = new javax.swing.JComboBox<>();
+        cbFilterLoaiMonAn = new javax.swing.JComboBox<>();
         scrTableMonAn = new javax.swing.JScrollPane();
         tableMonAn = new javax.swing.JTable();
         pnlButton = new javax.swing.JPanel();
@@ -110,10 +110,10 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
             }
         });
 
-        cbFilterTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        cbFilterTrangThai.addActionListener(new java.awt.event.ActionListener() {
+        cbFilterLoaiMonAn.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbFilterLoaiMonAn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbFilterTrangThaiActionPerformed(evt);
+                cbFilterLoaiMonAnActionPerformed(evt);
             }
         });
 
@@ -122,7 +122,7 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
         pnlThongTinKhuyenMaiLayout.setHorizontalGroup(
             pnlThongTinKhuyenMaiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlThongTinKhuyenMaiLayout.createSequentialGroup()
-                .addComponent(cbFilterTrangThai, 0, 140, Short.MAX_VALUE)
+                .addComponent(cbFilterLoaiMonAn, 0, 140, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 756, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -137,7 +137,7 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(pnlThongTinKhuyenMaiLayout.createSequentialGroup()
                 .addGap(1, 1, 1)
-                .addComponent(cbFilterTrangThai)
+                .addComponent(cbFilterLoaiMonAn)
                 .addContainerGap())
         );
 
@@ -156,7 +156,7 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Hình ảnh", "Mã món", "Tên món", "Đơn giá", "Đơn vị tính", "Mã loại", "Trạng thái"
+                "Hình ảnh", "Mã món", "Tên món", "Đơn giá", "Đơn vị tính", "Loại món ăn", "Trạng thái"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -182,6 +182,10 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
         add(pnlButton, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void cbFilterLoaiMonAnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbFilterLoaiMonAnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbFilterLoaiMonAnActionPerformed
+
     private void scrTableMonAnMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_scrTableMonAnMouseClicked
         // TODO add your handling code here:
     }// GEN-LAST:event_scrTableMonAnMouseClicked
@@ -197,7 +201,7 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnTimKiem;
     private javax.swing.JButton btnTrangChu;
-    private javax.swing.JComboBox<String> cbFilterTrangThai;
+    private javax.swing.JComboBox<String> cbFilterLoaiMonAn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel pnlButton;
     private javax.swing.JPanel pnlHeader;
