@@ -26,6 +26,13 @@ public class MainForm extends javax.swing.JFrame {
     private JLabel activeSubLabel = null;
     private PanelTrangChu currentTrangChuPanel = null;
 
+    // Lưu trữ các panel để bảo toàn trạng thái khi chuyển đổi
+    private PanelQuanLyDatBanTruoc panelQuanLyDatBanTruoc = null;
+    private PanelDatMon panelDatMon = null;
+    private PanelLapHoaDon panelLapHoaDon = null;
+    private JPanel lastVisitedPanel = null; // Theo dõi panel trước đó để quay lại
+    private JLabel lastVisitedSubLabel = null; // Lưu menu con để highlight lại
+
     // 2. ĐỊNH NGHĨA MÀU SẮC & GIAO DIỆN CHUẨN
     private final Color COLOR_MENU_BG = new Color(142, 128, 106);
     private final Color COLOR_MENU_HOVER = new Color(165, 150, 125);
@@ -153,9 +160,77 @@ public class MainForm extends javax.swing.JFrame {
     }
 
     public void openPanelDatMon() {
-        PanelDatMon panel = new PanelDatMon();
-        showPanel(panel);
+        // Nếu panelDatMon chưa được tạo, tạo mới
+        if (panelDatMon == null) {
+            panelDatMon = new PanelDatMon();
+        }
+        // Lưu panel hiện tại trước khi chuyển đi, để có thể quay lại
+        lastVisitedPanel = panelQuanLyDatBanTruoc;
+        // Lưu menu con để highlight lại khi quay lại
+        lastVisitedSubLabel = activeSubLabel;
+        showPanel(panelDatMon);
         lblTenTrang.setText("ĐẶT MÓN");
+    }
+
+    public void openPanelLapHoaDon() {
+        // Nếu panelLapHoaDon chưa được tạo, tạo mới
+        if (panelLapHoaDon == null) {
+            panelLapHoaDon = new PanelLapHoaDon();
+        }
+        // Lưu panel hiện tại trước khi chuyển đi
+        // (panelDatMon sẽ được giữ lại để quay lại)
+        showPanel(panelLapHoaDon);
+        lblTenTrang.setText("LẬP HÓA ĐƠN");
+    }
+
+    public void goBackToPanelDatMon() {
+        if (panelDatMon != null) {
+            showPanel(panelDatMon);
+            lblTenTrang.setText("ĐẶT MÓN");
+        }
+    }
+
+    public void goBackToPreviousPanel() {
+        if (lastVisitedPanel != null) {
+            showPanel(lastVisitedPanel);
+
+            // Highlight submenu nếu có
+            if (lastVisitedSubLabel != null) {
+                if (activeSubLabel != null) {
+                    activeSubLabel.setForeground(Color.WHITE);
+                    activeSubLabel.setFont(activeSubLabel.getFont().deriveFont(Font.PLAIN));
+                }
+                activeSubLabel = lastVisitedSubLabel;
+                lastVisitedSubLabel.setForeground(new Color(255, 200, 0));
+                lastVisitedSubLabel.setFont(lastVisitedSubLabel.getFont().deriveFont(Font.BOLD));
+            }
+
+            // Set title dựa trên panel
+            if (lastVisitedPanel == panelTrangChu) {
+                lblTenTrang.setText("TRANG CHỦ");
+            } else if (lastVisitedPanel == panelBan) {
+                lblTenTrang.setText("QUẢN LÝ BÀN");
+            } else if (lastVisitedPanel == panelKhuVuc) {
+                lblTenTrang.setText("KHU VỰC");
+            } else if (lastVisitedPanel == panelNhanVien) {
+                lblTenTrang.setText("NHÂN VIÊN");
+            } else if (lastVisitedPanel == panelKhachHang) {
+                lblTenTrang.setText("KHÁCH HÀNG");
+            } else if (lastVisitedPanel == panelHoaDon) {
+                lblTenTrang.setText("HÓA ĐƠN");
+            } else if (lastVisitedPanel == panelThue) {
+                lblTenTrang.setText("THUẾ");
+            } else if (lastVisitedPanel == PanelMonAn) {
+                lblTenTrang.setText("MÓN ĂN");
+            } else if (lastVisitedPanel == PanelKhuyenMai) {
+                lblTenTrang.setText("KHUYẾN MÃI");
+            } else if (lastVisitedPanel == panelQuanLyDatBanTruoc) {
+                lblTenTrang.setText("QUẢN LÝ BÀN ĐẶT TRƯỚC");
+            }
+        } else {
+            // Nếu không có panel trước đó, về trang chủ
+            goToTrangChuFromPanel();
+        }
     }
 
     private void paintRoundedPanel(JPanel panel, Color color, boolean forceDown) {
@@ -361,7 +436,12 @@ public class MainForm extends javax.swing.JFrame {
                 } else if (lbl == subDanhSachBan) {
                     showPanel(new PanelDanhSachBan());
                 } else if (lbl == subQuanLyDatBanTruoc) {
-                    showPanel(new PanelQuanLyDatBanTruoc());
+                    // Lưu instance để reuse (không tạo mới)
+                    if (panelQuanLyDatBanTruoc == null) {
+                        panelQuanLyDatBanTruoc = new PanelQuanLyDatBanTruoc();
+                    }
+                    lastVisitedSubLabel = lbl;
+                    showPanel(panelQuanLyDatBanTruoc);
                 } else if (lbl == subDanhSachKhuVuc) {
                     showPanel(new PanelDanhSachKhuVuc());
                 } else if (lbl == subDanhSachNhanVien) {

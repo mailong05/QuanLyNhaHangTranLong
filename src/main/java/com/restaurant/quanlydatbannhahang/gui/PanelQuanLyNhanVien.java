@@ -89,6 +89,7 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel {
         cbChucVu = new javax.swing.JComboBox<>();
         dpNgayVaoLam = new com.github.lgooddatepicker.components.DatePicker();
         cbTrangThai = new javax.swing.JComboBox<>();
+        cbFilterChucVu = new javax.swing.JComboBox<>();
         scrTableKhuVuc = new javax.swing.JScrollPane();
         tableKhuVuc = new javax.swing.JTable();
         pnlButton = new javax.swing.JPanel();
@@ -171,12 +172,21 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel {
         cbTrangThai.setMinimumSize(new java.awt.Dimension(72, 30));
         cbTrangThai.setPreferredSize(new java.awt.Dimension(72, 30));
 
+        cbFilterChucVu.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbFilterChucVu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbFilterChucVuActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlThongTinNhanVienLayout = new javax.swing.GroupLayout(pnlThongTinNhanVien);
         pnlThongTinNhanVien.setLayout(pnlThongTinNhanVienLayout);
         pnlThongTinNhanVienLayout.setHorizontalGroup(
             pnlThongTinNhanVienLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlThongTinNhanVienLayout.createSequentialGroup()
-                .addComponent(txtTimKiem)
+            .addGroup(pnlThongTinNhanVienLayout.createSequentialGroup()
+                .addComponent(cbFilterChucVu, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(pnlThongTinNhanVienLayout.createSequentialGroup()
@@ -244,8 +254,9 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
                 .addGroup(pnlThongTinNhanVienLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, 0))
+                    .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbFilterChucVu, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         pnlHeader.add(pnlThongTinNhanVien, java.awt.BorderLayout.PAGE_END);
@@ -283,15 +294,15 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel {
         pnlButton.setBackground(new java.awt.Color(255, 251, 233));
         pnlButton.setLayout(new java.awt.BorderLayout());
 
-        btnTrangChu.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnTrangChu.setText("Trang Chủ");
+        btnTrangChu.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         pnlButton.add(btnTrangChu, java.awt.BorderLayout.WEST);
 
         pnlRightButtons.setBackground(new java.awt.Color(255, 251, 233));
         pnlRightButtons.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 15, 0));
 
-        btnCapNhat.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnCapNhat.setText("Cập nhật");
+        btnCapNhat.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnCapNhat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCapNhatActionPerformed(evt);
@@ -299,12 +310,12 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel {
         });
         pnlRightButtons.add(btnCapNhat);
 
-        btnXoa.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnXoa.setText("Xóa");
+        btnXoa.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         pnlRightButtons.add(btnXoa);
 
-        btnThem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnThem.setText("Thêm");
+        btnThem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnThem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnThemActionPerformed(evt);
@@ -316,6 +327,10 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel {
 
         add(pnlButton, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void cbFilterChucVuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbFilterChucVuActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbFilterChucVuActionPerformed
 
     private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCapNhatActionPerformed
         // TODO add your handling code here:
@@ -344,6 +359,7 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel {
     private javax.swing.JButton btnTrangChu;
     private javax.swing.JButton btnXoa;
     private javax.swing.JComboBox<String> cbChucVu;
+    private javax.swing.JComboBox<String> cbFilterChucVu;
     private javax.swing.JComboBox<String> cbTrangThai;
     private com.github.lgooddatepicker.components.DatePicker dpNgayVaoLam;
     private javax.swing.JLabel lblChucVu;

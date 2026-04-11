@@ -87,11 +87,11 @@ public class PanelDanhSachKhuyenMai extends javax.swing.JPanel {
         setLayout(new java.awt.BorderLayout(0, 15));
 
         pnlHeader.setBackground(new java.awt.Color(255, 251, 233));
-        pnlHeader.setLayout(new java.awt.BorderLayout(0, 15));
+        pnlHeader.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         lblTitle.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         lblTitle.setText("Quản lý các chương trình khuyến mãi và giảm giá  ");
-        pnlHeader.add(lblTitle, java.awt.BorderLayout.WEST);
+        pnlHeader.add(lblTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         pnlThongTinKhuyenMai.setBackground(new java.awt.Color(255, 251, 233));
 
@@ -131,7 +131,7 @@ public class PanelDanhSachKhuyenMai extends javax.swing.JPanel {
                 .addGap(0, 14, Short.MAX_VALUE))
         );
 
-        pnlHeader.add(pnlThongTinKhuyenMai, java.awt.BorderLayout.PAGE_END);
+        pnlHeader.add(pnlThongTinKhuyenMai, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 40, -1, -1));
 
         add(pnlHeader, java.awt.BorderLayout.PAGE_START);
 

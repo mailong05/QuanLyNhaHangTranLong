@@ -185,9 +185,19 @@ public class PanelThongKe extends javax.swing.JPanel {
         jPanel6.setLayout(new java.awt.BorderLayout());
 
         btnTrangChu.setText("Trang chủ");
+        btnTrangChu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTrangChuActionPerformed(evt);
+            }
+        });
         jPanel6.add(btnTrangChu, java.awt.BorderLayout.WEST);
 
         btnInThongKe.setText("In thống kê");
+        btnInThongKe.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInThongKeActionPerformed(evt);
+            }
+        });
         jPanel6.add(btnInThongKe, java.awt.BorderLayout.EAST);
 
         add(jPanel6, java.awt.BorderLayout.SOUTH);
@@ -248,6 +258,14 @@ public class PanelThongKe extends javax.swing.JPanel {
 
         add(pnlContainerTable, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnTrangChuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTrangChuActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnTrangChuActionPerformed
+
+    private void btnInThongKeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInThongKeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnInThongKeActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
