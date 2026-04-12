@@ -2,6 +2,8 @@ package com.restaurant.quanlydatbannhahang.dao;
 
 import com.restaurant.quanlydatbannhahang.connectDB.DatabaseConnection;
 import com.restaurant.quanlydatbannhahang.entity.KhachHang;
+import com.restaurant.quanlydatbannhahang.entity.LoaiThanhVien;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -23,7 +25,7 @@ public class KhachHangDAO {
             int diemTichLuy = rs.getInt("diemTichLuy");
             String loaiThanhVien = rs.getString("loaiThanhVien");
 
-            return new KhachHang(maKH, hoTen, sdt, diemTichLuy, loaiThanhVien);
+            return new KhachHang(maKH, hoTen, sdt, diemTichLuy, LoaiThanhVien.valueOf(loaiThanhVien));
         } catch (Exception e) {
             e.printStackTrace();
             return null;

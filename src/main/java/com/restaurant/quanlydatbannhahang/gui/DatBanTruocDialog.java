@@ -46,6 +46,8 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
         spSoLuong = new javax.swing.JSpinner();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtGhiChu = new javax.swing.JTextArea();
+        txtTenKhachHang = new javax.swing.JTextField();
+        lblTenKhachHang = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -61,7 +63,7 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
         lblMaPhieuDat.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblMaPhieuDat.setForeground(new java.awt.Color(0, 0, 0));
         lblMaPhieuDat.setText("Mã phiếu đặt:");
-        jPanel2.add(lblMaPhieuDat, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 40, -1, 20));
+        jPanel2.add(lblMaPhieuDat, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 40, -1, 20));
 
         txtMaPhieuDat.setEditable(false);
         txtMaPhieuDat.setBackground(new java.awt.Color(255, 255, 255));
@@ -75,28 +77,28 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
 
         txtSoDienThoai.setBackground(new java.awt.Color(255, 255, 255));
         txtSoDienThoai.setForeground(new java.awt.Color(0, 0, 0));
-        jPanel2.add(txtSoDienThoai, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 90, 230, -1));
+        jPanel2.add(txtSoDienThoai, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 120, 230, -1));
 
         lblSoDienThoai.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblSoDienThoai.setForeground(new java.awt.Color(0, 0, 0));
         lblSoDienThoai.setText("Số điện thoại:");
-        jPanel2.add(lblSoDienThoai, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 90, -1, 20));
+        jPanel2.add(lblSoDienThoai, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 120, -1, 20));
 
         lblThoiGianDen.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblThoiGianDen.setForeground(new java.awt.Color(0, 0, 0));
         lblThoiGianDen.setText("Thời gian đến:");
-        jPanel2.add(lblThoiGianDen, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 140, -1, -1));
-        jPanel2.add(dtpThoiGianDen, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 140, -1, -1));
+        jPanel2.add(lblThoiGianDen, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 160, -1, -1));
+        jPanel2.add(dtpThoiGianDen, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 160, -1, -1));
 
         lblSoLuongNguoi.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblSoLuongNguoi.setForeground(new java.awt.Color(0, 0, 0));
         lblSoLuongNguoi.setText("Số lượng người:");
-        jPanel2.add(lblSoLuongNguoi, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 180, -1, -1));
+        jPanel2.add(lblSoLuongNguoi, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 200, -1, -1));
 
         lblGhiChu.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblGhiChu.setForeground(new java.awt.Color(0, 0, 0));
         lblGhiChu.setText("Ghi chú:");
-        jPanel2.add(lblGhiChu, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 230, -1, -1));
+        jPanel2.add(lblGhiChu, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 240, -1, -1));
 
         btnDatBan.setText("Đặt bàn");
         btnDatBan.setBackground(new java.awt.Color(204, 204, 204));
@@ -107,20 +109,38 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
                 btnDatBanActionPerformed(evt);
             }
         });
-        jPanel2.add(btnDatBan, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 350, 330, 40));
-        jPanel2.add(spSoLuong, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 180, 230, -1));
+        jPanel2.add(btnDatBan, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 380, 330, 40));
+        jPanel2.add(spSoLuong, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 200, 230, -1));
 
         txtGhiChu.setColumns(20);
         txtGhiChu.setRows(5);
         txtGhiChu.setBackground(new java.awt.Color(255, 255, 255));
         jScrollPane1.setViewportView(txtGhiChu);
 
-        jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 230, -1, -1));
+        jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 250, -1, -1));
 
-        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 480, 410));
+        txtTenKhachHang.setBackground(new java.awt.Color(255, 255, 255));
+        txtTenKhachHang.setForeground(new java.awt.Color(0, 0, 0));
+        txtTenKhachHang.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtTenKhachHangActionPerformed(evt);
+            }
+        });
+        jPanel2.add(txtTenKhachHang, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 80, 230, -1));
+
+        lblTenKhachHang.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblTenKhachHang.setForeground(new java.awt.Color(0, 0, 0));
+        lblTenKhachHang.setText("Tên khách hàng:");
+        jPanel2.add(lblTenKhachHang, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 80, -1, -1));
+
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 480, 430));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void txtTenKhachHangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTenKhachHangActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTenKhachHangActionPerformed
 
     private void btnDatBanActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnDatBanActionPerformed
         try {
@@ -220,10 +240,12 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
     private javax.swing.JLabel lblMaPhieuDat;
     private javax.swing.JLabel lblSoDienThoai;
     private javax.swing.JLabel lblSoLuongNguoi;
+    private javax.swing.JLabel lblTenKhachHang;
     private javax.swing.JLabel lblThoiGianDen;
     private javax.swing.JSpinner spSoLuong;
     private javax.swing.JTextArea txtGhiChu;
     private javax.swing.JTextField txtMaPhieuDat;
     private javax.swing.JTextField txtSoDienThoai;
+    private javax.swing.JTextField txtTenKhachHang;
     // End of variables declaration//GEN-END:variables
 }

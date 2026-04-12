@@ -4,7 +4,6 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 
-
 public class PanelDanhSachKhuyenMai extends javax.swing.JPanel {
 
     public PanelDanhSachKhuyenMai() {
@@ -15,6 +14,9 @@ public class PanelDanhSachKhuyenMai extends javax.swing.JPanel {
     private void customUI() {
         // Placeholder cho txtTimKiem
         setupPlaceholder(txtTimKiem, "Nhập tên hoặc mã khuyến mãi");
+
+        // Gắn sự kiện quay về Trang Chủ
+        MainForm.attachGoHomeListener(btnTrangChu, this);
     }
 
     /**
@@ -51,8 +53,6 @@ public class PanelDanhSachKhuyenMai extends javax.swing.JPanel {
         });
     }
 
-    
-
     private void applyCardStyle(JPanel panel, int radius) {
         panel.setOpaque(false);
         panel.setUI(new javax.swing.plaf.PanelUI() {
@@ -66,8 +66,9 @@ public class PanelDanhSachKhuyenMai extends javax.swing.JPanel {
             }
         });
     }
-    
+
     @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -87,11 +88,11 @@ public class PanelDanhSachKhuyenMai extends javax.swing.JPanel {
         setLayout(new java.awt.BorderLayout(0, 15));
 
         pnlHeader.setBackground(new java.awt.Color(255, 251, 233));
-        pnlHeader.setLayout(new java.awt.BorderLayout(0, 15));
+        pnlHeader.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         lblTitle.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         lblTitle.setText("Quản lý các chương trình khuyến mãi và giảm giá  ");
-        pnlHeader.add(lblTitle, java.awt.BorderLayout.WEST);
+        pnlHeader.add(lblTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         pnlThongTinKhuyenMai.setBackground(new java.awt.Color(255, 251, 233));
 
@@ -106,6 +107,11 @@ public class PanelDanhSachKhuyenMai extends javax.swing.JPanel {
         });
 
         cbFilterTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Trạng thái", "Còn áp dụng", "Ngưng áp dụng", " " }));
+        cbFilterTrangThai.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbFilterTrangThaiActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pnlThongTinKhuyenMaiLayout = new javax.swing.GroupLayout(pnlThongTinKhuyenMai);
         pnlThongTinKhuyenMai.setLayout(pnlThongTinKhuyenMaiLayout);
@@ -113,8 +119,8 @@ public class PanelDanhSachKhuyenMai extends javax.swing.JPanel {
             pnlThongTinKhuyenMaiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlThongTinKhuyenMaiLayout.createSequentialGroup()
                 .addComponent(cbFilterTrangThai, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(txtTimKiem, javax.swing.GroupLayout.DEFAULT_SIZE, 750, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 448, Short.MAX_VALUE)
+                .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -131,7 +137,7 @@ public class PanelDanhSachKhuyenMai extends javax.swing.JPanel {
                 .addGap(0, 14, Short.MAX_VALUE))
         );
 
-        pnlHeader.add(pnlThongTinKhuyenMai, java.awt.BorderLayout.PAGE_END);
+        pnlHeader.add(pnlThongTinKhuyenMai, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 40, -1, -1));
 
         add(pnlHeader, java.awt.BorderLayout.PAGE_START);
 
@@ -173,10 +179,13 @@ public class PanelDanhSachKhuyenMai extends javax.swing.JPanel {
         add(pnlButton, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
+    private void cbFilterTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbFilterTrangThaiActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnTimKiemActionPerformed
+    }//GEN-LAST:event_cbFilterTrangThaiActionPerformed
 
+    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTimKiemActionPerformed
+        // TODO add your handling code here:
+    }// GEN-LAST:event_btnTimKiemActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnTimKiem;

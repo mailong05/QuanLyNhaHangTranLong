@@ -95,6 +95,7 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel {
         jComboBox1 = new javax.swing.JComboBox<>();
         btnChonFileAnh = new javax.swing.JButton();
         jComboBox2 = new javax.swing.JComboBox<>();
+        cbFilterLoaiMonAn = new javax.swing.JComboBox<>();
         scrTableMonAn = new javax.swing.JScrollPane();
         tableMonAn = new javax.swing.JTable();
         pnlButton = new javax.swing.JPanel();
@@ -117,8 +118,8 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel {
 
         pnlThongTinKhuyenMai.setBackground(new java.awt.Color(255, 251, 233));
 
-        lblMaMon.setText("Mã món:");
         lblMaMon.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblMaMon.setText("Mã món:");
 
         txtMaMon.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtMaMon.setPreferredSize(new java.awt.Dimension(64, 35));
@@ -128,8 +129,8 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel {
             }
         });
 
-        lblTenMon.setText("Tên món:");
         lblTenMon.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblTenMon.setText("Tên món:");
 
         txtTenMon.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtTenMon.setPreferredSize(new java.awt.Dimension(64, 35));
@@ -139,14 +140,14 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel {
             }
         });
 
-        lblLoaiMon.setText("Loại món:");
         lblLoaiMon.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblLoaiMon.setText("Loại món:");
 
-        lblTrangThai.setText("Trạng thái:");
         lblTrangThai.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblTrangThai.setText("Trạng thái:");
 
-        lblDonGia.setText("Đơn giá:");
         lblDonGia.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblDonGia.setText("Đơn giá:");
 
         txtDonGia.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtDonGia.setPreferredSize(new java.awt.Dimension(64, 35));
@@ -158,19 +159,19 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel {
 
         txtTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
-        btnTimKiem.setText("Tìm kiếm");
         btnTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnTimKiem.setText("Tìm kiếm");
         btnTimKiem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTimKiemActionPerformed(evt);
             }
         });
 
-        lblHinhAnh.setText("Hình ảnh:");
         lblHinhAnh.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblHinhAnh.setText("Hình ảnh:");
 
-        lblDonViTinh.setText("Đơn vị tính:");
         lblDonViTinh.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblDonViTinh.setText("Đơn vị tính:");
 
         cbDonViTinh.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cbDonViTinh.setPreferredSize(new java.awt.Dimension(72, 35));
@@ -199,6 +200,13 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel {
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         jComboBox2.setPreferredSize(new java.awt.Dimension(72, 35));
 
+        cbFilterLoaiMonAn.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbFilterLoaiMonAn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbFilterLoaiMonAnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlThongTinKhuyenMaiLayout = new javax.swing.GroupLayout(pnlThongTinKhuyenMai);
         pnlThongTinKhuyenMai.setLayout(pnlThongTinKhuyenMaiLayout);
         pnlThongTinKhuyenMaiLayout.setHorizontalGroup(
@@ -220,23 +228,26 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel {
                     .addGroup(pnlThongTinKhuyenMaiLayout.createSequentialGroup()
                         .addComponent(lblDonViTinh)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(cbDonViTinh, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(cbDonViTinh, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cbFilterLoaiMonAn, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(53, 53, 53)
                 .addGroup(pnlThongTinKhuyenMaiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblLoaiMon)
                     .addComponent(lblTrangThai)
                     .addComponent(lblHinhAnh))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pnlThongTinKhuyenMaiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jComboBox2, 0, 110, Short.MAX_VALUE)
-                    .addComponent(btnChonFileAnh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(0, 333, Short.MAX_VALUE))
-            .addGroup(pnlThongTinKhuyenMaiLayout.createSequentialGroup()
-                .addComponent(txtTimKiem)
-                .addGap(24, 24, 24)
-                .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGroup(pnlThongTinKhuyenMaiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlThongTinKhuyenMaiLayout.createSequentialGroup()
+                        .addComponent(txtTimKiem)
+                        .addGap(24, 24, 24)
+                        .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addGroup(pnlThongTinKhuyenMaiLayout.createSequentialGroup()
+                        .addGroup(pnlThongTinKhuyenMaiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jComboBox2, 0, 110, Short.MAX_VALUE)
+                            .addComponent(btnChonFileAnh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 334, Short.MAX_VALUE))))
         );
         pnlThongTinKhuyenMaiLayout.setVerticalGroup(
             pnlThongTinKhuyenMaiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -271,11 +282,13 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel {
                         .addGroup(pnlThongTinKhuyenMaiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblDonViTinh)
                             .addComponent(cbDonViTinh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(pnlThongTinKhuyenMaiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, 0))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlThongTinKhuyenMaiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlThongTinKhuyenMaiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cbFilterLoaiMonAn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         pnlHeader.add(pnlThongTinKhuyenMai, java.awt.BorderLayout.PAGE_END);
@@ -293,7 +306,7 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Hình ảnh", "Mã món", "Tên món", "Đơn giá", "Đơn vị tính", "Mã loại", "Trạng thái"
+                "Hình ảnh", "Mã món", "Tên món", "Đơn giá", "Đơn vị tính", "Loại món ăn", "Trạng thái"
             }
         ) {
             Class[] types = new Class [] {
@@ -337,6 +350,11 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel {
 
         btnXoa.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnXoa.setText("Xóa");
+        btnXoa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnXoaActionPerformed(evt);
+            }
+        });
         pnlRightButtons.add(btnXoa);
 
         btnThem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -352,6 +370,14 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel {
 
         add(pnlButton, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void cbFilterLoaiMonAnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbFilterLoaiMonAnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbFilterLoaiMonAnActionPerformed
+
+    private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnXoaActionPerformed
 
     private void txtMaMonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtMaMonActionPerformed
         // TODO add your handling code here:
@@ -401,6 +427,7 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel {
     private javax.swing.JButton btnTrangChu;
     private javax.swing.JButton btnXoa;
     private javax.swing.JComboBox<String> cbDonViTinh;
+    private javax.swing.JComboBox<String> cbFilterLoaiMonAn;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;

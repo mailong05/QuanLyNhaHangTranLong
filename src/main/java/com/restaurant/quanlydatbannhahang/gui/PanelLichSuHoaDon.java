@@ -12,9 +12,11 @@ public class PanelLichSuHoaDon extends javax.swing.JPanel {
     }
 
     private void customUI() {
+        // Placeholder cho txtTimKiem
+        setupPlaceholder(txtTimKiem, "Nhập mã hóa đơn");
+
         // 1. Tùy chỉnh thanh tìm kiếm và ComboBox
-        txtTimKiem.putClientProperty("JTextField.placeholderText", "Nhập mã hóa đơn hoặc thông tin cần tìm...");
-        cbTrangThai.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        cbFilterTrangThai.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnTimKiem.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnTimKiem.setFocusPainted(false);
 
@@ -22,7 +24,7 @@ public class PanelLichSuHoaDon extends javax.swing.JPanel {
         scrTableLichSuHoaDon.setBorder(BorderFactory.createLineBorder(new Color(220, 210, 190), 1));
         scrTableLichSuHoaDon.setOpaque(false);
         scrTableLichSuHoaDon.getViewport().setOpaque(false);
-        
+
         // Khử góc trắng ScrollBar
         JPanel corner = new JPanel();
         corner.setBackground(new Color(255, 251, 233));
@@ -36,11 +38,14 @@ public class PanelLichSuHoaDon extends javax.swing.JPanel {
         tableLichSuHoaDon.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 
         // Header Table
-        tableLichSuHoaDon.getTableHeader().setPreferredSize(new Dimension(tableLichSuHoaDon.getTableHeader().getWidth(), 45));
+        tableLichSuHoaDon.getTableHeader()
+                .setPreferredSize(new Dimension(tableLichSuHoaDon.getTableHeader().getWidth(), 45));
         tableLichSuHoaDon.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
             @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                    boolean hasFocus, int row, int column) {
+                JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row,
+                        column);
                 label.setBackground(new Color(255, 251, 233));
                 label.setForeground(new Color(148, 134, 111));
                 label.setFont(new Font("Segoe UI", Font.BOLD, 13));
@@ -56,68 +61,85 @@ public class PanelLichSuHoaDon extends javax.swing.JPanel {
         for (int i = 0; i < tableLichSuHoaDon.getColumnCount(); i++) {
             tableLichSuHoaDon.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
         }
+
+        // 4. Gắn sự kiện quay về Trang Chủ
+        MainForm.attachGoHomeListener(btnTrangChu, this);
     }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
         txtTimKiem = new javax.swing.JTextField();
         btnTimKiem = new javax.swing.JButton();
-        cbTrangThai = new javax.swing.JComboBox<>();
+        cbFilterTrangThai = new javax.swing.JComboBox<>();
+        dpNgayTao = new com.github.lgooddatepicker.components.DatePicker();
         jPanel2 = new javax.swing.JPanel();
         scrTableLichSuHoaDon = new javax.swing.JScrollPane();
         tableLichSuHoaDon = new javax.swing.JTable();
+        jPanel3 = new javax.swing.JPanel();
+        btnTrangChu = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 251, 233));
         setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 60, 20, 60));
-        setLayout(new java.awt.BorderLayout(0, 15));
+        setLayout(new java.awt.BorderLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 251, 233));
-        jPanel1.setLayout(new java.awt.BorderLayout(15, 0));
+        jPanel1.setPreferredSize(new java.awt.Dimension(0, 50));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         txtTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtTimKiem.setPreferredSize(new java.awt.Dimension(64, 35));
-        jPanel1.add(txtTimKiem, java.awt.BorderLayout.CENTER);
+        txtTimKiem.addActionListener(this::txtTimKiemActionPerformed);
+        jPanel1.add(txtTimKiem, new org.netbeans.lib.awtextra.AbsoluteConstraints(591, 0, 390, -1));
 
         btnTimKiem.setText("Tìm kiếm");
         btnTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnTimKiem.setPreferredSize(new java.awt.Dimension(100, 35));
-        jPanel1.add(btnTimKiem, java.awt.BorderLayout.EAST);
+        btnTimKiem.addActionListener(this::btnTimKiemActionPerformed);
+        jPanel1.add(btnTimKiem, new org.netbeans.lib.awtextra.AbsoluteConstraints(996, 0, -1, -1));
 
-        cbTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất cả", "Đã thanh toán", "Chưa thanh toán", "Đã Hủy", " " }));
-        cbTrangThai.setPreferredSize(new java.awt.Dimension(150, 22));
-        cbTrangThai.addActionListener(this::cbTrangThaiActionPerformed);
-        jPanel1.add(cbTrangThai, java.awt.BorderLayout.WEST);
+        cbFilterTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(
+                new String[] { "Tất cả", "Đã thanh toán", "Chưa thanh toán", "Đã Hủy", " " }));
+        cbFilterTrangThai.setPreferredSize(new java.awt.Dimension(150, 22));
+        cbFilterTrangThai.addActionListener(this::cbFilterTrangThaiActionPerformed);
+        jPanel1.add(cbFilterTrangThai, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 130, 30));
+        jPanel1.add(dpNgayTao, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 0, -1, 30));
 
-        add(jPanel1, java.awt.BorderLayout.PAGE_START);
+        add(jPanel1, java.awt.BorderLayout.NORTH);
 
         jPanel2.setBackground(new java.awt.Color(255, 251, 233));
         jPanel2.setLayout(new java.awt.BorderLayout());
 
         tableLichSuHoaDon.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+                new Object[][] {
 
-            },
-            new String [] {
-                "Mã hóa đơn", "Mã bàn", "Mã khuyến mãi", "Mã thuế", "Ngày tạo", "Giờ vào", "Giờ ra", "Tổng tiền gốc", "Tiền giảm giá", "Tổng thanh toán", "Phương thức thanh toán", "Trạng thái thanh toán"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.String.class, java.lang.String.class
+                },
+                new String[] {
+                        "Mã hóa đơn", "Mã bàn", "Mã khuyến mãi", "Mã thuế", "Ngày tạo", "Giờ vào", "Giờ ra",
+                        "Tổng tiền gốc", "Tiền giảm giá", "Tổng thanh toán", "Phương thức thanh toán",
+                        "Trạng thái thanh toán"
+                }) {
+            Class[] types = new Class[] {
+                    java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class,
+                    java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Double.class,
+                    java.lang.Double.class, java.lang.Double.class, java.lang.String.class, java.lang.String.class
             };
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false, false, false
+            boolean[] canEdit = new boolean[] {
+                    false, false, false, false, false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
+                return types[columnIndex];
             }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
+                return canEdit[columnIndex];
             }
         });
         tableLichSuHoaDon.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
@@ -140,17 +162,78 @@ public class PanelLichSuHoaDon extends javax.swing.JPanel {
         jPanel2.add(scrTableLichSuHoaDon, java.awt.BorderLayout.CENTER);
 
         add(jPanel2, java.awt.BorderLayout.CENTER);
+
+        jPanel3.setBackground(new java.awt.Color(255, 251, 233));
+        jPanel3.setPreferredSize(new java.awt.Dimension(0, 37));
+        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        btnTrangChu.setText("Trang chủ");
+        btnTrangChu.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        btnTrangChu.setPreferredSize(new java.awt.Dimension(100, 30));
+        btnTrangChu.addActionListener(this::btnTrangChuActionPerformed);
+        jPanel3.add(btnTrangChu, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 5, -1, -1));
+
+        add(jPanel3, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void cbTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbTrangThaiActionPerformed
+    private void btnTrangChuActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTrangChuActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cbTrangThaiActionPerformed
+    }// GEN-LAST:event_btnTrangChuActionPerformed
+
+    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTimKiemActionPerformed
+        // TODO add your handling code here:
+    }// GEN-LAST:event_btnTimKiemActionPerformed
+
+    private void cbFilterTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterTrangThaiActionPerformed
+        // TODO add your handling code here:
+    }// GEN-LAST:event_cbFilterTrangThaiActionPerformed
+
+    private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtTimKiemActionPerformed
+        // TODO add your handling code here:
+    }// GEN-LAST:event_txtTimKiemActionPerformed
+
+    /**
+     * Tao placeholder cho TextField
+     * Khi focus vao, placeholder bien mat
+     * Khi focus out va trong, placeholder xuat hien lai
+     */
+    private void setupPlaceholder(JTextField textField, String placeholder) {
+        Color placeholderColor = new Color(153, 153, 153);
+        Color textColor = new Color(0, 0, 0);
+
+        // Set text mac dinh va mau
+        textField.setText(placeholder);
+        textField.setForeground(placeholderColor);
+
+        textField.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                // Khi focus vao, neu la placeholder thi xoa
+                if (textField.getText().equals(placeholder)) {
+                    textField.setText("");
+                    textField.setForeground(textColor);
+                }
+            }
+
+            @Override
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                // Khi focus out, neu trong thi hien thi placeholder
+                if (textField.getText().isEmpty()) {
+                    textField.setText(placeholder);
+                    textField.setForeground(placeholderColor);
+                }
+            }
+        });
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnTimKiem;
-    private javax.swing.JComboBox<String> cbTrangThai;
+    private javax.swing.JButton btnTrangChu;
+    private javax.swing.JComboBox<String> cbFilterTrangThai;
+    private com.github.lgooddatepicker.components.DatePicker dpNgayTao;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane scrTableLichSuHoaDon;
     private javax.swing.JTable tableLichSuHoaDon;
     private javax.swing.JTextField txtTimKiem;
