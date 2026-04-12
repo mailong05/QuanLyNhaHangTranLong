@@ -74,8 +74,8 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="cbFilterTrangThai" min="-2" pref="158" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="txtTimKiem" pref="750" max="32767" attributes="0"/>
+                      <EmptySpace pref="448" max="32767" attributes="0"/>
+                      <Component id="txtTimKiem" min="-2" pref="320" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="btnTimKiem" min="-2" pref="129" max="-2" attributes="0"/>
                   </Group>
@@ -129,6 +129,9 @@
                   </StringArray>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbFilterTrangThaiActionPerformed"/>
+              </Events>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
               </AuxValues>

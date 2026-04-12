@@ -86,6 +86,8 @@ public class PanelQuanLyBan extends javax.swing.JPanel {
         btnTimKiem = new javax.swing.JButton();
         cbTrangThai = new javax.swing.JComboBox<>();
         cbKhuVuc = new javax.swing.JComboBox<>();
+        cbFilterKhuVuc = new javax.swing.JComboBox<>();
+        cbFilterTrangThai = new javax.swing.JComboBox<>();
         scrTableBan = new javax.swing.JScrollPane();
         tableBan = new javax.swing.JTable();
         pnlButton = new javax.swing.JPanel();
@@ -164,6 +166,20 @@ public class PanelQuanLyBan extends javax.swing.JPanel {
 
         cbKhuVuc.setPreferredSize(new java.awt.Dimension(72, 35));
 
+        cbFilterKhuVuc.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbFilterKhuVuc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbFilterKhuVucActionPerformed(evt);
+            }
+        });
+
+        cbFilterTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbFilterTrangThai.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbFilterTrangThaiActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlThongTinBanLayout = new javax.swing.GroupLayout(pnlThongTinBan);
         pnlThongTinBan.setLayout(pnlThongTinBanLayout);
         pnlThongTinBanLayout.setHorizontalGroup(
@@ -181,21 +197,27 @@ public class PanelQuanLyBan extends javax.swing.JPanel {
                         .addGap(33, 33, 33)
                         .addComponent(txtSoGhe, javax.swing.GroupLayout.PREFERRED_SIZE, 390, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(56, 56, 56)
-                        .addComponent(lblKhuVuc)))
-                .addGap(26, 26, 26)
-                .addGroup(pnlThongTinBanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txtViTri, javax.swing.GroupLayout.PREFERRED_SIZE, 390, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblKhuVuc))
                     .addGroup(pnlThongTinBanLayout.createSequentialGroup()
-                        .addComponent(cbKhuVuc, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lblTrangThai)
-                        .addGap(18, 18, 18)
-                        .addComponent(cbTrangThai, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(50, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlThongTinBanLayout.createSequentialGroup()
-                .addComponent(txtTimKiem)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(cbFilterKhuVuc, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(29, 29, 29)
+                        .addComponent(cbFilterTrangThai, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(26, 26, 26)
+                .addGroup(pnlThongTinBanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlThongTinBanLayout.createSequentialGroup()
+                        .addComponent(txtTimKiem)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnlThongTinBanLayout.createSequentialGroup()
+                        .addGroup(pnlThongTinBanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtViTri, javax.swing.GroupLayout.PREFERRED_SIZE, 390, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(pnlThongTinBanLayout.createSequentialGroup()
+                                .addComponent(cbKhuVuc, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lblTrangThai)
+                                .addGap(18, 18, 18)
+                                .addComponent(cbTrangThai, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(51, Short.MAX_VALUE))))
         );
         pnlThongTinBanLayout.setVerticalGroup(
             pnlThongTinBanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -219,9 +241,12 @@ public class PanelQuanLyBan extends javax.swing.JPanel {
                         .addComponent(cbTrangThai, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(lblTrangThai)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(pnlThongTinBanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(pnlThongTinBanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(pnlThongTinBanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cbFilterKhuVuc, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbFilterTrangThai))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -281,6 +306,11 @@ public class PanelQuanLyBan extends javax.swing.JPanel {
 
         btnXoa.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnXoa.setText("Xóa");
+        btnXoa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnXoaActionPerformed(evt);
+            }
+        });
         pnlRightButtons.add(btnXoa);
 
         btnThem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -296,6 +326,18 @@ public class PanelQuanLyBan extends javax.swing.JPanel {
 
         add(pnlButton, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void cbFilterTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbFilterTrangThaiActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbFilterTrangThaiActionPerformed
+
+    private void cbFilterKhuVucActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbFilterKhuVucActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbFilterKhuVucActionPerformed
+
+    private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnXoaActionPerformed
 
     private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCapNhatActionPerformed
         // TODO add your handling code here:
@@ -327,6 +369,8 @@ public class PanelQuanLyBan extends javax.swing.JPanel {
     private javax.swing.JButton btnTimKiem;
     private javax.swing.JButton btnTrangChu;
     private javax.swing.JButton btnXoa;
+    private javax.swing.JComboBox<String> cbFilterKhuVuc;
+    private javax.swing.JComboBox<String> cbFilterTrangThai;
     private javax.swing.JComboBox<String> cbKhuVuc;
     private javax.swing.JComboBox<String> cbTrangThai;
     private javax.swing.JLabel lblKhuVuc;

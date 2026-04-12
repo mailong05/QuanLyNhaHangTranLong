@@ -125,8 +125,18 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel {
 
         btnTimKiem.setText("Tìm Kiếm");
         btnTimKiem.setPreferredSize(new java.awt.Dimension(0, 30));
+        btnTimKiem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTimKiemActionPerformed(evt);
+            }
+        });
 
         cbFilterQuyenHan.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbFilterQuyenHan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbFilterQuyenHanActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -216,6 +226,14 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel {
     private void txtMatKhauActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMatKhauActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtMatKhauActionPerformed
+
+    private void cbFilterQuyenHanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbFilterQuyenHanActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbFilterQuyenHanActionPerformed
+
+    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnTimKiemActionPerformed
 
    
     /**

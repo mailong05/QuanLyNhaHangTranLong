@@ -197,8 +197,8 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel {
         pnlRightButtons.setBackground(new java.awt.Color(255, 251, 233));
         pnlRightButtons.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 15, 0));
 
-        btnCapNhat.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnCapNhat.setText("Cập nhật");
+        btnCapNhat.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnCapNhat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCapNhatActionPerformed(evt);
@@ -208,6 +208,11 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel {
 
         btnXoa.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnXoa.setText("Xóa");
+        btnXoa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnXoaActionPerformed(evt);
+            }
+        });
         pnlRightButtons.add(btnXoa);
 
         btnThem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -223,6 +228,10 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel {
 
         add(pnlButton, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnXoaActionPerformed
 
     private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCapNhatActionPerformed
         // TODO add your handling code here:

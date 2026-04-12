@@ -99,6 +99,11 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
 
         btnTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnTimKiem.setText("Tìm kiếm");
+        btnTimKiem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTimKiemActionPerformed(evt);
+            }
+        });
         jPanel5.add(btnTimKiem, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 0, -1, -1));
 
         jPanel4.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 330, -1));
@@ -108,6 +113,11 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         jPanel7.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         btnTaoTaiKhoan.setText("Tạo tài khoản");
+        btnTaoTaiKhoan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTaoTaiKhoanActionPerformed(evt);
+            }
+        });
         jPanel7.add(btnTaoTaiKhoan, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 3, -1, 30));
 
         btnDungDiem.setText("Dùng điểm");
@@ -305,6 +315,11 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         panelButton.setBackground(new java.awt.Color(255, 251, 233));
 
         btnInHoaDon.setText("In hóa đơn");
+        btnInHoaDon.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInHoaDonActionPerformed(evt);
+            }
+        });
 
         btnTrangChu.setText("Quay lại");
 
@@ -338,6 +353,18 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
     private void cbKhuyenMaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbKhuyenMaiActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cbKhuyenMaiActionPerformed
+
+    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnTimKiemActionPerformed
+
+    private void btnTaoTaiKhoanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTaoTaiKhoanActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnTaoTaiKhoanActionPerformed
+
+    private void btnInHoaDonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInHoaDonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnInHoaDonActionPerformed
 
     private void customUI() {
         // Placeholder cho txtTimKiem

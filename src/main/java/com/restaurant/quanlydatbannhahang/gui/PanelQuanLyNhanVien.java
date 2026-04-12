@@ -312,6 +312,11 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel {
 
         btnXoa.setText("Xóa");
         btnXoa.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnXoa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnXoaActionPerformed(evt);
+            }
+        });
         pnlRightButtons.add(btnXoa);
 
         btnThem.setText("Thêm");
@@ -331,6 +336,10 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel {
     private void cbFilterChucVuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbFilterChucVuActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cbFilterChucVuActionPerformed
+
+    private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnXoaActionPerformed
 
     private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCapNhatActionPerformed
         // TODO add your handling code here:
