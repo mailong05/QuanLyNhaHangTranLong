@@ -58,7 +58,8 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <Component id="txtTimKiem" pref="863" max="32767" attributes="0"/>
+                      <EmptySpace pref="613" max="32767" attributes="0"/>
+                      <Component id="txtTimKiem" min="-2" pref="250" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="btnTimKiem" min="-2" pref="129" max="-2" attributes="0"/>
                   </Group>

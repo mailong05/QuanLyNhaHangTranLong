@@ -58,9 +58,13 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel {
 
         // Hiệu ứng chuột cho nút bấm
         btnTimKiem.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        // Gắn sự kiện quay về Trang Chủ
+        MainForm.attachGoHomeListener(btnTrangChu, this);
     }
 
     @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -157,10 +161,10 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel {
                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cbQuyenHan, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(0, 393, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 399, Short.MAX_VALUE)
-                        .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 405, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
@@ -223,19 +227,22 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel {
         add(jPanel3, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtMatKhauActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMatKhauActionPerformed
+    private void btnTrangChuActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTrangChuActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtMatKhauActionPerformed
+    }// GEN-LAST:event_btnTrangChuActionPerformed
 
-    private void cbFilterQuyenHanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbFilterQuyenHanActionPerformed
+    private void txtMatKhauActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtMatKhauActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cbFilterQuyenHanActionPerformed
+    }// GEN-LAST:event_txtMatKhauActionPerformed
 
-    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
+    private void cbFilterQuyenHanActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterQuyenHanActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnTimKiemActionPerformed
+    }// GEN-LAST:event_cbFilterQuyenHanActionPerformed
 
-   
+    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTimKiemActionPerformed
+        // TODO add your handling code here:
+    }// GEN-LAST:event_btnTimKiemActionPerformed
+
     /**
      * Tao placeholder cho TextField
      * Khi focus vao, placeholder bien mat

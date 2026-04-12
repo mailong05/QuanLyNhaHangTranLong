@@ -107,7 +107,8 @@ public class PanelDanhSachKhuVuc extends javax.swing.JPanel {
         pnlThongTinKhuVucLayout.setHorizontalGroup(
             pnlThongTinKhuVucLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlThongTinKhuVucLayout.createSequentialGroup()
-                .addComponent(txtTimKiem, javax.swing.GroupLayout.DEFAULT_SIZE, 863, Short.MAX_VALUE)
+                .addContainerGap(613, Short.MAX_VALUE)
+                .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
