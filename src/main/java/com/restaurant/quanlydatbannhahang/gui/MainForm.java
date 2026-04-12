@@ -2,6 +2,7 @@ package com.restaurant.quanlydatbannhahang.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -13,7 +14,10 @@ import java.awt.event.MouseEvent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.border.AbstractBorder;
+
+import com.restaurant.quanlydatbannhahang.entity.QuyenHan;
 import com.restaurant.quanlydatbannhahang.entity.TaiKhoan;
 import com.restaurant.quanlydatbannhahang.session.SessionManager;
 
@@ -91,7 +95,7 @@ public class MainForm extends javax.swing.JFrame {
 
         batSuKienMenu();
         phanQuyenGiaoDien();
-
+        disableMenuForStaff();
         JPanel[] allPanels = {
                 panelTrangChu, panelBan, panelKhuVuc, panelNhanVien,
                 panelKhachHang, panelHoaDon, panelThue, PanelMonAn,
@@ -106,6 +110,62 @@ public class MainForm extends javax.swing.JFrame {
         updateActivePanel(panelTrangChu);
         lblTenTrang.setText("TRANG CHỦ");
         showTrangChuPanel();
+    }
+
+    private boolean isManager() {
+        if (taiKhoan == null || taiKhoan.getQuyenHan() == null)
+            return false;
+        return taiKhoan.getQuyenHan() == QuyenHan.MANAGER;
+    }
+
+    private void showNoAccessMessage() {
+        JOptionPane.showMessageDialog(this, "Bạn không có quyền truy cập chức năng này!", "Chú ý",
+                JOptionPane.WARNING_MESSAGE);
+    }
+
+    private void disableMenuForStaff() {
+
+        if (!isManager()) {
+            JLabel[] restrictedMenus = {
+                    subQuanLyBan,
+                    subQuanLyKhuVuc,
+                    subQuanLyNhanVien,
+                    subQuanLyThue,
+                    subQuanLyKhuyenMai,
+                    subQuanLyMonAn,
+                    subQuanLyTaiKhoan
+
+            };
+            for (JLabel menu : restrictedMenus) {
+                if (menu != null) {
+                    menu.setEnabled(false);
+                    menu.setForeground(new Color(211, 211, 211));
+                    menu.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                }
+            }
+        }
+    }
+
+    private boolean canAccessLabel(JLabel lbl) {
+        if (isManager())
+            return true;
+
+        JLabel[] restrictedMenus = {
+                subQuanLyThue,
+                subQuanLyBan,
+                subQuanLyKhuVuc,
+                subQuanLyNhanVien,
+                subQuanLyMonAn,
+                subQuanLyKhuyenMai,
+                subQuanLyTaiKhoan
+        };
+
+        for (JLabel menu : restrictedMenus) {
+            if (menu == lbl) {
+                return false;
+            }
+        }
+        return true;
     }
 
     // 5. LOGIC HỆ THỐNG
@@ -231,6 +291,16 @@ public class MainForm extends javax.swing.JFrame {
             // Nếu không có panel trước đó, về trang chủ
             goToTrangChuFromPanel();
         }
+    }
+
+    // ========== HELPER METHOD FOR PANELS ==========
+    public static void attachGoHomeListener(javax.swing.JButton btn, JPanel panel) {
+        btn.addActionListener(e -> {
+            MainForm mainForm = (MainForm) SwingUtilities.getWindowAncestor(panel);
+            if (mainForm != null) {
+                mainForm.goToTrangChuFromPanel();
+            }
+        });
     }
 
     private void paintRoundedPanel(JPanel panel, Color color, boolean forceDown) {
@@ -382,6 +452,12 @@ public class MainForm extends javax.swing.JFrame {
         lbl.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
+                // 0. KIỂM TRA QUYỀN TRƯỚC
+                if (!canAccessLabel(lbl)) {
+                    showNoAccessMessage();
+                    return;
+                }
+
                 // 1. Cập nhật UI cho Label được chọn
                 if (activeSubLabel != null) {
                     activeSubLabel.setForeground(Color.WHITE);
