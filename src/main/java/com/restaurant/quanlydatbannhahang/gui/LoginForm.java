@@ -5,6 +5,7 @@ import javax.swing.JOptionPane;
 import java.awt.Color;
 import com.restaurant.quanlydatbannhahang.gui.MainForm;
 import com.restaurant.quanlydatbannhahang.gui.ForgetPasswordForm;
+import com.restaurant.quanlydatbannhahang.gui.UIConfiguration;
 import com.restaurant.quanlydatbannhahang.entity.TaiKhoan;
 import com.restaurant.quanlydatbannhahang.service.AuthService;
 
@@ -484,6 +485,10 @@ public class LoginForm extends javax.swing.JFrame {
     }
 
     public static void main(String args[]) {
+        // ========== SETUP UI (FlatLaf) TRƯỚC TIÊN ==========
+        UIConfiguration.setupUI();
+
+        // ========== SAU ĐÓ MỚI KHỞI TẠO LOGIN FORM ==========
         java.awt.EventQueue.invokeLater(() -> {
             new LoginForm().setVisible(true);
         });
