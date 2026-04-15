@@ -332,7 +332,10 @@ public class ForgetPasswordForm extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
+        // ========== SETUP UI (FlatLaf) TRƯỚC TIÊN ==========
+        UIConfiguration.setupUI();
 
+        // ========== SAU ĐÓ MỚI KHỞI TẠO FORM ==========
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new ForgetPasswordForm().setVisible(true);

@@ -1,5 +1,8 @@
 package com.restaurant.quanlydatbannhahang.gui;
 
+// UIConfiguration để setup FlatLaf L&F
+import com.restaurant.quanlydatbannhahang.gui.UIConfiguration;
+
 public class TaiKhoanDialog extends javax.swing.JDialog {
 
     /**
@@ -11,7 +14,8 @@ public class TaiKhoanDialog extends javax.swing.JDialog {
     }
 
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
@@ -311,49 +315,30 @@ public class TaiKhoanDialog extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtHoTenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtHoTenActionPerformed
+    private void txtHoTenActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtHoTenActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtHoTenActionPerformed
+    }// GEN-LAST:event_txtHoTenActionPerformed
 
-    private void btnSuaThongTinCaNhanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaThongTinCaNhanActionPerformed
+    private void btnSuaThongTinCaNhanActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnSuaThongTinCaNhanActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnSuaThongTinCaNhanActionPerformed
+    }// GEN-LAST:event_btnSuaThongTinCaNhanActionPerformed
 
-    private void txtSoDienThoaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSoDienThoaiActionPerformed
+    private void txtSoDienThoaiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtSoDienThoaiActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtSoDienThoaiActionPerformed
+    }// GEN-LAST:event_txtSoDienThoaiActionPerformed
 
-    private void btnDoiMatKhauActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDoiMatKhauActionPerformed
+    private void btnDoiMatKhauActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnDoiMatKhauActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnDoiMatKhauActionPerformed
+    }// GEN-LAST:event_btnDoiMatKhauActionPerformed
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TaiKhoanDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TaiKhoanDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TaiKhoanDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TaiKhoanDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+        // ========== SETUP UI (FlatLaf) TRƯỚC TIÊN ==========
+        UIConfiguration.setupUI();
 
+        // ========== SAU ĐÓ MỚI KHỞI TẠO DIALOG ==========
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
