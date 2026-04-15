@@ -3,6 +3,7 @@ package com.restaurant.quanlydatbannhahang.gui;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
+import java.time.LocalDate;
 
 public class PanelLichSuHoaDon extends javax.swing.JPanel {
 
@@ -60,6 +61,11 @@ public class PanelLichSuHoaDon extends javax.swing.JPanel {
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
         for (int i = 0; i < tableLichSuHoaDon.getColumnCount(); i++) {
             tableLichSuHoaDon.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+
+        // Set giá trị mặc định cho DatePicker (ngày hôm nay)
+        if (dpNgayTao != null) {
+            dpNgayTao.setDate(LocalDate.now());
         }
 
         // 4. Gắn sự kiện quay về Trang Chủ

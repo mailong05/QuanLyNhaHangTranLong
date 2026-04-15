@@ -2,6 +2,7 @@ package com.restaurant.quanlydatbannhahang.gui;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import javax.swing.JOptionPane;
 
@@ -19,6 +20,11 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         this.setLocationRelativeTo(parent); // Hiển thị dialog ở giữa màn hình
+
+        // Set giá trị mặc định cho DateTimePicker (ngày giờ hiện tại)
+        if (dtpThoiGianDen != null) {
+            dtpThoiGianDen.setDateTimeStrict(LocalDateTime.now());
+        }
     }
 
     public boolean isDatBanThanhCong() {
@@ -29,7 +35,8 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel2 = new javax.swing.JPanel();
@@ -138,9 +145,9 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtTenKhachHangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTenKhachHangActionPerformed
+    private void txtTenKhachHangActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtTenKhachHangActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtTenKhachHangActionPerformed
+    }// GEN-LAST:event_txtTenKhachHangActionPerformed
 
     private void btnDatBanActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnDatBanActionPerformed
         try {

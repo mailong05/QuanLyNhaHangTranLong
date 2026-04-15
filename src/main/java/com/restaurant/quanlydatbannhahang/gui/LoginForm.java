@@ -5,6 +5,7 @@ import javax.swing.JOptionPane;
 import java.awt.Color;
 import com.restaurant.quanlydatbannhahang.gui.MainForm;
 import com.restaurant.quanlydatbannhahang.gui.ForgetPasswordForm;
+import com.restaurant.quanlydatbannhahang.gui.UIConfiguration;
 import com.restaurant.quanlydatbannhahang.entity.TaiKhoan;
 import com.restaurant.quanlydatbannhahang.service.AuthService;
 
@@ -390,26 +391,33 @@ public class LoginForm extends javax.swing.JFrame {
     }// GEN-LAST:event_btnCancelActionPerformed
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnLoginActionPerformed
-        String user = txtUsername.getText().trim();
-        String pass = String.valueOf(txtPassword.getPassword()).trim();
-        System.out.println(user + pass);
-        // Validate input
-        if (user.isEmpty() || user.equals("Username")) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập tên đăng nhập!", "Thông báo",
-                    JOptionPane.WARNING_MESSAGE);
-            txtUsername.requestFocus();
+        String username = getTxtUsername().getText().trim();
+        String password = String.valueOf(getTxtPassword().getPassword()).trim();
+
+        System.out.println(username + password);
+        AuthService.ValidationResult userValidation = AuthService.validateUsername(username);
+        if (!userValidation.success) {
+            JOptionPane.showMessageDialog(this,
+                    userValidation.message,
+                    "Lỗi tên đăng nhập",
+                    JOptionPane.ERROR_MESSAGE);
+            getTxtUsername().requestFocus();
             return;
         }
 
-        if (pass.isEmpty() || pass.equals("Password")) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập mật khẩu!", "Thông báo", JOptionPane.WARNING_MESSAGE);
-            txtPassword.requestFocus();
+        AuthService.ValidationResult passValidation = AuthService.validatePassword(password);
+        if (!passValidation.success) {
+            JOptionPane.showMessageDialog(this,
+                    passValidation.message,
+                    "Lỗi mật khẩu",
+                    JOptionPane.ERROR_MESSAGE);
+            getTxtPassword().requestFocus();
             return;
         }
 
-        // Gọi AuthService để lấy dữ liệu từ Database
+        // ========== LOGIN ==========
         AuthService authService = new AuthService();
-        TaiKhoan taiKhoan = authService.login(user, pass);
+        TaiKhoan taiKhoan = authService.login(username, password);
 
         if (taiKhoan != null) {
             JOptionPane.showMessageDialog(this,
@@ -417,62 +425,22 @@ public class LoginForm extends javax.swing.JFrame {
                     "Thành công",
                     JOptionPane.INFORMATION_MESSAGE);
 
-            try {
-                // Ẩn LoginForm
-                this.setVisible(false);
-                System.out.println("✓ LoginForm ẩn thành công");
+            // Đóng LoginForm
+            this.dispose();
 
-                // Mở MainForm và truyền thông tin user
-                System.out.println("Đang tạo MainForm...");
-                MainForm mainForm = new MainForm(taiKhoan);
-                System.out.println("✓ MainForm khởi tạo xong");
-
-                mainForm.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-                System.out.println("✓ Thiết lập setDefaultCloseOperation");
-
-                mainForm.setVisible(true);
-                System.out.println("✓ MainForm hiển thị");
-
-                // Đóng LoginForm sau khi MainForm hiển thị
-                this.dispose();
-                System.out.println("✓ LoginForm đã đóng");
-            } catch (RuntimeException e) {
-                // Nếu là lỗi khởi tạo MainForm
-                if (e.getMessage() != null && e.getMessage().contains("khởi tạo MainForm")) {
-                    System.out.println("❌ Lỗi khởi tạo MainForm: " + e.getCause().getMessage());
-                    this.setVisible(true);
-                    JOptionPane.showMessageDialog(this,
-                            "Lỗi: " + e.getCause().getMessage() +
-                                    "\n\nVui lòng kiểm tra:\n" +
-                                    "1. Các file image trong thư mục resources/images\n" +
-                                    "2. Database connection\n" +
-                                    "3. Thử đăng nhập lại",
-                            "Lỗi",
-                            JOptionPane.ERROR_MESSAGE);
-                } else {
-                    throw e;
-                }
-            } catch (Exception e) {
-                System.out.println("❌ Lỗi khi mở MainForm: " + e.getMessage());
-                e.printStackTrace();
-                this.setVisible(true);
-                JOptionPane.showMessageDialog(this,
-                        "Lỗi khi mở giao diện chính:\n" + e.getMessage(),
-                        "Lỗi",
-                        JOptionPane.ERROR_MESSAGE);
-            }
+            // Mở MainForm
+            new MainForm(taiKhoan).setVisible(true);
         } else {
             JOptionPane.showMessageDialog(this,
                     "Tên đăng nhập hoặc mật khẩu không đúng!",
                     "Lỗi đăng nhập",
                     JOptionPane.ERROR_MESSAGE);
-            txtPassword.setText("");
-            txtPassword.setEchoChar((char) 0);
-            txtPassword.setText("Password");
-            txtPassword.setForeground(new Color(102, 102, 102));
-            txtUsername.requestFocus();
+            getTxtPassword().setText("");
+            getTxtPassword().setEchoChar((char) 0);
+            getTxtPassword().setText("Password");
+            getTxtPassword().setForeground(new Color(102, 102, 102));
+            getTxtUsername().requestFocus();
         }
-
     }// GEN-LAST:event_btnLoginActionPerformed
 
     private void checkRememberActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_checkRememberActionPerformed
@@ -517,6 +485,10 @@ public class LoginForm extends javax.swing.JFrame {
     }
 
     public static void main(String args[]) {
+        // ========== SETUP UI (FlatLaf) TRƯỚC TIÊN ==========
+        UIConfiguration.setupUI();
+
+        // ========== SAU ĐÓ MỚI KHỞI TẠO LOGIN FORM ==========
         java.awt.EventQueue.invokeLater(() -> {
             new LoginForm().setVisible(true);
         });

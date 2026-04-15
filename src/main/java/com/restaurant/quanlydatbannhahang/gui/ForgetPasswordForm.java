@@ -1,6 +1,12 @@
 package com.restaurant.quanlydatbannhahang.gui;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
+import com.restaurant.quanlydatbannhahang.dao.TaiKhoanDAO;
+import com.restaurant.quanlydatbannhahang.entity.TaiKhoan;
+import com.restaurant.quanlydatbannhahang.service.AuthService;
+import com.restaurant.quanlydatbannhahang.service.AuthService.ValidationResult;
 
 public class ForgetPasswordForm extends javax.swing.JFrame {
 
@@ -15,7 +21,8 @@ public class ForgetPasswordForm extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jFileChooser1 = new javax.swing.JFileChooser();
@@ -136,65 +143,84 @@ public class ForgetPasswordForm extends javax.swing.JFrame {
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(260, 260, 260)
-                        .addComponent(clickMinimize, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(clickCLose))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(60, 60, 60)
-                        .addComponent(jLabel6))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(btnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnContinue, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
+                jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblPhone)
-                                    .addComponent(lblUsername))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txtUsername)
-                                    .addComponent(jSeparator3)
-                                    .addComponent(jSeparator4)
-                                    .addComponent(txtPhone, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE))))))
-                .addContainerGap(10, Short.MAX_VALUE))
-        );
+                                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                                .addGap(260, 260, 260)
+                                                .addComponent(clickMinimize, javax.swing.GroupLayout.PREFERRED_SIZE, 10,
+                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(10, 10, 10)
+                                                .addComponent(clickCLose))
+                                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                                .addGap(60, 60, 60)
+                                                .addComponent(jLabel6))
+                                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                                .addGap(20, 20, 20)
+                                                .addGroup(jPanel2Layout
+                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                                                .addComponent(btnCancel,
+                                                                        javax.swing.GroupLayout.PREFERRED_SIZE, 73,
+                                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addPreferredGap(
+                                                                        javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addComponent(btnContinue,
+                                                                        javax.swing.GroupLayout.PREFERRED_SIZE, 75,
+                                                                        javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                                                .addGroup(jPanel2Layout.createParallelGroup(
+                                                                        javax.swing.GroupLayout.Alignment.LEADING)
+                                                                        .addComponent(lblPhone)
+                                                                        .addComponent(lblUsername))
+                                                                .addPreferredGap(
+                                                                        javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addGroup(jPanel2Layout.createParallelGroup(
+                                                                        javax.swing.GroupLayout.Alignment.LEADING,
+                                                                        false)
+                                                                        .addComponent(txtUsername)
+                                                                        .addComponent(jSeparator3)
+                                                                        .addComponent(jSeparator4)
+                                                                        .addComponent(txtPhone,
+                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                177, Short.MAX_VALUE))))))
+                                .addContainerGap(10, Short.MAX_VALUE)));
         jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(clickMinimize, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(clickCLose, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
-                .addComponent(jLabel6)
-                .addGap(47, 47, 47)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblUsername)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, 0)
-                        .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 3, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(14, 14, 14)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(txtPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, 0)
-                        .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 3, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(lblPhone))
-                .addGap(27, 27, 27)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnContinue, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
-        );
+                jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(clickMinimize, javax.swing.GroupLayout.PREFERRED_SIZE, 20,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(clickCLose, javax.swing.GroupLayout.PREFERRED_SIZE, 20,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(30, 30, 30)
+                                .addComponent(jLabel6)
+                                .addGap(47, 47, 47)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(lblUsername)
+                                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                                .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 24,
+                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(0, 0, 0)
+                                                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 3,
+                                                        javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(14, 14, 14)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                                .addComponent(txtPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 24,
+                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(0, 0, 0)
+                                                .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 3,
+                                                        javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(lblPhone))
+                                .addGap(27, 27, 27)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(btnContinue, javax.swing.GroupLayout.PREFERRED_SIZE, 26,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 26,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addContainerGap()));
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 0, 300, 400));
 
@@ -219,12 +245,79 @@ public class ForgetPasswordForm extends javax.swing.JFrame {
     }// GEN-LAST:event_txtUsernameActionPerformed
 
     private void btnContinueActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnContinueActionPerformed
-        // TODO add your handling code here:
+        String username = txtUsername.getText().trim();
+        String phone = txtPhone.getText().trim();
+
+        // ========== VALIDATE USERNAME ==========
+        ValidationResult userValidation = AuthService.validateUsername(username);
+        if (!userValidation.success) {
+            JOptionPane.showMessageDialog(this,
+                    userValidation.message,
+                    "Lỗi tên đăng nhập",
+                    JOptionPane.ERROR_MESSAGE);
+            txtUsername.requestFocus();
+            return;
+        }
+
+        // ========== VALIDATE PHONE ==========
+        ValidationResult phoneValidation = AuthService.validatePhoneNumber(phone);
+        if (!phoneValidation.success) {
+            JOptionPane.showMessageDialog(this,
+                    phoneValidation.message,
+                    "Lỗi số điện thoại",
+                    JOptionPane.ERROR_MESSAGE);
+            txtPhone.requestFocus();
+            return;
+        }
+
+        // ========== CHECK USERNAME EXISTS ==========
+        TaiKhoanDAO taiKhoanDAO = new TaiKhoanDAO();
+        TaiKhoan taiKhoan = taiKhoanDAO.findByUsername(username);
+
+        if (taiKhoan == null) {
+            JOptionPane.showMessageDialog(this,
+                    "Tên đăng nhập không tồn tại!",
+                    "Lỗi",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // ========== CHECK PHONE MATCH ==========
+        // Kiểm tra số điện thoại có khớp với nhân viên không
+        String phoneFromDB = taiKhoan.getNhanVien().getSdt();
+        if (!phone.equals(phoneFromDB)) {
+            JOptionPane.showMessageDialog(this,
+                    "Số điện thoại không khớp với tài khoản này!",
+                    "Lỗi xác minh",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // ========== EVERYTHING OK ==========
+        JOptionPane.showMessageDialog(this,
+                "Xác minh thành công! Vui lòng đặt lại mật khẩu.",
+                "Thành công",
+                JOptionPane.INFORMATION_MESSAGE);
+
+        // Đóng ForgetPasswordForm
+        this.dispose();
+
+        // Mở PanelDatLaiMatKhau để đặt lại mật khẩu
         new PanelDatLaiMatKhau().setVisible(true);
     }// GEN-LAST:event_btnContinueActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCancelActionPerformed
-        // TODO add your handling code here:
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "Bạn có muốn quay lại đăng nhập?",
+                "Xác nhận",
+                JOptionPane.YES_NO_OPTION);
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            // Đóng ForgetPasswordForm
+            this.dispose();
+            // Mở lại LoginForm
+            new LoginForm().setVisible(true);
+        }
     }// GEN-LAST:event_btnCancelActionPerformed
 
     private void txtMailActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtMailActionPerformed

@@ -23,6 +23,13 @@
     	<artifactId>LGoodDatePicker</artifactId>
     	<version>11.2.1</version>
 		</dependency>
+		
+		<!-- FlatLaf - Modern Look and Feel cho Java Swing -->
+		<dependency>
+			<groupId>com.formdev</groupId>
+			<artifactId>flatlaf</artifactId>
+			<version>3.0</version>
+		</dependency>
     </dependencies>
     
     <properties>

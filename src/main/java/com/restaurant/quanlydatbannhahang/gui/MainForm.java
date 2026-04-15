@@ -1234,4 +1234,18 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JLabel subQuanLyThue;
     private javax.swing.JLabel subThongKeDoanhThu;
     // End of variables declaration//GEN-END:variables
+
+    /**
+     * Main method - Cho phép chạy MainForm trực tiếp (testing purposes)
+     * Đảm bảo UI được setup trước khi khởi tạo
+     */
+    public static void main(String args[]) {
+        // ========== SETUP UI (FlatLaf) TRƯỚC TIÊN ==========
+        UIConfiguration.setupUI();
+
+        // ========== SAU ĐÓ MỚI KHỞI TẠO MAINFORM ==========
+        java.awt.EventQueue.invokeLater(() -> {
+            new MainForm().setVisible(true);
+        });
+    }
 }
