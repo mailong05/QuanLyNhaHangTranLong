@@ -11,6 +11,8 @@ import com.restaurant.quanlydatbannhahang.entity.KhachHang;
 import com.restaurant.quanlydatbannhahang.entity.LoaiThanhVien;
 import com.restaurant.quanlydatbannhahang.entity.Ban;
 import com.restaurant.quanlydatbannhahang.session.SessionManager;
+import com.restaurant.quanlydatbannhahang.util.IDGeneratorHelper;
+import com.restaurant.quanlydatbannhahang.util.IDQueryHelper;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -21,12 +23,16 @@ public class PhieuDatBanService {
     private ChiTietPhieuDatBanDAO chiTietPhieuDatBanDAO;
     private KhachHangDAO khachHangDAO;
     private BanDAO banDAO;
+    private IDGeneratorHelper generateHelper;
+    private IDQueryHelper querygenerateHelper;
 
     public PhieuDatBanService() {
         this.phieuDatBanDAO = new PhieuDatBanDAO();
         this.chiTietPhieuDatBanDAO = new ChiTietPhieuDatBanDAO();
         this.khachHangDAO = new KhachHangDAO();
         this.banDAO = new BanDAO();
+        this.generateHelper = new IDGeneratorHelper();
+        this.querygenerateHelper = new IDQueryHelper();
     }
 
     /**
@@ -149,7 +155,7 @@ public class PhieuDatBanService {
         if (maPhieu == null || maPhieu.trim().isEmpty()) {
             throw new IllegalArgumentException("Mã phiếu không được để trống");
         }
-        return chiTietPhieuDatBanDAO.getChiTietByMaPhieu(maPhieu);
+        return chiTietPhieuDatBanDAO.getChiTietByMaPhieuDat(maPhieu);
     }
 
     /**
@@ -198,14 +204,28 @@ public class PhieuDatBanService {
         return getPhieuDatBanTheoMa(maPhieu) != null;
     }
 
+    private KhachHang createNewKhachHang(String tenKhachHang, String soDienThoai) {
+        String lastMaKH = querygenerateHelper.getLastID("KhachHang", "maKH");
+        String newMaKH = (lastMaKH == null || lastMaKH.isEmpty()) ? generateHelper.generateDefaultID(lastMaKH)
+                : generateHelper.generateNextIDFromFullID(lastMaKH);
+        String hoTen = (tenKhachHang == null || tenKhachHang.isEmpty()) ? "Khách vãng lai" : tenKhachHang;
+        KhachHang kh = new KhachHang(
+                newMaKH,
+                hoTen,
+                soDienThoai,
+                0,
+                LoaiThanhVien.DONG);
+        khachHangDAO.themKhachHang(kh);
+        return kh;
+    }
+
     /**
      * Tạo phiếu đặt bàn trước mới từ DatBanTruocDialog
      * Bao gồm: validate, tạo khách hàng (nếu cần), tạo phiếu, tạo chi tiết
      */
-    public String taoPhieuDatBanMoi(String soDienThoai, int soLuongNguoi,
+    public String taoPhieuDatBanMoi(String maPhieuDatBan, String tenKhachHang, String soDienThoai, int soLuongNguoi,
             LocalDateTime thoiGianDen, String ghiChu) {
 
-        // ===== BƯỚC 1: VALIDATION =====
         String validationError = DatBanTruocService.validatePhieuDatBan(soDienThoai, String.valueOf(soLuongNguoi));
         if (validationError != null) {
             throw new IllegalArgumentException(validationError);
@@ -216,24 +236,19 @@ public class PhieuDatBanService {
         }
 
         if (LocalDateTime.now().isAfter(thoiGianDen)) {
-            throw new IllegalArgumentException("Thời gian đến không được trong quá khứ!");
+            throw new IllegalArgumentException("Thời gian đến phải sau ngày hiện tại");
         }
 
         try {
-            // ===== BƯỚC 2: TÌM HOẶC TẠO KHÁCH HÀNG =====
             KhachHang khachHang = khachHangDAO.getKhachHangTheoSDT(soDienThoai);
 
             if (khachHang == null) {
-                // Tạo khách hàng mới
-                khachHang = new KhachHang();
-                khachHang.setHoTen("Khách hàng " + soDienThoai);
-                khachHang.setSdt(soDienThoai);
-                khachHang.setDiemTichLuy(0);
-                khachHang.setLoaiThanhVien(LoaiThanhVien.ĐONG);
+                khachHang = createNewKhachHang(tenKhachHang, soDienThoai);
             }
 
-            // ===== BƯỚC 3: TẠO PHIẾU ĐẶT BÀN =====
             PhieuDatBan phieuDatBan = new PhieuDatBan();
+
+            phieuDatBan.setMaPhieuDat(maPhieuDatBan);
             phieuDatBan.setKhachHang(khachHang);
             phieuDatBan.setNhanVien(SessionManager.getCurrentNhanVien());
             phieuDatBan.setThoiGianDen(thoiGianDen);
@@ -241,17 +256,14 @@ public class PhieuDatBanService {
             phieuDatBan.setGhiChu(ghiChu != null && !ghiChu.isEmpty() ? ghiChu : "");
             phieuDatBan.setTrangThai(TrangThaiPhieuDat.CHO_XAC_NHAN);
 
-            // Lưu phiếu đặt bàn
             boolean phieuSaved = phieuDatBanDAO.themPhieuDatBan(phieuDatBan);
 
             if (!phieuSaved) {
                 throw new RuntimeException("Không thể lưu phiếu đặt bàn!");
             }
 
-            // Lấy mã phiếu đặt vừa tạo
             String maPhieuDat = phieuDatBan.getMaPhieuDat();
             if (maPhieuDat == null || maPhieuDat.isEmpty()) {
-                // Nếu chưa có, tìm phiếu mới nhất (fallback)
                 List<PhieuDatBan> allPhieus = phieuDatBanDAO.getAllPhieuDatBan();
                 if (!allPhieus.isEmpty()) {
                     PhieuDatBan lastPhieu = allPhieus.get(allPhieus.size() - 1);
@@ -259,7 +271,7 @@ public class PhieuDatBanService {
                 }
             }
 
-            System.out.println("✓ Tạo phiếu đặt bàn thành công! Mã: " + maPhieuDat);
+            System.out.println("Tạo phiếu đặt bàn thành công! Mã: " + maPhieuDat);
             return maPhieuDat;
 
         } catch (IllegalArgumentException e) {
@@ -268,4 +280,14 @@ public class PhieuDatBanService {
             throw new RuntimeException("Lỗi khi tạo phiếu đặt bàn: " + e.getMessage(), e);
         }
     }
+
+    /**
+     * Lấy mã phiếu đặt bàn cuối cùng để sinh mã tiếp theo
+     * 
+     * @return Mã phiếu cuối cùng (VD: PDB010) hoặc null nếu bảng rỗng
+     */
+    public String getLastPhieuDatBanID() {
+        return phieuDatBanDAO.getLastPhieuDatBanID();
+    }
+
 }

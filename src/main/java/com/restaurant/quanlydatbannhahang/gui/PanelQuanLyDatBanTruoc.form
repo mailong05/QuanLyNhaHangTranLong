@@ -127,7 +127,7 @@
                           </Group>
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="jComboBox1" pref="127" max="32767" attributes="0"/>
+                                  <Component id="cbTrangThai" pref="127" max="32767" attributes="0"/>
                                   <Component id="spSoNguoi" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
@@ -150,7 +150,7 @@
                                   <Component id="txtSoDienThoai" min="-2" max="-2" attributes="0"/>
                                   <Group type="103" alignment="0" groupAlignment="3" attributes="0">
                                       <Component id="lblGhiChu" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jComboBox1" alignment="3" max="32767" attributes="0"/>
+                                      <Component id="cbTrangThai" alignment="3" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -201,6 +201,7 @@
             </Component>
             <Component class="javax.swing.JTextField" name="txtMaPhieuDat">
               <Properties>
+                <Property name="editable" type="boolean" value="false"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="14" style="0"/>
                 </Property>
@@ -256,6 +257,7 @@
             </Component>
             <Component class="javax.swing.JTextField" name="txtMaNhanVien">
               <Properties>
+                <Property name="editable" type="boolean" value="false"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="14" style="0"/>
                 </Property>
@@ -300,7 +302,7 @@
                 </Property>
               </Properties>
             </Component>
-            <Component class="javax.swing.JComboBox" name="jComboBox1">
+            <Component class="javax.swing.JComboBox" name="cbTrangThai">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                   <StringArray count="0"/>

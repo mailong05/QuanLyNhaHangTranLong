@@ -11,16 +11,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChucVuDAO {
-    private Connection connection;
 
     public ChucVuDAO() {
-        this.connection = DatabaseConnection.getConnection();
     }
 
     /**
      * Lấy tất cả các chức vụ
      */
     public List<ChucVu> getAllChucVu() {
+        Connection connection = DatabaseConnection.getConnection();
         List<ChucVu> list = new ArrayList<>();
         String sql = "SELECT * FROM ChucVu";
 
@@ -43,6 +42,7 @@ public class ChucVuDAO {
      * Tìm chức vụ theo tên
      */
     public ChucVu findByName(String name) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "SELECT * FROM ChucVu WHERE tenChucVu = ?";
 
         try (PreparedStatement pstm = connection.prepareStatement(sql)) {

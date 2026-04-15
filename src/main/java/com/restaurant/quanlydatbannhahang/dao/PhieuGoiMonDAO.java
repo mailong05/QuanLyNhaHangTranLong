@@ -11,12 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PhieuGoiMonDAO {
-    private Connection connection;
     private BanDAO banDAO;
     private NhanVienDAO nhanVienDAO;
 
     public PhieuGoiMonDAO() {
-        this.connection = DatabaseConnection.getConnection();
         this.banDAO = new BanDAO();
         this.nhanVienDAO = new NhanVienDAO();
     }
@@ -46,6 +44,7 @@ public class PhieuGoiMonDAO {
     }
 
     public boolean themPhieuGoiMon(PhieuGoiMon phieu) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "insert into PhieuGoiMon (maPhieuGoi, maBan, maNV, gioVao, gioRa, tongTienTamTinh) values (?,?,?,?,?,?)";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
@@ -63,6 +62,7 @@ public class PhieuGoiMonDAO {
     }
 
     public PhieuGoiMon getPhieuGoiMonTheoMa(String maPhieuGoi) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from PhieuGoiMon where maPhieuGoi = ?";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
@@ -78,6 +78,7 @@ public class PhieuGoiMonDAO {
     }
 
     public List<PhieuGoiMon> getAllPhieuGoiMon() {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from PhieuGoiMon";
         ArrayList<PhieuGoiMon> dsPhieu = new ArrayList<>();
         try {
@@ -96,6 +97,7 @@ public class PhieuGoiMonDAO {
     }
 
     public List<PhieuGoiMon> getPhieuGoiMonTheoBan(String maBan) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from PhieuGoiMon where maBan = ?";
         ArrayList<PhieuGoiMon> dsPhieu = new ArrayList<>();
         try {
@@ -115,6 +117,7 @@ public class PhieuGoiMonDAO {
     }
 
     public List<PhieuGoiMon> getPhieuGoiMonTheoNhanVien(String maNV) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from PhieuGoiMon where maNV = ?";
         ArrayList<PhieuGoiMon> dsPhieu = new ArrayList<>();
         try {
@@ -134,6 +137,7 @@ public class PhieuGoiMonDAO {
     }
 
     public List<PhieuGoiMon> getPhieuGoiMonTheoNgay(LocalDate ngay) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from PhieuGoiMon where convert(date, gioVao) = ?";
         ArrayList<PhieuGoiMon> dsPhieu = new ArrayList<>();
         try {
@@ -153,6 +157,7 @@ public class PhieuGoiMonDAO {
     }
 
     public List<PhieuGoiMon> getPhieuGoiMonDangMo() {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from PhieuGoiMon where gioRa is null";
         ArrayList<PhieuGoiMon> dsPhieu = new ArrayList<>();
         try {
@@ -171,6 +176,7 @@ public class PhieuGoiMonDAO {
     }
 
     public boolean capNhatPhieuGoiMon(PhieuGoiMon phieu) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "update PhieuGoiMon set maBan = ?, maNV = ?, gioVao = ?, gioRa = ?, tongTienTamTinh = ? where maPhieuGoi = ?";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
@@ -188,6 +194,7 @@ public class PhieuGoiMonDAO {
     }
 
     public boolean capNhatTongTienTamTinh(String maPhieuGoi, double tongTien) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "update PhieuGoiMon set tongTienTamTinh = ? where maPhieuGoi = ?";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
@@ -201,6 +208,7 @@ public class PhieuGoiMonDAO {
     }
 
     public boolean xoaPhieuGoiMon(String maPhieuGoi) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "delete from PhieuGoiMon where maPhieuGoi = ?";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
@@ -213,6 +221,7 @@ public class PhieuGoiMonDAO {
     }
 
     public boolean ketThucPhieu(String maPhieuGoi) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "update PhieuGoiMon set gioRa = ? where maPhieuGoi = ?";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);

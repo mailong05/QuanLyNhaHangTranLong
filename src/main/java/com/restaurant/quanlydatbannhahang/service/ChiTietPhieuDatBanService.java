@@ -15,11 +15,11 @@ public class ChiTietPhieuDatBanService {
     /**
      * Lấy chi tiết phiếu đặt bàn theo mã phiếu
      */
-    public List<ChiTietPhieuDatBan> getChiTietByMaPhieu(String maPhieu) {
+    public List<ChiTietPhieuDatBan> getChiTietByMaPhieuDat(String maPhieu) {
         if (maPhieu == null || maPhieu.trim().isEmpty()) {
             throw new IllegalArgumentException("Mã phiếu không được để trống");
         }
-        return chiTietPhieuDatBanDAO.getChiTietByMaPhieu(maPhieu);
+        return chiTietPhieuDatBanDAO.getChiTietByMaPhieuDat(maPhieu);
     }
 
     /**
@@ -73,11 +73,11 @@ public class ChiTietPhieuDatBanService {
     /**
      * Xóa tất cả chi tiết của phiếu
      */
-    public void xoaAllChiTietByMaPhieu(String maPhieu) {
+    public void xoaAllChiTietByMaPhieuDat(String maPhieu) {
         if (maPhieu == null || maPhieu.trim().isEmpty()) {
             throw new IllegalArgumentException("Mã phiếu không được để trống");
         }
-        if (chiTietPhieuDatBanDAO.xoaAllChiTietByMaPhieu(maPhieu)) {
+        if (chiTietPhieuDatBanDAO.xoaAllChiTietByMaPhieuDat(maPhieu)) {
             System.out.println(" Xóa tất cả chi tiết phiếu thành công");
         } else {
             System.out.println(" Xóa tất cả chi tiết phiếu thất bại");
@@ -91,7 +91,7 @@ public class ChiTietPhieuDatBanService {
      * Cập nhật ghi chú
      */
     public void capNhatGhiChu(String maPhieu, String maBan, String ghiChuMoi) {
-        List<ChiTietPhieuDatBan> list = getChiTietByMaPhieu(maPhieu);
+        List<ChiTietPhieuDatBan> list = getChiTietByMaPhieuDat(maPhieu);
         if (list != null) {
             for (ChiTietPhieuDatBan chiTiet : list) {
                 if (chiTiet.getBan().getMaBan().equals(maBan)) {
@@ -108,7 +108,7 @@ public class ChiTietPhieuDatBanService {
      * Đếm tổng số bàn trong phiếu
      */
     public int countBanInPhieu(String maPhieu) {
-        List<ChiTietPhieuDatBan> list = getChiTietByMaPhieu(maPhieu);
+        List<ChiTietPhieuDatBan> list = getChiTietByMaPhieuDat(maPhieu);
         return list != null ? list.size() : 0;
     }
 }

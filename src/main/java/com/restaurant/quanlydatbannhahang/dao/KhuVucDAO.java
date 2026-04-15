@@ -2,6 +2,7 @@ package com.restaurant.quanlydatbannhahang.dao;
 
 import com.restaurant.quanlydatbannhahang.connectDB.DatabaseConnection;
 import com.restaurant.quanlydatbannhahang.entity.KhuVuc;
+import com.restaurant.quanlydatbannhahang.util.IDQueryHelper;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,10 +10,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class KhuVucDAO {
-    private Connection connection;
 
     public KhuVucDAO() {
-        this.connection = DatabaseConnection.getConnection();
+    }
+
+    /**
+     * Lấy mã khu vực cuối cùng
+     * 
+     * @return Mã khu vực cuối cùng (VD: KV005) hoặc null
+     */
+    public String getLastKhuVucID() {
+        return IDQueryHelper.getLastID("KhuVuc", "maKhuVuc");
     }
 
     private KhuVuc buildKhuVucFromResultSet(ResultSet rs) {
@@ -27,6 +35,7 @@ public class KhuVucDAO {
     }
 
     public boolean themKhuVuc(KhuVuc khuVuc) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "insert into KhuVuc (maKhuVuc, tenKhuVuc) values (?,?)";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
@@ -40,6 +49,7 @@ public class KhuVucDAO {
     }
 
     public KhuVuc getKhuVucTheoMa(String maKhuVuc) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from KhuVuc where maKhuVuc = ?";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
@@ -55,6 +65,7 @@ public class KhuVucDAO {
     }
 
     public List<KhuVuc> getAllKhuVuc() {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from KhuVuc";
         ArrayList<KhuVuc> dsKhuVuc = new ArrayList<>();
         try {
@@ -73,6 +84,7 @@ public class KhuVucDAO {
     }
 
     public boolean capNhatKhuVuc(KhuVuc khuVuc) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "update KhuVuc set tenKhuVuc = ? where maKhuVuc = ?";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
@@ -86,6 +98,7 @@ public class KhuVucDAO {
     }
 
     public boolean xoaKhuVuc(String maKhuVuc) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "delete from KhuVuc where maKhuVuc = ?";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
@@ -98,6 +111,7 @@ public class KhuVucDAO {
     }
 
     public KhuVuc getKhuVucTheoTen(String tenKhuVuc) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from KhuVuc where tenKhuVuc = ?";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);

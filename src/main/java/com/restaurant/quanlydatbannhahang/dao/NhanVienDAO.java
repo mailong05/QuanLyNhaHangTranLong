@@ -8,13 +8,20 @@ import com.restaurant.quanlydatbannhahang.connectDB.DatabaseConnection;
 import com.restaurant.quanlydatbannhahang.entity.ChucVu;
 import com.restaurant.quanlydatbannhahang.entity.NhanVien;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiNhanVien;
+import com.restaurant.quanlydatbannhahang.util.IDQueryHelper;
 
 public class NhanVienDAO {
-	private Connection connection;
 
 	public NhanVienDAO() {
-		// TODO Auto-generated constructor stub
-		this.connection = DatabaseConnection.getConnection();
+	}
+
+	/**
+	 * Lấy mã nhân viên cuối cùng
+	 * 
+	 * @return Mã nhân viên cuối cùng (VD: NV015) hoặc null
+	 */
+	public String getLastNhanVienID() {
+		return IDQueryHelper.getLastID("NhanVien", "maNV");
 	}
 
 	public NhanVien buildNhanVienFromResultSet(ResultSet rs) {
@@ -42,6 +49,7 @@ public class NhanVienDAO {
 	}
 
 	public NhanVien getNhanVienTheoMa(String maNV) {
+		Connection connection = DatabaseConnection.getConnection();
 		String sql = "Select * from NhanVien where maNV = ?";
 		try {
 			PreparedStatement pstm = connection.prepareStatement(sql);
@@ -57,6 +65,7 @@ public class NhanVienDAO {
 	}
 
 	public java.util.List<NhanVien> getAllNhanVien() {
+		Connection connection = DatabaseConnection.getConnection();
 		java.util.List<NhanVien> list = new java.util.ArrayList<>();
 		String sql = "Select * from NhanVien";
 		try {
@@ -75,6 +84,7 @@ public class NhanVienDAO {
 	}
 
 	public boolean themNhanVien(NhanVien nhanVien) {
+		Connection connection = DatabaseConnection.getConnection();
 		String sql = "INSERT INTO NhanVien (maNV, hoTen, sdt, chucVu, ngayVaoLam, luongCoBan, trangThai) "
 				+ "VALUES (?, ?, ?, ?, ?, ?, ?)";
 		try {
@@ -94,6 +104,7 @@ public class NhanVienDAO {
 	}
 
 	public boolean capNhatNhanVien(NhanVien nhanVien) {
+		Connection connection = DatabaseConnection.getConnection();
 		String sql = "UPDATE NhanVien SET hoTen = ?, sdt = ?, chucVu = ?, ngayVaoLam = ?, luongCoBan = ?, trangThai = ? "
 				+ "WHERE maNV = ?";
 		try {
@@ -113,6 +124,7 @@ public class NhanVienDAO {
 	}
 
 	public boolean xoaNhanVien(String maNV) {
+		Connection connection = DatabaseConnection.getConnection();
 		String sql = "DELETE FROM NhanVien WHERE maNV = ?";
 		try {
 			PreparedStatement pstm = connection.prepareStatement(sql);
@@ -125,6 +137,7 @@ public class NhanVienDAO {
 	}
 
 	public java.util.List<NhanVien> getNhanVienDangLamViec() {
+		Connection connection = DatabaseConnection.getConnection();
 		java.util.List<NhanVien> list = new java.util.ArrayList<>();
 		String sql = "Select * from NhanVien where trangThai = 1";
 		try {

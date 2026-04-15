@@ -4,9 +4,7 @@ import com.restaurant.quanlydatbannhahang.dao.TaiKhoanDAO;
 import com.restaurant.quanlydatbannhahang.service.AuthService.ValidationResult;
 
 /**
- * TaiKhoanService - Handle các operation liên quan đến TaiKhoan
- * (updatePassword, changePassword, etc.)
- * 
+
  * Khác AuthService chỉ handle authentication (login, validate)
  */
 public class TaiKhoanService {

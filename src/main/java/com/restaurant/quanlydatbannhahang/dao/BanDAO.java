@@ -4,6 +4,7 @@ import com.restaurant.quanlydatbannhahang.connectDB.DatabaseConnection;
 import com.restaurant.quanlydatbannhahang.entity.Ban;
 import com.restaurant.quanlydatbannhahang.entity.KhuVuc;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiBan;
+import com.restaurant.quanlydatbannhahang.util.IDQueryHelper;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,10 +13,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BanDAO {
-    private Connection connection;
 
     public BanDAO() {
-        this.connection = DatabaseConnection.getConnection();
+    }
+
+    /**
+     * Lấy mã bàn cuối cùng trong database
+     * Dùng để sinh mã bàn tiếp theo
+     * 
+     * @return Mã bàn cuối cùng (VD: B005) hoặc null nếu bảng rỗng
+     */
+    public String getLastBanID() {
+        return IDQueryHelper.getLastID("Ban", "maBan");
     }
 
     private Ban buildBanFromResultSet(ResultSet rs) {
@@ -46,6 +55,7 @@ public class BanDAO {
     }
 
     public boolean themBan(Ban ban) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "insert into BanAn (maBan, soGhe, viTri, maKhuVuc, trangThai) values (?,?,?,?,?)";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
@@ -63,6 +73,7 @@ public class BanDAO {
     }
 
     public Ban getBanTheoMa(String maBan) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from BanAn where maBan = ?";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
@@ -78,6 +89,7 @@ public class BanDAO {
     }
 
     public List<Ban> getAllBan() {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from BanAn";
         ArrayList<Ban> dsBan = new ArrayList<Ban>();
         try {
@@ -96,6 +108,7 @@ public class BanDAO {
     }
 
     public List<Ban> getBanTheoKhuVuc(String maKhuVuc) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from BanAn where maKhuVuc = ?";
         ArrayList<Ban> dsBan = new ArrayList<>();
         try {
@@ -115,6 +128,7 @@ public class BanDAO {
     }
 
     public List<Ban> getBanTrong() {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from BanAn where trangThai = ?";
         ArrayList<Ban> dsBan = new ArrayList<>();
         try {
@@ -134,6 +148,7 @@ public class BanDAO {
     }
 
     public List<Ban> getBanDangSuDung() {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from BanAn where trangThai = ?";
         ArrayList<Ban> dsBan = new ArrayList<>();
         try {
@@ -153,6 +168,7 @@ public class BanDAO {
     }
 
     public boolean capNhatBan(Ban ban) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "update BanAn set soGhe = ?, viTri = ?, maKhuVuc = ?, trangThai = ? where maBan = ?";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
@@ -169,6 +185,7 @@ public class BanDAO {
     }
 
     public boolean xoaBan(String maBan) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "delete from BanAn where maBan = ?";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
@@ -181,6 +198,7 @@ public class BanDAO {
     }
 
     public boolean capNhatTrangThaiBan(String maBan, String trangThai) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "update BanAn set trangThai = ? where maBan = ?";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);

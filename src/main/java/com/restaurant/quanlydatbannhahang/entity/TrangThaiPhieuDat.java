@@ -15,4 +15,13 @@ public enum TrangThaiPhieuDat {
     public String getDisplayName() {
         return displayName;
     }
+
+    public static TrangThaiPhieuDat fromDisplayName(String displayName) {
+        for (TrangThaiPhieuDat status : values()) {
+            if (status.displayName.equals(displayName)) {
+                return status;
+            }
+        }
+        return CHO_XAC_NHAN;
+    }
 }

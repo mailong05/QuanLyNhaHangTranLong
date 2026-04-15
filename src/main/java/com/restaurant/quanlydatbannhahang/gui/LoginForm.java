@@ -394,7 +394,6 @@ public class LoginForm extends javax.swing.JFrame {
         String username = getTxtUsername().getText().trim();
         String password = String.valueOf(getTxtPassword().getPassword()).trim();
 
-        System.out.println(username + password);
         AuthService.ValidationResult userValidation = AuthService.validateUsername(username);
         if (!userValidation.success) {
             JOptionPane.showMessageDialog(this,

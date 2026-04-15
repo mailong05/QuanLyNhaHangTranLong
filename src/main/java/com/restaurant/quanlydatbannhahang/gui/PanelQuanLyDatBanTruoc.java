@@ -1,23 +1,38 @@
 package com.restaurant.quanlydatbannhahang.gui;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+
+import com.restaurant.quanlydatbannhahang.service.ChiTietPhieuDatBanService;
+import com.restaurant.quanlydatbannhahang.service.PhieuDatBanService;
 
 import com.restaurant.quanlydatbannhahang.entity.PhieuDatBan;
+import com.restaurant.quanlydatbannhahang.entity.TrangThaiPhieuDat;
 
-public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel {
+public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseListener {
+
+        private PhieuDatBanService pdbService;
+        private ChiTietPhieuDatBanService ctpdbService;
 
         public PanelQuanLyDatBanTruoc() {
+                pdbService = new PhieuDatBanService();
+                ctpdbService = new ChiTietPhieuDatBanService();
                 initComponents();
                 customUI();
-                // loadDataToTable(null);
+                loadDataToTable();
+                pushDataToComboBox(cbFilterTrangThai);
+                pushDataToComboBox(cbTrangThai);
         }
 
         private void customUI() {
@@ -31,6 +46,19 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel {
 
                 // Gắn sự kiện quay về Trang Chủ
                 MainForm.attachGoHomeListener(btnTrangChu, this);
+
+                // ========== ENABLE BUTTON KHI CLICK RA NGOÀI TABLE ==========
+                this.addMouseListener(new java.awt.event.MouseAdapter() {
+                        @Override
+                        public void mousePressed(java.awt.event.MouseEvent evt) {
+                                // Nếu click không phải trên table thì enable button
+                                if (evt.getSource() != tableBan && !isMouseOverTable(evt)) {
+                                        tableBan.clearSelection();
+                                        clearFields(); // Clear dữ liệu các field
+                                        btnCapNhat.setEnabled(false); // Enable button
+                                }
+                        }
+                });
         }
 
         /**
@@ -67,41 +95,70 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel {
                 });
         }
 
-        private void loadDataToTable(ArrayList<PhieuDatBan> list) {
+        private void pushDataToComboBox(JComboBox<String> cb) {
+                cb.removeAllItems();
+                cb.addItem("-- Tất cả --");
+
+                for (TrangThaiPhieuDat trangThai : TrangThaiPhieuDat.values()) {
+                        cb.addItem(trangThai.getDisplayName());
+                }
+        }
+
+        private void loadDataToTable() {
+                ArrayList<PhieuDatBan> listPDB = (ArrayList<PhieuDatBan>) pdbService.getAllPhieuDatBan();
                 DefaultTableModel model = (DefaultTableModel) tableBan.getModel();
-                model.setRowCount(0); // Xóa dữ liệu cũ (rất quan trọng)
+                model.setRowCount(0);
 
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
-                for (PhieuDatBan p : list) {
+                for (PhieuDatBan p : listPDB) {
                         String thoiGian = p.getThoiGianDen().format(formatter);
+                        String listMaBan = ctpdbService.getChiTietByMaPhieuDat(p.getMaPhieuDat())
+                                        .stream()
+                                        .map(ct -> ct.getBan().getMaBan())
+                                        .collect(Collectors.joining(", "));
+
                         model.addRow(new Object[] {
                                         p.getMaPhieuDat(),
                                         p.getKhachHang().getSdt(),
                                         p.getNhanVien().getMaNV(),
+                                        listMaBan,
                                         p.getSoLuongNguoi(),
-                                        thoiGian, // Đã format đẹp
-                                        p.getGhiChu()
+                                        thoiGian,
+                                        p.getTrangThai().getDisplayName()
                         });
                 }
+
+                // ========== SET CELL ALIGNMENT (căn trái cho tất cả cột) ==========
+                DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
+                renderer.setHorizontalAlignment(JLabel.LEFT);
+
+                tableBan.getColumnModel().getColumn(4).setCellRenderer(renderer);
+
+                // ========== THÊM MOUSE LISTENER VÀO TABLE ==========
+                tableBan.addMouseListener(this);
         }
 
-        private void applyCardStyle(JPanel panel, int radius) {
-                panel.setOpaque(false);
-                panel.setUI(new javax.swing.plaf.PanelUI() {
-                        @Override
-                        public void update(Graphics g, JComponent c) {
-                                Graphics2D g2 = (Graphics2D) g.create();
-                                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                                g2.setColor(c.getBackground());
-                                g2.fillRoundRect(0, 0, c.getWidth(), c.getHeight(), radius, radius);
-                                g2.dispose();
-                        }
-                });
+        private boolean isMouseOverTable(java.awt.event.MouseEvent evt) {
+                java.awt.Point p = evt.getPoint();
+                java.awt.Point tablePoint = javax.swing.SwingUtilities.convertPoint(this, p, tableBan);
+                return tableBan.getBounds().contains(tablePoint);
+        }
+
+        private void clearFields() {
+                txtMaPhieuDat.setText("");
+                txtSoDienThoai.setText("");
+                txtMaNhanVien.setText("");
+                txtMaBan.setText("");
+                spSoNguoi.setValue(0);
+                dtpThoiGianDen.setDateTimeStrict(LocalDateTime.now());
+                cbTrangThai.setSelectedIndex(0); // Reset ComboBox
         }
 
         // Từ đây không chỉnh sửa bên dưới
         @SuppressWarnings("unchecked")
+        // <editor-fold defaultstate="collapsed" desc="Generated
+        // <editor-fold defaultstate="collapsed" desc="Generated
         // <editor-fold defaultstate="collapsed" desc="Generated
         // <editor-fold defaultstate="collapsed" desc="Generated
         // Code">//GEN-BEGIN:initComponents
@@ -122,7 +179,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel {
                 btnTimKiem = new javax.swing.JButton();
                 lblSoLuong = new javax.swing.JLabel();
                 dtpThoiGianDen = new com.github.lgooddatepicker.components.DateTimePicker();
-                jComboBox1 = new javax.swing.JComboBox<>();
+                cbTrangThai = new javax.swing.JComboBox<>();
                 txtMaBan = new javax.swing.JTextField();
                 lblMaBan = new javax.swing.JLabel();
                 spSoNguoi = new javax.swing.JSpinner();
@@ -152,6 +209,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel {
                 lblMaPhieuDat.setText("Mã phiếu đặt:");
                 lblMaPhieuDat.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
+                txtMaPhieuDat.setEditable(false);
                 txtMaPhieuDat.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
                 txtMaPhieuDat.setPreferredSize(new java.awt.Dimension(0, 35));
                 txtMaPhieuDat.addActionListener(new java.awt.event.ActionListener() {
@@ -175,6 +233,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel {
                 lblMaNhanVien.setText("Mã nhân viên:");
                 lblMaNhanVien.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
+                txtMaNhanVien.setEditable(false);
                 txtMaNhanVien.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
                 txtMaNhanVien.setPreferredSize(new java.awt.Dimension(0, 35));
 
@@ -198,7 +257,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel {
 
                 dtpThoiGianDen.setPreferredSize(new java.awt.Dimension(228, 35));
 
-                jComboBox1.setPreferredSize(new java.awt.Dimension(72, 35));
+                cbTrangThai.setPreferredSize(new java.awt.Dimension(72, 35));
 
                 txtMaBan.setPreferredSize(new java.awt.Dimension(0, 35));
                 txtMaBan.addActionListener(new java.awt.event.ActionListener() {
@@ -210,9 +269,8 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel {
                 lblMaBan.setText("Mã bàn:");
                 lblMaBan.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
-                cbFilterTrangThai.setModel(
-                                new javax.swing.DefaultComboBoxModel<>(
-                                                new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+                cbFilterTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(
+                                new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
                 cbFilterTrangThai.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
                                 cbFilterTrangThaiActionPerformed(evt);
@@ -224,9 +282,8 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel {
                 pnlThongTinBanLayout.setHorizontalGroup(
                                 pnlThongTinBanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                 .addGroup(pnlThongTinBanLayout.createSequentialGroup()
-                                                                .addGroup(pnlThongTinBanLayout
-                                                                                .createParallelGroup(
-                                                                                                javax.swing.GroupLayout.Alignment.LEADING)
+                                                                .addGroup(pnlThongTinBanLayout.createParallelGroup(
+                                                                                javax.swing.GroupLayout.Alignment.LEADING)
                                                                                 .addGroup(pnlThongTinBanLayout
                                                                                                 .createSequentialGroup()
                                                                                                 .addGroup(pnlThongTinBanLayout
@@ -306,9 +363,8 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel {
                                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE)))
                                                                 .addPreferredGap(
                                                                                 javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                .addGroup(pnlThongTinBanLayout
-                                                                                .createParallelGroup(
-                                                                                                javax.swing.GroupLayout.Alignment.LEADING)
+                                                                .addGroup(pnlThongTinBanLayout.createParallelGroup(
+                                                                                javax.swing.GroupLayout.Alignment.LEADING)
                                                                                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
                                                                                                 pnlThongTinBanLayout
                                                                                                                 .createSequentialGroup()
@@ -333,7 +389,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel {
                                                                                                                 .createParallelGroup(
                                                                                                                                 javax.swing.GroupLayout.Alignment.LEADING,
                                                                                                                                 false)
-                                                                                                                .addComponent(jComboBox1,
+                                                                                                                .addComponent(cbTrangThai,
                                                                                                                                 0,
                                                                                                                                 127,
                                                                                                                                 Short.MAX_VALUE)
@@ -342,9 +398,8 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel {
                 pnlThongTinBanLayout.setVerticalGroup(
                                 pnlThongTinBanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                 .addGroup(pnlThongTinBanLayout.createSequentialGroup()
-                                                                .addGroup(pnlThongTinBanLayout
-                                                                                .createParallelGroup(
-                                                                                                javax.swing.GroupLayout.Alignment.LEADING)
+                                                                .addGroup(pnlThongTinBanLayout.createParallelGroup(
+                                                                                javax.swing.GroupLayout.Alignment.LEADING)
                                                                                 .addGroup(pnlThongTinBanLayout
                                                                                                 .createSequentialGroup()
                                                                                                 .addGroup(pnlThongTinBanLayout
@@ -373,7 +428,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel {
                                                                                                                                                 .createParallelGroup(
                                                                                                                                                                 javax.swing.GroupLayout.Alignment.BASELINE)
                                                                                                                                                 .addComponent(lblGhiChu)
-                                                                                                                                                .addComponent(jComboBox1,
+                                                                                                                                                .addComponent(cbTrangThai,
                                                                                                                                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
                                                                                                                                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
                                                                                                                                                                 Short.MAX_VALUE))))
@@ -397,9 +452,8 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel {
                                                                                                                 26,
                                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE)))
                                                                 .addGap(12, 12, 12)
-                                                                .addGroup(pnlThongTinBanLayout
-                                                                                .createParallelGroup(
-                                                                                                javax.swing.GroupLayout.Alignment.LEADING)
+                                                                .addGroup(pnlThongTinBanLayout.createParallelGroup(
+                                                                                javax.swing.GroupLayout.Alignment.LEADING)
                                                                                 .addGroup(pnlThongTinBanLayout
                                                                                                 .createParallelGroup(
                                                                                                                 javax.swing.GroupLayout.Alignment.BASELINE)
@@ -415,18 +469,16 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel {
                                                                                 .addComponent(lblMaNhanVien))
                                                                 .addPreferredGap(
                                                                                 javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                .addGroup(pnlThongTinBanLayout
-                                                                                .createParallelGroup(
-                                                                                                javax.swing.GroupLayout.Alignment.LEADING)
+                                                                .addGroup(pnlThongTinBanLayout.createParallelGroup(
+                                                                                javax.swing.GroupLayout.Alignment.LEADING)
                                                                                 .addComponent(lblMaBan)
                                                                                 .addComponent(txtMaBan,
                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
                                                                                                 34,
                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE))
                                                                 .addGap(15, 15, 15)
-                                                                .addGroup(pnlThongTinBanLayout
-                                                                                .createParallelGroup(
-                                                                                                javax.swing.GroupLayout.Alignment.LEADING)
+                                                                .addGroup(pnlThongTinBanLayout.createParallelGroup(
+                                                                                javax.swing.GroupLayout.Alignment.LEADING)
                                                                                 .addGroup(pnlThongTinBanLayout
                                                                                                 .createParallelGroup(
                                                                                                                 javax.swing.GroupLayout.Alignment.BASELINE)
@@ -454,13 +506,12 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel {
                                 },
                                 new String[] {
                                                 "Mã phiếu đặt", "Số điện thoại", "Mã nhân viên", "Mã bàn", "Số người",
-                                                "Thời gian đến",
-                                                "Trạng thái"
+                                                "Thời gian đến", "Trạng thái"
                                 }) {
                         Class[] types = new Class[] {
                                         java.lang.String.class, java.lang.String.class, java.lang.String.class,
-                                        java.lang.String.class,
-                                        java.lang.Integer.class, java.lang.Object.class, java.lang.String.class
+                                        java.lang.String.class, java.lang.Integer.class, java.lang.Object.class,
+                                        java.lang.String.class
                         };
                         boolean[] canEdit = new boolean[] {
                                         false, false, false, false, false, false, false
@@ -494,6 +545,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel {
                 btnCapNhat.setText("Cập nhật");
                 btnCapNhat.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
                 btnCapNhat.setPreferredSize(new java.awt.Dimension(90, 27));
+                btnCapNhat.setEnabled(false);
                 btnCapNhat.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
                                 btnCapNhatActionPerformed(evt);
@@ -526,14 +578,97 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel {
 
         private void cbFilterTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterTrangThaiActionPerformed
                 // TODO add your handling code here:
+                filterAction();
         }// GEN-LAST:event_cbFilterTrangThaiActionPerformed
 
+        @SuppressWarnings("unchecked")
+        private void filterAction() {
+                String selectedStatus = (String) cbFilterTrangThai.getSelectedItem();
+
+                // Lấy TableRowSorter
+                TableRowSorter<DefaultTableModel> sorter = (TableRowSorter<DefaultTableModel>) tableBan.getRowSorter();
+
+                if (sorter == null) {
+                        sorter = new TableRowSorter<>((DefaultTableModel) tableBan.getModel());
+                        tableBan.setRowSorter(sorter);
+                }
+
+                if (selectedStatus == null || selectedStatus.equals("-- Tất cả --")) {
+                        sorter.setRowFilter(null);
+                } else {
+                        RowFilter<DefaultTableModel, Integer> filter = RowFilter.regexFilter("^" + selectedStatus + "$",
+                                        6);
+                        sorter.setRowFilter(filter);
+                }
+        }
+
         private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCapNhatActionPerformed
-                // TODO add your handling code here:
+                try {
+                        String maPDB = txtMaPhieuDat.getText().trim();
+                        if (maPDB.isEmpty()) {
+                                JOptionPane.showMessageDialog(this, "Vui lòng chọn phiếu đặt bàn để cập nhật", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                                return;
+                        }
+
+                        // Lấy thông tin phiếu đặt bàn hiện tại
+                        PhieuDatBan phieu = pdbService.getPhieuDatBanTheoMa(maPDB);
+                        if (phieu == null) {
+                                JOptionPane.showMessageDialog(this, "Không tìm thấy phiếu đặt bàn", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                                return;
+                        }
+
+                        // Cập nhật dữ liệu từ form
+                        phieu.setSoLuongNguoi((Integer) spSoNguoi.getValue());
+                        phieu.setThoiGianDen(dtpThoiGianDen.getDateTimeStrict());
+                        
+                        // Lấy trạng thái từ combobox
+                        String trangThaiStr = (String) cbTrangThai.getSelectedItem();
+                        TrangThaiPhieuDat trangThai = TrangThaiPhieuDat.fromDisplayName(trangThaiStr);
+                        phieu.setTrangThai(trangThai);
+
+                        // Gọi service để cập nhật
+                        pdbService.capNhatPhieuDatBan(phieu);
+
+                        JOptionPane.showMessageDialog(this, "Cập nhật phiếu đặt bàn thành công", "Thành công", JOptionPane.INFORMATION_MESSAGE);
+                        
+                        // Reload dữ liệu table
+                        loadDataToTable();
+                        clearFields();
+                        btnCapNhat.setEnabled(false);
+
+                } catch (Exception e) {
+                        JOptionPane.showMessageDialog(this, "Lỗi khi cập nhật: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+                        e.printStackTrace();
+                }
         }// GEN-LAST:event_btnCapNhatActionPerformed
 
         private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaActionPerformed
-                // TODO add your handling code here:
+                try {
+                        String maPDB = txtMaPhieuDat.getText().trim();
+                        if (maPDB.isEmpty()) {
+                                JOptionPane.showMessageDialog(this, "Vui lòng chọn phiếu đặt bàn để xóa", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                                return;
+                        }
+
+                        int result = JOptionPane.showConfirmDialog(this, 
+                                "Bạn có chắc chắn muốn xóa phiếu đặt bàn " + maPDB + " không?", 
+                                "Xác nhận xóa", 
+                                JOptionPane.YES_NO_OPTION);
+
+                        if (result == JOptionPane.YES_OPTION) {
+                                pdbService.xoaPhieuDatBan(maPDB);
+
+                                JOptionPane.showMessageDialog(this, "Xóa phiếu đặt bàn thành công", "Thành công", JOptionPane.INFORMATION_MESSAGE);
+                                
+                                loadDataToTable();
+                                clearFields();
+                                btnCapNhat.setEnabled(false);
+                        }
+
+                } catch (Exception e) {
+                        JOptionPane.showMessageDialog(this, "Lỗi khi xóa: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+                        e.printStackTrace();
+                }
         }// GEN-LAST:event_btnXoaActionPerformed
 
         private void txtMaPhieuDatActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtMaPhieuDatActionPerformed
@@ -541,7 +676,40 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel {
         }// GEN-LAST:event_txtMaPhieuDatActionPerformed
 
         private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTimKiemActionPerformed
-                // TODO add your handling code here:
+                try {
+                        String searchText = txtTimKiem.getText().trim();
+                        
+                        if (searchText.isEmpty() || searchText.equals("Nhập mã đặt bàn hoặc SĐT khách")) {
+                                if (tableBan.getRowSorter() instanceof TableRowSorter) {
+                                        ((TableRowSorter<?>) tableBan.getRowSorter()).setRowFilter(null);
+                                } else {
+                                        loadDataToTable();
+                                }
+                                return;
+                        }
+
+                        String pattern = "(?i).*" + java.util.regex.Pattern.quote(searchText) + ".*";
+                        javax.swing.RowFilter<java.lang.Object, java.lang.Object> filter = 
+                                javax.swing.RowFilter.orFilter(
+                                        java.util.Arrays.asList(
+                                                javax.swing.RowFilter.regexFilter(pattern, 0),
+                                                javax.swing.RowFilter.regexFilter(pattern, 1)
+                                        )
+                                );
+
+                        if (!(tableBan.getRowSorter() instanceof TableRowSorter)) {
+                                DefaultTableModel model = (DefaultTableModel) tableBan.getModel();
+                                TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
+                                tableBan.setRowSorter(sorter);
+                                sorter.setRowFilter(filter);
+                        } else {
+                                ((TableRowSorter<?>) tableBan.getRowSorter()).setRowFilter(filter);
+                        }
+                        
+                } catch (Exception e) {
+                        JOptionPane.showMessageDialog(this, "Lỗi khi tìm kiếm: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+                        e.printStackTrace();
+                }
         }// GEN-LAST:event_btnTimKiemActionPerformed
 
         private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtTimKiemActionPerformed
@@ -554,12 +722,32 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel {
         }// GEN-LAST:event_btnChonMonActionPerformed
 
         private void chonMonAction() {
-                // Lấy MainForm hiện tại
                 java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
                 if (parentFrame instanceof MainForm) {
-                        // Gọi method để mở PanelDatMon
                         ((MainForm) parentFrame).openPanelDatMon();
                 }
+        }
+
+        private void pushDataToFieldsFromRow(int rowIndex) {
+                String maPDB = (String) tableBan.getValueAt(rowIndex, 0);
+                String sdt = (String) tableBan.getValueAt(rowIndex, 1);
+                String maNV = (String) tableBan.getValueAt(rowIndex, 2);
+                String maBan = (String) tableBan.getValueAt(rowIndex, 3);
+                Integer soNguoi = (Integer) tableBan.getValueAt(rowIndex, 4);
+                String trangThai = (String) tableBan.getValueAt(rowIndex, 6);
+
+                String thoiGianDenStr = (String) tableBan.getValueAt(rowIndex, 5);
+
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+                LocalDateTime thoiGianDen = LocalDateTime.parse(thoiGianDenStr, formatter);
+
+                txtMaPhieuDat.setText(maPDB);
+                txtSoDienThoai.setText(sdt);
+                txtMaNhanVien.setText(maNV);
+                txtMaBan.setText(maBan);
+                dtpThoiGianDen.setDateTimeStrict(thoiGianDen);
+                spSoNguoi.setValue(soNguoi);
+                cbTrangThai.setSelectedItem(trangThai);
         }
 
         private void txtMaBanActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtMaBanActionPerformed
@@ -573,8 +761,8 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel {
         private javax.swing.JButton btnTrangChu;
         private javax.swing.JButton btnXoa;
         private javax.swing.JComboBox<String> cbFilterTrangThai;
+        private javax.swing.JComboBox<String> cbTrangThai;
         private com.github.lgooddatepicker.components.DateTimePicker dtpThoiGianDen;
-        private javax.swing.JComboBox<String> jComboBox1;
         private javax.swing.JLabel lblGhiChu;
         private javax.swing.JLabel lblMaBan;
         private javax.swing.JLabel lblMaKhachHang;
@@ -596,4 +784,37 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel {
         private javax.swing.JTextField txtSoDienThoai;
         private javax.swing.JTextField txtTimKiem;
         // End of variables declaration//GEN-END:variables
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+                int rowSelected = tableBan.getSelectedRow();
+                if (rowSelected >= 0) {
+                        pushDataToFieldsFromRow(rowSelected);
+                        btnCapNhat.setEnabled(true);
+                }
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+                // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+                // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void mouseExited(MouseEvent e) {
+                // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+                // TODO Auto-generated method stub
+
+        }
 }

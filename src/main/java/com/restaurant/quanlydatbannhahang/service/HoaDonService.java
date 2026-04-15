@@ -180,4 +180,13 @@ public class HoaDonService {
         List<HoaDon> list = getAllHoaDon();
         return list != null ? list.size() : 0;
     }
+
+    /**
+     * Lấy mã hóa đơn cuối cùng để sinh mã tiếp theo
+     * 
+     * @return Mã hóa đơn cuối cùng (VD: HD000) hoặc null nếu bảng rỗng
+     */
+    public String getLastHoaDonID() {
+        return hoaDonDAO.getLastHoaDonID();
+    }
 }

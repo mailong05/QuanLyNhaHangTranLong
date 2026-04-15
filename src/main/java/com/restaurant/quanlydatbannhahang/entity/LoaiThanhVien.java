@@ -4,17 +4,17 @@ public enum LoaiThanhVien {
 	VIP("VIP"),
 	VANG("VÀNG"),
 	BAC("BẠC"),
-	ĐONG("ĐỒNG");
-	
+	DONG("ĐỒNG");
+
 	private final String displayName;
-	
+
 	LoaiThanhVien(String displayName) {
 		// TODO Auto-generated constructor stub
 		this.displayName = displayName;
 	}
-	
+
 	public String getDisplayName() {
 		return displayName;
 	}
-	
+
 }

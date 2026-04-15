@@ -11,17 +11,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChiTietPhieuDatBanDAO {
-    private Connection connection;
 
     public ChiTietPhieuDatBanDAO() {
-        this.connection = DatabaseConnection.getConnection();
     }
 
     /**
      * Thêm chi tiết phiếu đặt bàn
      */
     public boolean themChiTietPhieuDatBan(ChiTietPhieuDatBan chiTiet) {
-        String sql = "INSERT INTO ChiTietPhieuDatBan (maPhieu, maBan, GhiChu) " +
+        Connection connection = DatabaseConnection.getConnection();
+        String sql = "INSERT INTO ChiTietPhieuDatBan (maPhieuDat, maBan, GhiChu) " +
                 "VALUES (?, ?, ?)";
 
         try (PreparedStatement pstm = connection.prepareStatement(sql)) {
@@ -40,12 +39,13 @@ public class ChiTietPhieuDatBanDAO {
     /**
      * Lấy chi tiết phiếu đặt bàn theo mã phiếu
      */
-    public List<ChiTietPhieuDatBan> getChiTietByMaPhieu(String maPhieu) {
+    public List<ChiTietPhieuDatBan> getChiTietByMaPhieuDat(String maPhieuDat) {
+        Connection connection = DatabaseConnection.getConnection();
         List<ChiTietPhieuDatBan> list = new ArrayList<>();
-        String sql = "SELECT * FROM ChiTietPhieuDatBan WHERE maPhieu = ?";
+        String sql = "SELECT * FROM ChiTietPhieuDatBan WHERE maPhieuDat = ?";
 
         try (PreparedStatement pstm = connection.prepareStatement(sql)) {
-            pstm.setString(1, maPhieu);
+            pstm.setString(1, maPhieuDat);
             try (ResultSet rs = pstm.executeQuery()) {
                 while (rs.next()) {
                     // Tạo object từ ResultSet (cần liên kết với Ban và PhieuDatBan)
@@ -66,8 +66,9 @@ public class ChiTietPhieuDatBanDAO {
      * Cập nhật chi tiết phiếu đặt bàn
      */
     public boolean capNhatChiTietPhieuDatBan(ChiTietPhieuDatBan chiTiet) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "UPDATE ChiTietPhieuDatBan SET GhiChu = ? " +
-                "WHERE maPhieu = ? AND maBan = ?";
+                "WHERE maPhieuDat = ? AND maBan = ?";
 
         try (PreparedStatement pstm = connection.prepareStatement(sql)) {
             pstm.setString(1, chiTiet.getGhiChu());
@@ -84,11 +85,12 @@ public class ChiTietPhieuDatBanDAO {
     /**
      * Xóa chi tiết phiếu đặt bàn
      */
-    public boolean xoaChiTietPhieuDatBan(String maPhieu, String maBan) {
-        String sql = "DELETE FROM ChiTietPhieuDatBan WHERE maPhieu = ? AND maBan = ?";
+    public boolean xoaChiTietPhieuDatBan(String maPhieuDat, String maBan) {
+        Connection connection = DatabaseConnection.getConnection();
+        String sql = "DELETE FROM ChiTietPhieuDatBan WHERE maPhieuDat = ? AND maBan = ?";
 
         try (PreparedStatement pstm = connection.prepareStatement(sql)) {
-            pstm.setString(1, maPhieu);
+            pstm.setString(1, maPhieuDat);
             pstm.setString(2, maBan);
 
             return pstm.executeUpdate() > 0;
@@ -110,7 +112,7 @@ public class ChiTietPhieuDatBanDAO {
 
             ChiTietPhieuDatBan chiTiet = new ChiTietPhieuDatBan();
             chiTiet.setBan(banDAO.getBanTheoMa(rs.getString("maBan")));
-            chiTiet.setPhieuDatBan(phieuDAO.getPhieuDatBanTheoMa(rs.getString("maPhieu")));
+            chiTiet.setPhieuDatBan(phieuDAO.getPhieuDatBanTheoMa(rs.getString("maPhieuDat")));
             chiTiet.setGhiChu(rs.getString("GhiChu"));
 
             return chiTiet;
@@ -124,11 +126,12 @@ public class ChiTietPhieuDatBanDAO {
     /**
      * Xóa tất cả chi tiết của một phiếu đặt bàn
      */
-    public boolean xoaAllChiTietByMaPhieu(String maPhieu) {
-        String sql = "DELETE FROM ChiTietPhieuDatBan WHERE maPhieu = ?";
+    public boolean xoaAllChiTietByMaPhieuDat(String maPhieuDat) {
+        Connection connection = DatabaseConnection.getConnection();
+        String sql = "DELETE FROM ChiTietPhieuDatBan WHERE maPhieuDat = ?";
 
         try (PreparedStatement pstm = connection.prepareStatement(sql)) {
-            pstm.setString(1, maPhieu);
+            pstm.setString(1, maPhieuDat);
             return pstm.executeUpdate() > 0;
         } catch (SQLException e) {
             System.out.println("❌ Lỗi khi xóa tất cả chi tiết phiếu: " + e.getMessage());

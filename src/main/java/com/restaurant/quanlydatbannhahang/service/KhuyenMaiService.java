@@ -144,4 +144,13 @@ public class KhuyenMaiService {
         }
         return khuyenMaiDAO.getKhuyenMaiTheoNgay(ngayBatDau, ngayKetThuc);
     }
+
+    /**
+     * Lấy mã khuyến mại cuối cùng để sinh mã tiếp theo
+     * 
+     * @return Mã khuyến mại cuối cùng (VD: KM000) hoặc null nếu bảng rỗng
+     */
+    public String getLastKhuyenMaiID() {
+        return khuyenMaiDAO.getLastKhuyenMaiID();
+    }
 }

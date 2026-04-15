@@ -95,4 +95,13 @@ public class KhuVucService {
         List<KhuVuc> list = getAllKhuVuc();
         return list != null ? list.size() : 0;
     }
+
+    /**
+     * Lấy mã khu vực cuối cùng để sinh mã tiếp theo
+     * 
+     * @return Mã khu vực cuối cùng (VD: KV000) hoặc null nếu bảng rỗng
+     */
+    public String getLastKhuVucID() {
+        return khuVucDAO.getLastKhuVucID();
+    }
 }

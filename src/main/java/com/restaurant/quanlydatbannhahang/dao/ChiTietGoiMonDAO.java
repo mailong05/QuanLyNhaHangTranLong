@@ -9,11 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChiTietGoiMonDAO {
-    private Connection connection;
     private MonAnDAO monAnDAO;
 
     public ChiTietGoiMonDAO() {
-        this.connection = DatabaseConnection.getConnection();
         this.monAnDAO = new MonAnDAO();
     }
 
@@ -42,6 +40,7 @@ public class ChiTietGoiMonDAO {
     }
 
     public boolean themChiTietGoiMon(ChiTietGoiMon ct) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "insert into ChiTietGoiMon (maPhieuGoi, maMon, soLuong, donGiaLuuTru, thanhTien, ghiChu) values (?,?,?,?,?,?)";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
@@ -59,6 +58,7 @@ public class ChiTietGoiMonDAO {
     }
 
     public ChiTietGoiMon getChiTietGoiMonTheoMa(String maPhieuGoi, String maMon) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from ChiTietGoiMon where maPhieuGoi = ? and maMon = ?";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
@@ -75,6 +75,7 @@ public class ChiTietGoiMonDAO {
     }
 
     public List<ChiTietGoiMon> getChiTietGoiMonByPhieu(String maPhieuGoi) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from ChiTietGoiMon where maPhieuGoi = ?";
         ArrayList<ChiTietGoiMon> dsChiTiet = new ArrayList<>();
         try {
@@ -94,6 +95,7 @@ public class ChiTietGoiMonDAO {
     }
 
     public List<ChiTietGoiMon> getChiTietGoiMonByMon(String maMon) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from ChiTietGoiMon where maMon = ?";
         ArrayList<ChiTietGoiMon> dsChiTiet = new ArrayList<>();
         try {
@@ -113,6 +115,7 @@ public class ChiTietGoiMonDAO {
     }
 
     public boolean capNhatChiTietGoiMon(ChiTietGoiMon ct) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "update ChiTietGoiMon set soLuong = ?, donGiaLuuTru = ?, thanhTien = ?, ghiChu = ? where maPhieuGoi = ? and maMon = ?";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
@@ -135,6 +138,7 @@ public class ChiTietGoiMonDAO {
     }
 
     public boolean capNhatSoLuong(String maPhieuGoi, String maMon, int soLuongMoi) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "update ChiTietGoiMon set soLuong = ? where maPhieuGoi = ? and maMon = ?";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
@@ -149,6 +153,7 @@ public class ChiTietGoiMonDAO {
     }
 
     public boolean xoaChiTietGoiMon(String maPhieuGoi, String maMon) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "delete from ChiTietGoiMon where maPhieuGoi = ? and maMon = ?";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
@@ -162,6 +167,7 @@ public class ChiTietGoiMonDAO {
     }
 
     public boolean xoaAllChiTietByMaPhieu(String maPhieu) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "delete from ChiTietGoiMon where maPhieuGoi = ?";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
@@ -174,6 +180,7 @@ public class ChiTietGoiMonDAO {
     }
 
     public double tinhTongTienPhieu(String maPhieuGoi) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "select sum(thanhTien) from ChiTietGoiMon where maPhieuGoi = ?";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);

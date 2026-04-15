@@ -54,7 +54,7 @@ public class KhachHang {
     }
 
     public String getLoaiThanhVien() {
-        return LoaiThanhVien.ĐONG.getDisplayName();
+        return loaiThanhVien.name();
     }
 
     public void setLoaiThanhVien(LoaiThanhVien loaiThanhVien) {
@@ -72,9 +72,8 @@ public class KhachHang {
             return 10.0;
         } else if (loaiThanhVien == LoaiThanhVien.VANG) {
             return 7.0;
-        }
-        else if(loaiThanhVien == LoaiThanhVien.BAC)
-        	return 5.0;
+        } else if (loaiThanhVien == LoaiThanhVien.BAC)
+            return 5.0;
         return 0.0;
     }
 

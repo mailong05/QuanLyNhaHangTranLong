@@ -3,6 +3,7 @@ package com.restaurant.quanlydatbannhahang.dao;
 import com.restaurant.quanlydatbannhahang.connectDB.DatabaseConnection;
 import com.restaurant.quanlydatbannhahang.entity.KhachHang;
 import com.restaurant.quanlydatbannhahang.entity.LoaiThanhVien;
+import com.restaurant.quanlydatbannhahang.util.IDQueryHelper;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,10 +12,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class KhachHangDAO {
-    private Connection connection;
 
     public KhachHangDAO() {
-        this.connection = DatabaseConnection.getConnection();
+    }
+
+    /**
+     * Lấy mã khách hàng cuối cùng
+     * 
+     * @return Mã khách hàng cuối cùng (VD: KH025) hoặc null
+     */
+    public String getLastKhachHangID() {
+        return IDQueryHelper.getLastID("KhachHang", "maKH");
     }
 
     private KhachHang buildKhachHangFromResultSet(ResultSet rs) {
@@ -33,6 +41,7 @@ public class KhachHangDAO {
     }
 
     public boolean themKhachHang(KhachHang kh) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "insert into KhachHang (maKH, hoTen, sdt, diemTichLuy, loaiThanhVien) values (?,?,?,?,?)";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
@@ -49,6 +58,7 @@ public class KhachHangDAO {
     }
 
     public KhachHang getKhachHangTheoMa(String maKH) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from KhachHang where maKH = ?";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
@@ -64,6 +74,7 @@ public class KhachHangDAO {
     }
 
     public KhachHang getKhachHangTheoSDT(String sdt) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from KhachHang where sdt = ?";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
@@ -79,6 +90,7 @@ public class KhachHangDAO {
     }
 
     public List<KhachHang> getAllKhachHang() {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from KhachHang";
         ArrayList<KhachHang> dsKhachHang = new ArrayList<>();
         try {
@@ -97,6 +109,7 @@ public class KhachHangDAO {
     }
 
     public boolean capNhatKhachHang(KhachHang kh) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "update KhachHang set hoTen = ?, sdt = ?, diemTichLuy = ?, loaiThanhVien = ? where maKH = ?";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
@@ -113,6 +126,7 @@ public class KhachHangDAO {
     }
 
     public boolean xoaKhachHang(String maKH) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "delete from KhachHang where maKH = ?";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
@@ -125,6 +139,7 @@ public class KhachHangDAO {
     }
 
     public List<KhachHang> timKhachHangTheoTen(String hoTen) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from KhachHang where hoTen like ?";
         ArrayList<KhachHang> dsKhachHang = new ArrayList<>();
         try {
@@ -144,6 +159,7 @@ public class KhachHangDAO {
     }
 
     public List<KhachHang> getKhachHangVIP() {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from KhachHang where loaiThanhVien = ?";
         ArrayList<KhachHang> dsKhachHang = new ArrayList<>();
         try {

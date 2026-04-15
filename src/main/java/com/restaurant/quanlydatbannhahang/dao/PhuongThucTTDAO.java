@@ -11,16 +11,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PhuongThucTTDAO {
-    private Connection connection;
 
     public PhuongThucTTDAO() {
-        this.connection = DatabaseConnection.getConnection();
     }
 
     /**
      * Lấy tất cả phương thức thanh toán
      */
     public List<PhuongThucTT> getAllPhuongThucTT() {
+        Connection connection = DatabaseConnection.getConnection();
         List<PhuongThucTT> list = new ArrayList<>();
         String sql = "SELECT * FROM PhuongThucTT";
 
@@ -43,6 +42,7 @@ public class PhuongThucTTDAO {
      * Tìm phương thức thanh toán theo tên
      */
     public PhuongThucTT findByName(String name) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "SELECT * FROM PhuongThucTT WHERE tenPhuongThuc = ?";
 
         try (PreparedStatement pstm = connection.prepareStatement(sql)) {

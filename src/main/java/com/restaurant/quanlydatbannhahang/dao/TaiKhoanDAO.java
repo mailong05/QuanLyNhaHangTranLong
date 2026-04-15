@@ -54,6 +54,7 @@ public class TaiKhoanDAO {
      * Tìm tài khoản theo username và password
      */
     public TaiKhoan findByUsernameAndPassword(String username, String password) {
+        Connection connection = DatabaseConnection.getConnection();
         String query = SELECT_TAIKHOAN_WITH_NHANVIEN + "WHERE tk.username = ? AND tk.password = ?";
 
         try (PreparedStatement pstm = connection.prepareStatement(query)) {
@@ -76,6 +77,7 @@ public class TaiKhoanDAO {
      * Lấy tài khoản theo username
      */
     public TaiKhoan findByUsername(String username) {
+        Connection connection = DatabaseConnection.getConnection();
         String query = SELECT_TAIKHOAN_WITH_NHANVIEN + "WHERE tk.username = ?";
 
         try (PreparedStatement pstm = connection.prepareStatement(query)) {
@@ -97,6 +99,7 @@ public class TaiKhoanDAO {
      * Kiểm tra tài khoản tồn tại
      */
     public boolean existUsername(String username) {
+        Connection connection = DatabaseConnection.getConnection();
         String query = "SELECT COUNT(*) FROM TaiKhoan WHERE username = ?";
 
         try (PreparedStatement pstm = connection.prepareStatement(query)) {
@@ -113,19 +116,20 @@ public class TaiKhoanDAO {
         }
         return false;
     }
-    
+
     public boolean updatePassword(String username, String newPassWord) {
-		String sql = "Update TaiKhoan set password = ? where username = ?";
-		try {
-			PreparedStatement pstm = connection.prepareStatement(sql);
-			pstm.setString(1, newPassWord);
-			pstm.setString(2, username);
-			return pstm.executeUpdate() > 0;
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-		}
-		return false;
-		
-	}
+        Connection connection = DatabaseConnection.getConnection();
+        String sql = "Update TaiKhoan set password = ? where username = ?";
+        try {
+            PreparedStatement pstm = connection.prepareStatement(sql);
+            pstm.setString(1, newPassWord);
+            pstm.setString(2, username);
+            return pstm.executeUpdate() > 0;
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
+        return false;
+
+    }
 }

@@ -10,6 +10,7 @@ import java.time.LocalTime;
 import javax.swing.JOptionPane;
 
 import com.restaurant.quanlydatbannhahang.service.PhieuDatBanService;
+import com.restaurant.quanlydatbannhahang.util.IDGeneratorHelper;
 import com.restaurant.quanlydatbannhahang.service.DatBanTruocService;
 
 public class DatBanTruocDialog extends javax.swing.JDialog {
@@ -18,13 +19,15 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
      * Creates new form TaiKhoanDialog
      */
     private boolean datBanThanhCong = false;
-
+    private IDGeneratorHelper helper;
+    private PhieuDatBanService pdbService;
     public DatBanTruocDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
+        helper = new IDGeneratorHelper();
+        pdbService = new PhieuDatBanService();
         initComponents();
-        this.setLocationRelativeTo(parent); // Hiển thị dialog ở giữa màn hình
-
-        // Set giá trị mặc định cho DateTimePicker (ngày giờ hiện tại)
+        this.setLocationRelativeTo(parent); 
+       
         if (dtpThoiGianDen != null) {
             dtpThoiGianDen.setDateTimeStrict(LocalDateTime.now());
         }
@@ -39,7 +42,7 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel2 = new javax.swing.JPanel();
@@ -75,8 +78,13 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
         lblMaPhieuDat.setText("Mã phiếu đặt:");
         jPanel2.add(lblMaPhieuDat, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 40, -1, 20));
 
+        String lastMaPDB = pdbService.getLastPhieuDatBanID();
+        String newMaPDB = (lastMaPDB == null || lastMaPDB.isEmpty()) ? helper.generateDefaultID(lastMaPDB) : 
+        	helper.generateNextIDFromFullID(lastMaPDB);
+        txtMaPhieuDat.setText(newMaPDB);
         txtMaPhieuDat.setEditable(false);
         txtMaPhieuDat.setBackground(new java.awt.Color(255, 255, 255));
+        txtMaPhieuDat.setFocusable(false);
         txtMaPhieuDat.setForeground(new java.awt.Color(0, 0, 0));
         txtMaPhieuDat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -154,14 +162,15 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
 
     private void btnDatBanActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnDatBanActionPerformed
         try {
+        	String maPDB = txtMaPhieuDat.getText().trim();
             String soDienThoai = txtSoDienThoai.getText().trim();
+            String tenKhachHang = txtTenKhachHang.getText().trim();
             int soLuongNguoi = (int) spSoLuong.getValue();
-            LocalDateTime thoiGianDen = dtpThoiGianDen.getDateTimePermissive();
+            LocalDateTime thoiGianDen = dtpThoiGianDen.getDateTimeStrict();
             String ghiChu = txtGhiChu.getText().trim();
 
-            // Gọi service để validate và lưu
-            PhieuDatBanService service = new PhieuDatBanService();
-            String maPhieuDat = service.taoPhieuDatBanMoi(soDienThoai, soLuongNguoi, thoiGianDen, ghiChu);
+            
+            String maPhieuDat = pdbService.taoPhieuDatBanMoi(maPDB, tenKhachHang, soDienThoai,soLuongNguoi, thoiGianDen, ghiChu);
 
             datBanThanhCong = true;
 
@@ -169,7 +178,6 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
                     "Đặt bàn thành công!\nMã phiếu: " + maPhieuDat, "Thành công",
                     JOptionPane.INFORMATION_MESSAGE);
 
-            // Đóng dialog này
             this.dispose();
 
         } catch (IllegalArgumentException e) {

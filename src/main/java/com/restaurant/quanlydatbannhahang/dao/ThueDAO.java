@@ -10,10 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ThueDAO {
-    private Connection connection;
 
     public ThueDAO() {
-        this.connection = DatabaseConnection.getConnection();
     }
 
     private Thue buildThueFromResultSet(ResultSet rs) {
@@ -33,6 +31,7 @@ public class ThueDAO {
     }
 
     public boolean themThue(Thue thue) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "insert into Thue (maThue, tenThue, thueSuat, trangThai) values (?,?,?,?)";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
@@ -48,6 +47,7 @@ public class ThueDAO {
     }
 
     public Thue getThueTheoMa(String maThue) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from Thue where maThue = ?";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
@@ -63,6 +63,7 @@ public class ThueDAO {
     }
 
     public List<Thue> getAllThue() {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from Thue";
         ArrayList<Thue> dsThue = new ArrayList<>();
         try {
@@ -81,6 +82,7 @@ public class ThueDAO {
     }
 
     public boolean capNhatThue(Thue thue) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "update Thue set tenThue = ?, thueSuat = ?, trangThai = ? where maThue = ?";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
@@ -96,6 +98,7 @@ public class ThueDAO {
     }
 
     public boolean capNhatThueSuat(String maThue, double thueSuatMoi) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "update Thue set thueSuat = ? where maThue = ?";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
@@ -109,6 +112,7 @@ public class ThueDAO {
     }
 
     public boolean xoaThue(String maThue) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "delete from Thue where maThue = ?";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
@@ -121,6 +125,7 @@ public class ThueDAO {
     }
 
     public Thue getThueTheoTen(String tenThue) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from Thue where tenThue = ?";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
@@ -136,6 +141,7 @@ public class ThueDAO {
     }
 
     public List<Thue> getThueTheoTrangThai(TrangThaiThue trangThai) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from Thue where trangThai = ?";
         ArrayList<Thue> dsThue = new ArrayList<>();
         try {

@@ -159,4 +159,13 @@ public class MonAnService {
         List<MonAn> list = getMonAnConHang();
         return list != null ? list.size() : 0;
     }
+
+    /**
+     * Lấy mã món ăn cuối cùng để sinh mã tiếp theo
+     * 
+     * @return Mã món ăn cuối cùng (VD: MA000) hoặc null nếu bảng rỗng
+     */
+    public String getLastMonAnID() {
+        return monAnDAO.getLastMonAnID();
+    }
 }

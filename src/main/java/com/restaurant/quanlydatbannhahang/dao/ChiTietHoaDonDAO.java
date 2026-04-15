@@ -11,16 +11,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChiTietHoaDonDAO {
-    private Connection connection;
 
     public ChiTietHoaDonDAO() {
-        this.connection = DatabaseConnection.getConnection();
     }
 
     /**
      * Thêm chi tiết hóa đơn
      */
     public boolean themChiTietHoaDon(ChiTietHoaDon chiTiet) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "INSERT INTO ChiTietHoaDon (maHD, maMon, soLuong, donGiaLuuTru, ghiChu) " +
                 "VALUES (?, ?, ?, ?, ?)";
 
@@ -42,6 +41,7 @@ public class ChiTietHoaDonDAO {
      * Lấy chi tiết hóa đơn theo mã hóa đơn
      */
     public List<ChiTietHoaDon> getChiTietByMaHD(String maHD) {
+        Connection connection = DatabaseConnection.getConnection();
         List<ChiTietHoaDon> list = new ArrayList<>();
         String sql = "SELECT * FROM ChiTietHoaDon WHERE maHD = ?";
 
@@ -66,6 +66,7 @@ public class ChiTietHoaDonDAO {
      * Lấy chi tiết hóa đơn theo mã hóa đơn và mã món
      */
     public ChiTietHoaDon getChiTietByMaHDAndMaMon(String maHD, String maMon) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "SELECT * FROM ChiTietHoaDon WHERE maHD = ? AND maMon = ?";
 
         try (PreparedStatement pstm = connection.prepareStatement(sql)) {
@@ -87,6 +88,7 @@ public class ChiTietHoaDonDAO {
      * Cập nhật chi tiết hóa đơn
      */
     public boolean capNhatChiTietHoaDon(ChiTietHoaDon chiTiet) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "UPDATE ChiTietHoaDon SET soLuong = ?, donGiaLuuTru = ?, ghiChu = ? " +
                 "WHERE maHD = ? AND maMon = ?";
 
@@ -108,6 +110,7 @@ public class ChiTietHoaDonDAO {
      * Xóa chi tiết hóa đơn
      */
     public boolean xoaChiTietHoaDon(String maHD, String maMon) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "DELETE FROM ChiTietHoaDon WHERE maHD = ? AND maMon = ?";
 
         try (PreparedStatement pstm = connection.prepareStatement(sql)) {
@@ -126,6 +129,7 @@ public class ChiTietHoaDonDAO {
      * Xóa tất cả chi tiết của một hóa đơn
      */
     public boolean xoaAllChiTietByMaHD(String maHD) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "DELETE FROM ChiTietHoaDon WHERE maHD = ?";
 
         try (PreparedStatement pstm = connection.prepareStatement(sql)) {
@@ -142,6 +146,7 @@ public class ChiTietHoaDonDAO {
      * Tính tổng tiền của hóa đơn
      */
     public double getTongTienHoaDon(String maHD) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "SELECT SUM(thanhTien) as tongTien FROM ChiTietHoaDon WHERE maHD = ?";
 
         try (PreparedStatement pstm = connection.prepareStatement(sql)) {
@@ -162,6 +167,7 @@ public class ChiTietHoaDonDAO {
      * Kiểm tra hóa đơn có chi tiết không
      */
     public int countChiTietByMaHD(String maHD) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "SELECT COUNT(*) as soChiTiet FROM ChiTietHoaDon WHERE maHD = ?";
 
         try (PreparedStatement pstm = connection.prepareStatement(sql)) {

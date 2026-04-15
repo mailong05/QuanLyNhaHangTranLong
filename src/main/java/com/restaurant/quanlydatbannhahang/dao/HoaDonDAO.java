@@ -3,6 +3,7 @@ package com.restaurant.quanlydatbannhahang.dao;
 import com.restaurant.quanlydatbannhahang.connectDB.DatabaseConnection;
 import com.restaurant.quanlydatbannhahang.entity.HoaDon;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiHoaDon;
+import com.restaurant.quanlydatbannhahang.util.IDQueryHelper;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,18 +13,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HoaDonDAO {
-    private Connection connection;
     private BanDAO banDAO;
     private NhanVienDAO nhanVienDAO;
     private KhuyenMaiDAO khuyenMaiDAO;
     private ThueDAO thueDAO;
 
     public HoaDonDAO() {
-        this.connection = DatabaseConnection.getConnection();
         this.banDAO = new BanDAO();
         this.nhanVienDAO = new NhanVienDAO();
         this.khuyenMaiDAO = new KhuyenMaiDAO();
         this.thueDAO = new ThueDAO();
+    }
+
+    /**
+     * Lấy mã hóa đơn cuối cùng
+     * 
+     * @return Mã hóa đơn cuối cùng (VD: HD050) hoặc null
+     */
+    public String getLastHoaDonID() {
+        return IDQueryHelper.getLastID("HoaDon", "maHD");
     }
 
     private HoaDon buildHoaDonFromResultSet(ResultSet rs) {
@@ -67,6 +75,7 @@ public class HoaDonDAO {
     }
 
     public boolean themHoaDon(HoaDon hd) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "insert into HoaDon (maHD, maBan, maNV, maKM, maThue, ngayTao, gioVao, gioRa, tongTienGoc, tienGiamGia, tongThanhToan, phuongThucTT, trangThaiThanhToan) values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
@@ -91,6 +100,7 @@ public class HoaDonDAO {
     }
 
     public HoaDon getHoaDonTheoMa(String maHD) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from HoaDon where maHD = ?";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
@@ -106,6 +116,7 @@ public class HoaDonDAO {
     }
 
     public List<HoaDon> getAllHoaDon() {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from HoaDon";
         ArrayList<HoaDon> dsHoaDon = new ArrayList<>();
         try {
@@ -124,6 +135,7 @@ public class HoaDonDAO {
     }
 
     public List<HoaDon> getHoaDonTheoNgay(LocalDate ngay) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from HoaDon where convert(date, ngayTao) = ?";
         ArrayList<HoaDon> dsHoaDon = new ArrayList<>();
         try {
@@ -143,6 +155,7 @@ public class HoaDonDAO {
     }
 
     public List<HoaDon> getHoaDonTrongKhoangThoi(LocalDate tuNgay, LocalDate denNgay) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from HoaDon where convert(date, ngayTao) between ? and ?";
         ArrayList<HoaDon> dsHoaDon = new ArrayList<>();
         try {
@@ -163,6 +176,7 @@ public class HoaDonDAO {
     }
 
     public List<HoaDon> getHoaDonTheoNhanVien(String maNV) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from HoaDon where maNV = ?";
         ArrayList<HoaDon> dsHoaDon = new ArrayList<>();
         try {
@@ -188,6 +202,7 @@ public class HoaDonDAO {
     }
 
     public boolean capNhatHoaDon(HoaDon hd) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "update HoaDon set maBan = ?, maNV = ?, maKM = ?, maThue = ?, ngayTao = ?, gioVao = ?, gioRa = ?, tongTienGoc = ?, tienGiamGia = ?, tongThanhToan = ?, phuongThucTT = ?, trangThaiThanhToan = ? where maHD = ?";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
@@ -212,6 +227,7 @@ public class HoaDonDAO {
     }
 
     public boolean xoaHoaDon(String maHD) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "delete from HoaDon where maHD = ?";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
@@ -224,6 +240,7 @@ public class HoaDonDAO {
     }
 
     public double tinhTongDoanhThu() {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "select sum(tongThanhToan) from HoaDon where trangThaiThanhToan = ?";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
@@ -239,6 +256,7 @@ public class HoaDonDAO {
     }
 
     public double tinhTongDoanhThuTheoNgay(LocalDate ngay) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "select sum(tongThanhToan) from HoaDon where convert(date, ngayTao) = ? and trangThaiThanhToan = ?";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
@@ -255,6 +273,7 @@ public class HoaDonDAO {
     }
 
     public double tinhTongDoanhThuTheoGian(LocalDate tuNgay, LocalDate denNgay) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "select sum(tongThanhToan) from HoaDon where convert(date, ngayTao) between ? and ? and trangThaiThanhToan = ?";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
@@ -272,6 +291,7 @@ public class HoaDonDAO {
     }
 
     public List<HoaDon> getHoaDonTheoMaBan(String maBan) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from HoaDon where maBan = ?";
         ArrayList<HoaDon> dsHoaDon = new ArrayList<>();
         try {
@@ -292,6 +312,8 @@ public class HoaDonDAO {
 
     public List<HoaDon> getHoaDonTheoTrangThai(TrangThaiHoaDon trangThai) {
         String sql = "select * from HoaDon where trangThaiThanhToan = ?";
+        Connection connection = DatabaseConnection.getConnection();
+
         ArrayList<HoaDon> dsHoaDon = new ArrayList<>();
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);

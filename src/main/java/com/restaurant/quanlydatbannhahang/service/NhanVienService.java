@@ -129,4 +129,13 @@ public class NhanVienService {
         List<NhanVien> list = getNhanVienDangLamViec();
         return list != null ? list.size() : 0;
     }
+
+    /**
+     * Lấy mã nhân viên cuối cùng để sinh mã tiếp theo
+     * 
+     * @return Mã nhân viên cuối cùng (VD: NV000) hoặc null nếu bảng rỗng
+     */
+    public String getLastNhanVienID() {
+        return nhanVienDAO.getLastNhanVienID();
+    }
 }

@@ -138,4 +138,13 @@ public class KhachHangService {
     public boolean existKhachHang(String maKH) {
         return getKhachHangTheoMa(maKH) != null;
     }
+
+    /**
+     * Lấy mã khách hàng cuối cùng để sinh mã tiếp theo
+     * 
+     * @return Mã khách hàng cuối cùng (VD: KH000) hoặc null nếu bảng rỗng
+     */
+    public String getLastKhachHangID() {
+        return khachHangDAO.getLastKhachHangID();
+    }
 }

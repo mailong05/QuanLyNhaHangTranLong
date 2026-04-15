@@ -4,6 +4,7 @@ import com.restaurant.quanlydatbannhahang.connectDB.DatabaseConnection;
 import com.restaurant.quanlydatbannhahang.entity.MonAn;
 import com.restaurant.quanlydatbannhahang.entity.LoaiMonAn;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiMonAn;
+import com.restaurant.quanlydatbannhahang.util.IDQueryHelper;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,10 +12,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MonAnDAO {
-    private Connection connection;
 
     public MonAnDAO() {
-        this.connection = DatabaseConnection.getConnection();
+    }
+
+    /**
+     * Lấy mã món ăn cuối cùng
+     * 
+     * @return Mã món ăn cuối cùng (VD: MA080) hoặc null
+     */
+    public String getLastMonAnID() {
+        return IDQueryHelper.getLastID("MonAn", "maMon");
     }
 
     private MonAn buildMonAnFromResultSet(ResultSet rs) {
@@ -38,6 +46,7 @@ public class MonAnDAO {
     }
 
     public boolean themMonAn(MonAn monAn) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "insert into MonAn (maMon, tenMon, donGia, donViTinh, tenLoai, trangThai, urlHinhAnh) values (?,?,?,?,?,?,?)";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
@@ -56,6 +65,7 @@ public class MonAnDAO {
     }
 
     public MonAn getMonAnTheoMa(String maMon) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from MonAn where maMon = ?";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
@@ -71,6 +81,7 @@ public class MonAnDAO {
     }
 
     public List<MonAn> getAllMonAn() {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from MonAn";
         ArrayList<MonAn> dsMonAn = new ArrayList<>();
         try {
@@ -89,6 +100,7 @@ public class MonAnDAO {
     }
 
     public List<MonAn> getMonAnTheoLoai(String maLoai) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from MonAn where tenLoai = ?";
         ArrayList<MonAn> dsMonAn = new ArrayList<>();
         try {
@@ -108,6 +120,7 @@ public class MonAnDAO {
     }
 
     public List<MonAn> getMonAnConHang() {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from MonAn where trangThai = ?";
         ArrayList<MonAn> dsMonAn = new ArrayList<>();
         try {
@@ -127,6 +140,7 @@ public class MonAnDAO {
     }
 
     public boolean capNhatMonAn(MonAn monAn) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "update MonAn set tenMon = ?, donGia = ?, donViTinh = ?, tenLoai = ?, trangThai = ?, urlHinhAnh = ? where maMon = ?";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
@@ -145,6 +159,7 @@ public class MonAnDAO {
     }
 
     public boolean capNhatGiaMonAn(String maMon, double giaMoi) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "update MonAn set donGia = ? where maMon = ?";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
@@ -158,6 +173,7 @@ public class MonAnDAO {
     }
 
     public boolean capNhatTrangThaiMonAn(String maMon, String trangThai) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "update MonAn set trangThai = ? where maMon = ?";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
@@ -171,6 +187,7 @@ public class MonAnDAO {
     }
 
     public boolean xoaMonAn(String maMon) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "delete from MonAn where maMon = ?";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
@@ -183,6 +200,7 @@ public class MonAnDAO {
     }
 
     public List<MonAn> timMonAnTheoTen(String tenMon) {
+        Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from MonAn where tenMon like ?";
         ArrayList<MonAn> dsMonAn = new ArrayList<>();
         try {

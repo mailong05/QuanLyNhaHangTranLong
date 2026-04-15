@@ -159,4 +159,13 @@ public class BanService {
     public void giaiphongBan(String maBan) {
         capNhatTrangThaiBan(maBan, TrangThaiBan.TRONG);
     }
+
+    /**
+     * Lấy mã bàn cuối cùng để sinh mã tiếp theo
+     * 
+     * @return Mã bàn cuối cùng (VD: B005) hoặc null nếu bảng rỗng
+     */
+    public String getLastBanID() {
+        return banDAO.getLastBanID();
+    }
 }
