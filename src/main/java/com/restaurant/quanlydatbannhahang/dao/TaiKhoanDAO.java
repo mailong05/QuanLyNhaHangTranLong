@@ -113,4 +113,19 @@ public class TaiKhoanDAO {
         }
         return false;
     }
+    
+    public boolean updatePassword(String username, String newPassWord) {
+		String sql = "Update TaiKhoan set password = ? where username = ?";
+		try {
+			PreparedStatement pstm = connection.prepareStatement(sql);
+			pstm.setString(1, newPassWord);
+			pstm.setString(2, username);
+			return pstm.executeUpdate() > 0;
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return false;
+		
+	}
 }

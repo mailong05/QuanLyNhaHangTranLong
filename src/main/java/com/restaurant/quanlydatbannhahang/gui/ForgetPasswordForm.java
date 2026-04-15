@@ -302,8 +302,8 @@ public class ForgetPasswordForm extends javax.swing.JFrame {
         // Đóng ForgetPasswordForm
         this.dispose();
 
-        // Mở PanelDatLaiMatKhau để đặt lại mật khẩu
-        new PanelDatLaiMatKhau().setVisible(true);
+        // Mở PanelDatLaiMatKhau để đặt lại mật khẩu (truyền username)
+        new PanelDatLaiMatKhau(username).setVisible(true);
     }// GEN-LAST:event_btnContinueActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCancelActionPerformed

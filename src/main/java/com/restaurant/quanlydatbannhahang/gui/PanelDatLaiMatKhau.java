@@ -2,12 +2,19 @@ package com.restaurant.quanlydatbannhahang.gui;
 
 // UIConfiguration để setup FlatLaf L&F
 import com.restaurant.quanlydatbannhahang.gui.UIConfiguration;
+import com.restaurant.quanlydatbannhahang.service.TaiKhoanService;
+import com.restaurant.quanlydatbannhahang.service.AuthService.ValidationResult;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 public class PanelDatLaiMatKhau extends javax.swing.JFrame {
 
-    public PanelDatLaiMatKhau() {
+    // ========== FIELD ==========
+    private String username; // Lưu username từ ForgetPasswordForm
+
+    public PanelDatLaiMatKhau(String username) {
+        this.username = username;
         initComponents();
 
         // khử viền xanh khi click nút
@@ -228,6 +235,7 @@ public class PanelDatLaiMatKhau extends javax.swing.JFrame {
 
     private void clickCLoseMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_clickCLoseMouseClicked
         this.dispose();
+        System.exit(0);
     }// GEN-LAST:event_clickCLoseMouseClicked
 
     private void clickMinimizeMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_clickMinimizeMouseClicked
@@ -239,12 +247,41 @@ public class PanelDatLaiMatKhau extends javax.swing.JFrame {
     }// GEN-LAST:event_txtUsernameActionPerformed
 
     private void btnContinueActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnContinueActionPerformed
-        // TODO add your handling code here:
-        new PanelDatLaiMatKhau();
+        String newPassword = String.valueOf(txtMatKhauMoi.getPassword());
+        String confirmPassword = String.valueOf(txtNhapLaiMatKhauMoi.getPassword());
+
+        ValidationResult result = TaiKhoanService.updatePassword(username, newPassword, confirmPassword);
+
+        if (!result.success) {
+            JOptionPane.showMessageDialog(this, result.message, "Lỗi", JOptionPane.ERROR_MESSAGE);
+
+            if (result.message.contains("mật khẩu mới") || result.message.contains("phải")) {
+                txtMatKhauMoi.requestFocus();
+            } else {
+                txtNhapLaiMatKhauMoi.requestFocus();
+            }
+            return;
+        }
+
+        JOptionPane.showMessageDialog(this,
+                "Đặt lại mật khẩu thành công! Vui lòng đăng nhập lại.",
+                "Thành công",
+                JOptionPane.INFORMATION_MESSAGE);
+
+        this.dispose();
+        new LoginForm().setVisible(true);
     }// GEN-LAST:event_btnContinueActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCancelActionPerformed
-        // TODO add your handling code here:
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "Bạn có muốn quay lại đăng nhập?",
+                "Xác nhận",
+                JOptionPane.YES_NO_OPTION);
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            this.dispose();
+            new LoginForm().setVisible(true);
+        }
     }// GEN-LAST:event_btnCancelActionPerformed
 
     private void txtMailActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtMailActionPerformed
@@ -264,7 +301,7 @@ public class PanelDatLaiMatKhau extends javax.swing.JFrame {
 
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new PanelDatLaiMatKhau().setVisible(true);
+                new PanelDatLaiMatKhau("testuser").setVisible(true);
             }
         });
     }
