@@ -4,21 +4,15 @@ import com.restaurant.quanlydatbannhahang.connectDB.DatabaseConnection;
 import javax.swing.JOptionPane;
 import com.restaurant.quanlydatbannhahang.gui.LoadingScreen;
 import com.restaurant.quanlydatbannhahang.gui.LoginForm;
+import com.restaurant.quanlydatbannhahang.gui.UIConfiguration;
 
 public class QuanLyDatBanNhaHang {
 
     public static void main(String[] args) {
-        // setup giao diện windows (chạy cho đẹp)
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Windows".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        // ========== SETUP FLATLAF UI TRƯỚC TIÊN ==========
+        UIConfiguration.setupUI();
+
+        // ========== SAU ĐÓ KHỞI TẠO LOADING SCREEN ==========
 
         // khởi tạo loadingform
         LoadingScreen sp = new LoadingScreen();
