@@ -2,29 +2,13 @@ package com.restaurant.quanlydatbannhahang.service;
 
 import com.restaurant.quanlydatbannhahang.dao.NhanVienDAO;
 import com.restaurant.quanlydatbannhahang.entity.NhanVien;
-import com.restaurant.quanlydatbannhahang.entity.TrangThaiNhanVien;
-
 import java.util.List;
 
 public class NhanVienService {
-    private NhanVienDAO nhanVienDAO;
+    private final NhanVienDAO nhanVienDAO;
 
     public NhanVienService() {
         this.nhanVienDAO = new NhanVienDAO();
-    }
-
-    /**
-     * Lấy nhân viên theo mã
-     */
-    public NhanVien getNhanVienTheoMa(String maNV) {
-        if (maNV == null || maNV.trim().isEmpty()) {
-            throw new IllegalArgumentException("Mã nhân viên không được để trống");
-        }
-        NhanVien nhanVien = nhanVienDAO.getNhanVienTheoMa(maNV);
-        if (nhanVien == null) {
-            System.out.println(" Không tìm thấy nhân viên với mã: " + maNV);
-        }
-        return nhanVien;
     }
 
     /**
@@ -35,51 +19,113 @@ public class NhanVienService {
     }
 
     /**
+     * Lấy nhân viên theo mã
+     */
+    public NhanVien getNhanVienTheoMa(String maNV) {
+        if (maNV == null || maNV.trim().isEmpty()) {
+            return null;
+        }
+        return nhanVienDAO.getNhanVienTheoMa(maNV);
+    }
+
+    /**
      * Thêm nhân viên mới
      */
-    public void themNhanVien(NhanVien nhanVien) {
-        if (nhanVien == null) {
-            throw new IllegalArgumentException("Nhân viên không được để trống");
+    public boolean themNhanVien(NhanVien nv) throws Exception {
+        validateNhanVien(nv);
+        
+        // Kiểm tra trùng mã
+        if (nhanVienDAO.getNhanVienTheoMa(nv.getMaNV()) != null) {
+            System.err.println("❌ Thêm " + nv.getMaNV() + " không thành công: Mã đã tồn tại!");
+            throw new Exception("Mã nhân viên [" + nv.getMaNV() + "] đã tồn tại!");
         }
-        if (nhanVien.getMaNV() == null || nhanVien.getMaNV().trim().isEmpty()) {
-            throw new IllegalArgumentException("Mã nhân viên không được để trống");
-        }
-        if (nhanVien.getHoTen() == null || nhanVien.getHoTen().trim().isEmpty()) {
-            throw new IllegalArgumentException("Họ tên không được để trống");
-        }
-        if (nhanVienDAO.themNhanVien(nhanVien)) {
-            System.out.println(" Thêm nhân viên thành công");
+        
+        boolean result = nhanVienDAO.themNhanVien(nv);
+        if (result) {
+            System.out.println("✓ Thêm " + nv.getMaNV() + " thành công!");
         } else {
-            System.out.println(" Thêm nhân viên thất bại");
+            System.err.println("❌ Thêm " + nv.getMaNV() + " không thành công!");
         }
+        return result;
     }
 
     /**
      * Cập nhật nhân viên
+     * Logic: Kiểm tra tồn tại và kiểm tra xem có sự thay đổi dữ liệu hay không
      */
-    public void capNhatNhanVien(NhanVien nhanVien) {
-        if (nhanVien == null) {
-            throw new IllegalArgumentException("Nhân viên không được để trống");
+    public boolean capNhatNhanVien(NhanVien nvMoi) throws Exception {
+        validateNhanVien(nvMoi);
+        
+        // 1. Kiểm tra tồn tại trước khi cập nhật
+        NhanVien nvCu = nhanVienDAO.getNhanVienTheoMa(nvMoi.getMaNV());
+        if (nvCu == null) {
+            System.err.println("❌ Cập nhật " + nvMoi.getMaNV() + " không thành công: Không tìm thấy nhân viên!");
+            throw new Exception("Không tìm thấy nhân viên mã [" + nvMoi.getMaNV() + "] để cập nhật!");
         }
-        if (nhanVienDAO.capNhatNhanVien(nhanVien)) {
-            System.out.println(" Cập nhật nhân viên thành công");
+
+        // 2. Logic: Kiểm tra nếu không có gì thay đổi so với database
+        if (isDữLiệuGiốngNhau(nvCu, nvMoi)) {
+            System.out.println("⚠ Cập nhật " + nvMoi.getMaNV() + ": Bạn chưa thay đổi gì.");
+            throw new Exception("Bạn chưa thay đổi bất kỳ thông tin nào so với dữ liệu cũ!");
+        }
+        
+        boolean result = nhanVienDAO.capNhatNhanVien(nvMoi);
+        if (result) {
+            System.out.println("✓ Cập nhật " + nvMoi.getMaNV() + " thành công!");
         } else {
-            System.out.println(" Cập nhật nhân viên thất bại");
+            System.err.println("❌ Cập nhật " + nvMoi.getMaNV() + " không thành công!");
         }
+        return result;
     }
 
     /**
-     * Xóa nhân viên
+     * Xóa nhân viên theo mã
      */
-    public void xoaNhanVien(String maNV) {
+    public boolean xoaNhanVien(String maNV) throws Exception {
         if (maNV == null || maNV.trim().isEmpty()) {
-            throw new IllegalArgumentException("Mã nhân viên không được để trống");
+            throw new Exception("Mã nhân viên không được để trống!");
         }
-        if (nhanVienDAO.xoaNhanVien(maNV)) {
-            System.out.println(" Xóa nhân viên thành công");
+        
+        boolean result = nhanVienDAO.xoaNhanVien(maNV);
+        if (result) {
+            System.out.println("✓ Xóa " + maNV + " thành công!");
         } else {
-            System.out.println(" Xóa nhân viên thất bại");
+            System.err.println("❌ Xóa " + maNV + " không thành công!");
         }
+        return result;
+    }
+
+    /**
+     * So sánh dữ liệu cũ và mới để kiểm tra xem có thay đổi không
+     */
+    private boolean isDữLiệuGiốngNhau(NhanVien cu, NhanVien moi) {
+        return cu.getHoTen().trim().equals(moi.getHoTen().trim()) &&
+               cu.getSdt().trim().equals(moi.getSdt().trim()) &&
+               cu.getChucVu() == moi.getChucVu() &&
+               cu.getNgayVaoLam().equals(moi.getNgayVaoLam()) &&
+               Double.compare(cu.getLuongCoBan(), moi.getLuongCoBan()) == 0 &&
+               cu.getTrangThai() == moi.getTrangThai();
+    }
+
+    /**
+     * Tìm kiếm nhân viên theo tên hoặc số điện thoại
+     */
+    public List<NhanVien> timKiemNhanVien(String keyword) {
+        System.out.println("🔍 Đang tìm kiếm với từ khóa: " + keyword);
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return nhanVienDAO.getAllNhanVien();
+        }
+        return nhanVienDAO.timKiemNhanVien(keyword.trim());
+    }
+
+    /**
+     * Lọc nhân viên theo chức vụ
+     */
+    public List<NhanVien> filterTheoChucVu(String chucVuName) {
+        if (chucVuName == null || chucVuName.equals("Tất cả chức vụ")) {
+            return nhanVienDAO.getAllNhanVien();
+        }
+        return nhanVienDAO.filterTheoChucVu(chucVuName);
     }
 
     /**
@@ -90,43 +136,30 @@ public class NhanVienService {
     }
 
     /**
-     * Cập nhật trạng thái nhân viên
+     * Hàm kiểm tra dữ liệu đầu vào (Validation)
      */
-    public void capNhatTrangThaiNhanVien(String maNV, TrangThaiNhanVien trangThai) {
-        if (maNV == null || maNV.trim().isEmpty()) {
-            throw new IllegalArgumentException("Mã nhân viên không được để trống");
+    private void validateNhanVien(NhanVien nv) throws Exception {
+        if (nv == null) {
+            throw new Exception("Dữ liệu nhân viên không hợp lệ!");
         }
-        if (trangThai == null) {
-            throw new IllegalArgumentException("Trạng thái không được để trống");
+        if (nv.getMaNV() == null || nv.getMaNV().trim().isEmpty()) {
+            throw new Exception("Mã nhân viên không được để trống!");
         }
-        NhanVien nhanVien = getNhanVienTheoMa(maNV);
-        if (nhanVien != null) {
-            nhanVien.setTrangThai(trangThai);
-            capNhatNhanVien(nhanVien);
+        if (nv.getHoTen() == null || nv.getHoTen().trim().isEmpty()) {
+            throw new Exception("Họ tên không được để trống!");
+        }
+        if (nv.getSdt() == null || !nv.getSdt().matches("0\\d{9}")) {
+            throw new Exception("Số điện thoại phải bắt đầu bằng số 0 và có 10 chữ số!");
+        }
+        if (nv.getLuongCoBan() < 0) {
+            throw new Exception("Lương cơ bản không được âm!");
+        }
+        if (nv.getNgayVaoLam() == null) {
+            throw new Exception("Ngày vào làm không được để trống!");
         }
     }
 
-    /**
-     * Kiểm tra nhân viên đang làm việc hay không
-     */
-    public boolean isNhanVienDangLamViec(String maNV) {
-        NhanVien nhanVien = getNhanVienTheoMa(maNV);
-        return nhanVien != null && nhanVien.getTrangThai() == TrangThaiNhanVien.DANG_LAM_VIEC;
-    }
-
-    /**
-     * Tính tổng số nhân viên
-     */
     public int getTotalNhanVien() {
-        List<NhanVien> list = getAllNhanVien();
-        return list != null ? list.size() : 0;
+        return nhanVienDAO.getAllNhanVien().size();
     }
-
-    /**
-     * Tính tổng số nhân viên đang làm việc
-     */
-    public int getTotalNhanVienDangLamViec() {
-        List<NhanVien> list = getNhanVienDangLamViec();
-        return list != null ? list.size() : 0;
-    }
-}
+}   

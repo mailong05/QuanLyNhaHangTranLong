@@ -2,7 +2,7 @@ package com.restaurant.quanlydatbannhahang.entity;
 
 public enum ChucVu {
     QUAN_LY("Quản lý"),
-    BEP("Bếp"),
+    BEP("Đầu bếp"),
     THU_NGAN("Thu ngân"),
     PHUC_VU("Phục vụ");
 
@@ -13,6 +13,11 @@ public enum ChucVu {
     }
 
     public String getDisplayName() {
+        return displayName;
+    }
+
+    @Override
+    public String toString() {
         return displayName;
     }
 }
