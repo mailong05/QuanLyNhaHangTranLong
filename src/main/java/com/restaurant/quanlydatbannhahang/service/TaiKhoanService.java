@@ -1,6 +1,9 @@
 package com.restaurant.quanlydatbannhahang.service;
 
+import java.util.List;
+
 import com.restaurant.quanlydatbannhahang.dao.TaiKhoanDAO;
+import com.restaurant.quanlydatbannhahang.entity.TaiKhoan;
 import com.restaurant.quanlydatbannhahang.service.AuthService.ValidationResult;
 
 /**
@@ -42,4 +45,9 @@ public class TaiKhoanService {
             return new ValidationResult(false, "Lỗi cập nhật mật khẩu từ cơ sở dữ liệu. Vui lòng thử lại!");
         }
     }
+
+	public List<TaiKhoan> getAllTaiKhoan() {
+		// TODO Auto-generated method stub
+		return taiKhoanDAO.getAllTaiKhoan();
+	}
 }

@@ -104,4 +104,6 @@ public class KhuVucService {
     public String getLastKhuVucID() {
         return khuVucDAO.getLastKhuVucID();
     }
+
+	
 }

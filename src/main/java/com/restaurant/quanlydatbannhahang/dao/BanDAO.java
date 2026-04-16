@@ -48,7 +48,7 @@ public class BanDAO {
         }
     }
 
-    public Ban buildBan(String maBan, int soGhe, String maKV, String trangThai) {
+    private Ban buildBan(String maBan, int soGhe, String maKV, String trangThai) {
         KhuVuc khuVuc = new KhuVuc(maKV, "");
         TrangThaiBan status = TrangThaiBan.valueOf(trangThai);
         return new Ban(maBan, soGhe, "", khuVuc, status);

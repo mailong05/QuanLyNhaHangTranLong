@@ -3,17 +3,31 @@ package com.restaurant.quanlydatbannhahang.gui;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import com.restaurant.quanlydatbannhahang.service.ThueService;
+import com.restaurant.quanlydatbannhahang.entity.Thue;
+import com.restaurant.quanlydatbannhahang.entity.TrangThaiThue;
+import com.restaurant.quanlydatbannhahang.util.ComboBoxEnumLoader;
+import java.util.List;
 
 public class PanelDanhSachThue extends javax.swing.JPanel {
+    private ThueService thueService;
+    private List<Thue> allThue;
 
     public PanelDanhSachThue() {
         initComponents();
+        
+        thueService = new ThueService();
         customUI();
+        loadDataToTable();
     }
 
     private void customUI() {
         // Placeholder cho txtTimKiem
         setupPlaceholder(txtTimKiem, "Nhập tên hoặc mã thuế");
+
+        // Load enum trạng thái lên ComboBox
+        ComboBoxEnumLoader.loadTrangThaiThueToComboBox(cbFilterTrangThai);
 
         // Gắn sự kiện quay về Trang Chủ
         MainForm.attachGoHomeListener(btnTrangChu, this);
@@ -67,10 +81,39 @@ public class PanelDanhSachThue extends javax.swing.JPanel {
         });
     }
 
+    private void loadDataToTable() {
+        try {
+            allThue = thueService.getAllThue();
+            DefaultTableModel model = (DefaultTableModel) tableThue.getModel();
+            model.setRowCount(0);
+
+            for (Thue thue : allThue) {
+                model.addRow(new Object[] {
+                        thue.getMaThue(),
+                        thue.getTenThue(),
+                        thue.getThueSuat(),
+                        thue.getTrangThai() == TrangThaiThue.CON_AP_DUNG ? "Còn áp dụng" : "Ngưng áp dụng"
+                });
+            }
+            centerTableColumns(tableThue);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void centerTableColumns(JTable table) {
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        for (int i = 0; i < table.getColumnCount(); i++) {
+            table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPopupMenu1 = new javax.swing.JPopupMenu();
@@ -108,7 +151,8 @@ public class PanelDanhSachThue extends javax.swing.JPanel {
             }
         });
 
-        cbFilterTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Trạng thái", "Còn áp dụng", "Ngưng áp dụng", " " }));
+        // ComboBox được load bởi UIComboBoxHelper.loadTrangThaiThueToComboBox() trong
+        // customUI()
         cbFilterTrangThai.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbFilterTrangThaiActionPerformed(evt);
@@ -118,50 +162,55 @@ public class PanelDanhSachThue extends javax.swing.JPanel {
         javax.swing.GroupLayout pnlThongTinThueLayout = new javax.swing.GroupLayout(pnlThongTinThue);
         pnlThongTinThue.setLayout(pnlThongTinThueLayout);
         pnlThongTinThueLayout.setHorizontalGroup(
-            pnlThongTinThueLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlThongTinThueLayout.createSequentialGroup()
-                .addComponent(cbFilterTrangThai, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 455, Short.MAX_VALUE)
-                .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
+                pnlThongTinThueLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(pnlThongTinThueLayout.createSequentialGroup()
+                                .addComponent(cbFilterTrangThai, javax.swing.GroupLayout.PREFERRED_SIZE, 136,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 455,
+                                        Short.MAX_VALUE)
+                                .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 236,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 123,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)));
         pnlThongTinThueLayout.setVerticalGroup(
-            pnlThongTinThueLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlThongTinThueLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(pnlThongTinThueLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(cbFilterTrangThai)
-                    .addGroup(pnlThongTinThueLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))))
-        );
+                pnlThongTinThueLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(pnlThongTinThueLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(pnlThongTinThueLayout
+                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(cbFilterTrangThai)
+                                        .addGroup(pnlThongTinThueLayout
+                                                .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35,
+                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35,
+                                                        javax.swing.GroupLayout.PREFERRED_SIZE)))));
 
         pnlHeader.add(pnlThongTinThue, java.awt.BorderLayout.PAGE_END);
 
         add(pnlHeader, java.awt.BorderLayout.PAGE_START);
 
         tableThue.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+                new Object[][] {
 
-            },
-            new String [] {
-                "Mã thuế", "Tên thuế", "Thuế suất", "Trạng thái"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.String.class
+                },
+                new String[] {
+                        "Mã thuế", "Tên thuế", "Thuế suất", "Trạng thái"
+                }) {
+            Class[] types = new Class[] {
+                    java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.String.class
             };
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false
+            boolean[] canEdit = new boolean[] {
+                    false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
+                return types[columnIndex];
             }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
+                return canEdit[columnIndex];
             }
         });
         tableThue.setRowHeight(35);
@@ -179,12 +228,54 @@ public class PanelDanhSachThue extends javax.swing.JPanel {
         add(pnlButton, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnTimKiemActionPerformed
+    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTimKiemActionPerformed
+        searchAndFilter();
+    }// GEN-LAST:event_btnTimKiemActionPerformed
+
+    private void searchAndFilter() {
+        DefaultTableModel model = (DefaultTableModel) tableThue.getModel();
+        model.setRowCount(0);
+        String searchText = txtTimKiem.getText().trim().toLowerCase();
+        String selectedTrangThai = (String) cbFilterTrangThai.getSelectedItem();
+
+        for (Thue thue : allThue) {
+            // Check filters
+            if (selectedTrangThai != null && !selectedTrangThai.equals("Trạng thái")) {
+                if (!thue.getTrangThai().getDisplayName().equals(selectedTrangThai)) {
+                    continue;
+                }
+            }
+
+            // Check search text
+            String tenThue = thue.getTenThue() != null ? thue.getTenThue().toLowerCase() : "";
+            String maThue = thue.getMaThue() != null ? thue.getMaThue().toLowerCase() : "";
+            if (!searchText.isEmpty() && (!tenThue.contains(searchText) && !maThue.contains(searchText))) {
+                continue;
+            }
+
+            // Add to table
+            model.addRow(new Object[] {
+                    thue.getMaThue(),
+                    thue.getTenThue(),
+                    thue.getThueSuat(),
+                    thue.getTrangThai().getDisplayName()
+            });
+        }
+        centerTableColumns(tableThue);
+    }
+
+    private void filterTable() {
+        String selectedTrangThai = (String) cbFilterTrangThai.getSelectedItem();
+
+        if (selectedTrangThai != null && !selectedTrangThai.equals("Trạng thái")) {
+            searchAndFilter();
+        } else {
+            loadDataToTable();
+        }
+    }
 
     private void cbFilterTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterTrangThaiActionPerformed
-        // TODO add your handling code here:
+        filterTable();
     }// GEN-LAST:event_cbFilterTrangThaiActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

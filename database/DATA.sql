@@ -114,7 +114,7 @@ INSERT INTO MonAn (maMon, tenMon, donGia, donViTinh, tenLoai, trangThai, urlHinh
 
 
 
--- 2.8. BẢNG BÀN ĂN (10 Bàn)
+-- 2.8. BẢNG BÀN ĂN
 INSERT INTO BanAn (maBan, soGhe, viTri, maKhuVuc, trangThai) VALUES 
 ('B001', 4, N'Cạnh cửa sổ', 'KV001', N'TRONG'),
 ('B002', 2, N'Góc sảnh', 'KV001', N'DANG_DUNG'),
@@ -123,35 +123,21 @@ INSERT INTO BanAn (maBan, soGhe, viTri, maKhuVuc, trangThai) VALUES
 ('B005', 8, N'Gần hồ cá', 'KV004', N'TRONG'),
 ('B006', 4, N'Quầy Bar 1', 'KV005', N'DANG_DUNG'),
 ('B007', 12, N'Phòng Trúc lớn', 'KV002', N'DA_DAT'),
-('B008', 2, N'Gầm cầu thang', 'KV001', N'TRONG'),
-('B009', 6, N'Ban công phải', 'KV003', N'TRONG'),
-('B010', 8, N'Hàng thứ hai', 'KV001', N'TRONG');
+('B008', 2, N'Gầm cầu thang', 'KV001', N'TRONG');
 
--- 2.9. PHIẾU ĐẶT BÀN (10 Phiếu)
+-- 2.9. PHIẾU ĐẶT BÀN
 INSERT INTO PhieuDatBan (maPhieuDat, maKH, maNV, thoiGianDen, soLuongNguoi, ghiChu, trangThai) VALUES 
 ('PD001', 'KH001', 'NV003', '2026-04-04 19:00:00', 4, N'Sinh nhật', N'DANG_SU_DUNG'),
 ('PD002', 'KH002', 'NV002', '2026-04-05 18:30:00', 10, N'Tiệc công ty', N'DANG_CHO'),
 ('PD003', 'KH004', 'NV003', '2026-04-10 20:00:00', 2, N'Kỷ niệm ngày cưới', N'DANG_SU_DUNG'),
-('PD004', 'KH005', 'NV002', '2026-04-12 11:30:00', 6, N'Ăn trưa gia đình', N'DANG_SU_DUNG'),
-('PD005', 'KH003', 'NV006', '2026-04-15 19:30:00', 4, N'Gặp mặt nhóm bạn', N'DANG_CHO'),
-('PD006', 'KH006', 'NV003', '2026-04-16 12:00:00', 8, N'Tiệc trưa đặc biệt', N'DANG_SU_DUNG'),
-('PD007', 'KH001', 'NV002', '2026-04-18 18:00:00', 6, N'Đôi qua', N'DANG_CHO'),
-('PD008', 'KH004', 'NV006', '2026-04-20 20:30:00', 2, N'Tối lãng mạn', N'DANG_CHO'),
-('PD009', 'KH002', 'NV003', '2026-04-22 11:00:00', 12, N'Họp mặt gia đình lớn', N'DA_HUY'),
-('PD010', 'KH005', 'NV002', '2026-04-25 19:00:00', 4, N'Kỷ niệm thành lập công ty', N'DANG_CHO');
+('PD004', 'KH005', 'NV002', '2026-04-12 11:30:00', 6, N'Ăn trưa gia đình', N'DANG_SU_DUNG');
 
 -- 2.10. CHI TIẾT PHIẾU ĐẶT BÀN
 INSERT INTO ChiTietPhieuDatBan (maPhieuDat, maBan, ghiChu) VALUES 
 ('PD001', 'B001', N'Trang trí nến'),
 ('PD002', 'B003', N'Phòng máy lạnh'),
 ('PD003', 'B008', N'Góc riêng tư'),
-('PD004', 'B005', N'Gần khu vui chơi'),
-('PD005', 'B004', N'Không khí mát'),
-('PD006', 'B007', N'Phòng VIP'),
-('PD007', 'B009', N'View sân vườn'),
-('PD008', 'B002', N'Cạnh quầy bar'),
-('PD009', 'B003', N'Hủy do lịch bận'),
-('PD010', 'B006', N'Gần quầy nước');
+('PD004', 'B005', N'Gần khu vui chơi');
 
 -- 2.11. BẢNG HÓA ĐƠN
 INSERT INTO HoaDon (maHD, maBan, maNV, maKM, maThue, ngayTao, gioVao, gioRa, trangThaiThanhToan, phuongThucTT, tienGiamGia) VALUES 

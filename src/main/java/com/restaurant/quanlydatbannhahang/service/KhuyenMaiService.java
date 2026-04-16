@@ -153,4 +153,6 @@ public class KhuyenMaiService {
     public String getLastKhuyenMaiID() {
         return khuyenMaiDAO.getLastKhuyenMaiID();
     }
+
+	
 }

@@ -4,17 +4,30 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import com.restaurant.quanlydatbannhahang.service.NhanVienService;
+import com.restaurant.quanlydatbannhahang.util.ComboBoxEnumLoader;
+import com.restaurant.quanlydatbannhahang.entity.NhanVien;
+import java.util.List;
 
 public class PanelDanhSachNhanVien extends javax.swing.JPanel {
+    private NhanVienService nhanVienService;
+    private List<NhanVien> allNhanVien;
 
     public PanelDanhSachNhanVien() {
         initComponents();
+        nhanVienService = new NhanVienService();
         customUI();
+        loadDataToTable();
     }
 
     private void customUI() {
         // Placeholder cho txtTimKiem
         setupPlaceholder(txtTimKiem, "Nhập tên hoặc số điện thoại");
+
+        // Load enum chức vụ lên ComboBox
+        ComboBoxEnumLoader.loadChucVuToComboBox(cbFilterChucVu);
+
         // Gắn sự kiện quay về Trang Chủ
         MainForm.attachGoHomeListener(btnTrangChu, this);
     }
@@ -67,10 +80,42 @@ public class PanelDanhSachNhanVien extends javax.swing.JPanel {
         });
     }
 
+    private void loadDataToTable() {
+        try {
+            allNhanVien = nhanVienService.getAllNhanVien();
+            DefaultTableModel model = (DefaultTableModel) tableKhuVuc.getModel();
+            model.setRowCount(0);
+
+            for (NhanVien nv : allNhanVien) {
+                model.addRow(new Object[] {
+                        nv.getMaNV(),
+                        nv.getHoTen(),
+                        nv.getSdt(),
+                        nv.getChucVu().getDisplayName(),
+                        nv.getNgayVaoLam(),
+                        nv.getLuongCoBan(),
+                        nv.getTrangThai().getDisplayName()
+                });
+            }
+            centerTableColumns(tableKhuVuc);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void centerTableColumns(JTable table) {
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        for (int i = 0; i < table.getColumnCount(); i++) {
+            table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         pnlHeader = new javax.swing.JPanel();
@@ -107,7 +152,8 @@ public class PanelDanhSachNhanVien extends javax.swing.JPanel {
             }
         });
 
-        cbFilterChucVu.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Chức vụ", "Quản lý", "Thu ngân", "Phục vụ", "Bếp", " " }));
+        cbFilterChucVu.setModel(new javax.swing.DefaultComboBoxModel<>(
+                new String[] { "Chức vụ", "Quản lý", "Thu ngân", "Phục vụ", "Bếp", " " }));
         cbFilterChucVu.setPreferredSize(new java.awt.Dimension(72, 35));
         cbFilterChucVu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -118,50 +164,60 @@ public class PanelDanhSachNhanVien extends javax.swing.JPanel {
         javax.swing.GroupLayout pnlThongTinNhanVienLayout = new javax.swing.GroupLayout(pnlThongTinNhanVien);
         pnlThongTinNhanVien.setLayout(pnlThongTinNhanVienLayout);
         pnlThongTinNhanVienLayout.setHorizontalGroup(
-            pnlThongTinNhanVienLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlThongTinNhanVienLayout.createSequentialGroup()
-                .addComponent(cbFilterChucVu, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 452, Short.MAX_VALUE)
-                .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 304, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
+                pnlThongTinNhanVienLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
+                                pnlThongTinNhanVienLayout.createSequentialGroup()
+                                        .addComponent(cbFilterChucVu, javax.swing.GroupLayout.PREFERRED_SIZE, 138,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 452,
+                                                Short.MAX_VALUE)
+                                        .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 304,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 132,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE)));
         pnlThongTinNhanVienLayout.setVerticalGroup(
-            pnlThongTinNhanVienLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlThongTinNhanVienLayout.createSequentialGroup()
-                .addGroup(pnlThongTinNhanVienLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlThongTinNhanVienLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(cbFilterChucVu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 10, Short.MAX_VALUE))
-        );
+                pnlThongTinNhanVienLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(pnlThongTinNhanVienLayout.createSequentialGroup()
+                                .addGroup(pnlThongTinNhanVienLayout
+                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(pnlThongTinNhanVienLayout
+                                                .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35,
+                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35,
+                                                        javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(cbFilterChucVu, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 10, Short.MAX_VALUE)));
 
         pnlHeader.add(pnlThongTinNhanVien, java.awt.BorderLayout.PAGE_END);
 
         add(pnlHeader, java.awt.BorderLayout.PAGE_START);
 
         tableKhuVuc.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+                new Object[][] {
 
-            },
-            new String [] {
-                "Mã nhân viên", "Họ tên", "Số điện thoại", "Chức vụ", "Ngày vào làm", "Lương cơ bản", "Trạng thái"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Double.class, java.lang.String.class
+                },
+                new String[] {
+                        "Mã nhân viên", "Họ tên", "Số điện thoại", "Chức vụ", "Ngày vào làm", "Lương cơ bản",
+                        "Trạng thái"
+                }) {
+            Class[] types = new Class[] {
+                    java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class,
+                    java.lang.Object.class, java.lang.Double.class, java.lang.String.class
             };
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+            boolean[] canEdit = new boolean[] {
+                    false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
+                return types[columnIndex];
             }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
+                return canEdit[columnIndex];
             }
         });
         tableKhuVuc.setRowHeight(35);
@@ -180,16 +236,63 @@ public class PanelDanhSachNhanVien extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTimKiemActionPerformed
-        // TODO add your handling code here:
+        searchAndFilter();
     }// GEN-LAST:event_btnTimKiemActionPerformed
 
     private void cbFilterChucVuActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterChucVuActionPerformed
-        // TODO add your handling code here:
+        filterTable();
     }// GEN-LAST:event_cbFilterChucVuActionPerformed
 
     private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtTimKiemActionPerformed
-        // TODO add your handling code here:
+        searchAndFilter();
     }// GEN-LAST:event_txtTimKiemActionPerformed
+
+    private void searchAndFilter() {
+        DefaultTableModel model = (DefaultTableModel) tableKhuVuc.getModel();
+        model.setRowCount(0);
+        String searchText = txtTimKiem.getText().trim().toLowerCase();
+        String selectedChucVu = (String) cbFilterChucVu.getSelectedItem();
+
+        for (NhanVien nv : allNhanVien) {
+            // Check filters
+            if (selectedChucVu != null && !selectedChucVu.equals("Chức vụ")) {
+                if (!nv.getChucVu().getDisplayName().equals(selectedChucVu)) {
+                    continue;
+                }
+            }
+
+            // Check search text
+            String tenNV = nv.getHoTen() != null ? nv.getHoTen().toLowerCase() : "";
+            String sdtNV = nv.getSdt() != null ? nv.getSdt().trim() : "";
+            String maNV = nv.getMaNV() != null ? nv.getMaNV().toLowerCase() : "";
+            if (!searchText.isEmpty()
+                    && (!tenNV.contains(searchText) && !sdtNV.contains(searchText) && !maNV.contains(searchText))) {
+                continue;
+            }
+
+            // Add to table
+            model.addRow(new Object[] {
+                    nv.getMaNV(),
+                    nv.getHoTen(),
+                    nv.getSdt(),
+                    nv.getChucVu().getDisplayName(),
+                    nv.getNgayVaoLam(),
+                    nv.getLuongCoBan(),
+                    nv.getTrangThai().getDisplayName()
+            });
+        }
+        centerTableColumns(tableKhuVuc);
+    }
+
+    private void filterTable() {
+        String selectedChucVu = (String) cbFilterChucVu.getSelectedItem();
+
+        if (selectedChucVu != null && !selectedChucVu.equals("Chức vụ")) {
+            searchAndFilter();
+        } else {
+            loadDataToTable();
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnTimKiem;

@@ -54,7 +54,7 @@ public class KhachHang {
     }
 
     public String getLoaiThanhVien() {
-        return loaiThanhVien.name();
+        return loaiThanhVien.getDisplayName();
     }
 
     public void setLoaiThanhVien(LoaiThanhVien loaiThanhVien) {

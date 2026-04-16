@@ -3,6 +3,7 @@ package com.restaurant.quanlydatbannhahang.gui;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
+import com.restaurant.quanlydatbannhahang.util.ComboBoxEnumLoader;
 import java.time.LocalDate;
 
 public class PanelLichSuHoaDon extends javax.swing.JPanel {
@@ -15,6 +16,9 @@ public class PanelLichSuHoaDon extends javax.swing.JPanel {
     private void customUI() {
         // Placeholder cho txtTimKiem
         setupPlaceholder(txtTimKiem, "Nhập mã hóa đơn");
+
+        // Load enum trạng thái hóa đơn lên ComboBox
+        ComboBoxEnumLoader.loadTrangThaiHoaDonToComboBox(cbFilterTrangThai);
 
         // 1. Tùy chỉnh thanh tìm kiếm và ComboBox
         cbFilterTrangThai.setCursor(new Cursor(Cursor.HAND_CURSOR));

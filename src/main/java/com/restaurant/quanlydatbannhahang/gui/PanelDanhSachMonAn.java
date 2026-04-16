@@ -3,19 +3,29 @@ package com.restaurant.quanlydatbannhahang.gui;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import com.restaurant.quanlydatbannhahang.service.MonAnService;
+import com.restaurant.quanlydatbannhahang.util.ComboBoxEntityLoader;
+import com.restaurant.quanlydatbannhahang.entity.MonAn;
+import com.restaurant.quanlydatbannhahang.entity.TrangThaiMonAn;
+import java.util.List;
 
 /**
  *
  * @author nguye
  */
 public class PanelDanhSachMonAn extends javax.swing.JPanel {
+    private MonAnService monAnService;
+    private List<MonAn> allMonAn;
 
     /**
      * Creates new form PanelQuanLyMonAn
      */
     public PanelDanhSachMonAn() {
-        initComponents();
+        initComponents();        
+        monAnService = new MonAnService();
         customUI();
+        loadDataToTable();
     }
 
     private void customUI() {
@@ -74,10 +84,42 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
         });
     }
 
+    private void loadDataToTable() {
+        try {
+            allMonAn = monAnService.getAllMonAn();
+            DefaultTableModel model = (DefaultTableModel) tableMonAn.getModel();
+            model.setRowCount(0);
+
+            for (MonAn monAn : allMonAn) {
+                model.addRow(new Object[] {
+                        "",
+                        monAn.getMaMon(),
+                        monAn.getTenMon(),
+                        monAn.getDonGia(),
+                        monAn.getDonViTinh(),
+                        monAn.getTenLoai() != null ? monAn.getTenLoai().getDisplayName() : "",
+                        monAn.kiemTraConHang() ? "Còn" : "Ngưng sử dụng"
+                });
+            }
+            centerTableColumns(tableMonAn);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void centerTableColumns(JTable table) {
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        for (int i = 0; i < table.getColumnCount(); i++) {
+            table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         pnlHeader = new javax.swing.JPanel();
@@ -115,43 +157,52 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
             }
         });
 
-        cbFilterLoaiMonAn.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbFilterLoaiMonAn.setModel(
+                new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cbFilterLoaiMonAn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbFilterLoaiMonAnActionPerformed(evt);
             }
         });
 
-        cbFilterDonViTinh.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbFilterDonViTinh.setModel(
+                new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout pnlThongTinKhuyenMaiLayout = new javax.swing.GroupLayout(pnlThongTinKhuyenMai);
         pnlThongTinKhuyenMai.setLayout(pnlThongTinKhuyenMaiLayout);
         pnlThongTinKhuyenMaiLayout.setHorizontalGroup(
-            pnlThongTinKhuyenMaiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlThongTinKhuyenMaiLayout.createSequentialGroup()
-                .addComponent(cbFilterLoaiMonAn, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(28, 28, 28)
-                .addComponent(cbFilterDonViTinh, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 308, Short.MAX_VALUE)
-                .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
+                pnlThongTinKhuyenMaiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(pnlThongTinKhuyenMaiLayout.createSequentialGroup()
+                                .addComponent(cbFilterLoaiMonAn, javax.swing.GroupLayout.PREFERRED_SIZE, 139,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(28, 28, 28)
+                                .addComponent(cbFilterDonViTinh, javax.swing.GroupLayout.PREFERRED_SIZE, 145,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 308,
+                                        Short.MAX_VALUE)
+                                .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 294,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 123,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)));
         pnlThongTinKhuyenMaiLayout.setVerticalGroup(
-            pnlThongTinKhuyenMaiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlThongTinKhuyenMaiLayout.createSequentialGroup()
-                .addGroup(pnlThongTinKhuyenMaiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(pnlThongTinKhuyenMaiLayout.createSequentialGroup()
-                .addGroup(pnlThongTinKhuyenMaiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlThongTinKhuyenMaiLayout.createSequentialGroup()
-                        .addGap(1, 1, 1)
-                        .addComponent(cbFilterLoaiMonAn))
-                    .addComponent(cbFilterDonViTinh))
-                .addContainerGap())
-        );
+                pnlThongTinKhuyenMaiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(pnlThongTinKhuyenMaiLayout.createSequentialGroup()
+                                .addGroup(pnlThongTinKhuyenMaiLayout
+                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(pnlThongTinKhuyenMaiLayout.createSequentialGroup()
+                                .addGroup(pnlThongTinKhuyenMaiLayout
+                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(pnlThongTinKhuyenMaiLayout.createSequentialGroup()
+                                                .addGap(1, 1, 1)
+                                                .addComponent(cbFilterLoaiMonAn))
+                                        .addComponent(cbFilterDonViTinh))
+                                .addContainerGap()));
 
         pnlHeader.add(pnlThongTinKhuyenMai, java.awt.BorderLayout.PAGE_END);
 
@@ -164,19 +215,18 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
         });
 
         tableMonAn.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+                new Object[][] {
 
-            },
-            new String [] {
-                "Hình ảnh", "Mã món", "Tên món", "Đơn giá", "Đơn vị tính", "Loại món ăn", "Trạng thái"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                },
+                new String[] {
+                        "Hình ảnh", "Mã món", "Tên món", "Đơn giá", "Đơn vị tính", "Loại món ăn", "Trạng thái"
+                }) {
+            boolean[] canEdit = new boolean[] {
+                    false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
+                return canEdit[columnIndex];
             }
         });
         tableMonAn.setRowHeight(35);
@@ -195,7 +245,7 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cbFilterLoaiMonAnActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterLoaiMonAnActionPerformed
-        // TODO add your handling code here:
+        filterTable();
     }// GEN-LAST:event_cbFilterLoaiMonAnActionPerformed
 
     private void scrTableMonAnMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_scrTableMonAnMouseClicked
@@ -203,12 +253,66 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
     }// GEN-LAST:event_scrTableMonAnMouseClicked
 
     private void cbFilterTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterTrangThaiActionPerformed
-        // TODO add your handling code here:
+        filterTable();
     }// GEN-LAST:event_cbFilterTrangThaiActionPerformed
 
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTimKiemActionPerformed
-        // TODO add your handling code here:
+        searchAndFilter();
     }// GEN-LAST:event_btnTimKiemActionPerformed
+
+    private void searchAndFilter() {
+        DefaultTableModel model = (DefaultTableModel) tableMonAn.getModel();
+        model.setRowCount(0);
+        String searchText = txtTimKiem.getText().trim().toLowerCase();
+        String selectedLoaiMonAn = (String) cbFilterLoaiMonAn.getSelectedItem();
+        String selectedDonVi = (String) cbFilterDonViTinh.getSelectedItem();
+
+        for (MonAn monAn : allMonAn) {
+            // Check filters
+            if (selectedLoaiMonAn != null && !selectedLoaiMonAn.equals("Item 1")) {
+                if (monAn.getTenLoai() == null || !monAn.getTenLoai().getDisplayName().equals(selectedLoaiMonAn)) {
+                    continue;
+                }
+            }
+
+            if (selectedDonVi != null && !selectedDonVi.equals("Item 1")) {
+                if (!monAn.getDonViTinh().equals(selectedDonVi)) {
+                    continue;
+                }
+            }
+
+            // Check search text
+            String tenMonAn = monAn.getTenMon() != null ? monAn.getTenMon().toLowerCase() : "";
+            String maMonAn = monAn.getMaMon() != null ? monAn.getMaMon().toLowerCase() : "";
+            if (!searchText.isEmpty() && (!tenMonAn.contains(searchText) && !maMonAn.contains(searchText))) {
+                continue;
+            }
+
+            // Add to table
+            model.addRow(new Object[] {
+                    "",
+                    monAn.getMaMon(),
+                    monAn.getTenMon(),
+                    monAn.getDonGia(),
+                    monAn.getDonViTinh(),
+                    monAn.getTenLoai() != null ? monAn.getTenLoai().getDisplayName() : "",
+                    monAn.kiemTraConHang() ? "Còn" : "Ngưng sử dụng"
+            });
+        }
+        centerTableColumns(tableMonAn);
+    }
+
+    private void filterTable() {
+        String selectedLoaiMonAn = (String) cbFilterLoaiMonAn.getSelectedItem();
+        String selectedDonVi = (String) cbFilterDonViTinh.getSelectedItem();
+
+        if ((selectedLoaiMonAn != null && !selectedLoaiMonAn.equals("Item 1")) ||
+                (selectedDonVi != null && !selectedDonVi.equals("Item 1"))) {
+            searchAndFilter();
+        } else {
+            loadDataToTable();
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnTimKiem;

@@ -9,12 +9,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TaiKhoanDAO {
     private Connection connection;
     private NhanVienDAO nv_dao;
 
-    // ========== SQL QUERIES ==========
     private static final String SELECT_TAIKHOAN_WITH_NHANVIEN = "SELECT tk.username, tk.password, tk.maNV, tk.quyenHan, "
             +
             "nv.hoTen, nv.sdt, nv.chucVu, nv.ngayVaoLam, nv.luongCoBan, nv.trangThai " +
@@ -132,4 +133,22 @@ public class TaiKhoanDAO {
         return false;
 
     }
+    
+    public List<TaiKhoan> getAllTaiKhoan () {
+    	 Connection connection = DatabaseConnection.getConnection();
+         String query = "select * from TaiKhoan";
+         List<TaiKhoan> dsTaiKhoan = new ArrayList<TaiKhoan>();
+         try (PreparedStatement pstm = connection.prepareStatement(query)) {
+           
+             try (ResultSet rs = pstm.executeQuery()) {
+                 if (rs.next()) {
+                      dsTaiKhoan.add(buildTaiKhoanFromResultSet(rs));
+                 }
+             }
+         } catch (SQLException e) {
+             System.out.println("❌ Lỗi khi tìm tài khoản: " + e.getMessage());
+             e.printStackTrace();
+         }
+         return dsTaiKhoan;
+	}
 }

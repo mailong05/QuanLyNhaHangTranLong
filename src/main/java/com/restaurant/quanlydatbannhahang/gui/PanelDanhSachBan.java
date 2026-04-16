@@ -4,17 +4,44 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import com.restaurant.quanlydatbannhahang.service.BanService;
+import com.restaurant.quanlydatbannhahang.service.KhuVucService;
+import com.restaurant.quanlydatbannhahang.util.ComboBoxEnumLoader;
+import com.restaurant.quanlydatbannhahang.util.ComboBoxEntityLoader;
+import com.restaurant.quanlydatbannhahang.entity.Ban;
+import com.restaurant.quanlydatbannhahang.entity.KhuVuc;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PanelDanhSachBan extends javax.swing.JPanel {
+    private BanService banService;
+    private List<Ban> allBans;
+    private ComboBoxEnumLoader cbEnumLoader;
+    private KhuVucService khuVucService;
+    private ComboBoxEntityLoader cbEntityLoader;
 
     public PanelDanhSachBan() {
         initComponents();
+        banService = new BanService();
+        khuVucService = new KhuVucService();
+        cbEnumLoader = new ComboBoxEnumLoader();
+        cbEntityLoader = new ComboBoxEntityLoader();
         customUI();
+        loadDataToTable();
     }
 
     private void customUI() {
         // Placeholder cho txtTimKiem
         setupPlaceholder(txtTimKiem, "Nhập mã bàn hoặc mã khu vực");
+
+        // Load enum trạng thái lên ComboBox
+        ComboBoxEnumLoader.loadTrangThaiBanToComboBox(cbFilterTrangThai);
+
+        // Load entity khu vực lên ComboBox
+        List<KhuVuc> dsKhuVuc = khuVucService.getAllKhuVuc();
+        ComboBoxEntityLoader.loadKhuVucToComboBox(cbFilterKhuVuc, dsKhuVuc);
 
         // Gắn sự kiện quay về Trang Chủ
         MainForm.attachGoHomeListener(btnTrangChu, this);
@@ -68,11 +95,41 @@ public class PanelDanhSachBan extends javax.swing.JPanel {
         });
     }
 
+    private void loadDataToTable() {
+        try {
+            allBans = banService.getAllBan();
+            DefaultTableModel model = (DefaultTableModel) tableBan.getModel();
+            model.setRowCount(0);
+
+            for (Ban ban : allBans) {
+                model.addRow(new Object[] {
+                        ban.getMaBan(),
+                        ban.getSoGhe(),
+                        ban.getViTri(),
+                        ban.getKhuVuc() != null ? ban.getKhuVuc().getMaKhuVuc() : "",
+                        ban.getTrangThai() != null ? ban.getTrangThai().toString() : ""
+                });
+            }
+            centerTableColumns(tableBan);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void centerTableColumns(JTable table) {
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        for (int i = 0; i < table.getColumnCount(); i++) {
+            table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+    }
+
     // Từ đây không chỉnh sửa bên dưới
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         pnlHeader = new javax.swing.JPanel();
@@ -111,7 +168,6 @@ public class PanelDanhSachBan extends javax.swing.JPanel {
             }
         });
 
-        cbFilterKhuVuc.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Khu vực", "A", "B", "C" }));
         cbFilterKhuVuc.setPreferredSize(new java.awt.Dimension(72, 35));
         cbFilterKhuVuc.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -119,7 +175,6 @@ public class PanelDanhSachBan extends javax.swing.JPanel {
             }
         });
 
-        cbFilterTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Trạng thái", "Trống", "Đang sử dụng", "Đang chờ", " " }));
         cbFilterTrangThai.setPreferredSize(new java.awt.Dimension(72, 35));
         cbFilterTrangThai.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -130,56 +185,70 @@ public class PanelDanhSachBan extends javax.swing.JPanel {
         javax.swing.GroupLayout pnlThongTinBanLayout = new javax.swing.GroupLayout(pnlThongTinBan);
         pnlThongTinBan.setLayout(pnlThongTinBanLayout);
         pnlThongTinBanLayout.setHorizontalGroup(
-            pnlThongTinBanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlThongTinBanLayout.createSequentialGroup()
-                .addComponent(cbFilterKhuVuc, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(cbFilterTrangThai, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 348, Short.MAX_VALUE)
-                .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
+                pnlThongTinBanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(pnlThongTinBanLayout.createSequentialGroup()
+                                .addComponent(cbFilterKhuVuc, javax.swing.GroupLayout.PREFERRED_SIZE, 132,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(cbFilterTrangThai, javax.swing.GroupLayout.PREFERRED_SIZE, 132,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 348,
+                                        Short.MAX_VALUE)
+                                .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 280,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 134,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)));
         pnlThongTinBanLayout.setVerticalGroup(
-            pnlThongTinBanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlThongTinBanLayout.createSequentialGroup()
-                .addGroup(pnlThongTinBanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlThongTinBanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(cbFilterKhuVuc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(cbFilterTrangThai, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(pnlThongTinBanLayout.createSequentialGroup()
-                        .addGap(3, 3, 3)
-                        .addGroup(pnlThongTinBanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap())
-        );
+                pnlThongTinBanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(pnlThongTinBanLayout.createSequentialGroup()
+                                .addGroup(pnlThongTinBanLayout
+                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlThongTinBanLayout
+                                                .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                .addComponent(cbFilterKhuVuc, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(cbFilterTrangThai, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                        javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addGroup(pnlThongTinBanLayout.createSequentialGroup()
+                                                .addGap(3, 3, 3)
+                                                .addGroup(pnlThongTinBanLayout
+                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(btnTimKiem,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE, 35,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(txtTimKiem,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addContainerGap()));
 
         pnlHeader.add(pnlThongTinBan, java.awt.BorderLayout.PAGE_END);
 
         add(pnlHeader, java.awt.BorderLayout.PAGE_START);
 
         tableBan.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+                new Object[][] {
 
-            },
-            new String [] {
-                "Mã bàn", "Số ghế", "Vị trí", "Mã khu vực", "Trạng thái"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                },
+                new String[] {
+                        "Mã bàn", "Số ghế", "Vị trí", "Mã khu vực", "Trạng thái"
+                }) {
+            Class[] types = new Class[] {
+                    java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class,
+                    java.lang.String.class
             };
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+            boolean[] canEdit = new boolean[] {
+                    false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
+                return types[columnIndex];
             }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
+                return canEdit[columnIndex];
             }
         });
         tableBan.setRowHeight(35);
@@ -199,21 +268,72 @@ public class PanelDanhSachBan extends javax.swing.JPanel {
         add(pnlButton, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void cbFilterKhuVucActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbFilterKhuVucActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cbFilterKhuVucActionPerformed
+    private void cbFilterKhuVucActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterKhuVucActionPerformed
+        filterTable();
+    }// GEN-LAST:event_cbFilterKhuVucActionPerformed
 
-    private void cbFilterTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbFilterTrangThaiActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cbFilterTrangThaiActionPerformed
+    private void cbFilterTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterTrangThaiActionPerformed
+        filterTable();
+    }// GEN-LAST:event_cbFilterTrangThaiActionPerformed
 
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTimKiemActionPerformed
-        // TODO add your handling code here:
+        searchAndFilter();
     }// GEN-LAST:event_btnTimKiemActionPerformed
 
     private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtTimKiemActionPerformed
-        // TODO add your handling code here:
+        searchAndFilter();
     }// GEN-LAST:event_txtTimKiemActionPerformed
+
+    private void searchAndFilter() {
+        DefaultTableModel model = (DefaultTableModel) tableBan.getModel();
+        model.setRowCount(0);
+        String searchText = txtTimKiem.getText().trim().toLowerCase();
+        String selectedKhuVuc = (String) cbFilterKhuVuc.getSelectedItem();
+        String selectedTrangThai = (String) cbFilterTrangThai.getSelectedItem();
+
+        for (Ban ban : allBans) {
+            // Check filters
+            if (selectedKhuVuc != null && !selectedKhuVuc.equals("Khu vực")) {
+                if (ban.getKhuVuc() == null || !ban.getKhuVuc().getMaKhuVuc().equals(selectedKhuVuc)) {
+                    continue;
+                }
+            }
+
+            if (selectedTrangThai != null && !selectedTrangThai.equals("Trạng thái")) {
+                if (!ban.getTrangThai().getDisplayName().equals(selectedTrangThai)) {
+                    continue;
+                }
+            }
+
+            // Check search text
+            String maBan = ban.getMaBan() != null ? ban.getMaBan().toLowerCase() : "";
+            if (!searchText.isEmpty() && (!maBan.contains(searchText))) {
+                continue;
+            }
+
+            // Add to table
+            model.addRow(new Object[] {
+                    ban.getMaBan(),
+                    ban.getSoGhe(),
+                    ban.getViTri(),
+                    ban.getKhuVuc() != null ? ban.getKhuVuc().getMaKhuVuc() : "",
+                    ban.getTrangThai() != null ? ban.getTrangThai().toString() : ""
+            });
+        }
+        centerTableColumns(tableBan);
+    }
+
+    private void filterTable() {
+        String selectedKhuVuc = (String) cbFilterKhuVuc.getSelectedItem();
+        String selectedTrangThai = (String) cbFilterTrangThai.getSelectedItem();
+
+        if ((selectedKhuVuc != null && !selectedKhuVuc.equals("Khu vực")) ||
+                (selectedTrangThai != null && !selectedTrangThai.equals("Trạng thái"))) {
+            searchAndFilter();
+        } else {
+            loadDataToTable();
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnTimKiem;

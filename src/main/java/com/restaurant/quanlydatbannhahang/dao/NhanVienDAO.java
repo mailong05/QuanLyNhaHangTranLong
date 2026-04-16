@@ -24,7 +24,11 @@ public class NhanVienDAO {
 		return IDQueryHelper.getLastID("NhanVien", "maNV");
 	}
 
-	public NhanVien buildNhanVienFromResultSet(ResultSet rs) {
+	/**
+	 * Build NhanVien from ResultSet - package-private so other DAOs can use
+	 * internally
+	 */
+	NhanVien buildNhanVienFromResultSet(ResultSet rs) {
 		try {
 			String chucVuStr = rs.getString("chucVu");
 			ChucVu chucVu = ChucVu.valueOf(chucVuStr);
