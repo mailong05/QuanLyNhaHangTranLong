@@ -129,25 +129,57 @@ public class PhieuDatBanService {
     public void capNhatTrangThaiPhieu(String maPhieu, TrangThaiPhieuDat trangThai) {
         PhieuDatBan phieu = getPhieuDatBanTheoMa(maPhieu);
         if (phieu != null) {
+            TrangThaiPhieuDat oldStatus = phieu.getTrangThai();
             phieu.setTrangThai(trangThai);
             capNhatPhieuDatBan(phieu);
+            System.out.println("✓ Cập nhật trạng thái phiếu " + maPhieu + ": " + oldStatus.getDisplayName() + " → "
+                    + trangThai.getDisplayName());
+        }
+    }
+
+    /**
+     * Bắt đầu sử dụng (DANG_CHO → DANG_SU_DUNG)
+     */
+    public void batDauSuDung(String maPhieu) {
+        PhieuDatBan phieu = getPhieuDatBanTheoMa(maPhieu);
+        if (phieu != null && phieu.getTrangThai() == TrangThaiPhieuDat.DANG_CHO) {
+            capNhatTrangThaiPhieu(maPhieu, TrangThaiPhieuDat.DANG_SU_DUNG);
+        } else {
+            System.out.println("⚠ Không thể bắt đầu sử dụng. Phiếu phải ở trạng thái '"
+                    + TrangThaiPhieuDat.DANG_CHO.getDisplayName() + "'");
         }
     }
 
     /**
      * Xác nhận đặt bàn
      */
-    public void xacNhanDatBan(String maPhieu) {
-        capNhatTrangThaiPhieu(maPhieu, TrangThaiPhieuDat.DA_XAC_NHAN);
-        System.out.println(" Đã xác nhận phiếu đặt bàn");
-    }
 
     /**
-     * Hủy đặt bàn
+     * Hủy đặt bàn (chuyển sang trạng thái DA_HUY)
      */
     public void huyDatBan(String maPhieu) {
-        capNhatTrangThaiPhieu(maPhieu, TrangThaiPhieuDat.DA_HUY);
-        System.out.println(" Đã hủy phiếu đặt bàn");
+        PhieuDatBan phieu = getPhieuDatBanTheoMa(maPhieu);
+        if (phieu != null) {
+            // Nếu đang sử dụng, không được hủy
+            if (phieu.getTrangThai() == TrangThaiPhieuDat.DANG_SU_DUNG) {
+                throw new IllegalStateException("Không thể hủy phiếu đang sử dụng");
+            }
+
+            // Cập nhật trạng thái thành DA_HUY
+            capNhatTrangThaiPhieu(maPhieu, TrangThaiPhieuDat.DA_HUY);
+
+            // Cập nhật lại trạng thái bàn thành TRONG
+            List<ChiTietPhieuDatBan> chiTietList = chiTietPhieuDatBanDAO.getChiTietByMaPhieuDat(maPhieu);
+            if (chiTietList != null) {
+                for (ChiTietPhieuDatBan chiTiet : chiTietList) {
+                    if (chiTiet.getBan() != null) {
+                        banDAO.capNhatTrangThaiBan(chiTiet.getBan().getMaBan(), TrangThaiBan.TRONG);
+                    }
+                }
+            }
+
+            System.out.println("✓ Đã hủy phiếu đặt bàn: " + maPhieu);
+        }
     }
 
     /**
@@ -270,7 +302,7 @@ public class PhieuDatBanService {
             phieuDatBan.setThoiGianDen(thoiGianDen);
             phieuDatBan.setSoLuongNguoi(soLuongNguoi);
             phieuDatBan.setGhiChu(ghiChu != null && !ghiChu.isEmpty() ? ghiChu : "");
-            phieuDatBan.setTrangThai(TrangThaiPhieuDat.CHO_XAC_NHAN);
+            phieuDatBan.setTrangThai(TrangThaiPhieuDat.DANG_CHO);
 
             boolean phieuSaved = phieuDatBanDAO.themPhieuDatBan(phieuDatBan);
 
@@ -279,7 +311,6 @@ public class PhieuDatBanService {
             }
 
             String maPhieuDat = phieuDatBan.getMaPhieuDat();
-            
 
             // ← BƯỚC 2: Tạo chi tiết phiếu đặt bàn cho mỗi bàn đã chọn
             for (String maBan : selectedTables) {

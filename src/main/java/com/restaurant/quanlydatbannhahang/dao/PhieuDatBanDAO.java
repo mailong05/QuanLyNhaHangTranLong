@@ -241,25 +241,7 @@ public class PhieuDatBanDAO {
         return false;
     }
 
-    public List<PhieuDatBan> getPhieuDatBanChoXacNhan() {
-        Connection connection = DatabaseConnection.getConnection();
-        String sql = "select * from PhieuDatBan where trangThai = ?";
-        ArrayList<PhieuDatBan> dsPhieu = new ArrayList<>();
-        try {
-            PreparedStatement pstm = connection.prepareStatement(sql);
-            pstm.setString(1, TrangThaiPhieuDat.CHO_XAC_NHAN.name());
-            ResultSet rs = pstm.executeQuery();
-            while (rs.next()) {
-                PhieuDatBan phieu = buildPhieuDatBanFromResultSet(rs);
-                if (phieu != null) {
-                    dsPhieu.add(phieu);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return dsPhieu;
-    }
+    
 
     public List<PhieuDatBan> getPhieuDatBanTheoTrangThai(TrangThaiPhieuDat trangThai) {
         Connection connection = DatabaseConnection.getConnection();

@@ -97,20 +97,13 @@ public class PhieuDatBan {
     // Các phương thức cần thiết
     public boolean taoPhieuDat() {
         if (khachHang != null && ban != null && ban.kiemTraBanTrong()) {
-            this.trangThai = TrangThaiPhieuDat.CHO_XAC_NHAN;
+            this.trangThai = TrangThaiPhieuDat.DANG_CHO;
             return true;
         }
         return false;
     }
 
-    public boolean xacNhanDen() {
-        if (trangThai == TrangThaiPhieuDat.CHO_XAC_NHAN) {
-            this.trangThai = TrangThaiPhieuDat.DA_XAC_NHAN;
-            ban.datBan();
-            return true;
-        }
-        return false;
-    }
+   
 
     public boolean huyPhieu() {
         if (trangThai != TrangThaiPhieuDat.DA_HUY) {
