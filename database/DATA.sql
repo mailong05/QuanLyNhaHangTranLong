@@ -116,21 +116,21 @@ INSERT INTO MonAn (maMon, tenMon, donGia, donViTinh, tenLoai, trangThai, urlHinh
 
 -- 2.8. BẢNG BÀN ĂN
 INSERT INTO BanAn (maBan, soGhe, viTri, maKhuVuc, trangThai) VALUES 
-('B001', 4, N'Cạnh cửa sổ', 'KV001', N'TRONG'),
-('B002', 2, N'Góc sảnh', 'KV001', N'DANG_DUNG'),
+('B001', 4, N'Cạnh cửa sổ', 'KV001', N'DANG_DUNG'),
+('B002', 2, N'Góc sảnh', 'KV001', N'TRONG'),
 ('B003', 10, N'Phòng Đào', 'KV002', N'DA_DAT'),
 ('B004', 6, N'Ban công trái', 'KV003', N'TRONG'),
-('B005', 8, N'Gần hồ cá', 'KV004', N'TRONG'),
-('B006', 4, N'Quầy Bar 1', 'KV005', N'DANG_DUNG'),
-('B007', 12, N'Phòng Trúc lớn', 'KV002', N'DA_DAT'),
-('B008', 2, N'Gầm cầu thang', 'KV001', N'TRONG');
+('B005', 8, N'Gần hồ cá', 'KV004', N'DA_DAT'),
+('B006', 4, N'Quầy Bar 1', 'KV005', N'TRONG'),
+('B007', 12, N'Phòng Trúc lớn', 'KV002', N'TRONG'),
+('B008', 2, N'Gầm cầu thang', 'KV001', N'DA_DAT');
 
 -- 2.9. PHIẾU ĐẶT BÀN
 INSERT INTO PhieuDatBan (maPhieuDat, maKH, maNV, thoiGianDen, soLuongNguoi, ghiChu, trangThai) VALUES 
 ('PD001', 'KH001', 'NV003', '2026-04-04 19:00:00', 4, N'Sinh nhật', N'DANG_SU_DUNG'),
 ('PD002', 'KH002', 'NV002', '2026-04-05 18:30:00', 10, N'Tiệc công ty', N'DANG_CHO'),
-('PD003', 'KH004', 'NV003', '2026-04-10 20:00:00', 2, N'Kỷ niệm ngày cưới', N'DANG_SU_DUNG'),
-('PD004', 'KH005', 'NV002', '2026-04-12 11:30:00', 6, N'Ăn trưa gia đình', N'DANG_SU_DUNG');
+('PD003', 'KH004', 'NV003', '2026-04-10 20:00:00', 2, N'Kỷ niệm ngày cưới', N'DANG_CHO'),
+('PD004', 'KH005', 'NV002', '2026-04-12 11:30:00', 6, N'Ăn trưa gia đình', N'DANG_CHO');
 
 -- 2.10. CHI TIẾT PHIẾU ĐẶT BÀN
 INSERT INTO ChiTietPhieuDatBan (maPhieuDat, maBan, ghiChu) VALUES 
