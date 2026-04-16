@@ -19,6 +19,7 @@ public class PanelDatBan extends javax.swing.JPanel {
     private String selectedKhuVuc = null;
     private String selectedTrangThai = null;
     private PanelQuanLyDatBanTruoc panelQuanLyDatBanTruoc = null; // Reference để callback khi edit mode
+    private boolean editMode = false; // Flag để biết đang ở chế độ chỉnh sửa bàn
 
     public PanelDatBan() {
         selectedTables = new HashSet<>();
@@ -43,6 +44,9 @@ public class PanelDatBan extends javax.swing.JPanel {
      * @param tablesToSelect Danh sách mã bàn cũ cần highlight
      */
     public void setSelectedTablesForEdit(Set<String> tablesToSelect) {
+        // BẬT EDIT MODE - sẽ bỏ qua refreshData() khi trigger click listener
+        this.editMode = true;
+
         // Clear selected tables trước
         for (String maBan : new HashSet<>(selectedTables)) {
             JPanel card = tableCards.get(maBan);
@@ -54,15 +58,14 @@ public class PanelDatBan extends javax.swing.JPanel {
         }
         selectedTables.clear();
 
-        // Set selectedTables từ input - highlight với màu xanh 
+        // Set selectedTables từ input - highlight với màu xanh
         if (tablesToSelect != null) {
             selectedTables.addAll(tablesToSelect);
 
-            // Update UI: highlight các bàn cũ với màu xanh 
             for (String maBan : selectedTables) {
                 JPanel card = tableCards.get(maBan);
                 if (card != null) {
-                    card.setBackground(new java.awt.Color(51, 153, 255)); 
+                    card.setBackground(new java.awt.Color(51, 153, 255));
                     card.setBorder(BorderFactory.createCompoundBorder(
                             BorderFactory.createLineBorder(new Color(34, 139, 34), 2, true),
                             BorderFactory.createEmptyBorder(10, 10, 10, 10)));
@@ -84,9 +87,16 @@ public class PanelDatBan extends javax.swing.JPanel {
      * PUBLIC METHOD: Reload lại toàn bộ giao diện PanelDatBan để lấy dữ liệu mới
      * nhất từ DB
      * Gọi khi chuyển sang tab PanelDatBan để cập nhật trạng thái bàn
+     * Bỏ qua nếu đang ở edit mode để bảo vệ highlight dữ liệu
      */
     public void refreshData() {
+    	System.out.println("\nRefresh");
         try {
+            // Nếu đang ở edit mode (highlight bàn cũ), bỏ qua refresh để không mất dữ liệu
+            if (editMode) {
+                return;
+            }
+
             // Clear lại trạng thái hiện tại
             selectedTables.clear();
             tableCards.clear();
@@ -102,6 +112,13 @@ public class PanelDatBan extends javax.swing.JPanel {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Reset edit mode flag sau khi user xong chọn bàn (gọi từ btnDatBan)
+     */
+    public void resetEditMode() {
+        this.editMode = false;
     }
 
     private void customUI() {
@@ -323,6 +340,15 @@ public class PanelDatBan extends javax.swing.JPanel {
     }
 
     private void toggleTableSelection(String maBan, JPanel card) {
+        // Kiểm tra nếu click vào bàn highlight (background xanh 51, 153, 255) từ edit
+        // mode
+        // → Hủy chọn + cập nhật về TRONG
+        if (card.getBackground().equals(new Color(51, 153, 255))) {
+            selectedTables.remove(maBan);
+            updateBanStatusUI(maBan, TrangThaiBan.TRONG);
+            return;
+        }
+
         // Lấy trạng thái hiện tại từ map
         TrangThaiBan trangThai = tableTrangThai.get(maBan);
         if (trangThai == null) {
@@ -330,7 +356,7 @@ public class PanelDatBan extends javax.swing.JPanel {
         }
 
         // Xử lý bàn đã đặt
-        if (trangThai == TrangThaiBan.DA_DAT && !card.getBackground().equals(new Color(51, 153, 255))) {
+        if (trangThai == TrangThaiBan.DA_DAT) {
             JOptionPane.showMessageDialog(this,
                     "Nếu muốn làm trống bàn vui lòng chỉnh sửa bên quản lý phiếu đặt bàn",
                     "Thông báo",
@@ -409,14 +435,14 @@ public class PanelDatBan extends javax.swing.JPanel {
     public void updateBanStatusUI(String maBan, TrangThaiBan newTrangThai) {
         JPanel card = tableCards.get(maBan);
         if (card == null) {
-            System.err.println("Không tìm thấy card cho bàn: " + maBan);
+            System.err.println("❌ Không tìm thấy card cho bàn: " + maBan);
             return;
         }
-
-        // 1️⃣ Cập nhật map trạng thái
+        
+        System.out.println(newTrangThai.getDisplayName());
+        
         tableTrangThai.put(maBan, newTrangThai);
 
-        // 2️⃣ Cập nhật background theo trạng thái mới
         if (newTrangThai == TrangThaiBan.TRONG) {
             card.setBackground(Color.WHITE);
         } else if (newTrangThai == TrangThaiBan.DANG_DUNG) {
@@ -425,22 +451,19 @@ public class PanelDatBan extends javax.swing.JPanel {
             card.setBackground(new Color(255, 200, 0)); // Vàng - đã đặt
         }
 
-        // 3️⃣ Cập nhật text label trạng thái
         JLabel lblStatus = tableLabelStatus.get(maBan);
         if (lblStatus != null) {
             lblStatus.setText(newTrangThai.getDisplayName());
+        } else {
+            System.err.println("label status not found for " + maBan);
         }
 
-        // 4️⃣ Xóa border đặc biệt nếu bàn được chọn (khôi phục border mặc định)
         card.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(new Color(200, 200, 200), 1, true),
                 BorderFactory.createEmptyBorder(10, 10, 10, 10)));
 
-        // 5️⃣ Force repaint ngay
         card.revalidate();
         card.repaint();
-
-        System.out.println("✓ Cập nhật bàn " + maBan + " → " + newTrangThai.getDisplayName());
     }
 
     private void onButtonDatBanClicked() {
@@ -461,11 +484,11 @@ public class PanelDatBan extends javax.swing.JPanel {
         if (result == JOptionPane.YES_OPTION) {
             // ========== EDIT MODE: chuyển tab + cập nhật txtMaBan (không callback DB trực
             // tiếp) ==========
-            if (panelQuanLyDatBanTruoc != null) {
+            if (editMode) {
                 // Cập nhật txtMaBan với danh sách bàn đã chọn
                 panelQuanLyDatBanTruoc.updateMaBanForEdit(new HashSet<>(selectedTables));
 
-                // Clear selected tables
+                // Reset UI cho tất cả bàn về trạng thái gốc
                 selectedTables.clear();
                 for (String maBan : tableCards.keySet()) {
                     TrangThaiBan trangThai = tableTrangThai.get(maBan);
@@ -474,11 +497,18 @@ public class PanelDatBan extends javax.swing.JPanel {
                     }
                 }
 
+                // Force repaint cả PanelDatBan để highlight bị remove được render
+                panelSoDoBan.revalidate();
+                panelSoDoBan.repaint();
+                this.revalidate();
+                this.repaint();
+
                 // Chuyển sang tab PanelQuanLyDatBanTruoc để user bấm btnCapNhat
                 java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
                 if (parentFrame instanceof MainForm) {
                     ((MainForm) parentFrame).switchToQuanLyDatBanTruocTab();
                 }
+
                 return;
             }
 
@@ -497,6 +527,12 @@ public class PanelDatBan extends javax.swing.JPanel {
                     updateBanStatusUI(maBan, trangThai);
                 }
             }
+
+            // Force repaint UI
+            panelSoDoBan.revalidate();
+            panelSoDoBan.repaint();
+            this.revalidate();
+            this.repaint();
         }
     }
 
@@ -507,7 +543,7 @@ public class PanelDatBan extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel2 = new javax.swing.JPanel();
@@ -557,8 +593,7 @@ public class PanelDatBan extends javax.swing.JPanel {
             }
         });
 
-        cbFilterTrangThai.setModel(
-                new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất cả", "Trống", "Đang dùng", "Đã đặt" }));
+        cbFilterTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất cả", "Trống", "Đang dùng", "Đã đặt" }));
         cbFilterTrangThai.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbFilterTrangThaiActionPerformed(evt);
@@ -573,33 +608,39 @@ public class PanelDatBan extends javax.swing.JPanel {
         javax.swing.GroupLayout pnlStatusTrongLayout = new javax.swing.GroupLayout(pnlStatusTrong);
         pnlStatusTrong.setLayout(pnlStatusTrongLayout);
         pnlStatusTrongLayout.setHorizontalGroup(
-                pnlStatusTrongLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 16, Short.MAX_VALUE));
+            pnlStatusTrongLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 16, Short.MAX_VALUE)
+        );
         pnlStatusTrongLayout.setVerticalGroup(
-                pnlStatusTrongLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 16, Short.MAX_VALUE));
+            pnlStatusTrongLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 16, Short.MAX_VALUE)
+        );
 
         pnlStatusServing.setBackground(new java.awt.Color(0, 153, 0));
 
         javax.swing.GroupLayout pnlStatusServingLayout = new javax.swing.GroupLayout(pnlStatusServing);
         pnlStatusServing.setLayout(pnlStatusServingLayout);
         pnlStatusServingLayout.setHorizontalGroup(
-                pnlStatusServingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 20, Short.MAX_VALUE));
+            pnlStatusServingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 20, Short.MAX_VALUE)
+        );
         pnlStatusServingLayout.setVerticalGroup(
-                pnlStatusServingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 20, Short.MAX_VALUE));
+            pnlStatusServingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 20, Short.MAX_VALUE)
+        );
 
-        pnlStatusReserved.setBackground(new java.awt.Color(255, 255, 51));
+        pnlStatusReserved.setBackground(new java.awt.Color(255, 204, 0));
 
         javax.swing.GroupLayout pnlStatusReservedLayout = new javax.swing.GroupLayout(pnlStatusReserved);
         pnlStatusReserved.setLayout(pnlStatusReservedLayout);
         pnlStatusReservedLayout.setHorizontalGroup(
-                pnlStatusReservedLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 20, Short.MAX_VALUE));
+            pnlStatusReservedLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 20, Short.MAX_VALUE)
+        );
         pnlStatusReservedLayout.setVerticalGroup(
-                pnlStatusReservedLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 20, Short.MAX_VALUE));
+            pnlStatusReservedLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 20, Short.MAX_VALUE)
+        );
 
         jLabel2.setText("Đang dùng");
 
@@ -611,107 +652,83 @@ public class PanelDatBan extends javax.swing.JPanel {
 
         pnlStatusBanDuocChonTuPhieu.setBackground(new java.awt.Color(51, 153, 255));
 
-        javax.swing.GroupLayout pnlStatusBanDuocChonTuPhieuLayout = new javax.swing.GroupLayout(
-                pnlStatusBanDuocChonTuPhieu);
+        javax.swing.GroupLayout pnlStatusBanDuocChonTuPhieuLayout = new javax.swing.GroupLayout(pnlStatusBanDuocChonTuPhieu);
         pnlStatusBanDuocChonTuPhieu.setLayout(pnlStatusBanDuocChonTuPhieuLayout);
         pnlStatusBanDuocChonTuPhieuLayout.setHorizontalGroup(
-                pnlStatusBanDuocChonTuPhieuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 22, Short.MAX_VALUE));
+            pnlStatusBanDuocChonTuPhieuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 22, Short.MAX_VALUE)
+        );
         pnlStatusBanDuocChonTuPhieuLayout.setVerticalGroup(
-                pnlStatusBanDuocChonTuPhieuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 0, Short.MAX_VALUE));
+            pnlStatusBanDuocChonTuPhieuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
 
         jLabel6.setText("Bàn trong phiếu");
 
         javax.swing.GroupLayout panelTimKiemLayout = new javax.swing.GroupLayout(panelTimKiem);
         panelTimKiem.setLayout(panelTimKiemLayout);
         panelTimKiemLayout.setHorizontalGroup(
-                panelTimKiemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTimKiemLayout.createSequentialGroup()
-                                .addGap(12, 12, 12)
-                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 51,
-                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(cbFilterKhuVuc, javax.swing.GroupLayout.PREFERRED_SIZE, 99,
-                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 64,
-                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(cbFilterTrangThai, javax.swing.GroupLayout.PREFERRED_SIZE, 100,
-                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 298,
-                                        Short.MAX_VALUE)
-                                .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 271,
-                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 103,
-                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(31, 31, 31))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTimKiemLayout.createSequentialGroup()
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(pnlStatusBanDuocChonTuPhieu, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel6)
-                                .addGap(18, 18, 18)
-                                .addComponent(pnlStatusTrong, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel1)
-                                .addGap(18, 18, 18)
-                                .addComponent(pnlStatusServing, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel2)
-                                .addGap(24, 24, 24)
-                                .addComponent(pnlStatusReserved, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 36,
-                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(32, 32, 32)));
+            panelTimKiemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTimKiemLayout.createSequentialGroup()
+                .addGap(12, 12, 12)
+                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(cbFilterKhuVuc, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(cbFilterTrangThai, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 298, Short.MAX_VALUE)
+                .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(31, 31, 31))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTimKiemLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(pnlStatusBanDuocChonTuPhieu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel6)
+                .addGap(18, 18, 18)
+                .addComponent(pnlStatusTrong, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
+                .addComponent(pnlStatusServing, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2)
+                .addGap(24, 24, 24)
+                .addComponent(pnlStatusReserved, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(32, 32, 32))
+        );
         panelTimKiemLayout.setVerticalGroup(
-                panelTimKiemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(panelTimKiemLayout.createSequentialGroup()
-                                .addContainerGap(38, Short.MAX_VALUE)
-                                .addGroup(panelTimKiemLayout
-                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(panelTimKiemLayout
-                                                .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 37,
-                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 37,
-                                                        javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTimKiemLayout
-                                                .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                .addComponent(cbFilterTrangThai, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                        37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addComponent(jLabel5))
-                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTimKiemLayout
-                                                .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                .addComponent(cbFilterKhuVuc, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                        37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addComponent(jLabel4)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(panelTimKiemLayout
-                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addGroup(panelTimKiemLayout
-                                                .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                .addComponent(pnlStatusTrong, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                        javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(pnlStatusServing, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                        javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(pnlStatusReserved, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                        javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
-                                                .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
-                                                .addComponent(pnlStatusBanDuocChonTuPhieu,
-                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                        javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                        .addComponent(jLabel6)
-                                        .addComponent(jLabel3))
-                                .addGap(11, 11, 11)));
+            panelTimKiemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelTimKiemLayout.createSequentialGroup()
+                .addContainerGap(38, Short.MAX_VALUE)
+                .addGroup(panelTimKiemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelTimKiemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTimKiemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(cbFilterTrangThai, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel5))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTimKiemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(cbFilterKhuVuc, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel4)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelTimKiemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(panelTimKiemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(pnlStatusTrong, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(pnlStatusServing, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(pnlStatusReserved, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(pnlStatusBanDuocChonTuPhieu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel3))
+                .addGap(11, 11, 11))
+        );
 
         jPanel2.add(panelTimKiem);
 
@@ -725,11 +742,13 @@ public class PanelDatBan extends javax.swing.JPanel {
         javax.swing.GroupLayout panelSoDoBanLayout = new javax.swing.GroupLayout(panelSoDoBan);
         panelSoDoBan.setLayout(panelSoDoBanLayout);
         panelSoDoBanLayout.setHorizontalGroup(
-                panelSoDoBanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 1103, Short.MAX_VALUE));
+            panelSoDoBanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1103, Short.MAX_VALUE)
+        );
         panelSoDoBanLayout.setVerticalGroup(
-                panelSoDoBanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 496, Short.MAX_VALUE));
+            panelSoDoBanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 496, Short.MAX_VALUE)
+        );
 
         scrSoDoBan.setViewportView(panelSoDoBan);
 

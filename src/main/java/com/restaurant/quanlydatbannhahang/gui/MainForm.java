@@ -28,6 +28,7 @@ public class MainForm extends javax.swing.JFrame {
     private TaiKhoan taiKhoan = null;
     private JPanel activePanel = null;
     private JLabel activeSubLabel = null;
+    private boolean isMenuClick = true; // Flag để track: click từ menu (true) hay từ button (false)
     private PanelTrangChu currentTrangChuPanel = null;
 
     // Lưu trữ các panel để bảo toàn trạng thái khi chuyển đổi
@@ -524,6 +525,11 @@ public class MainForm extends javax.swing.JFrame {
                     if (panelQuanLyDatBanTruoc != null) {
                         panelDatBan.setPanelQuanLyDatBanTruoc(panelQuanLyDatBanTruoc);
                         panelQuanLyDatBanTruoc.setPanelDatBan(panelDatBan);
+                    }
+
+                    // Chỉ refresh nếu click từ menu, không refresh nếu click từ button
+                    if (isMenuClick) {
+                        panelDatBan.refreshData();
                     }
 
                     lastVisitedSubLabel = lbl;
@@ -1271,17 +1277,16 @@ public class MainForm extends javax.swing.JFrame {
     public void switchToPanelDatBan() {
         if (subLapPhieuDatBan != null) {
             // Tạo và dispatch MouseEvent để simulate click trên label
+            // isMenuClick = false → listener sẽ KHÔNG gọi refreshData() (để bảo vệ edit
+            // mode)
+            isMenuClick = false;
             MouseEvent event = new MouseEvent(subLapPhieuDatBan,
                     MouseEvent.MOUSE_CLICKED, System.currentTimeMillis(), 0,
                     0, 0, 1, false);
             for (java.awt.event.MouseListener listener : subLapPhieuDatBan.getMouseListeners()) {
                 listener.mouseClicked(event);
             }
-
-            // Refresh dữ liệu từ DB khi chuyển sang tab
-            if (panelDatBan != null) {
-                panelDatBan.refreshData();
-            }
+            isMenuClick = true; // Reset flag
         }
     }
 
@@ -1293,17 +1298,15 @@ public class MainForm extends javax.swing.JFrame {
     public void switchToQuanLyDatBanTruocTab() {
         if (subQuanLyDatBanTruoc != null) {
             // Tạo và dispatch MouseEvent để simulate click trên label
+            // isMenuClick = false → listener sẽ KHÔNG gọi refreshData()
+            isMenuClick = false;
             MouseEvent event = new MouseEvent(subQuanLyDatBanTruoc,
                     MouseEvent.MOUSE_CLICKED, System.currentTimeMillis(), 0,
                     0, 0, 1, false);
             for (java.awt.event.MouseListener listener : subQuanLyDatBanTruoc.getMouseListeners()) {
                 listener.mouseClicked(event);
             }
-
-            // Refresh dữ liệu từ DB khi chuyển sang tab
-            if (panelDatBan != null) {
-                panelDatBan.refreshData();
-            }
+            isMenuClick = true; // Reset flag
         }
     }
 
