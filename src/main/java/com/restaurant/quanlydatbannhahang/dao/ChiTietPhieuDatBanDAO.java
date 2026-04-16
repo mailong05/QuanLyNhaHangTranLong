@@ -139,4 +139,27 @@ public class ChiTietPhieuDatBanDAO {
         }
         return false;
     }
+
+    public List<ChiTietPhieuDatBan> getAllChiTiet() {
+        Connection connection = DatabaseConnection.getConnection();
+        List<ChiTietPhieuDatBan> list = new ArrayList<>();
+        String sql = "SELECT * FROM ChiTietPhieuDatBan";
+
+        try (PreparedStatement pstm = connection.prepareStatement(sql)) {
+        
+            try (ResultSet rs = pstm.executeQuery()) {
+                while (rs.next()) {
+                    ChiTietPhieuDatBan chiTiet = buildChiTietFromResultSet(rs);
+                    if (chiTiet != null) {
+                        list.add(chiTiet);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Lỗi khi lấy danh sách chi tiết phiếu đặt bàn: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return list;
+    }
+
 }

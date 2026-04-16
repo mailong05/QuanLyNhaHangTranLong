@@ -11,12 +11,14 @@ public class LuaChonDatBanDialog extends javax.swing.JDialog {
      */
     private Set<String> selectedTables; // ← Lưu các bàn đã chọn (không static)
     private PanelDatBan panelDatBan; // ← Lưu reference PanelDatBan để update UI
+    private PanelQuanLyDatBanTruoc panelQuanLyDatBanTruoc; // ← Lưu reference để refresh data
 
     public LuaChonDatBanDialog(java.awt.Frame parent, boolean modal, Set<String> selectedTables,
-            PanelDatBan panelDatBan) {
+            PanelDatBan panelDatBan, PanelQuanLyDatBanTruoc panelQuanLyDatBanTruoc) {
         super(parent, modal);
         this.selectedTables = selectedTables; // ← Nhận selectedTables từ PanelDatBan
         this.panelDatBan = panelDatBan; // ← Nhận PanelDatBan để update UI
+        this.panelQuanLyDatBanTruoc = panelQuanLyDatBanTruoc; // ← Nhận PanelQuanLyDatBanTruoc
         initComponents();
         this.setLocationRelativeTo(parent);
     }
@@ -77,8 +79,8 @@ public class LuaChonDatBanDialog extends javax.swing.JDialog {
 
     private void btnDatBanTruocActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnDatBanTruocActionPerformed
         java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
-        DatBanTruocDialog dialog = new DatBanTruocDialog(parentFrame, true, selectedTables, panelDatBan); // ← Truyền
-                                                                                                          // panelDatBan
+        DatBanTruocDialog dialog = new DatBanTruocDialog(parentFrame, true, selectedTables, panelDatBan,
+                panelQuanLyDatBanTruoc);
         dialog.setVisible(true);
 
         // Sau khi dialog đóng, kiểm tra xem đặt bàn có thành công không
@@ -110,7 +112,8 @@ public class LuaChonDatBanDialog extends javax.swing.JDialog {
                 testTables.add("B001");
                 testTables.add("B002");
 
-                LuaChonDatBanDialog dialog = new LuaChonDatBanDialog(new javax.swing.JFrame(), true, testTables, null);
+                LuaChonDatBanDialog dialog = new LuaChonDatBanDialog(new javax.swing.JFrame(), true, testTables, null,
+                        null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

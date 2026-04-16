@@ -153,7 +153,7 @@ classDiagram
     %% class TrangThaiNhanVien { <<enumeration>> DANG_LAM_VIEC, DA_NGHI_VIEC }
     %% class TrangThaiBan { <<enumeration>> TRONG, DANG_DUNG, DA_DAT }
     %% class LoaiMonAn { <<enumeration>> KHAI_VI, MON_CHINH, HAI_SAN, DO_UONG }
-    %% class TrangThaiPhieuDat { <<enumeration>> CHO_XAC_NHAN, DA_XAC_NHAN, DA_DEN, DA_HUY }
+    %% class TrangThaiPhieuDat { <<enumeration>> CHO_XAC_NHAN, DA_XAC_NHAN, DA_DEN, DA_HUY, DA_SU_DUNG }
     %% class TrangThaiHoaDon { <<enumeration>> CHUA_THANH_TOAN, DA_THANH_TOAN, DA_HUY }
     %% class PhuongThucTT { <<enumeration>> TIEN_MAT, CHUYEN_KHOAN, THE }
     %% class TrangThaiMonAn {<<enumeration>> CON, HET}

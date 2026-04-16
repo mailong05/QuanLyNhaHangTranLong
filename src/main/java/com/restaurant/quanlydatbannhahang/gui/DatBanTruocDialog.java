@@ -24,12 +24,14 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
     private PhieuDatBanService pdbService;
     private Set<String> selectedTables; // ← Lưu các bàn đã chọn (không static)
     private PanelDatBan panelDatBan; // ← Lưu reference PanelDatBan để update UI
+    private PanelQuanLyDatBanTruoc panelQuanLyDatBanTruoc; // ← Lưu reference để refresh data
 
     public DatBanTruocDialog(java.awt.Frame parent, boolean modal, Set<String> selectedTables,
-            PanelDatBan panelDatBan) {
+            PanelDatBan panelDatBan, PanelQuanLyDatBanTruoc panelQuanLyDatBanTruoc) {
         super(parent, modal);
         this.selectedTables = selectedTables; // ← Nhận selectedTables từ LuaChonDatBanDialog
         this.panelDatBan = panelDatBan; // ← Nhận PanelDatBan để update UI
+        this.panelQuanLyDatBanTruoc = panelQuanLyDatBanTruoc; // ← Nhận PanelQuanLyDatBanTruoc để refresh
         helper = new IDGeneratorHelper();
         pdbService = new PhieuDatBanService();
         initComponents();
@@ -180,11 +182,14 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
             String maPhieuDat = pdbService.taoPhieuDatBanMoi(maPDB, tenKhachHang, soDienThoai, soLuongNguoi,
                     thoiGianDen, ghiChu, selectedTables); // ← Truyền selectedTables
 
-            // 🎯 SAU KHI SUCCESS, cập nhật UI ngay tức thì cho mỗi bàn đã đặt
-            if (panelDatBan != null && selectedTables != null) {
-                for (String maBan : selectedTables) {
-                    panelDatBan.updateBanStatusUI(maBan, com.restaurant.quanlydatbannhahang.entity.TrangThaiBan.DA_DAT);
-                }
+            // 🎯 SAU KHI SUCCESS, cập nhật UI tất cả bàn từ DB
+            if (panelDatBan != null) {
+                panelDatBan.updateAllTableStatusFromPhieuData();
+            }
+
+            // Refresh data ở PanelQuanLyDatBanTruoc (update table phiếu đặt bàn)
+            if (panelQuanLyDatBanTruoc != null) {
+                panelQuanLyDatBanTruoc.refreshData();
             }
 
             datBanThanhCong = true;
@@ -232,7 +237,8 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
                 testTables.add("B001");
                 testTables.add("B002");
 
-                DatBanTruocDialog dialog = new DatBanTruocDialog(new javax.swing.JFrame(), true, testTables, null);
+                DatBanTruocDialog dialog = new DatBanTruocDialog(new javax.swing.JFrame(), true, testTables, null,
+                        null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

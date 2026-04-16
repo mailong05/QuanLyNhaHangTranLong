@@ -3,7 +3,8 @@ package com.restaurant.quanlydatbannhahang.entity;
 public enum TrangThaiPhieuDat {
     DANG_CHO("Đang chờ"),
     DANG_SU_DUNG("Đang sử dụng"),
-    DA_HUY("Đã hủy");
+    DA_HUY("Đã hủy"),
+    DA_SU_DUNG("Đã sử dụng");
 
     private final String displayName;
 

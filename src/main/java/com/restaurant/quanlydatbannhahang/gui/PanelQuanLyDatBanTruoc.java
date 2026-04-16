@@ -58,6 +58,19 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                 this.panelDatBan = panelDatBan;
         }
 
+        /**
+         * PUBLIC METHOD: Reload lại data table phiếu đặt bàn từ DB
+         * Gọi khi DatBanTruocDialog hoàn tất (btnDatBan click) để cập nhật data
+         */
+        public void refreshData() {
+                try {
+                        loadDataToTable();
+                        clearFields();
+                } catch (Exception e) {
+                        e.printStackTrace();
+                }
+        }
+
         private void customUI() {
                 // Placeholder cho txtTimKiem
                 setupPlaceholder(txtTimKiem, "Nhập mã đặt bàn hoặc SĐT khách");
@@ -135,6 +148,10 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
                 for (PhieuDatBan p : listPDB) {
+
+                        if (p.getTrangThai() == TrangThaiPhieuDat.DA_HUY
+                                        || p.getTrangThai() == TrangThaiPhieuDat.DA_SU_DUNG)
+                                continue;
                         String thoiGian = p.getThoiGianDen().format(formatter);
                         String listMaBan = ctpdbService.getChiTietByMaPhieuDat(p.getMaPhieuDat())
                                         .stream()
@@ -629,14 +646,8 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                                 return;
                         }
 
-                        // Lấy bàn hiện tại từ ChiTietPhieuDatBan
-                        List<ChiTietPhieuDatBan> chiTietHienTai = ctpdbService.getChiTietByMaPhieuDat(maPDB);
-                        Set<String> oldBanSet = new HashSet<>();
-                        if (chiTietHienTai != null) {
-                                for (ChiTietPhieuDatBan ct : chiTietHienTai) {
-                                        oldBanSet.add(ct.getBan().getMaBan());
-                                }
-                        }
+                        // Lấy bàn hiện tại từ DB
+                        Set<String> oldBanSet = getTableSetFromDB(maPDB);
 
                         // Pre-populate PanelDatBan với selectedTables hiện tại
                         if (panelDatBan != null) {
@@ -684,6 +695,24 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
         }
 
         /**
+         * Helper method: Lấy danh sách bàn hiện tại từ DB
+         * Truy vấn ChiTietPhieuDatBan theo maPDB và trích xuất Set<String> mã bàn
+         * 
+         * @param maPDB Mã phiếu đặt bàn
+         * @return Set danh sách mã bàn (rỗng nếu không có)
+         */
+        private Set<String> getTableSetFromDB(String maPDB) {
+                Set<String> banSet = new HashSet<>();
+                List<ChiTietPhieuDatBan> chiTietList = ctpdbService.getChiTietByMaPhieuDat(maPDB);
+                if (chiTietList != null) {
+                        for (ChiTietPhieuDatBan ct : chiTietList) {
+                                banSet.add(ct.getBan().getMaBan());
+                        }
+                }
+                return banSet;
+        }
+
+        /**
          * Cập nhật txtMaBan khi user chọn xong bàn trong PanelDatBan (edit mode)
          * Nhân viên sẽ thấy danh sách bàn mới đã chọn trong txtMaBan
          * Sau đó bấm btnCapNhat để lưu vào DB
@@ -713,21 +742,10 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
 
                 try {
                         // Lấy bàn hiện tại từ DB
-                        List<ChiTietPhieuDatBan> chiTietHienTai = ctpdbService.getChiTietByMaPhieuDat(maPDBEditMode);
-                        Set<String> oldBanSet = new HashSet<>();
-                        if (chiTietHienTai != null) {
-                                for (ChiTietPhieuDatBan ct : chiTietHienTai) {
-                                        oldBanSet.add(ct.getBan().getMaBan());
-                                }
-                        }
+                        Set<String> oldBanSet = getTableSetFromDB(maPDBEditMode);
 
                         // Cập nhật ChiTietPhieuDatBan (thêm/xóa bàn)
                         updateChiTietPhieuDatBan(maPDBEditMode, oldBanSet, newSelectedTables);
-
-                        // Reset edit mode flag trong PanelDatBan để bật lại refresh cho lần sau
-                        if (panelDatBan != null) {
-                                panelDatBan.resetEditMode();
-                        }
 
                         // Clear maPDB edit mode
                         maPDBEditMode = null;
@@ -741,110 +759,24 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
 
         /**
          * Helper method: Xử lý thêm/xóa ChiTietPhieuDatBan
-         * So sánh oldBanSet vs newBanSet, thêm bàn mới, xóa bàn không còn
+         * Delegate to service layer - Service handles validation + DB logic
+         * GUI chỉ handle exception + display notification
+         * 
+         * @throws IllegalArgumentException từ service nếu validation fail
          */
-        private void updateChiTietPhieuDatBan(String maPDB, Set<String> oldBanSet, Set<String> newBanSet) {
-                try {
-                        // Bàn cần thêm (newBanSet - oldBanSet)
-                        Set<String> banCanThem = new HashSet<>(newBanSet);
-                        banCanThem.removeAll(oldBanSet);
+        private void updateChiTietPhieuDatBan(String maPDB, Set<String> oldBanSet, Set<String> newBanSet)
+                        throws IllegalArgumentException {
+                // 1. Gọi service - nếu lỗi sẽ throw exception
+                ctpdbService.updateBanInPhieu(maPDB, oldBanSet, newBanSet);
 
-                        // Bàn cần xóa (oldBanSet - newBanSet)
-                        Set<String> banCanXoa = new HashSet<>(oldBanSet);
-                        banCanXoa.removeAll(newBanSet);
-
-                        // Lấy ChiTietPhieuDatBan hiện tại
-                        List<ChiTietPhieuDatBan> chiTietList = ctpdbService.getChiTietByMaPhieuDat(maPDB);
-                        Map<String, ChiTietPhieuDatBan> chiTietMap = new HashMap<>();
-                        if (chiTietList != null) {
-                                for (ChiTietPhieuDatBan ct : chiTietList) {
-                                        chiTietMap.put(ct.getBan().getMaBan(), ct);
-                                }
-                        }
-
-                        PhieuDatBan phieu = pdbService.getPhieuDatBanTheoMa(maPDB);
-
-                        // 1. THÊM bàn mới
-                        StringBuilder thongBaoThem = new StringBuilder();
-                        for (String maBan : banCanThem) {
-                                // Check duplicate trước (maPhieuDat + maBan)
-                                if (chiTietMap.containsKey(maBan)) {
-                                        JOptionPane.showMessageDialog(this,
-                                                        "Bàn " + maBan + " đã tồn tại trong phiếu này", "Lỗi",
-                                                        JOptionPane.ERROR_MESSAGE);
-                                        return;
-                                }
-
-                                // Check bàn có sẵn không
-                                Ban ban = banService.getBanTheoMa(maBan);
-                                if (ban == null) {
-                                        JOptionPane.showMessageDialog(this,
-                                                        "Bàn " + maBan + " không tồn tại", "Lỗi",
-                                                        JOptionPane.ERROR_MESSAGE);
-                                        return;
-                                }
-
-                                // Check trạng thái bàn (không được DA_DAT hay DANG_DUNG nếu là bàn mới)
-                                // Cho phép thêm nếu bàn là TRONG (cho phép tái sử dụng bàn của phiếu này)
-                                if (ban.getTrangThai() == TrangThaiBan.DA_DAT
-                                                || ban.getTrangThai() == TrangThaiBan.DANG_DUNG) {
-                                        // Nếu bàn này là của phiếu hiện tại thì OK
-                                        if (!oldBanSet.contains(maBan)) {
-                                                JOptionPane.showMessageDialog(this,
-                                                                "Bàn " + maBan + " đang được sử dụng hoặc đã đặt",
-                                                                "Lỗi",
-                                                                JOptionPane.ERROR_MESSAGE);
-                                                return;
-                                        }
-                                }
-
-                                // Tạo ChiTietPhieuDatBan mới
-                                ChiTietPhieuDatBan chiTietMoi = new ChiTietPhieuDatBan();
-                                chiTietMoi.setPhieuDatBan(phieu);
-                                chiTietMoi.setBan(ban);
-                                chiTietMoi.setGhiChu("");
-
-                                ctpdbService.themChiTietPhieuDatBan(chiTietMoi);
-                                thongBaoThem.append(maBan).append(" ");
-
-                                // Update UI bàn
-                                if (panelDatBan != null) {
-                                        panelDatBan.updateBanStatusUI(maBan, TrangThaiBan.DA_DAT);
-                                }
-                        }
-
-                        // 2. XÓA bàn không còn chọn
-                        StringBuilder thongBaoXoa = new StringBuilder();
-                        for (String maBan : banCanXoa) {
-                                ctpdbService.xoaChiTietPhieuDatBan(maPDB, maBan);
-                                thongBaoXoa.append(maBan).append(" ");
-
-                                // Update UI bàn về TRONG
-                                if (panelDatBan != null) {
-                                        panelDatBan.updateBanStatusUI(maBan, TrangThaiBan.TRONG);
-                                }
-                        }
-
-                        // 3. Thông báo kết quả
-                        StringBuilder thongBaoFinal = new StringBuilder();
-                        if (thongBaoThem.length() > 0) {
-                                thongBaoFinal.append("Thêm: ").append(thongBaoThem.toString()).append("\n");
-                        }
-                        if (thongBaoXoa.length() > 0) {
-                                thongBaoFinal.append("Xóa: ").append(thongBaoXoa.toString()).append("\n");
-                        }
-                        if (thongBaoFinal.length() == 0) {
-                                thongBaoFinal.append("Không có thay đổi");
-                        }
-
-                        JOptionPane.showMessageDialog(this, thongBaoFinal.toString(), "Cập nhật bàn",
-                                        JOptionPane.INFORMATION_MESSAGE);
-
-                } catch (Exception e) {
-                        JOptionPane.showMessageDialog(this, "Lỗi khi cập nhật: " + e.getMessage(), "Lỗi",
-                                        JOptionPane.ERROR_MESSAGE);
-                        e.printStackTrace();
+                // 2. Cập nhật UI bàn từ DB (sau khi thêm/xóa hoàn tất)
+                if (panelDatBan != null) {
+                        panelDatBan.updateAllTableStatusFromPhieuData();
                 }
+
+                // 3. Hiển thị thông báo thành công
+                JOptionPane.showMessageDialog(this, "Cập nhật bàn thành công", "Thành công",
+                                JOptionPane.INFORMATION_MESSAGE);
         }
 
         private void cbFilterTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterTrangThaiActionPerformed
@@ -925,41 +857,16 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                         if (newBanSet != null && !newBanSet.isEmpty()) {
 
                                 // Lấy bàn hiện tại từ DB
-                                List<ChiTietPhieuDatBan> chiTietHienTai = ctpdbService.getChiTietByMaPhieuDat(maPDB);
-                                Set<String> oldBanSet = new HashSet<>();
-                                if (chiTietHienTai != null) {
-                                        for (ChiTietPhieuDatBan ct : chiTietHienTai) {
-                                                oldBanSet.add(ct.getBan().getMaBan());
-                                        }
-                                }
+                                Set<String> oldBanSet = getTableSetFromDB(maPDB);
 
                                 if (!oldBanSet.equals(newBanSet)) {
                                         updateChiTietPhieuDatBan(maPDB, oldBanSet, newBanSet);
                                 }
                         }
 
+                        // Reload toàn bộ UI từ DB để cập nhật trạng thái bàn theo phiếu mới
                         if (panelDatBan != null) {
-                                List<ChiTietPhieuDatBan> chiTietList = ctpdbService.getChiTietByMaPhieuDat(maPDB);
-
-                                if (chiTietList != null && !chiTietList.isEmpty()) {
-                                        for (ChiTietPhieuDatBan chiTiet : chiTietList) {
-                                                String maBan = chiTiet.getBan().getMaBan();
-                                                System.out.println(maBan);
-
-                                                TrangThaiBan trangThaiBan;
-                                                System.out.println(trangThai.getDisplayName());
-                                                if (trangThai == TrangThaiPhieuDat.DA_HUY) {
-                                                        trangThaiBan = TrangThaiBan.TRONG;
-                                                } else if (trangThai == TrangThaiPhieuDat.DANG_SU_DUNG) {
-                                                        trangThaiBan = TrangThaiBan.DANG_DUNG;
-                                                } else {
-                                                        trangThaiBan = TrangThaiBan.DA_DAT;
-                                                }
-
-                                                panelDatBan.updateBanStatusUI(maBan, trangThaiBan);
-
-                                        }
-                                }
+                                panelDatBan.refreshData();
                         }
 
                         JOptionPane.showMessageDialog(this, "Cập nhật phiếu đặt bàn thành công", "Thành công",
@@ -967,11 +874,6 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
 
                         loadDataToTable();
                         clearFields();
-
-                        // Reset edit mode flag sau khi update xong để cho phép tạo phiếu mới
-                        if (panelDatBan != null) {
-                                panelDatBan.resetEditMode();
-                        }
 
                         btnCapNhat.setEnabled(false);
 
@@ -1006,13 +908,9 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                                 // Sau đó xóa phiếu
                                 pdbService.xoaPhieuDatBan(maPDB);
 
-                                // Update UI bàn về trạng thái TRONG
-                                if (panelDatBan != null && chiTietList != null && !chiTietList.isEmpty()) {
-                                        for (ChiTietPhieuDatBan chiTiet : chiTietList) {
-                                                String maBan = chiTiet.getBan().getMaBan();
-                                                panelDatBan.updateBanStatusUI(maBan, TrangThaiBan.TRONG);
-
-                                        }
+                                // Cập nhật UI bàn từ DB (bàn trong phiếu xóa sẽ thành TRONG)
+                                if (panelDatBan != null) {
+                                        panelDatBan.updateAllTableStatusFromPhieuData();
                                 }
 
                                 JOptionPane.showMessageDialog(this, "Xóa phiếu đặt bàn thành công", "Thành công",
