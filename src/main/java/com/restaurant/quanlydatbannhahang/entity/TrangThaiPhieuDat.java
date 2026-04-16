@@ -1,9 +1,8 @@
 package com.restaurant.quanlydatbannhahang.entity;
 
 public enum TrangThaiPhieuDat {
-    CHO_XAC_NHAN("Chờ xác nhận"),
-    DA_XAC_NHAN("Đã xác nhận"),
-    DA_DEN("Đã đến"),
+    DANG_CHO("Đang chờ"),
+    DANG_SU_DUNG("Đang sử dụng"),
     DA_HUY("Đã hủy");
 
     private final String displayName;
@@ -22,6 +21,6 @@ public enum TrangThaiPhieuDat {
                 return status;
             }
         }
-        return CHO_XAC_NHAN;
+        return DANG_CHO;
     }
 }

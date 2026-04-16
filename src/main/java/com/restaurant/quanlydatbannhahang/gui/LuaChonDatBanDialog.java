@@ -2,14 +2,21 @@ package com.restaurant.quanlydatbannhahang.gui;
 
 // UIConfiguration để setup FlatLaf L&F
 import com.restaurant.quanlydatbannhahang.gui.UIConfiguration;
+import java.util.Set;
 
 public class LuaChonDatBanDialog extends javax.swing.JDialog {
 
     /**
      * Creates new form TaiKhoanDialog
      */
-    public LuaChonDatBanDialog(java.awt.Frame parent, boolean modal) {
+    private Set<String> selectedTables; // ← Lưu các bàn đã chọn (không static)
+    private PanelDatBan panelDatBan; // ← Lưu reference PanelDatBan để update UI
+
+    public LuaChonDatBanDialog(java.awt.Frame parent, boolean modal, Set<String> selectedTables,
+            PanelDatBan panelDatBan) {
         super(parent, modal);
+        this.selectedTables = selectedTables; // ← Nhận selectedTables từ PanelDatBan
+        this.panelDatBan = panelDatBan; // ← Nhận PanelDatBan để update UI
         initComponents();
         this.setLocationRelativeTo(parent);
     }
@@ -70,7 +77,8 @@ public class LuaChonDatBanDialog extends javax.swing.JDialog {
 
     private void btnDatBanTruocActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnDatBanTruocActionPerformed
         java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
-        DatBanTruocDialog dialog = new DatBanTruocDialog(parentFrame, true);
+        DatBanTruocDialog dialog = new DatBanTruocDialog(parentFrame, true, selectedTables, panelDatBan); // ← Truyền
+                                                                                                          // panelDatBan
         dialog.setVisible(true);
 
         // Sau khi dialog đóng, kiểm tra xem đặt bàn có thành công không
@@ -84,6 +92,12 @@ public class LuaChonDatBanDialog extends javax.swing.JDialog {
     /**
      * @param args the command line arguments
      */
+    /**
+     * @param args the command line arguments
+     * 
+     *             NOTE: Main method chỉ dùng cho testing. Trong thực tế, dialog
+     *             được gọi từ PanelDatBan
+     */
     public static void main(String args[]) {
         // ========== SETUP UI (FlatLaf) TRƯỚC TIÊN ==========
         UIConfiguration.setupUI();
@@ -92,7 +106,11 @@ public class LuaChonDatBanDialog extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                LuaChonDatBanDialog dialog = new LuaChonDatBanDialog(new javax.swing.JFrame(), true);
+                java.util.Set<String> testTables = new java.util.HashSet<>();
+                testTables.add("B001");
+                testTables.add("B002");
+
+                LuaChonDatBanDialog dialog = new LuaChonDatBanDialog(new javax.swing.JFrame(), true, testTables, null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

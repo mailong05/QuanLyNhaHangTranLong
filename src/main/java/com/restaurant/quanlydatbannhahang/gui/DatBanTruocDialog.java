@@ -6,6 +6,7 @@ import com.restaurant.quanlydatbannhahang.gui.UIConfiguration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Set;
 
 import javax.swing.JOptionPane;
 
@@ -21,13 +22,19 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
     private boolean datBanThanhCong = false;
     private IDGeneratorHelper helper;
     private PhieuDatBanService pdbService;
-    public DatBanTruocDialog(java.awt.Frame parent, boolean modal) {
+    private Set<String> selectedTables; // ← Lưu các bàn đã chọn (không static)
+    private PanelDatBan panelDatBan; // ← Lưu reference PanelDatBan để update UI
+
+    public DatBanTruocDialog(java.awt.Frame parent, boolean modal, Set<String> selectedTables,
+            PanelDatBan panelDatBan) {
         super(parent, modal);
+        this.selectedTables = selectedTables; // ← Nhận selectedTables từ LuaChonDatBanDialog
+        this.panelDatBan = panelDatBan; // ← Nhận PanelDatBan để update UI
         helper = new IDGeneratorHelper();
         pdbService = new PhieuDatBanService();
         initComponents();
-        this.setLocationRelativeTo(parent); 
-       
+        this.setLocationRelativeTo(parent);
+
         if (dtpThoiGianDen != null) {
             dtpThoiGianDen.setDateTimeStrict(LocalDateTime.now());
         }
@@ -42,7 +49,8 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel2 = new javax.swing.JPanel();
@@ -79,8 +87,8 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
         jPanel2.add(lblMaPhieuDat, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 40, -1, 20));
 
         String lastMaPDB = pdbService.getLastPhieuDatBanID();
-        String newMaPDB = (lastMaPDB == null || lastMaPDB.isEmpty()) ? helper.generateDefaultID(lastMaPDB) : 
-        	helper.generateNextIDFromFullID(lastMaPDB);
+        String newMaPDB = (lastMaPDB == null || lastMaPDB.isEmpty()) ? helper.generateDefaultID(lastMaPDB)
+                : helper.generateNextIDFromFullID(lastMaPDB);
         txtMaPhieuDat.setText(newMaPDB);
         txtMaPhieuDat.setEditable(false);
         txtMaPhieuDat.setBackground(new java.awt.Color(255, 255, 255));
@@ -162,15 +170,22 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
 
     private void btnDatBanActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnDatBanActionPerformed
         try {
-        	String maPDB = txtMaPhieuDat.getText().trim();
+            String maPDB = txtMaPhieuDat.getText().trim();
             String soDienThoai = txtSoDienThoai.getText().trim();
             String tenKhachHang = txtTenKhachHang.getText().trim();
             int soLuongNguoi = (int) spSoLuong.getValue();
             LocalDateTime thoiGianDen = dtpThoiGianDen.getDateTimeStrict();
             String ghiChu = txtGhiChu.getText().trim();
 
-            
-            String maPhieuDat = pdbService.taoPhieuDatBanMoi(maPDB, tenKhachHang, soDienThoai,soLuongNguoi, thoiGianDen, ghiChu);
+            String maPhieuDat = pdbService.taoPhieuDatBanMoi(maPDB, tenKhachHang, soDienThoai, soLuongNguoi,
+                    thoiGianDen, ghiChu, selectedTables); // ← Truyền selectedTables
+
+            // 🎯 SAU KHI SUCCESS, cập nhật UI ngay tức thì cho mỗi bàn đã đặt
+            if (panelDatBan != null && selectedTables != null) {
+                for (String maBan : selectedTables) {
+                    panelDatBan.updateBanStatusUI(maBan, com.restaurant.quanlydatbannhahang.entity.TrangThaiBan.DA_DAT);
+                }
+            }
 
             datBanThanhCong = true;
 
@@ -199,6 +214,12 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
     /**
      * @param args the command line arguments
      */
+    /**
+     * @param args the command line arguments
+     * 
+     *             NOTE: Main method chỉ dùng cho testing. Trong thực tế, dialog
+     *             được gọi từ LuaChonDatBanDialog
+     */
     public static void main(String args[]) {
         // ========== SETUP UI (FlatLaf) TRƯỚC TIÊN ==========
         UIConfiguration.setupUI();
@@ -207,7 +228,11 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                DatBanTruocDialog dialog = new DatBanTruocDialog(new javax.swing.JFrame(), true);
+                java.util.Set<String> testTables = new java.util.HashSet<>();
+                testTables.add("B001");
+                testTables.add("B002");
+
+                DatBanTruocDialog dialog = new DatBanTruocDialog(new javax.swing.JFrame(), true, testTables, null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

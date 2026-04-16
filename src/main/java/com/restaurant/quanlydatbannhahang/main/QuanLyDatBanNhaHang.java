@@ -9,14 +9,11 @@ import com.restaurant.quanlydatbannhahang.gui.UIConfiguration;
 public class QuanLyDatBanNhaHang {
 
     public static void main(String[] args) {
-        // ========== SETUP FLATLAF UI TRƯỚC TIÊN ==========
         UIConfiguration.setupUI();
 
-        // ========== SAU ĐÓ KHỞI TẠO LOADING SCREEN ==========
 
-        // khởi tạo loadingform
         LoadingScreen sp = new LoadingScreen();
-        sp.setLocationRelativeTo(null); // Nên thêm dòng này để hiện giữa màn hình
+        sp.setLocationRelativeTo(null); 
         sp.setVisible(true);
 
         new Thread(() -> {
@@ -29,7 +26,6 @@ public class QuanLyDatBanNhaHang {
                         sp.prgLoading.setValue(p);
                         sp.lblPercentage.setText(p + "%");
 
-                        // chữ chạy khi loading
                         if (p == 10) {
                             sp.lblStatus.setText("Turning on Modules...");
                         }
@@ -39,7 +35,6 @@ public class QuanLyDatBanNhaHang {
                         if (p == 50) {
                             sp.lblStatus.setText("Connecting to Database...");
 
-                            // Khởi tạo kết nối database
                             if (DatabaseConnection.getConnection() == null) {
                                 sp.dispose();
                                 JOptionPane.showMessageDialog(null,

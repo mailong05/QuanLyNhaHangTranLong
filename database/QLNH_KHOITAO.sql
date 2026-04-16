@@ -107,7 +107,7 @@ CREATE TABLE BanAn (
     maKhuVuc VARCHAR(20),
     trangThai NVARCHAR(50) NOT NULL
         CHECK (trangThai IN (N'TRONG', N'DANG_DUNG', N'DA_DAT')),
-    CONSTRAINT FK_BanAn_KhuVuc FOREIGN KEY (maKhuVuc) REFERENCES KhuVuc(maKhuVuc)
+    CONSTRAINT FK_BanAn_KhuVuc FOREIGN KEY (maKhuVuc) REFERENCES KhuVuc(maKhuVuc) ON DELETE CASCADE
 );
 
 -- =========================================================
@@ -121,9 +121,9 @@ CREATE TABLE PhieuDatBan (
     soLuongNguoi INT,
     ghiChu NVARCHAR(255),
     trangThai NVARCHAR(50) NOT NULL
-        CHECK (trangThai IN (N'CHO_XAC_NHAN', N'DA_XAC_NHAN', N'DA_DEN', N'DA_HUY')),
-    CONSTRAINT FK_PDB_KhachHang FOREIGN KEY (maKH) REFERENCES KhachHang(maKH),
-    CONSTRAINT FK_PDB_NhanVien FOREIGN KEY (maNV) REFERENCES NhanVien(maNV)
+        CHECK (trangThai IN (N'DANG_CHO', N'DANG_SU_DUNG', N'DA_HUY')),
+    CONSTRAINT FK_PDB_KhachHang FOREIGN KEY (maKH) REFERENCES KhachHang(maKH) ON DELETE CASCADE,
+    CONSTRAINT FK_PDB_NhanVien FOREIGN KEY (maNV) REFERENCES NhanVien(maNV) ON DELETE CASCADE
 );
 
 CREATE TABLE ChiTietPhieuDatBan (
@@ -131,8 +131,8 @@ CREATE TABLE ChiTietPhieuDatBan (
     maBan VARCHAR(20) NOT NULL,
     ghiChu NVARCHAR(255),
     PRIMARY KEY (maPhieuDat, maBan),
-    CONSTRAINT FK_CTPDB_PhieuDat FOREIGN KEY (maPhieuDat) REFERENCES PhieuDatBan(maPhieuDat),
-    CONSTRAINT FK_CTPDB_BanAn FOREIGN KEY (maBan) REFERENCES BanAn(maBan)
+    CONSTRAINT FK_CTPDB_PhieuDat FOREIGN KEY (maPhieuDat) REFERENCES PhieuDatBan(maPhieuDat) ON DELETE CASCADE,
+    CONSTRAINT FK_CTPDB_BanAn FOREIGN KEY (maBan) REFERENCES BanAn(maBan) ON DELETE CASCADE
 );
 
 -- =========================================================
@@ -154,10 +154,10 @@ CREATE TABLE HoaDon (
         CHECK (phuongThucTT IN (N'TIEN_MAT', N'CHUYEN_KHOAN', N'THE')),
     trangThaiThanhToan NVARCHAR(50) NOT NULL
         CHECK (trangThaiThanhToan IN (N'CHUA_THANH_TOAN', N'DA_THANH_TOAN', N'DA_HUY')),
-    CONSTRAINT FK_HD_BanAn FOREIGN KEY (maBan) REFERENCES BanAn(maBan),
-    CONSTRAINT FK_HD_NhanVien FOREIGN KEY (maNV) REFERENCES NhanVien(maNV),
-    CONSTRAINT FK_HD_KhuyenMai FOREIGN KEY (maKM) REFERENCES KhuyenMai(maKM),
-    CONSTRAINT FK_HD_Thue FOREIGN KEY (maThue) REFERENCES Thue(maThue)
+    CONSTRAINT FK_HD_BanAn FOREIGN KEY (maBan) REFERENCES BanAn(maBan) ON DELETE CASCADE,
+    CONSTRAINT FK_HD_NhanVien FOREIGN KEY (maNV) REFERENCES NhanVien(maNV) ON DELETE CASCADE,
+    CONSTRAINT FK_HD_KhuyenMai FOREIGN KEY (maKM) REFERENCES KhuyenMai(maKM) ON DELETE CASCADE,
+    CONSTRAINT FK_HD_Thue FOREIGN KEY (maThue) REFERENCES Thue(maThue) ON DELETE CASCADE
 );
 
 -- =========================================================
@@ -172,6 +172,6 @@ CREATE TABLE ChiTietHoaDon (
     thanhTien AS (soLuong * donGiaLuuTru),
     PRIMARY KEY (maHD, maMon),
     CONSTRAINT FK_CTHD_HoaDon FOREIGN KEY (maHD) REFERENCES HoaDon(maHD) ON DELETE CASCADE,
-    CONSTRAINT FK_CTHD_MonAn FOREIGN KEY (maMon) REFERENCES MonAn(maMon)
+    CONSTRAINT FK_CTHD_MonAn FOREIGN KEY (maMon) REFERENCES MonAn(maMon) ON DELETE CASCADE
 );
 GO

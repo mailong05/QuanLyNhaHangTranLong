@@ -210,4 +210,15 @@ public class BanDAO {
         }
         return false;
     }
+
+    /**
+     * Cập nhật trạng thái bàn (overload nhận TrangThaiBan enum)
+     * 
+     * @param maBan     Mã bàn
+     * @param trangThai TrangThaiBan enum
+     * @return true nếu cập nhật thành công
+     */
+    public boolean capNhatTrangThaiBan(String maBan,TrangThaiBan trangThai) {
+        return capNhatTrangThaiBan(maBan, trangThai.name());
+    }
 }

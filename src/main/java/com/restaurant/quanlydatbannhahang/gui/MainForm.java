@@ -31,6 +31,7 @@ public class MainForm extends javax.swing.JFrame {
     private PanelTrangChu currentTrangChuPanel = null;
 
     // Lưu trữ các panel để bảo toàn trạng thái khi chuyển đổi
+    private PanelDatBan panelDatBan = null;
     private PanelQuanLyDatBanTruoc panelQuanLyDatBanTruoc = null;
     private PanelDatMon panelDatMon = null;
     private PanelLapHoaDon panelLapHoaDon = null;
@@ -110,6 +111,28 @@ public class MainForm extends javax.swing.JFrame {
         updateActivePanel(panelTrangChu);
         lblTenTrang.setText("TRANG CHỦ");
         showTrangChuPanel();
+
+        // Khởi tạo sớm các panel quan trọng để setup callback chúng chính xác
+        initializePanelsEarly();
+    }
+
+    /**
+     * Khởi tạo sớm các panel để tránh lỗi null reference khi callback
+     */
+    private void initializePanelsEarly() {
+        // Tạo panelDatBan nếu chưa tồn tại
+        if (panelDatBan == null) {
+            panelDatBan = new PanelDatBan();
+        }
+
+        // Tạo panelQuanLyDatBanTruoc nếu chưa tồn tại
+        if (panelQuanLyDatBanTruoc == null) {
+            panelQuanLyDatBanTruoc = new PanelQuanLyDatBanTruoc();
+        }
+
+        // Setup bidirectional callback
+        panelDatBan.setPanelQuanLyDatBanTruoc(panelQuanLyDatBanTruoc);
+        panelQuanLyDatBanTruoc.setPanelDatBan(panelDatBan);
     }
 
     private boolean isManager() {
@@ -492,7 +515,19 @@ public class MainForm extends javax.swing.JFrame {
 
                 // 3. LOGIC CHUYỂN PANEL (Giữ nguyên các instance của bạn)
                 if (lbl == subLapPhieuDatBan) {
-                    showPanel(new PanelDatBan());
+                    // Lưu instance PanelDatBan để reuse + setup callback với PanelQuanLyDatBanTruoc
+                    if (panelDatBan == null) {
+                        panelDatBan = new PanelDatBan();
+                    }
+
+                    // Setup callback - nếu panelQuanLyDatBanTruoc đã được tạo
+                    if (panelQuanLyDatBanTruoc != null) {
+                        panelDatBan.setPanelQuanLyDatBanTruoc(panelQuanLyDatBanTruoc);
+                        panelQuanLyDatBanTruoc.setPanelDatBan(panelDatBan);
+                    }
+
+                    lastVisitedSubLabel = lbl;
+                    showPanel(panelDatBan);
                 } else if (lbl == subThongKeDoanhThu) {
                     showPanel(new PanelThongKe());
                 } else if (lbl == subQuanLyThue) {
@@ -516,6 +551,13 @@ public class MainForm extends javax.swing.JFrame {
                     if (panelQuanLyDatBanTruoc == null) {
                         panelQuanLyDatBanTruoc = new PanelQuanLyDatBanTruoc();
                     }
+
+                    // Setup callback - nếu panelDatBan đã được tạo
+                    if (panelDatBan != null) {
+                        panelDatBan.setPanelQuanLyDatBanTruoc(panelQuanLyDatBanTruoc);
+                        panelQuanLyDatBanTruoc.setPanelDatBan(panelDatBan);
+                    }
+
                     lastVisitedSubLabel = lbl;
                     showPanel(panelQuanLyDatBanTruoc);
                 } else if (lbl == subDanhSachKhuVuc) {
@@ -1222,6 +1264,49 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JLabel subDanhSachNhanVien;
     private javax.swing.JLabel subDanhSachThue;
     private javax.swing.JLabel subLapPhieuDatBan;
+
+    /**
+     * Public method để chuyển sang tab PanelDatBan (gọi từ các panel khác)
+     */
+    public void switchToPanelDatBan() {
+        if (subLapPhieuDatBan != null) {
+            // Tạo và dispatch MouseEvent để simulate click trên label
+            MouseEvent event = new MouseEvent(subLapPhieuDatBan,
+                    MouseEvent.MOUSE_CLICKED, System.currentTimeMillis(), 0,
+                    0, 0, 1, false);
+            for (java.awt.event.MouseListener listener : subLapPhieuDatBan.getMouseListeners()) {
+                listener.mouseClicked(event);
+            }
+
+            // Refresh dữ liệu từ DB khi chuyển sang tab
+            if (panelDatBan != null) {
+                panelDatBan.refreshData();
+            }
+        }
+    }
+
+    /**
+     * Public method để chuyển sang tab PanelQuanLyDatBanTruoc khi user bấm "Đặt
+     * bàn" trong edit mode
+     * (gọi từ PanelDatBan)
+     */
+    public void switchToQuanLyDatBanTruocTab() {
+        if (subQuanLyDatBanTruoc != null) {
+            // Tạo và dispatch MouseEvent để simulate click trên label
+            MouseEvent event = new MouseEvent(subQuanLyDatBanTruoc,
+                    MouseEvent.MOUSE_CLICKED, System.currentTimeMillis(), 0,
+                    0, 0, 1, false);
+            for (java.awt.event.MouseListener listener : subQuanLyDatBanTruoc.getMouseListeners()) {
+                listener.mouseClicked(event);
+            }
+
+            // Refresh dữ liệu từ DB khi chuyển sang tab
+            if (panelDatBan != null) {
+                panelDatBan.refreshData();
+            }
+        }
+    }
+
     private javax.swing.JLabel subLichSuHoaDon;
     private javax.swing.JLabel subQuanLyBan;
     private javax.swing.JLabel subQuanLyDatBanTruoc;

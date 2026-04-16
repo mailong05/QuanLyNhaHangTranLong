@@ -5,18 +5,20 @@ import com.restaurant.quanlydatbannhahang.dao.ChiTietPhieuDatBanDAO;
 import com.restaurant.quanlydatbannhahang.dao.KhachHangDAO;
 import com.restaurant.quanlydatbannhahang.dao.BanDAO;
 import com.restaurant.quanlydatbannhahang.entity.PhieuDatBan;
+import com.restaurant.quanlydatbannhahang.entity.Ban;
 import com.restaurant.quanlydatbannhahang.entity.ChiTietPhieuDatBan;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiPhieuDat;
+import com.restaurant.quanlydatbannhahang.session.SessionManager;
 import com.restaurant.quanlydatbannhahang.entity.KhachHang;
 import com.restaurant.quanlydatbannhahang.entity.LoaiThanhVien;
-import com.restaurant.quanlydatbannhahang.entity.Ban;
-import com.restaurant.quanlydatbannhahang.session.SessionManager;
+import com.restaurant.quanlydatbannhahang.entity.TrangThaiBan;
 import com.restaurant.quanlydatbannhahang.util.IDGeneratorHelper;
 import com.restaurant.quanlydatbannhahang.util.IDQueryHelper;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 public class PhieuDatBanService {
     private PhieuDatBanDAO phieuDatBanDAO;
@@ -221,10 +223,20 @@ public class PhieuDatBanService {
 
     /**
      * Tạo phiếu đặt bàn trước mới từ DatBanTruocDialog
-     * Bao gồm: validate, tạo khách hàng (nếu cần), tạo phiếu, tạo chi tiết
+     * Bao gồm: validate, tạo khách hàng (nếu cần), tạo phiếu, tạo chi tiết, cập
+     * nhật trạng thái bàn
+     * 
+     * @param maPhieuDatBan  Mã phiếu đặt bàn
+     * @param tenKhachHang   Tên khách hàng
+     * @param soDienThoai    Số điện thoại
+     * @param soLuongNguoi   Số lượng người
+     * @param thoiGianDen    Thời gian đến
+     * @param ghiChu         Ghi chú
+     * @param selectedTables Tập hợp các bàn đã chọn (mã bàn)
+     * @return Mã phiếu đặt bàn đã tạo
      */
     public String taoPhieuDatBanMoi(String maPhieuDatBan, String tenKhachHang, String soDienThoai, int soLuongNguoi,
-            LocalDateTime thoiGianDen, String ghiChu) {
+            LocalDateTime thoiGianDen, String ghiChu, Set<String> selectedTables) {
 
         String validationError = DatBanTruocService.validatePhieuDatBan(soDienThoai, String.valueOf(soLuongNguoi));
         if (validationError != null) {
@@ -237,6 +249,10 @@ public class PhieuDatBanService {
 
         if (LocalDateTime.now().isAfter(thoiGianDen)) {
             throw new IllegalArgumentException("Thời gian đến phải sau ngày hiện tại");
+        }
+
+        if (selectedTables == null || selectedTables.isEmpty()) {
+            throw new IllegalArgumentException("Vui lòng chọn ít nhất một bàn!");
         }
 
         try {
@@ -263,12 +279,30 @@ public class PhieuDatBanService {
             }
 
             String maPhieuDat = phieuDatBan.getMaPhieuDat();
-            if (maPhieuDat == null || maPhieuDat.isEmpty()) {
-                List<PhieuDatBan> allPhieus = phieuDatBanDAO.getAllPhieuDatBan();
-                if (!allPhieus.isEmpty()) {
-                    PhieuDatBan lastPhieu = allPhieus.get(allPhieus.size() - 1);
-                    maPhieuDat = lastPhieu.getMaPhieuDat();
+            
+
+            // ← BƯỚC 2: Tạo chi tiết phiếu đặt bàn cho mỗi bàn đã chọn
+            for (String maBan : selectedTables) {
+                Ban ban = banDAO.getBanTheoMa(maBan);
+                if (ban == null) {
+                    throw new RuntimeException("Bàn " + maBan + " không tồn tại!");
                 }
+
+                ChiTietPhieuDatBan chiTiet = new ChiTietPhieuDatBan();
+                chiTiet.setPhieuDatBan(phieuDatBan);
+                chiTiet.setBan(ban);
+                chiTiet.setGhiChu("");
+
+                if (!chiTietPhieuDatBanDAO.themChiTietPhieuDatBan(chiTiet)) {
+                    throw new RuntimeException("Không thể lưu chi tiết phiếu cho bàn " + maBan);
+                }
+
+                // ← BƯỚC 3: Cập nhật trạng thái bàn thành DA_DAT
+                if (!banDAO.capNhatTrangThaiBan(maBan, TrangThaiBan.DA_DAT)) {
+                    throw new RuntimeException("Không thể cập nhật trạng thái bàn " + maBan);
+                }
+
+                System.out.println("✓ Đã đặt bàn: " + maBan);
             }
 
             System.out.println("Tạo phiếu đặt bàn thành công! Mã: " + maPhieuDat);

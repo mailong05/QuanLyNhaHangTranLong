@@ -2,7 +2,25 @@
 GO
 
 -- =========================================================
--- 2. CHÈN DỮ LIỆU MẪU (SEED DATA)
+-- 0. XÓA DỮ LIỆU CŨ (để tránh duplicate khi chạy lại script)
+-- =========================================================
+-- Xóa theo thứ tự ngược lại của FK constraints
+DELETE FROM ChiTietHoaDon;
+DELETE FROM HoaDon;
+DELETE FROM ChiTietPhieuDatBan;
+DELETE FROM PhieuDatBan;
+DELETE FROM KhachHang;
+DELETE FROM TaiKhoan;
+DELETE FROM NhanVien;
+DELETE FROM BanAn;
+DELETE FROM MonAn;
+DELETE FROM KhuyenMai;
+DELETE FROM Thue;
+DELETE FROM KhuVuc;
+GO
+
+-- =========================================================
+-- 1. CHÈN DỮ LIỆU MẪU (SEED DATA)
 -- =========================================================
 
 -- 2.1. BẢNG KHU VỰC (6 Khu vực)
@@ -109,10 +127,10 @@ INSERT INTO BanAn (maBan, soGhe, viTri, maKhuVuc, trangThai) VALUES
 
 -- 2.9. PHIẾU ĐẶT BÀN
 INSERT INTO PhieuDatBan (maPhieuDat, maKH, maNV, thoiGianDen, soLuongNguoi, ghiChu, trangThai) VALUES 
-('PD001', 'KH001', 'NV003', '2026-04-04 19:00:00', 4, N'Sinh nhật', N'DA_XAC_NHAN'),
-('PD002', 'KH002', 'NV002', '2026-04-05 18:30:00', 10, N'Tiệc công ty', N'CHO_XAC_NHAN'),
-('PD003', 'KH004', 'NV003', '2026-04-10 20:00:00', 2, N'Kỷ niệm ngày cưới', N'DA_XAC_NHAN'),
-('PD004', 'KH005', 'NV002', '2026-04-12 11:30:00', 6, N'Ăn trưa gia đình', N'DA_XAC_NHAN');
+('PD001', 'KH001', 'NV003', '2026-04-04 19:00:00', 4, N'Sinh nhật', N'DANG_SU_DUNG'),
+('PD002', 'KH002', 'NV002', '2026-04-05 18:30:00', 10, N'Tiệc công ty', N'DANG_CHO'),
+('PD003', 'KH004', 'NV003', '2026-04-10 20:00:00', 2, N'Kỷ niệm ngày cưới', N'DANG_SU_DUNG'),
+('PD004', 'KH005', 'NV002', '2026-04-12 11:30:00', 6, N'Ăn trưa gia đình', N'DANG_SU_DUNG');
 
 -- 2.10. CHI TIẾT PHIẾU ĐẶT BÀN
 INSERT INTO ChiTietPhieuDatBan (maPhieuDat, maBan, ghiChu) VALUES 
