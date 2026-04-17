@@ -497,7 +497,6 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
 
         private void clearFields() {
                 txtTenTaiKhoan.setText("");
-                txtMatKhau.setText("");
                 cbQuyenHan.setSelectedIndex(0);
         }
 

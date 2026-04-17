@@ -212,7 +212,6 @@ public class PanelQuanLyThue extends javax.swing.JPanel implements MouseListener
     }
 
     private void clearFields() {
-        txtMaThue.setText("");
         txtTenThue.setText("");
         txtThueSuat.setText("");
         cbTrangThai.setSelectedIndex(0);

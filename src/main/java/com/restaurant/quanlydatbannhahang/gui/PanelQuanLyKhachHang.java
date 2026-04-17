@@ -238,7 +238,6 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseLis
     }
 
     private void clearFields() {
-        txtMaKhachHang.setText("");
         txtHoTen.setText("");
         txtSoDienThoai.setText("");
         txtDiemTichLuy.setText("");

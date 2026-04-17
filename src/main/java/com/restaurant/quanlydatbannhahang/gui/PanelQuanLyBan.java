@@ -343,6 +343,7 @@ public class PanelQuanLyBan extends javax.swing.JPanel implements MouseListener 
         btnCapNhat.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnCapNhat.setText("Cập nhật");
         btnCapNhat.setPreferredSize(new java.awt.Dimension(90, 27));
+        btnCapNhat.setEnabled(false);
         btnCapNhat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCapNhatActionPerformed(evt);
@@ -537,9 +538,44 @@ public class PanelQuanLyBan extends javax.swing.JPanel implements MouseListener 
 
     private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaActionPerformed
         // TODO add your handling code here:
+    	xoaAction();
     }// GEN-LAST:event_btnXoaActionPerformed
 
-    private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCapNhatActionPerformed
+    private void xoaAction() {
+		// TODO Auto-generated method stub
+    	 try {
+             String maBan = txtMaBan.getText().trim();
+             if (maBan.isEmpty()) {
+                     JOptionPane.showMessageDialog(this, "Vui lòng chọn phiếu đặt bàn để xóa", "Thông báo",
+                                     JOptionPane.WARNING_MESSAGE);
+                     return;
+             }
+
+             int result = JOptionPane.showConfirmDialog(this,
+                             "Bạn có chắc chắn muốn xóa phiếu đặt bàn " + maBan + " không?",
+                             "Xác nhận xóa",
+                             JOptionPane.YES_NO_OPTION);
+
+             if (result == JOptionPane.YES_OPTION) {
+                
+                     banService.xoaBan(maBan);
+
+                     JOptionPane.showMessageDialog(this, " bàn thành công", "Thành công",
+                                     JOptionPane.INFORMATION_MESSAGE);
+
+                     loadDataToTable();
+                     clearFields();
+                     btnCapNhat.setEnabled(false);
+             }
+
+     } catch (Exception e) {
+             JOptionPane.showMessageDialog(this, "Lỗi khi xóa: " + e.getMessage(), "Lỗi",
+                             JOptionPane.ERROR_MESSAGE);
+             e.printStackTrace();
+     }
+	}
+
+	private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCapNhatActionPerformed
         // TODO add your handling code here:
     }// GEN-LAST:event_btnCapNhatActionPerformed
 
@@ -598,6 +634,7 @@ public class PanelQuanLyBan extends javax.swing.JPanel implements MouseListener 
             int row = tableBan.getSelectedRow();
             if (row >= 0) {
                 loadDataFromRow(row);
+                btnCapNhat.setEnabled(true);
             }
         }
     }
@@ -626,7 +663,6 @@ public class PanelQuanLyBan extends javax.swing.JPanel implements MouseListener 
     }
 
     private void clearFields() {
-        txtMaBan.setText("");
         txtSoGhe.setText("");
         txtViTri.setText("");
         cbKhuVuc.setSelectedIndex(0);

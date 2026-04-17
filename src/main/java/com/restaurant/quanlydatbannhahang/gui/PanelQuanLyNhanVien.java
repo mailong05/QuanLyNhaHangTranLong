@@ -191,7 +191,6 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
         }
 
         private void clearFields() {
-                txtMaNhanVien.setText("");
                 txtHoTen.setText("");
                 txtSoDienThoai.setText("");
                 txtLuongCoBan.setText("");

@@ -197,7 +197,6 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
         }
 
         private void clearFields() {
-                txtMaKhuyenMai.setText("");
                 txtTenKhuyenMai.setText("");
                 txtGiaTriGiam.setText("");
                 txtDieuKienToiThieu.setText("");

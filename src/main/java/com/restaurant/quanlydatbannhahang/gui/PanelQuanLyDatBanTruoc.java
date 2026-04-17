@@ -184,7 +184,6 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
         }
 
         private void clearFields() {
-                txtMaPhieuDat.setText("");
                 txtSoDienThoai.setText("");
                 txtMaNhanVien.setText("");
                 txtMaBan.setText("");

@@ -394,7 +394,6 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
     }
 
     private void clearFields() {
-        txtMaKhuVuc.setText("");
         txtTenKhuVuc.setText("");
     }
 

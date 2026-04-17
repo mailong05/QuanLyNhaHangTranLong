@@ -182,7 +182,6 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
     }
 
     private void clearFields() {
-        txtMaMon.setText("");
         txtTenMon.setText("");
         txtDonGia.setText("");
         cbDonViTinh.setSelectedIndex(0);
