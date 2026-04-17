@@ -142,7 +142,7 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel {
                         kh.getHoTen(),
                         kh.getSdt(),
                         kh.getDiemTichLuy(),
-                        kh.getLoaiThanhVien()
+                        kh.getLoaiThanhVien().getDisplayName()
                 });
             }
             centerTableColumns(tableKhachHang);
@@ -160,7 +160,6 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel {
         }
     }
 
-    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
@@ -383,7 +382,7 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel {
                 new String[] {
                         "Mã KH", "Họ tên", "Số điện thoại", "Điểm tích lũy", "Loại thành viên"
                 }) {
-            Class[] types = new Class[] {
+            Class<?>[] types = new Class<?>[] {
                     java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class,
                     java.lang.String.class
             };
@@ -391,7 +390,7 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel {
                     false, false, false, false, false
             };
 
-            public Class getColumnClass(int columnIndex) {
+            public Class<?> getColumnClass(int columnIndex) {
                 return types[columnIndex];
             }
 

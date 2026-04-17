@@ -5,10 +5,9 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import com.restaurant.quanlydatbannhahang.service.MonAnService;
-import com.restaurant.quanlydatbannhahang.util.ComboBoxEntityLoader;
-import com.restaurant.quanlydatbannhahang.entity.MonAn;
-import com.restaurant.quanlydatbannhahang.entity.TrangThaiMonAn;
+
 import java.util.List;
+import com.restaurant.quanlydatbannhahang.entity.MonAn;
 
 /**
  *
@@ -22,7 +21,7 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
      * Creates new form PanelQuanLyMonAn
      */
     public PanelDanhSachMonAn() {
-        initComponents();        
+        initComponents();
         monAnService = new MonAnService();
         customUI();
         loadDataToTable();

@@ -2,7 +2,7 @@ package com.restaurant.quanlydatbannhahang.gui;
 
 import java.awt.*;
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
+
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import com.restaurant.quanlydatbannhahang.service.BanService;
@@ -12,14 +12,13 @@ import com.restaurant.quanlydatbannhahang.util.ComboBoxEntityLoader;
 import com.restaurant.quanlydatbannhahang.entity.Ban;
 import com.restaurant.quanlydatbannhahang.entity.KhuVuc;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PanelDanhSachBan extends javax.swing.JPanel {
     private BanService banService;
     private List<Ban> allBans;
-    private ComboBoxEnumLoader cbEnumLoader;
     private KhuVucService khuVucService;
+    private ComboBoxEnumLoader cbEnumLoader;
     private ComboBoxEntityLoader cbEntityLoader;
 
     public PanelDanhSachBan() {

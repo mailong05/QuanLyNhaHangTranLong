@@ -271,7 +271,7 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel {
                                 new String[] {
                                                 "Tên tài khoản", "Mật khẩu", "Mã nhân viên", "Quyền hạn"
                                 }) {
-                        Class[] types = new Class[] {
+                        Class<?>[] types = new Class<?>[] {
                                         java.lang.String.class, java.lang.String.class, java.lang.String.class,
                                         java.lang.String.class
                         };
@@ -279,7 +279,7 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel {
                                         false, false, true, false
                         };
 
-                        public Class getColumnClass(int columnIndex) {
+                        public Class<?> getColumnClass(int columnIndex) {
                                 return types[columnIndex];
                         }
 

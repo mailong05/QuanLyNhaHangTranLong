@@ -109,7 +109,7 @@ public class PanelDanhSachKhachHang extends javax.swing.JPanel {
                         kh.getHoTen(),
                         kh.getSdt(),
                         kh.getDiemTichLuy(),
-                        kh.getLoaiThanhVien() != null ? kh.getLoaiThanhVien() : ""
+                        kh.getLoaiThanhVien() != null ? kh.getLoaiThanhVien().getDisplayName() : ""
                 });
             }
             centerTableColumns(tableKhachHang);
@@ -212,7 +212,7 @@ public class PanelDanhSachKhachHang extends javax.swing.JPanel {
                 new String[] {
                         "Mã KH", "Họ tên", "Số điện thoại", "Điểm tích lũy", "Loại thành viên"
                 }) {
-            Class[] types = new Class[] {
+            Class<?>[] types = new Class<?>[] {
                     java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class,
                     java.lang.String.class
             };
@@ -220,7 +220,7 @@ public class PanelDanhSachKhachHang extends javax.swing.JPanel {
                     false, false, false, false, false
             };
 
-            public Class getColumnClass(int columnIndex) {
+            public Class<?> getColumnClass(int columnIndex) {
                 return types[columnIndex];
             }
 
@@ -269,7 +269,7 @@ public class PanelDanhSachKhachHang extends javax.swing.JPanel {
         for (KhachHang kh : allKhachHang) {
             // Check filters
             if (selectedLoaiThanhVien != null && !selectedLoaiThanhVien.equals("Loại thành viên")) {
-                if (!kh.getLoaiThanhVien().equals(selectedLoaiThanhVien)) {
+                if (!kh.getLoaiThanhVien().getDisplayName().equals(selectedLoaiThanhVien)) {
                     continue;
                 }
             }
@@ -289,7 +289,7 @@ public class PanelDanhSachKhachHang extends javax.swing.JPanel {
                     kh.getHoTen(),
                     kh.getSdt(),
                     kh.getDiemTichLuy(),
-                    kh.getLoaiThanhVien() != null ? kh.getLoaiThanhVien() : ""
+                    kh.getLoaiThanhVien() != null ? kh.getLoaiThanhVien().getDisplayName() : ""
             });
         }
         centerTableColumns(tableKhachHang);

@@ -1,7 +1,7 @@
 package com.restaurant.quanlydatbannhahang.gui;
 
 // UIConfiguration để setup FlatLaf L&F
-import com.restaurant.quanlydatbannhahang.gui.UIConfiguration;
+
 import java.util.Set;
 
 public class LuaChonDatBanDialog extends javax.swing.JDialog {
@@ -23,7 +23,6 @@ public class LuaChonDatBanDialog extends javax.swing.JDialog {
         this.setLocationRelativeTo(parent);
     }
 
-    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
     // Code">//GEN-BEGIN:initComponents

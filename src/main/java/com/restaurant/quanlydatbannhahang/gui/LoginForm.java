@@ -3,9 +3,7 @@ package com.restaurant.quanlydatbannhahang.gui;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import java.awt.Color;
-import com.restaurant.quanlydatbannhahang.gui.MainForm;
-import com.restaurant.quanlydatbannhahang.gui.ForgetPasswordForm;
-import com.restaurant.quanlydatbannhahang.gui.UIConfiguration;
+
 import com.restaurant.quanlydatbannhahang.entity.TaiKhoan;
 import com.restaurant.quanlydatbannhahang.service.AuthService;
 
@@ -77,7 +75,6 @@ public class LoginForm extends javax.swing.JFrame {
         lblIconHide.setVisible(true);
     }
 
-    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
     // Code">//GEN-BEGIN:initComponents
     private void initComponents() {

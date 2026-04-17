@@ -1,7 +1,5 @@
 package com.restaurant.quanlydatbannhahang.gui;
 
-import javax.swing.JOptionPane;
-
 public class LoadingScreen extends javax.swing.JFrame {
 
         public LoadingScreen() {
@@ -9,8 +7,7 @@ public class LoadingScreen extends javax.swing.JFrame {
                 lblSystemName.setFont(new java.awt.Font("Segoe UI", 0, 14));
         }
 
-        @SuppressWarnings("unchecked")
-        // <editor-fold defaultstate="collapsed" desc="Generated
+        // <editor-fold
         // Code">//GEN-BEGIN:initComponents
         private void initComponents() {
 

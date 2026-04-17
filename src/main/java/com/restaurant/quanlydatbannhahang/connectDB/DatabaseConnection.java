@@ -13,7 +13,6 @@ public class DatabaseConnection {
 
     public static Connection getConnection() {
         try {
-            // Kiểm tra connection có tồn tại và còn sống không
             if (connection == null || connection.isClosed()) {
                 Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
                 connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);

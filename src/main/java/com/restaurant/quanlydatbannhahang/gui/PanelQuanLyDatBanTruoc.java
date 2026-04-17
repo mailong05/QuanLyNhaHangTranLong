@@ -34,13 +34,11 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
 
         private PhieuDatBanService pdbService;
         private ChiTietPhieuDatBanService ctpdbService;
-        private BanService banService;
         private PanelDatBan panelDatBan; // ← Reference để update UI bàn
 
         public PanelQuanLyDatBanTruoc() {
                 pdbService = new PhieuDatBanService();
                 ctpdbService = new ChiTietPhieuDatBanService();
-                banService = new BanService();
                 this.panelDatBan = null; // Mặc định null (có thể set sau via setPanelDatBan)
                 initComponents();
                 customUI();
@@ -554,7 +552,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                                                 "Mã phiếu đặt", "Số điện thoại", "Mã nhân viên", "Mã bàn", "Số người",
                                                 "Thời gian đến", "Trạng thái"
                                 }) {
-                        Class[] types = new Class[] {
+                        Class<?>[] types = new Class<?>[] {
                                         java.lang.String.class, java.lang.String.class, java.lang.String.class,
                                         java.lang.String.class, java.lang.Integer.class, java.lang.Object.class,
                                         java.lang.String.class
@@ -563,7 +561,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                                         false, false, false, false, false, false, false
                         };
 
-                        public Class getColumnClass(int columnIndex) {
+                        public Class<?> getColumnClass(int columnIndex) {
                                 return types[columnIndex];
                         }
 
@@ -662,7 +660,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                                 storeMaPDBForEditMode(maPDB);
 
                                 // Hiển thị nhắc nhở và tự động chuyển sang tab PanelDatBan khi YES
-                                String banList = oldBanSet.isEmpty() ? "(không có)" : String.join(", ", oldBanSet);
+
                                 int response = JOptionPane.showConfirmDialog(this,
                                                 "Bạn chắn chắc muốn chọn lại bàn?", "Nhắc nhở",
                                                 JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
@@ -900,7 +898,6 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
 
                         if (result == JOptionPane.YES_OPTION) {
                                 // QUAN TRỌNG: Lấy chi tiết phiếu TRƯỚC khi xóa
-                                List<ChiTietPhieuDatBan> chiTietList = ctpdbService.getChiTietByMaPhieuDat(maPDB);
 
                                 // Xóa tất cả chi tiết phiếu TRƯỚC (để tránh foreign key constraint)
                                 ctpdbService.xoaAllChiTietByMaPhieuDat(maPDB);

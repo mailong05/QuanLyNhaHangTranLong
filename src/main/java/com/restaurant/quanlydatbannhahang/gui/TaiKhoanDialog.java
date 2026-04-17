@@ -1,7 +1,6 @@
 package com.restaurant.quanlydatbannhahang.gui;
 
 // UIConfiguration để setup FlatLaf L&F
-import com.restaurant.quanlydatbannhahang.gui.UIConfiguration;
 
 public class TaiKhoanDialog extends javax.swing.JDialog {
 
@@ -13,7 +12,6 @@ public class TaiKhoanDialog extends javax.swing.JDialog {
         initComponents();
     }
 
-    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
     // Code">//GEN-BEGIN:initComponents
     private void initComponents() {

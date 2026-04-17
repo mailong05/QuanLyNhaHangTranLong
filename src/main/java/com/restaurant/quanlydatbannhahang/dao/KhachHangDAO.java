@@ -49,7 +49,7 @@ public class KhachHangDAO {
             pstm.setString(2, kh.getHoTen());
             pstm.setString(3, kh.getSdt());
             pstm.setInt(4, kh.getDiemTichLuy());
-            pstm.setString(5, kh.getLoaiThanhVien());
+            pstm.setString(5, kh.getLoaiThanhVien().name());
             return pstm.executeUpdate() > 0;
         } catch (Exception e) {
             e.printStackTrace();
@@ -116,7 +116,7 @@ public class KhachHangDAO {
             pstm.setString(1, kh.getHoTen());
             pstm.setString(2, kh.getSdt());
             pstm.setInt(3, kh.getDiemTichLuy());
-            pstm.setString(4, kh.getLoaiThanhVien());
+            pstm.setString(4, kh.getLoaiThanhVien().name());
             pstm.setString(5, kh.getMaKH());
             return pstm.executeUpdate() > 0;
         } catch (Exception e) {

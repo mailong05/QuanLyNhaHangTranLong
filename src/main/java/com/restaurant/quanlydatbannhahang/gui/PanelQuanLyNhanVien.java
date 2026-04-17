@@ -2,7 +2,7 @@ package com.restaurant.quanlydatbannhahang.gui;
 
 import java.awt.*;
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
+
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import com.restaurant.quanlydatbannhahang.service.NhanVienService;
@@ -62,21 +62,6 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel {
                 });
         }
 
-        private void applyCardStyle(JPanel panel, int radius) {
-                panel.setOpaque(false);
-                panel.setUI(new javax.swing.plaf.PanelUI() {
-                        @Override
-                        public void update(Graphics g, JComponent c) {
-                                Graphics2D g2 = (Graphics2D) g.create();
-                                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                                g2.setColor(c.getBackground());
-                                g2.fillRoundRect(0, 0, c.getWidth(), c.getHeight(), radius, radius);
-                                g2.dispose();
-                        }
-                });
-        }
-
-        @SuppressWarnings("unchecked")
         // <editor-fold defaultstate="collapsed" desc="Generated
         // <editor-fold defaultstate="collapsed" desc="Generated
         // Code">//GEN-BEGIN:initComponents
@@ -405,7 +390,7 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel {
                                                 "Lương cơ bản",
                                                 "Trạng thái"
                                 }) {
-                        Class[] types = new Class[] {
+                        Class<?>[] types = new Class<?>[] {
                                         java.lang.String.class, java.lang.String.class, java.lang.String.class,
                                         java.lang.String.class,
                                         java.lang.Object.class, java.lang.Double.class, java.lang.String.class
@@ -414,7 +399,7 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel {
                                         false, false, false, false, false, false, false
                         };
 
-                        public Class getColumnClass(int columnIndex) {
+                        public Class<?> getColumnClass(int columnIndex) {
                                 return types[columnIndex];
                         }
 

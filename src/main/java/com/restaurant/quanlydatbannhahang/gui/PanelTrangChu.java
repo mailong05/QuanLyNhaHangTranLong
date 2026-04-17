@@ -4,7 +4,6 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 
-import com.restaurant.quanlydatbannhahang.entity.TrangThaiBan;
 import com.restaurant.quanlydatbannhahang.service.BanService;
 
 import javax.swing.border.EmptyBorder;
@@ -106,7 +105,6 @@ public class PanelTrangChu extends javax.swing.JPanel {
     }
 
     // Không sửa phần dưới, giữ nguyên code tự sinh của design
-    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
     // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -260,7 +258,7 @@ public class PanelTrangChu extends javax.swing.JPanel {
                 new String[] {
                         "Mã phiếu đặt", "Mã bàn", "Tên khách hàng", "Số điện thoại", "Giờ đến", "Số người", "Trạng thái"
                 }) {
-            Class[] types = new Class[] {
+            Class<?>[] types = new Class<?>[] {
                     java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class,
                     java.lang.Object.class, java.lang.Integer.class, java.lang.String.class
             };
@@ -268,7 +266,7 @@ public class PanelTrangChu extends javax.swing.JPanel {
                     false, false, false, false, false, false, false
             };
 
-            public Class getColumnClass(int columnIndex) {
+            public Class<?> getColumnClass(int columnIndex) {
                 return types[columnIndex];
             }
 

@@ -16,7 +16,7 @@ public class PanelDanhSachThue extends javax.swing.JPanel {
 
     public PanelDanhSachThue() {
         initComponents();
-        
+
         thueService = new ThueService();
         customUI();
         loadDataToTable();

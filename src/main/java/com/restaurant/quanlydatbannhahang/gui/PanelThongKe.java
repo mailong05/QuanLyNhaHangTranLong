@@ -19,11 +19,11 @@ public class PanelThongKe extends javax.swing.JPanel {
         applyCardStyle(carDoanhThuTrungBinh, 30);
 
         // 2. Thiết lập cho Panel chứa bảng
-        pnlContainerTable.setBackground(new Color(254, 243, 198)); 
-        applyCardStyle(pnlContainerTable, 40); 
+        pnlContainerTable.setBackground(new Color(254, 243, 198));
+        applyCardStyle(pnlContainerTable, 40);
         pnlContainerTable.setBorder(new EmptyBorder(25, 25, 25, 25));
 
-        // Đảm bảo tiêu đề bảng 
+        // Đảm bảo tiêu đề bảng
         pnlHeaderTable.setOpaque(false);
         lblTitleTable.setForeground(new Color(148, 134, 111));
         lblTitleTable.setFont(new Font("Segoe UI", Font.BOLD, 20));
@@ -36,7 +36,7 @@ public class PanelThongKe extends javax.swing.JPanel {
 
         // Sửa lỗi mất màu góc trên bên phải
         JPanel corner = new JPanel();
-        corner.setBackground(new Color(255, 251, 235)); 
+        corner.setBackground(new Color(255, 251, 235));
         scrTableTopMonAn.setCorner(JScrollPane.UPPER_RIGHT_CORNER, corner);
 
         // 4. Tùy chỉnh Table
@@ -44,16 +44,18 @@ public class PanelThongKe extends javax.swing.JPanel {
         tableTopMonAn.setIntercellSpacing(new Dimension(0, 0));
         tableTopMonAn.setRowHeight(45);
         tableTopMonAn.setBorder(BorderFactory.createEmptyBorder());
-        
+
         // Chiều cao Header
         tableTopMonAn.getTableHeader().setPreferredSize(new Dimension(tableTopMonAn.getTableHeader().getWidth(), 45));
 
         // Custom Header Renderer
         tableTopMonAn.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
             @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                label.setBackground(new Color(255, 251, 235)); 
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                    boolean hasFocus, int row, int column) {
+                JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row,
+                        column);
+                label.setBackground(new Color(255, 251, 235));
                 label.setForeground(new Color(148, 134, 111));
                 label.setFont(new Font("Segoe UI", Font.BOLD, 14));
                 label.setHorizontalAlignment(JLabel.CENTER);
@@ -68,7 +70,7 @@ public class PanelThongKe extends javax.swing.JPanel {
         for (int i = 0; i < tableTopMonAn.getColumnCount(); i++) {
             tableTopMonAn.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
         }
-        
+
         // Tùy chỉnh nút bấm
         btnTrangChu.setFocusPainted(false);
         btnInThongKe.setFocusPainted(false);
@@ -76,25 +78,25 @@ public class PanelThongKe extends javax.swing.JPanel {
 
     private void applyCardStyle(JPanel panel, int radius) {
         panel.setOpaque(false);
-        panel.setBorder(new EmptyBorder(0, 0, 0, 0)); 
-        
+        panel.setBorder(new EmptyBorder(0, 0, 0, 0));
+
         panel.setUI(new javax.swing.plaf.PanelUI() {
             @Override
             public void update(Graphics g, JComponent c) {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                
+
                 g2.setColor(c.getBackground());
                 g2.fillRoundRect(0, 0, c.getWidth(), c.getHeight(), radius, radius);
-                
+
                 g2.dispose();
             }
         });
     }
 
     // Không sửa từ đây xuống dưới
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
@@ -214,42 +216,40 @@ public class PanelThongKe extends javax.swing.JPanel {
         javax.swing.GroupLayout pnlHeaderTableLayout = new javax.swing.GroupLayout(pnlHeaderTable);
         pnlHeaderTable.setLayout(pnlHeaderTableLayout);
         pnlHeaderTableLayout.setHorizontalGroup(
-            pnlHeaderTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlHeaderTableLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblTitleTable)
-                .addContainerGap(774, Short.MAX_VALUE))
-        );
+                pnlHeaderTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(pnlHeaderTableLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(lblTitleTable)
+                                .addContainerGap(774, Short.MAX_VALUE)));
         pnlHeaderTableLayout.setVerticalGroup(
-            pnlHeaderTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlHeaderTableLayout.createSequentialGroup()
-                .addComponent(lblTitleTable)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
+                pnlHeaderTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(pnlHeaderTableLayout.createSequentialGroup()
+                                .addComponent(lblTitleTable)
+                                .addGap(0, 0, Short.MAX_VALUE)));
 
         pnlContainerTable.add(pnlHeaderTable, java.awt.BorderLayout.PAGE_START);
 
         tableTopMonAn.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+                new Object[][] {
 
-            },
-            new String [] {
-                "Top", "Hình ảnh", "Tên món ăn", "Đơn giá", "Số lượng"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.Object.class, java.lang.String.class, java.lang.Double.class, java.lang.Integer.class
+                },
+                new String[] {
+                        "Top", "Hình ảnh", "Tên món ăn", "Đơn giá", "Số lượng"
+                }) {
+            Class<?>[] types = new Class<?>[] {
+                    java.lang.Integer.class, java.lang.Object.class, java.lang.String.class, java.lang.Double.class,
+                    java.lang.Integer.class
             };
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+            boolean[] canEdit = new boolean[] {
+                    false, false, false, false, false
             };
 
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
+            public Class<?> getColumnClass(int columnIndex) {
+                return types[columnIndex];
             }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
+                return canEdit[columnIndex];
             }
         });
         scrTableTopMonAn.setViewportView(tableTopMonAn);
@@ -259,14 +259,13 @@ public class PanelThongKe extends javax.swing.JPanel {
         add(pnlContainerTable, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnTrangChuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTrangChuActionPerformed
+    private void btnTrangChuActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTrangChuActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnTrangChuActionPerformed
+    }// GEN-LAST:event_btnTrangChuActionPerformed
 
-    private void btnInThongKeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInThongKeActionPerformed
+    private void btnInThongKeActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnInThongKeActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnInThongKeActionPerformed
-
+    }// GEN-LAST:event_btnInThongKeActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnInThongKe;

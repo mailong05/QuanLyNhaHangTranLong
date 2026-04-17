@@ -60,6 +60,18 @@ public class PhieuDatBanDAO {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "insert into PhieuDatBan (maPhieuDat, maKH, maNV, thoiGianDen, soLuongNguoi, ghiChu, trangThai) values (?,?,?,?,?,?,?)";
         try {
+            // Kiểm tra khách hàng tồn tại
+            if (phieu.getKhachHang() == null || phieu.getKhachHang().getMaKH() == null) {
+                System.err.println("Lỗi: Mã khách hàng không được NULL");
+                return false;
+            }
+
+            // Kiểm tra nhân viên tồn tại
+            if (phieu.getNhanVien() == null || phieu.getNhanVien().getMaNV() == null) {
+                System.err.println("Lỗi: Mã nhân viên không được NULL");
+                return false;
+            }
+
             PreparedStatement pstm = connection.prepareStatement(sql);
             pstm.setString(1, phieu.getMaPhieuDat());
             pstm.setString(2, phieu.getKhachHang().getMaKH());
@@ -70,6 +82,11 @@ public class PhieuDatBanDAO {
             pstm.setString(7, phieu.getTrangThai().name());
             return pstm.executeUpdate() > 0;
         } catch (Exception e) {
+            System.err.println("Lỗi khi insert PhieuDatBan - Mã: " + (phieu != null ? phieu.getMaPhieuDat() : "null"));
+            if (e.getMessage() != null && e.getMessage().contains("FOREIGN KEY")) {
+                System.err.println(
+                        "FOREIGN KEY violation - Kiểm tra maKH hoặc maNV có tồn tại trong bảng KhachHang/NhanVien");
+            }
             e.printStackTrace();
         }
         return false;
@@ -240,8 +257,6 @@ public class PhieuDatBanDAO {
         }
         return false;
     }
-
-    
 
     public List<PhieuDatBan> getPhieuDatBanTheoTrangThai(TrangThaiPhieuDat trangThai) {
         Connection connection = DatabaseConnection.getConnection();

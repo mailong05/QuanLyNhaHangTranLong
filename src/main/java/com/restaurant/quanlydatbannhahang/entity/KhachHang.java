@@ -53,8 +53,8 @@ public class KhachHang {
         this.diemTichLuy = diemTichLuy;
     }
 
-    public String getLoaiThanhVien() {
-        return loaiThanhVien.getDisplayName();
+    public LoaiThanhVien getLoaiThanhVien() {
+        return loaiThanhVien;
     }
 
     public void setLoaiThanhVien(LoaiThanhVien loaiThanhVien) {

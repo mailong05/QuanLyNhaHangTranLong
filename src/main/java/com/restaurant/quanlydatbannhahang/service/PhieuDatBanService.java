@@ -249,7 +249,12 @@ public class PhieuDatBanService {
                 soDienThoai,
                 0,
                 LoaiThanhVien.DONG);
-        khachHangDAO.themKhachHang(kh);
+
+        // Kiểm tra insert khách hàng có thành công không
+        if (!khachHangDAO.themKhachHang(kh)) {
+            throw new RuntimeException("Không thể tạo khách hàng mới! Mã: " + newMaKH);
+        }
+
         return kh;
     }
 
@@ -294,10 +299,20 @@ public class PhieuDatBanService {
                 khachHang = createNewKhachHang(tenKhachHang, soDienThoai);
             }
 
+            // Kiểm tra khách hàng tồn tại
+            if (khachHang == null) {
+                throw new RuntimeException("Không thể lấy hoặc tạo khách hàng với số điện thoại: " + soDienThoai);
+            }
+
             PhieuDatBan phieuDatBan = new PhieuDatBan();
 
             phieuDatBan.setMaPhieuDat(maPhieuDatBan);
             phieuDatBan.setKhachHang(khachHang);
+
+            // Kiểm tra nhân viên hiện tại
+            if (SessionManager.getCurrentNhanVien() == null) {
+                throw new RuntimeException("Nhân viên không được đăng nhập hoặc session hết hạn!");
+            }
             phieuDatBan.setNhanVien(SessionManager.getCurrentNhanVien());
             phieuDatBan.setThoiGianDen(thoiGianDen);
             phieuDatBan.setSoLuongNguoi(soLuongNguoi);

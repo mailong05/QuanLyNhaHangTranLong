@@ -2,7 +2,7 @@ package com.restaurant.quanlydatbannhahang.gui;
 
 import java.awt.*;
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
+
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import com.restaurant.quanlydatbannhahang.service.KhuVucService;
