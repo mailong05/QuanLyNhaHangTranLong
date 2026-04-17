@@ -81,7 +81,7 @@ public class PanelLichSuHoaDon extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
@@ -92,15 +92,14 @@ public class PanelLichSuHoaDon extends javax.swing.JPanel {
         jPanel2 = new javax.swing.JPanel();
         scrTableLichSuHoaDon = new javax.swing.JScrollPane();
         tableLichSuHoaDon = new javax.swing.JTable();
-        jPanel3 = new javax.swing.JPanel();
         btnTrangChu = new javax.swing.JButton();
+        btnXoaTrang = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 251, 233));
         setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 60, 20, 60));
-        setLayout(new java.awt.BorderLayout());
+        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 251, 233));
-        jPanel1.setPreferredSize(new java.awt.Dimension(0, 50));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         txtTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -114,42 +113,38 @@ public class PanelLichSuHoaDon extends javax.swing.JPanel {
         btnTimKiem.addActionListener(this::btnTimKiemActionPerformed);
         jPanel1.add(btnTimKiem, new org.netbeans.lib.awtextra.AbsoluteConstraints(996, 0, -1, -1));
 
-        cbFilterTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(
-                new String[] { "Tất cả", "Đã thanh toán", "Chưa thanh toán", "Đã Hủy", " " }));
+        cbFilterTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất cả", "Đã thanh toán", "Chưa thanh toán", "Đã Hủy", " " }));
         cbFilterTrangThai.setPreferredSize(new java.awt.Dimension(150, 22));
         cbFilterTrangThai.addActionListener(this::cbFilterTrangThaiActionPerformed);
         jPanel1.add(cbFilterTrangThai, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 130, 30));
         jPanel1.add(dpNgayTao, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 0, -1, 30));
 
-        add(jPanel1, java.awt.BorderLayout.NORTH);
+        add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 20, -1, -1));
 
         jPanel2.setBackground(new java.awt.Color(255, 251, 233));
-        jPanel2.setLayout(new java.awt.BorderLayout());
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         tableLichSuHoaDon.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][] {
+            new Object [][] {
 
-                },
-                new String[] {
-                        "Mã hóa đơn", "Mã bàn", "Mã khuyến mãi", "Mã thuế", "Ngày tạo", "Giờ vào", "Giờ ra",
-                        "Tổng tiền gốc", "Tiền giảm giá", "Tổng thanh toán", "Phương thức thanh toán",
-                        "Trạng thái thanh toán"
-                }) {
-            Class<?>[] types = new Class<?>[] {
-                    java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class,
-                    java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Double.class,
-                    java.lang.Double.class, java.lang.Double.class, java.lang.String.class, java.lang.String.class
+            },
+            new String [] {
+                "Mã hóa đơn", "Mã bàn", "Mã khuyến mãi", "Mã thuế", "Ngày tạo", "Giờ vào", "Giờ ra", "Tổng tiền gốc", "Tiền giảm giá", "Tổng thanh toán", "Phương thức thanh toán", "Trạng thái thanh toán"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.String.class, java.lang.String.class
             };
-            boolean[] canEdit = new boolean[] {
-                    false, false, false, false, false, false, false, false, false, false, false, false
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false, false, false, false
             };
 
-            public Class<?> getColumnClass(int columnIndex) {
-                return types[columnIndex];
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
             }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit[columnIndex];
+                return canEdit [columnIndex];
             }
         });
         tableLichSuHoaDon.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
@@ -169,22 +164,23 @@ public class PanelLichSuHoaDon extends javax.swing.JPanel {
             tableLichSuHoaDon.getColumnModel().getColumn(11).setPreferredWidth(200);
         }
 
-        jPanel2.add(scrTableLichSuHoaDon, java.awt.BorderLayout.CENTER);
+        jPanel2.add(scrTableLichSuHoaDon, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1096, 500));
 
-        add(jPanel2, java.awt.BorderLayout.CENTER);
-
-        jPanel3.setBackground(new java.awt.Color(255, 251, 233));
-        jPanel3.setPreferredSize(new java.awt.Dimension(0, 37));
-        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 70, 1096, 500));
 
         btnTrangChu.setText("Trang chủ");
-        btnTrangChu.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
-        btnTrangChu.setPreferredSize(new java.awt.Dimension(100, 30));
         btnTrangChu.addActionListener(this::btnTrangChuActionPerformed);
-        jPanel3.add(btnTrangChu, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 5, -1, -1));
+        add(btnTrangChu, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 583, 90, 30));
 
-        add(jPanel3, java.awt.BorderLayout.PAGE_END);
+        btnXoaTrang.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnXoaTrang.setText("Xóa trắng");
+        btnXoaTrang.addActionListener(this::btnXoaTrangActionPerformed);
+        add(btnXoaTrang, new org.netbeans.lib.awtextra.AbsoluteConstraints(1080, 580, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaTrangActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnXoaTrangActionPerformed
 
     private void btnTrangChuActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTrangChuActionPerformed
         // TODO add your handling code here:
@@ -239,11 +235,11 @@ public class PanelLichSuHoaDon extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnTimKiem;
     private javax.swing.JButton btnTrangChu;
+    private javax.swing.JButton btnXoaTrang;
     private javax.swing.JComboBox<String> cbFilterTrangThai;
     private com.github.lgooddatepicker.components.DatePicker dpNgayTao;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane scrTableLichSuHoaDon;
     private javax.swing.JTable tableLichSuHoaDon;
     private javax.swing.JTextField txtTimKiem;

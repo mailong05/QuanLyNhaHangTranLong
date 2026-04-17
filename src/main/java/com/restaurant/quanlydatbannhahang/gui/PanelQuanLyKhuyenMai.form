@@ -474,6 +474,17 @@
             <Property name="verticalGap" type="int" value="0"/>
           </Layout>
           <SubComponents>
+            <Component class="javax.swing.JButton" name="btnXoaTrang">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="X&#xf3;a tr&#x1eaf;ng"/>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Segoe UI" size="14" style="0"/>
+                </Property>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnXoaTrangActionPerformed"/>
+              </Events>
+            </Component>
             <Component class="javax.swing.JButton" name="btnCapNhat">
               <Properties>
                 <Property name="text" type="java.lang.String" value="C&#x1ead;p nh&#x1ead;t"/>
