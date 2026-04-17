@@ -191,6 +191,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                 spSoNguoi.setValue(0);
                 dtpThoiGianDen.setDateTimeStrict(LocalDateTime.now());
                 cbTrangThai.setSelectedIndex(0); // Reset ComboBox
+                
         }
 
         // Từ đây không chỉnh sửa bên dưới
@@ -508,6 +509,9 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
 
     private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaTrangActionPerformed
         // TODO add your handling code here:
+    	refreshData();
+    	 cbFilterTrangThai.setSelectedIndex(0);
+    	 txtTimKiem.setText("");
     }//GEN-LAST:event_btnXoaTrangActionPerformed
 
         private void btnChonBanActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnChonBanActionPerformed
