@@ -253,7 +253,8 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel {
         cbLoaiThanhVien.setPreferredSize(new java.awt.Dimension(72, 35));
 
         cbFilterLoaiThanhVien.setModel(
-                new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+                new javax.swing.DefaultComboBoxModel<>(
+                        new String[] { "Loại thành viên", "VIP", "VÀNG", "BẠC", "ĐỒNG" }));
         cbFilterLoaiThanhVien.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbFilterLoaiThanhVienActionPerformed(evt);
@@ -454,7 +455,7 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel {
     }// GEN-LAST:event_btnXoaActionPerformed
 
     private void cbFilterLoaiThanhVienActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterLoaiThanhVienActionPerformed
-        // TODO add your handling code here:
+        loadDataToTable();
     }// GEN-LAST:event_cbFilterLoaiThanhVienActionPerformed
 
     private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCapNhatActionPerformed

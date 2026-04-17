@@ -147,7 +147,7 @@ public class PanelQuanLyThue extends javax.swing.JPanel {
         });
 
         cbFilterTrangThai.setModel(
-                new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+                new javax.swing.DefaultComboBoxModel<>(new String[] { "Trạng thái", "Còn áp dụng", "Ngừng áp dụng" }));
         cbFilterTrangThai.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbFilterTrangThaiActionPerformed(evt);
@@ -367,7 +367,7 @@ public class PanelQuanLyThue extends javax.swing.JPanel {
     }
 
     private void cbFilterTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterTrangThaiActionPerformed
-        // TODO add your handling code here:
+        loadDataToTable();
     }// GEN-LAST:event_cbFilterTrangThaiActionPerformed
 
     private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaActionPerformed

@@ -211,10 +211,7 @@ public class PanelDatBan extends javax.swing.JPanel {
             java.util.List<KhuVuc> khuVucList = khuVucService.getAllKhuVuc();
 
             cbFilterKhuVuc.removeAllItems();
-            cbFilterKhuVuc.addItem("-- Tất cả --");
-            for (KhuVuc kv : khuVucList) {
-                cbFilterKhuVuc.addItem(kv.getMaKhuVuc());
-            }
+            
 
             // Load cbFilterTrangThai từ enum TrangThaiBan
             cbFilterTrangThai.removeAllItems();
@@ -649,7 +646,7 @@ public class PanelDatBan extends javax.swing.JPanel {
             }
         });
 
-        cbFilterKhuVuc.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất cả", "A", "B", "C" }));
+        cbFilterKhuVuc.setModel(new javax.swing.DefaultComboBoxModel<>());
         cbFilterKhuVuc.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbFilterKhuVucActionPerformed(evt);

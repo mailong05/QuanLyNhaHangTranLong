@@ -6,14 +6,24 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import com.restaurant.quanlydatbannhahang.service.BanService;
+import com.restaurant.quanlydatbannhahang.service.KhuVucService;
 import com.restaurant.quanlydatbannhahang.entity.Ban;
+import com.restaurant.quanlydatbannhahang.entity.KhuVuc;
 import java.util.List;
+import java.awt.event.ActionListener;
 
 public class PanelQuanLyBan extends javax.swing.JPanel {
+    private ActionListener cbFilterKhuVucListener;
+    private ActionListener cbFilterTrangThaiListener;
+    private BanService banService;
+    private KhuVucService khuVucService;
 
     public PanelQuanLyBan() {
         initComponents();
+        banService = new BanService();
+        khuVucService = new KhuVucService();
         customUI();
+        loadDataToComboBoxes();
         loadDataToTable();
     }
 
@@ -158,7 +168,7 @@ public class PanelQuanLyBan extends javax.swing.JPanel {
         cbKhuVuc.setPreferredSize(new java.awt.Dimension(72, 35));
 
         cbFilterKhuVuc.setModel(
-                new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+                new javax.swing.DefaultComboBoxModel<>(new String[] { "Khu v\u1ef1c" }));
         cbFilterKhuVuc.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbFilterKhuVucActionPerformed(evt);
@@ -166,7 +176,8 @@ public class PanelQuanLyBan extends javax.swing.JPanel {
         });
 
         cbFilterTrangThai.setModel(
-                new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+                new javax.swing.DefaultComboBoxModel<>(new String[] { "Tr\u1ea1ng th\u00e1i", "Tr\u1ed1ng",
+                        "\u0110ang d\u00f9ng", "\u0110\u00e3 \u0111\u1eb7t" }));
         cbFilterTrangThai.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbFilterTrangThaiActionPerformed(evt);
@@ -364,21 +375,83 @@ public class PanelQuanLyBan extends javax.swing.JPanel {
         add(pnlButton, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void loadDataToTable() {
+    private void loadDataToComboBoxes() {
         try {
-            BanService service = new BanService();
-            List<Ban> list = service.getAllBan();
+            // Save listeners
+            ActionListener[] khuVucListeners = cbFilterKhuVuc.getActionListeners();
+            ActionListener[] trangThaiListeners = cbFilterTrangThai.getActionListeners();
+
+            // Remove listeners
+            for (ActionListener listener : khuVucListeners) {
+                cbFilterKhuVuc.removeActionListener(listener);
+            }
+            for (ActionListener listener : trangThaiListeners) {
+                cbFilterTrangThai.removeActionListener(listener);
+            }
+
+            // Load KhuVuc
+            cbFilterKhuVuc.removeAllItems();
+            cbFilterKhuVuc.addItem("-- Tất cả --");
+            List<KhuVuc> dsKhuVuc = khuVucService.getAllKhuVuc();
+            for (KhuVuc kv : dsKhuVuc) {
+                cbFilterKhuVuc.addItem(kv.getMaKhuVuc());
+            }
+
+            // Load TrangThaiBan
+            cbFilterTrangThai.removeAllItems();
+            cbFilterTrangThai.addItem("-- Tất cả --");
+            for (com.restaurant.quanlydatbannhahang.entity.TrangThaiBan trangThai : com.restaurant.quanlydatbannhahang.entity.TrangThaiBan
+                    .values()) {
+                cbFilterTrangThai.addItem(trangThai.getDisplayName());
+            }
+
+            // Re-add listeners
+            for (ActionListener listener : khuVucListeners) {
+                cbFilterKhuVuc.addActionListener(listener);
+            }
+            for (ActionListener listener : trangThaiListeners) {
+                cbFilterTrangThai.addActionListener(listener);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Lỗi load dữ liệu filter: " + e.getMessage());
+        }
+    }
+
+    private void loadDataToTable() {
+        loadFilteredData();
+    }
+
+    private void loadFilteredData() {
+        try {
+            List<Ban> list = banService.getAllBan();
+            String selectedKhuVuc = (String) cbFilterKhuVuc.getSelectedItem();
+            String selectedTrangThai = (String) cbFilterTrangThai.getSelectedItem();
 
             DefaultTableModel model = (DefaultTableModel) tableBan.getModel();
             model.setRowCount(0);
 
             for (Ban ban : list) {
+                // Apply KhuVuc filter
+                if (selectedKhuVuc != null && !selectedKhuVuc.equals("-- Tất cả --")) {
+                    if (ban.getKhuVuc() == null || !ban.getKhuVuc().getMaKhuVuc().equals(selectedKhuVuc)) {
+                        continue;
+                    }
+                }
+
+                // Apply TrangThai filter
+                if (selectedTrangThai != null && !selectedTrangThai.equals("-- Tất cả --")) {
+                    if (ban.getTrangThai() == null || !ban.getTrangThai().getDisplayName().equals(selectedTrangThai)) {
+                        continue;
+                    }
+                }
+
                 model.addRow(new Object[] {
                         ban.getMaBan(),
                         ban.getSoGhe(),
                         ban.getViTri(),
-                        ban.getKhuVuc().getMaKhuVuc(),
-                        ban.getTrangThai().getDisplayName()
+                        ban.getKhuVuc() != null ? ban.getKhuVuc().getMaKhuVuc() : "",
+                        ban.getTrangThai() != null ? ban.getTrangThai().getDisplayName() : ""
                 });
             }
             centerTableColumns(tableBan);
@@ -396,12 +469,60 @@ public class PanelQuanLyBan extends javax.swing.JPanel {
         }
     }
 
+    private void searchByText() {
+        try {
+            List<Ban> list = banService.getAllBan();
+            String searchText = txtTimKiem.getText().trim().toLowerCase();
+            String selectedKhuVuc = (String) cbFilterKhuVuc.getSelectedItem();
+            String selectedTrangThai = (String) cbFilterTrangThai.getSelectedItem();
+
+            DefaultTableModel model = (DefaultTableModel) tableBan.getModel();
+            model.setRowCount(0);
+
+            for (Ban ban : list) {
+                // Apply KhuVuc filter
+                if (selectedKhuVuc != null && !selectedKhuVuc.equals("-- Tất cả --")) {
+                    if (ban.getKhuVuc() == null || !ban.getKhuVuc().getMaKhuVuc().equals(selectedKhuVuc)) {
+                        continue;
+                    }
+                }
+
+                // Apply TrangThai filter
+                if (selectedTrangThai != null && !selectedTrangThai.equals("-- Tất cả --")) {
+                    if (ban.getTrangThai() == null || !ban.getTrangThai().getDisplayName().equals(selectedTrangThai)) {
+                        continue;
+                    }
+                }
+
+                // Apply search text filter
+                if (!searchText.isEmpty()) {
+                    String maBan = ban.getMaBan() != null ? ban.getMaBan().toLowerCase() : "";
+                    if (!maBan.contains(searchText)) {
+                        continue;
+                    }
+                }
+
+                model.addRow(new Object[] {
+                        ban.getMaBan(),
+                        ban.getSoGhe(),
+                        ban.getViTri(),
+                        ban.getKhuVuc() != null ? ban.getKhuVuc().getMaKhuVuc() : "",
+                        ban.getTrangThai() != null ? ban.getTrangThai().getDisplayName() : ""
+                });
+            }
+            centerTableColumns(tableBan);
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Lỗi tìm kiếm dữ liệu: " + e.getMessage());
+        }
+    }
+
     private void cbFilterTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterTrangThaiActionPerformed
-        // TODO add your handling code here:
+        loadFilteredData();
     }// GEN-LAST:event_cbFilterTrangThaiActionPerformed
 
     private void cbFilterKhuVucActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterKhuVucActionPerformed
-        // TODO add your handling code here:
+        loadFilteredData();
     }// GEN-LAST:event_cbFilterKhuVucActionPerformed
 
     private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaActionPerformed
@@ -425,11 +546,11 @@ public class PanelQuanLyBan extends javax.swing.JPanel {
     }// GEN-LAST:event_txtViTriActionPerformed
 
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTimKiemActionPerformed
-        // TODO add your handling code here:
+        searchByText();
     }// GEN-LAST:event_btnTimKiemActionPerformed
 
     private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtTimKiemActionPerformed
-        // TODO add your handling code here:
+        searchByText();
     }// GEN-LAST:event_txtTimKiemActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

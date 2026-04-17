@@ -502,7 +502,7 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel {
         }
 
         private void cbFilterTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterTrangThaiActionPerformed
-                // TODO add your handling code here:
+                loadDataToTable();
         }// GEN-LAST:event_cbFilterTrangThaiActionPerformed
 
         private void txtMaKhuyenMaiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtMaKhuyenMaiActionPerformed

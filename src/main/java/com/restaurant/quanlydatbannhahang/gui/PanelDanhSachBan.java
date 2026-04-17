@@ -7,8 +7,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import com.restaurant.quanlydatbannhahang.service.BanService;
 import com.restaurant.quanlydatbannhahang.service.KhuVucService;
-import com.restaurant.quanlydatbannhahang.util.ComboBoxEnumLoader;
-import com.restaurant.quanlydatbannhahang.util.ComboBoxEntityLoader;
+
 import com.restaurant.quanlydatbannhahang.entity.Ban;
 import com.restaurant.quanlydatbannhahang.entity.KhuVuc;
 
@@ -18,32 +17,59 @@ public class PanelDanhSachBan extends javax.swing.JPanel {
     private BanService banService;
     private List<Ban> allBans;
     private KhuVucService khuVucService;
-    private ComboBoxEnumLoader cbEnumLoader;
-    private ComboBoxEntityLoader cbEntityLoader;
+
 
     public PanelDanhSachBan() {
         initComponents();
         banService = new BanService();
         khuVucService = new KhuVucService();
-        cbEnumLoader = new ComboBoxEnumLoader();
-        cbEntityLoader = new ComboBoxEntityLoader();
         customUI();
-        loadDataToTable();
+        loadDataToComboBoxes();
+        loadDataToTable();       
     }
 
     private void customUI() {
         // Placeholder cho txtTimKiem
         setupPlaceholder(txtTimKiem, "Nhập mã bàn hoặc mã khu vực");
 
-        // Load enum trạng thái lên ComboBox
-        ComboBoxEnumLoader.loadTrangThaiBanToComboBox(cbFilterTrangThai);
-
-        // Load entity khu vực lên ComboBox
-        List<KhuVuc> dsKhuVuc = khuVucService.getAllKhuVuc();
-        ComboBoxEntityLoader.loadKhuVucToComboBox(cbFilterKhuVuc, dsKhuVuc);
-
-        // Gắn sự kiện quay về Trang Chủ
+        // Gan su kien quay ve Trang Chu
         MainForm.attachGoHomeListener(btnTrangChu, this);
+    }
+
+    private void loadDataToComboBoxes() {
+        try {
+            // Tam disable action listeners de tranh trigger khi loading
+            java.awt.event.ActionListener[] khuVucListeners = cbFilterKhuVuc.getActionListeners();
+            for (java.awt.event.ActionListener listener : khuVucListeners) {
+                cbFilterKhuVuc.removeActionListener(listener);
+            }
+
+            java.awt.event.ActionListener[] trangThaiListeners = cbFilterTrangThai.getActionListeners();
+            for (java.awt.event.ActionListener listener : trangThaiListeners) {
+                cbFilterTrangThai.removeActionListener(listener);
+            }
+
+            // Load KhuVuc tu database
+            cbFilterKhuVuc.removeAllItems();
+            cbFilterKhuVuc.addItem("-- Tất cả --");
+            List<KhuVuc> dsKhuVuc = khuVucService.getAllKhuVuc();
+            for (KhuVuc kv : dsKhuVuc) {
+                cbFilterKhuVuc.addItem(kv.getMaKhuVuc());
+            }
+
+            // Load TrangThaiBan tu enum
+            cbFilterTrangThai.removeAllItems();
+            cbFilterTrangThai.addItem("-- Tất cả --");
+            for (com.restaurant.quanlydatbannhahang.entity.TrangThaiBan trangThai : 
+                    com.restaurant.quanlydatbannhahang.entity.TrangThaiBan.values()) {
+                cbFilterTrangThai.addItem(trangThai.getDisplayName());
+            }
+
+           
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Loi load du lieu filter: " + e.getMessage());
+        }
     }
 
     /**
@@ -106,7 +132,7 @@ public class PanelDanhSachBan extends javax.swing.JPanel {
                         ban.getSoGhe(),
                         ban.getViTri(),
                         ban.getKhuVuc() != null ? ban.getKhuVuc().getMaKhuVuc() : "",
-                        ban.getTrangThai() != null ? ban.getTrangThai().toString() : ""
+                        ban.getTrangThai() != null ? ban.getTrangThai().getDisplayName() : ""
                 });
             }
             centerTableColumns(tableBan);
@@ -276,14 +302,49 @@ public class PanelDanhSachBan extends javax.swing.JPanel {
     }// GEN-LAST:event_cbFilterTrangThaiActionPerformed
 
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTimKiemActionPerformed
-        searchAndFilter();
+        searchByText();
     }// GEN-LAST:event_btnTimKiemActionPerformed
 
     private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtTimKiemActionPerformed
-        searchAndFilter();
+        searchByText();
     }// GEN-LAST:event_txtTimKiemActionPerformed
 
-    private void searchAndFilter() {
+   
+
+    private void filterByComboBoxes() {
+        DefaultTableModel model = (DefaultTableModel) tableBan.getModel();
+        model.setRowCount(0);
+        String selectedKhuVuc = (String) cbFilterKhuVuc.getSelectedItem();
+        String selectedTrangThai = (String) cbFilterTrangThai.getSelectedItem();
+
+        for (Ban ban : allBans) {
+            // Check KhuVuc filter
+            if (selectedKhuVuc != null && !selectedKhuVuc.equals("-- Tất cả --")) {
+                if (ban.getKhuVuc() == null || !ban.getKhuVuc().getMaKhuVuc().equals(selectedKhuVuc)) {
+                    continue;
+                }
+            }
+
+            // Check TrangThai filter
+            if (selectedTrangThai != null && !selectedTrangThai.equals("-- Tất cả --")) {
+                if (ban.getTrangThai() == null || !ban.getTrangThai().getDisplayName().equals(selectedTrangThai)) {
+                    continue;
+                }
+            }
+
+            // Add to table
+            model.addRow(new Object[] {
+                    ban.getMaBan(),
+                    ban.getSoGhe(),
+                    ban.getViTri(),
+                    ban.getKhuVuc() != null ? ban.getKhuVuc().getMaKhuVuc() : "",
+                    ban.getTrangThai() != null ? ban.getTrangThai().getDisplayName() : ""
+            });
+        }
+        centerTableColumns(tableBan);
+    }
+
+    private void searchByText() {
         DefaultTableModel model = (DefaultTableModel) tableBan.getModel();
         model.setRowCount(0);
         String searchText = txtTimKiem.getText().trim().toLowerCase();
@@ -291,15 +352,16 @@ public class PanelDanhSachBan extends javax.swing.JPanel {
         String selectedTrangThai = (String) cbFilterTrangThai.getSelectedItem();
 
         for (Ban ban : allBans) {
-            // Check filters
-            if (selectedKhuVuc != null && !selectedKhuVuc.equals("Khu vực")) {
+            // Check KhuVuc filter
+            if (selectedKhuVuc != null && !selectedKhuVuc.equals("-- Tất cả --")) {
                 if (ban.getKhuVuc() == null || !ban.getKhuVuc().getMaKhuVuc().equals(selectedKhuVuc)) {
                     continue;
                 }
             }
 
-            if (selectedTrangThai != null && !selectedTrangThai.equals("Trạng thái")) {
-                if (!ban.getTrangThai().getDisplayName().equals(selectedTrangThai)) {
+            // Check TrangThai filter
+            if (selectedTrangThai != null && !selectedTrangThai.equals("-- Tất cả --")) {
+                if (ban.getTrangThai() == null || !ban.getTrangThai().getDisplayName().equals(selectedTrangThai)) {
                     continue;
                 }
             }
@@ -316,22 +378,14 @@ public class PanelDanhSachBan extends javax.swing.JPanel {
                     ban.getSoGhe(),
                     ban.getViTri(),
                     ban.getKhuVuc() != null ? ban.getKhuVuc().getMaKhuVuc() : "",
-                    ban.getTrangThai() != null ? ban.getTrangThai().toString() : ""
+                    ban.getTrangThai() != null ? ban.getTrangThai().getDisplayName() : ""
             });
         }
         centerTableColumns(tableBan);
     }
 
     private void filterTable() {
-        String selectedKhuVuc = (String) cbFilterKhuVuc.getSelectedItem();
-        String selectedTrangThai = (String) cbFilterTrangThai.getSelectedItem();
-
-        if ((selectedKhuVuc != null && !selectedKhuVuc.equals("Khu vực")) ||
-                (selectedTrangThai != null && !selectedTrangThai.equals("Trạng thái"))) {
-            searchAndFilter();
-        } else {
-            loadDataToTable();
-        }
+        filterByComboBoxes();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

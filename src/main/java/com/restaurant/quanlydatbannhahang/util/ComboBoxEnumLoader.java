@@ -55,10 +55,16 @@ public class ComboBoxEnumLoader {
             JComboBox<String> comboBox,
             String defaultLabel,
             Class<E> enumClass) {
-        comboBox.removeAllItems();
-        comboBox.addItem(defaultLabel);
+        // Tạm disable action listeners để tránh trigger nhiều lần khi loading
+        java.awt.event.ActionListener[] listeners = comboBox.getActionListeners();
+        for (java.awt.event.ActionListener listener : listeners) {
+            comboBox.removeActionListener(listener);
+        }
 
         try {
+            comboBox.removeAllItems();
+            comboBox.addItem(defaultLabel);
+
             // Lấy method getDisplayName()
             Method getDisplayName = enumClass.getMethod("getDisplayName");
 
@@ -69,6 +75,11 @@ public class ComboBoxEnumLoader {
         } catch (Exception e) {
             System.err.println("Error loading enum to ComboBox: " + e.getMessage());
             e.printStackTrace();
+        } finally {
+            // Thêm lại action listeners
+            for (java.awt.event.ActionListener listener : listeners) {
+                comboBox.addActionListener(listener);
+            }
         }
     }
 

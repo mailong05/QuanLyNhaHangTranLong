@@ -46,14 +46,20 @@ public class ComboBoxEntityLoader {
             String defaultLabel,
             List<T> entities,
             String getterMethodName) {
-        comboBox.removeAllItems();
-        comboBox.addItem(defaultLabel);
-
-        if (entities == null || entities.isEmpty()) {
-            return;
+        // Tạm disable action listeners để tránh trigger nhiều lần khi loading
+        java.awt.event.ActionListener[] listeners = comboBox.getActionListeners();
+        for (java.awt.event.ActionListener listener : listeners) {
+            comboBox.removeActionListener(listener);
         }
 
         try {
+            comboBox.removeAllItems();
+            comboBox.addItem(defaultLabel);
+
+            if (entities == null || entities.isEmpty()) {
+                return;
+            }
+
             for (T entity : entities) {
                 if (entity != null) {
                     // Lấy method từ class
@@ -68,6 +74,11 @@ public class ComboBoxEntityLoader {
         } catch (Exception e) {
             System.err.println("Error loading entities to ComboBox: " + e.getMessage());
             e.printStackTrace();
+        } finally {
+            // Thêm lại action listeners
+            for (java.awt.event.ActionListener listener : listeners) {
+                comboBox.addActionListener(listener);
+            }
         }
     }
 
@@ -87,9 +98,8 @@ public class ComboBoxEntityLoader {
     public static void loadKhuVucToComboBox(
             JComboBox<String> comboBox,
             List<?> khuVucs) {
-        loadEntitiesToComboBox(comboBox, "Khu vực", khuVucs, "getMaKhuVuc");
+        loadEntitiesToComboBox(comboBox, "--Tất cả--", khuVucs, "getMaKhuVuc");
     }
-
 
     /**
      * Load Ban list lên ComboBox

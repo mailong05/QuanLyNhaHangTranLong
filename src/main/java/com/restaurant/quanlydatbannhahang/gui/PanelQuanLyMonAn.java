@@ -195,7 +195,8 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel {
         jComboBox2.setPreferredSize(new java.awt.Dimension(72, 35));
 
         cbFilterLoaiMonAn.setModel(
-                new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+                new javax.swing.DefaultComboBoxModel<>(new String[] { "Lo\u1ea1i m\u00f3n \u0103n", "Khai v\u1ecb",
+                        "M\u00f3n ch\u00ednh", "H\u1ea3i s\u1ea3n", "\u0110\u1ed3 u\u1ed1ng", "Trang mi\u1ebfng" }));
         cbFilterLoaiMonAn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbFilterLoaiMonAnActionPerformed(evt);
@@ -451,7 +452,7 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel {
     }
 
     private void cbFilterLoaiMonAnActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterLoaiMonAnActionPerformed
-        // TODO add your handling code here:
+        loadDataToTable();
     }// GEN-LAST:event_cbFilterLoaiMonAnActionPerformed
 
     private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaActionPerformed
