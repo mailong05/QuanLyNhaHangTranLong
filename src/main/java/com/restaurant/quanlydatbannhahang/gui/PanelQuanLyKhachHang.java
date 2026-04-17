@@ -9,6 +9,8 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import com.restaurant.quanlydatbannhahang.service.KhachHangService;
+import com.restaurant.quanlydatbannhahang.util.IDGeneratorHelper;
+import com.restaurant.quanlydatbannhahang.util.IDQueryHelper;
 import com.restaurant.quanlydatbannhahang.entity.KhachHang;
 import java.util.List;
 
@@ -16,10 +18,14 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseLis
 
     private ActionListener cbFilterLoaiThanhVienListener;
 
+    private IDGeneratorHelper idGeneratorHelper;
+    private IDQueryHelper idQueryHelper;
     /**
      * Creates new form PanelKhachHang
      */
     public PanelQuanLyKhachHang() {
+    	idGeneratorHelper = new IDGeneratorHelper();
+    	idQueryHelper = new IDQueryHelper();
         initComponents();
         customUI();
         loadDataToComboBoxes();
@@ -371,6 +377,9 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseLis
         txtMaKhachHang.setEditable(false);
         txtMaKhachHang.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtMaKhachHang.setPreferredSize(new java.awt.Dimension(64, 35));
+        String lastID = idQueryHelper.getLastID("KhachHang", "maKH");
+        String maKHNew = (lastID == null || lastID.isEmpty())? idGeneratorHelper.toString():idGeneratorHelper.generateNextIDFromFullID(lastID);
+        txtMaKhachHang.setText(maKHNew);
         txtMaKhachHang.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtMaKhachHangActionPerformed(evt);

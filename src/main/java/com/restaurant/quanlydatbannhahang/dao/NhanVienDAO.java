@@ -33,9 +33,8 @@ public class NhanVienDAO {
 			String chucVuStr = rs.getString("chucVu");
 			ChucVu chucVu = ChucVu.valueOf(chucVuStr);
 
-			TrangThaiNhanVien trangThai = rs.getBoolean("trangThai")
-					? TrangThaiNhanVien.DANG_LAM_VIEC
-					: TrangThaiNhanVien.DA_NGHI_VIEC;
+			TrangThaiNhanVien trangThai = TrangThaiNhanVien.valueOf(rs.getString("trangThai"));
+					
 
 			return new NhanVien(
 					rs.getString("maNV"),

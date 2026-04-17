@@ -47,7 +47,7 @@ public class IDGeneratorHelper {
      * @return ID tiếp theo (VD: KH026, PDB011...) hoặc null nếu input không hợp lệ
      */
     public static String generateNextIDFromFullID(String lastFullID) {
-        if (lastFullID == null || lastFullID.length() < 4) {
+        if (lastFullID == null || lastFullID.isEmpty()) {
             return null;
         }
 

@@ -10,12 +10,18 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import com.restaurant.quanlydatbannhahang.service.KhuVucService;
+import com.restaurant.quanlydatbannhahang.util.IDGeneratorHelper;
+import com.restaurant.quanlydatbannhahang.util.IDQueryHelper;
 import com.restaurant.quanlydatbannhahang.entity.KhuVuc;
 import java.util.List;
 
 public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListener {
 
+	private IDGeneratorHelper idGeneratorHelper;
+    private IDQueryHelper idQueryHelper;
     public PanelQuanLyKhuVuc() {
+    	idGeneratorHelper = new IDGeneratorHelper();
+    	idQueryHelper = new IDQueryHelper();
         initComponents();
         customUI();
         loadDataToTable();
@@ -134,6 +140,9 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
         txtMaKhuVuc.setEditable(false);
         txtMaKhuVuc.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtMaKhuVuc.setPreferredSize(new java.awt.Dimension(64, 35));
+        String lastID = idQueryHelper.getLastID("KhuVuc", "maKhuVuc");
+        String maKVNew = (lastID == null || lastID.isEmpty())? idGeneratorHelper.toString():idGeneratorHelper.generateNextIDFromFullID(lastID);
+        txtMaKhuVuc.setText(maKVNew);
         txtMaKhuVuc.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtMaKhuVucActionPerformed(evt);

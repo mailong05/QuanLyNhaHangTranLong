@@ -105,11 +105,13 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                                 model.addRow(new Object[] {
                                                 nv.getMaNV(),
                                                 nv.getHoTen(),
-                                                nv.getChucVu(),
-                                                nv.getNgayVaoLam(),
                                                 nv.getSdt(),
+                                                nv.getChucVu().getDisplayName(),
+                                                nv.getNgayVaoLam(),
+                                               
+                                                
                                                 nv.getLuongCoBan(),
-                                                nv.getTrangThai() != null ? nv.getTrangThai().getDisplayName() : ""
+                                                nv.getTrangThai().getDisplayName()
                                 });
                         }
                         centerTableColumns(tableKhuVuc);

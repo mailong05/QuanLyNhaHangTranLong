@@ -21,6 +21,8 @@ import javax.swing.table.TableRowSorter;
 
 import com.restaurant.quanlydatbannhahang.service.ChiTietPhieuDatBanService;
 import com.restaurant.quanlydatbannhahang.service.PhieuDatBanService;
+import com.restaurant.quanlydatbannhahang.util.IDGeneratorHelper;
+import com.restaurant.quanlydatbannhahang.util.IDQueryHelper;
 import com.restaurant.quanlydatbannhahang.service.BanService;
 
 import com.restaurant.quanlydatbannhahang.entity.PhieuDatBan;
@@ -35,11 +37,14 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
         private PhieuDatBanService pdbService;
         private ChiTietPhieuDatBanService ctpdbService;
         private PanelDatBan panelDatBan; // ← Reference để update UI bàn
-
+        private IDGeneratorHelper idGeneratorHelper;
+        private IDQueryHelper idQueryHelper;
         public PanelQuanLyDatBanTruoc() {
                 pdbService = new PhieuDatBanService();
                 ctpdbService = new ChiTietPhieuDatBanService();
-                this.panelDatBan = null; // Mặc định null (có thể set sau via setPanelDatBan)
+                idGeneratorHelper = new IDGeneratorHelper();
+                idQueryHelper = new IDQueryHelper();
+                this.panelDatBan = null; 
                 initComponents();
                 customUI();
                 loadDataToTable();
@@ -256,6 +261,10 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
         txtMaPhieuDat.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtMaPhieuDat.setFocusable(false);
         txtMaPhieuDat.setPreferredSize(new java.awt.Dimension(0, 35));
+        String lastID = idQueryHelper.getLastID("PhieuDatBan", "maPhieuDat");
+        String maPDBNew = (lastID == null || lastID.isEmpty())? idGeneratorHelper.toString():idGeneratorHelper.generateNextIDFromFullID(lastID);
+        txtMaPhieuDat.setText(maPDBNew);
+        
         txtMaPhieuDat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtMaPhieuDatActionPerformed(evt);

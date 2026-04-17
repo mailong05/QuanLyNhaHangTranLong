@@ -10,6 +10,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import com.restaurant.quanlydatbannhahang.service.KhuyenMaiService;
 import com.restaurant.quanlydatbannhahang.util.ComboBoxEnumLoader;
+import com.restaurant.quanlydatbannhahang.util.IDGeneratorHelper;
+import com.restaurant.quanlydatbannhahang.util.IDQueryHelper;
 import com.restaurant.quanlydatbannhahang.entity.KhuyenMai;
 import java.util.List;
 import java.time.LocalDate;
@@ -18,7 +20,11 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
 
         private ActionListener cbFilterTrangThaiListener;
 
+        private IDGeneratorHelper idGeneratorHelper;
+        private IDQueryHelper idQueryHelper;
         public PanelQuanLyKhuyenMai() {
+        		idGeneratorHelper = new IDGeneratorHelper();
+        		idGeneratorHelper = new IDGeneratorHelper();
                 initComponents();
                 customUI();
                 loadDataToComboBoxes();
@@ -321,6 +327,10 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                 txtMaKhuyenMai.setEditable(false);
                 txtMaKhuyenMai.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
                 txtMaKhuyenMai.setPreferredSize(new java.awt.Dimension(64, 35));
+                String lastID = idQueryHelper.getLastID("KhuyenMai", "maKM");
+                String maKMNew = (lastID == null || lastID.isEmpty())? idGeneratorHelper.toString():idGeneratorHelper.generateNextIDFromFullID(lastID);
+                txtMaKhuyenMai.setText(maKMNew);
+                
                 txtMaKhuyenMai.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
                                 txtMaKhuyenMaiActionPerformed(evt);
