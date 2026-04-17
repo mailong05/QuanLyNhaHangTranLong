@@ -9,10 +9,14 @@ import com.restaurant.quanlydatbannhahang.service.BanService;
 import com.restaurant.quanlydatbannhahang.service.KhuVucService;
 import com.restaurant.quanlydatbannhahang.entity.Ban;
 import com.restaurant.quanlydatbannhahang.entity.KhuVuc;
+import com.restaurant.quanlydatbannhahang.entity.TrangThaiBan;
+
 import java.util.List;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
-public class PanelQuanLyBan extends javax.swing.JPanel {
+public class PanelQuanLyBan extends javax.swing.JPanel implements MouseListener {
     private ActionListener cbFilterKhuVucListener;
     private ActionListener cbFilterTrangThaiListener;
     private BanService banService;
@@ -30,6 +34,21 @@ public class PanelQuanLyBan extends javax.swing.JPanel {
     private void customUI() {
         // Placeholder cho txtTimKiem
         setupPlaceholder(txtTimKiem, "Nhập mã bàn");
+
+        // ========== DESELECT WHEN CLICK OUTSIDE TABLE ==========
+        this.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                // Nếu click không phải trên table thì deselect
+                if (evt.getSource() != tableBan && !isMouseOverTable(evt)) {
+                    tableBan.clearSelection();
+                    clearFields();
+                }
+            }
+        });
+
+        // Register mouse listener để populate fields khi click vào row
+        tableBan.addMouseListener(this);
     }
 
     /**
@@ -67,6 +86,7 @@ public class PanelQuanLyBan extends javax.swing.JPanel {
     }
 
     // Từ đây không chỉnh sửa bên dưới
+    // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
     // Code">//GEN-BEGIN:initComponents
@@ -168,7 +188,7 @@ public class PanelQuanLyBan extends javax.swing.JPanel {
         cbKhuVuc.setPreferredSize(new java.awt.Dimension(72, 35));
 
         cbFilterKhuVuc.setModel(
-                new javax.swing.DefaultComboBoxModel<>(new String[] { "Khu v\u1ef1c" }));
+                new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cbFilterKhuVuc.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbFilterKhuVucActionPerformed(evt);
@@ -176,8 +196,7 @@ public class PanelQuanLyBan extends javax.swing.JPanel {
         });
 
         cbFilterTrangThai.setModel(
-                new javax.swing.DefaultComboBoxModel<>(new String[] { "Tr\u1ea1ng th\u00e1i", "Tr\u1ed1ng",
-                        "\u0110ang d\u00f9ng", "\u0110\u00e3 \u0111\u1eb7t" }));
+                new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cbFilterTrangThai.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbFilterTrangThaiActionPerformed(evt);
@@ -309,7 +328,7 @@ public class PanelQuanLyBan extends javax.swing.JPanel {
                 new String[] {
                         "Mã bàn", "Số ghế", "Vị trí", "Mã khu vực", "Trạng thái"
                 }) {
-            Class<?>[] types = new Class<?>[] {
+            Class[] types = new Class[] {
                     java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class,
                     java.lang.String.class
             };
@@ -317,7 +336,7 @@ public class PanelQuanLyBan extends javax.swing.JPanel {
                     false, false, false, false, false
             };
 
-            public Class<?> getColumnClass(int columnIndex) {
+            public Class getColumnClass(int columnIndex) {
                 return types[columnIndex];
             }
 
@@ -337,6 +356,11 @@ public class PanelQuanLyBan extends javax.swing.JPanel {
         btnTrangChu.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnTrangChu.setText("Trang Chủ");
         btnTrangChu.setPreferredSize(new java.awt.Dimension(100, 27));
+        btnTrangChu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTrangChuActionPerformed(evt);
+            }
+        });
         pnlButton.add(btnTrangChu, java.awt.BorderLayout.WEST);
 
         pnlRightButtons.setBackground(new java.awt.Color(255, 251, 233));
@@ -375,6 +399,11 @@ public class PanelQuanLyBan extends javax.swing.JPanel {
         add(pnlButton, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnTrangChuActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTrangChuActionPerformed
+        // TODO add your handling code here:
+        MainForm.attachGoHomeListener(btnTrangChu, this);
+    }// GEN-LAST:event_btnTrangChuActionPerformed
+
     private void loadDataToComboBoxes() {
         try {
             // Save listeners
@@ -395,14 +424,16 @@ public class PanelQuanLyBan extends javax.swing.JPanel {
             List<KhuVuc> dsKhuVuc = khuVucService.getAllKhuVuc();
             for (KhuVuc kv : dsKhuVuc) {
                 cbFilterKhuVuc.addItem(kv.getMaKhuVuc());
+                cbKhuVuc.addItem(kv.getMaKhuVuc());
             }
 
             // Load TrangThaiBan
             cbFilterTrangThai.removeAllItems();
             cbFilterTrangThai.addItem("-- Tất cả --");
-            for (com.restaurant.quanlydatbannhahang.entity.TrangThaiBan trangThai : com.restaurant.quanlydatbannhahang.entity.TrangThaiBan
+            for (TrangThaiBan trangThai : TrangThaiBan
                     .values()) {
                 cbFilterTrangThai.addItem(trangThai.getDisplayName());
+                cbTrangThai.addItem(trangThai.getDisplayName());
             }
 
             // Re-add listeners
@@ -580,4 +611,75 @@ public class PanelQuanLyBan extends javax.swing.JPanel {
     private javax.swing.JTextField txtTimKiem;
     private javax.swing.JTextField txtViTri;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        if (e.getSource() == tableBan) {
+            int row = tableBan.getSelectedRow();
+            if (row >= 0) {
+                loadDataFromRow(row);
+            }
+        }
+    }
+
+    private void loadDataFromRow(int rowIndex) {
+        try {
+            String maBan = (String) tableBan.getValueAt(rowIndex, 0); // Cột 0: Mã bàn
+            Integer soGhe = (Integer) tableBan.getValueAt(rowIndex, 1); // Cột 1: Số ghế
+            String viTri = (String) tableBan.getValueAt(rowIndex, 2); // Cột 2: Vị trí
+            String maKhuVuc = (String) tableBan.getValueAt(rowIndex, 3); // Cột 3: Mã khu vực
+            String trangThaiStr = (String) tableBan.getValueAt(rowIndex, 4); // Cột 4: Trạng thái
+
+            // Populate text fields
+            txtMaBan.setText(maBan);
+            txtSoGhe.setText(soGhe != null ? soGhe.toString() : "");
+            txtViTri.setText(viTri);
+
+            // Set combobox values
+            cbKhuVuc.setSelectedItem(maKhuVuc);
+            cbTrangThai.setSelectedItem(trangThaiStr);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Lỗi khi load dữ liệu từ row: " + e.getMessage());
+        }
+    }
+
+    private void clearFields() {
+        txtMaBan.setText("");
+        txtSoGhe.setText("");
+        txtViTri.setText("");
+        cbKhuVuc.setSelectedIndex(0);
+        cbTrangThai.setSelectedIndex(0);
+    }
+
+    private boolean isMouseOverTable(java.awt.event.MouseEvent evt) {
+        java.awt.Point p = evt.getPoint();
+        java.awt.Point tablePoint = SwingUtilities.convertPoint(this, p, tableBan);
+        return tableBan.getBounds().contains(tablePoint);
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+        // TODO Auto-generated method stub
+
+    }
 }

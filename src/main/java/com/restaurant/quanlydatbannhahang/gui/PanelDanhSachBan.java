@@ -18,14 +18,13 @@ public class PanelDanhSachBan extends javax.swing.JPanel {
     private List<Ban> allBans;
     private KhuVucService khuVucService;
 
-
     public PanelDanhSachBan() {
         initComponents();
         banService = new BanService();
         khuVucService = new KhuVucService();
         customUI();
         loadDataToComboBoxes();
-        loadDataToTable();       
+        loadDataToTable();
     }
 
     private void customUI() {
@@ -38,13 +37,14 @@ public class PanelDanhSachBan extends javax.swing.JPanel {
 
     private void loadDataToComboBoxes() {
         try {
-            // Tam disable action listeners de tranh trigger khi loading
+            // Save listeners
             java.awt.event.ActionListener[] khuVucListeners = cbFilterKhuVuc.getActionListeners();
+            java.awt.event.ActionListener[] trangThaiListeners = cbFilterTrangThai.getActionListeners();
+
+            // Remove listeners
             for (java.awt.event.ActionListener listener : khuVucListeners) {
                 cbFilterKhuVuc.removeActionListener(listener);
             }
-
-            java.awt.event.ActionListener[] trangThaiListeners = cbFilterTrangThai.getActionListeners();
             for (java.awt.event.ActionListener listener : trangThaiListeners) {
                 cbFilterTrangThai.removeActionListener(listener);
             }
@@ -60,12 +60,19 @@ public class PanelDanhSachBan extends javax.swing.JPanel {
             // Load TrangThaiBan tu enum
             cbFilterTrangThai.removeAllItems();
             cbFilterTrangThai.addItem("-- Tất cả --");
-            for (com.restaurant.quanlydatbannhahang.entity.TrangThaiBan trangThai : 
-                    com.restaurant.quanlydatbannhahang.entity.TrangThaiBan.values()) {
+            for (com.restaurant.quanlydatbannhahang.entity.TrangThaiBan trangThai : com.restaurant.quanlydatbannhahang.entity.TrangThaiBan
+                    .values()) {
                 cbFilterTrangThai.addItem(trangThai.getDisplayName());
             }
 
-           
+            // Re-add listeners
+            for (java.awt.event.ActionListener listener : khuVucListeners) {
+                cbFilterKhuVuc.addActionListener(listener);
+            }
+            for (java.awt.event.ActionListener listener : trangThaiListeners) {
+                cbFilterTrangThai.addActionListener(listener);
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Loi load du lieu filter: " + e.getMessage());
@@ -308,8 +315,6 @@ public class PanelDanhSachBan extends javax.swing.JPanel {
     private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtTimKiemActionPerformed
         searchByText();
     }// GEN-LAST:event_txtTimKiemActionPerformed
-
-   
 
     private void filterByComboBoxes() {
         DefaultTableModel model = (DefaultTableModel) tableBan.getModel();

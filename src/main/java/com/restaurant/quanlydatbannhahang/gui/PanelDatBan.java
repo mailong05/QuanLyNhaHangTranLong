@@ -211,7 +211,10 @@ public class PanelDatBan extends javax.swing.JPanel {
             java.util.List<KhuVuc> khuVucList = khuVucService.getAllKhuVuc();
 
             cbFilterKhuVuc.removeAllItems();
-            
+            cbFilterKhuVuc.addItem("-- Tất cả --");
+            for (KhuVuc kv : khuVucList) {
+            	cbFilterKhuVuc.addItem(kv.getMaKhuVuc());
+            }
 
             // Load cbFilterTrangThai từ enum TrangThaiBan
             cbFilterTrangThai.removeAllItems();

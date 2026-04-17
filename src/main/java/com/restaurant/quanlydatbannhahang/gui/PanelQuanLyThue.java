@@ -19,6 +19,43 @@ public class PanelQuanLyThue extends javax.swing.JPanel {
     private void customUI() {
         // Placeholder cho txtTimKiem
         setupPlaceholder(txtTimKiem, "Nhập tên hoặc mã thuế");
+
+        // Mouse listener để populate fields khi click vào row
+        tableThue.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                int row = tableThue.getSelectedRow();
+                if (row >= 0) {
+                    pushDataToFieldsFromRow(row);
+                }
+            }
+        });
+    }
+
+    private void pushDataToFieldsFromRow(int rowIndex) {
+        try {
+            String maThue = (String) tableThue.getValueAt(rowIndex, 0); // Cột 0: Mã thuế
+            String tenThue = (String) tableThue.getValueAt(rowIndex, 1); // Cột 1: Tên thuế
+            Object thueSuatObj = tableThue.getValueAt(rowIndex, 2); // Cột 2: Thuế suất
+            String trangThaiStr = (String) tableThue.getValueAt(rowIndex, 3); // Cột 3: Trạng thái
+
+            // Populate fields
+            txtMaThue.setText(maThue);
+            txtTenThue.setText(tenThue);
+            if (thueSuatObj != null) {
+                txtThueSuat.setText(thueSuatObj.toString());
+            } else {
+                txtThueSuat.setText("");
+            }
+
+            // Set combobox trạng thái
+            cbTrangThai.setSelectedItem(trangThaiStr);
+
+            System.out.println("Populated fields - MaThue: " + maThue + ", TenThue: " + tenThue);
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Lỗi khi populate fields: " + e.getMessage());
+        }
     }
 
     /**

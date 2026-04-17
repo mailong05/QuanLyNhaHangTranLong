@@ -1,6 +1,9 @@
 package com.restaurant.quanlydatbannhahang.gui;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
 import javax.swing.*;
 
 import javax.swing.table.DefaultTableCellRenderer;
@@ -9,7 +12,7 @@ import com.restaurant.quanlydatbannhahang.service.KhuVucService;
 import com.restaurant.quanlydatbannhahang.entity.KhuVuc;
 import java.util.List;
 
-public class PanelQuanLyKhuVuc extends javax.swing.JPanel {
+public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListener {
 
     public PanelQuanLyKhuVuc() {
         initComponents();
@@ -317,4 +320,33 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel {
     private javax.swing.JTextField txtTenKhuVuc;
     private javax.swing.JTextField txtTimKiem;
     // End of variables declaration//GEN-END:variables
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
 }
