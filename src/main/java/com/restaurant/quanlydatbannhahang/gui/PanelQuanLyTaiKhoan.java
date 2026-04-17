@@ -15,6 +15,12 @@ import java.util.List;
 public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseListener {
 
         private JButton btnTrangChu = new JButton();
+        private JPanel pnlButton = new JPanel();
+        private JPanel pnlRightButtons = new JPanel();
+        private JButton btnXoaTrang = new JButton();
+        private JButton btnCapNhat = new JButton();
+        private JButton btnXoa = new JButton();
+        private JButton btnThem = new JButton();
         private ActionListener cbFilterQuyenHanListener;
         private TaiKhoanService taiKhoanService;
         private List<TaiKhoan> allTaiKhoan;
@@ -96,6 +102,7 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
         }
 
         @SuppressWarnings("unchecked")
+        // <editor-fold defaultstate="collapsed" desc="Generated
         // <editor-fold defaultstate="collapsed" desc="Generated
         // <editor-fold defaultstate="collapsed" desc="Generated
         // <editor-fold defaultstate="collapsed" desc="Generated
@@ -242,17 +249,17 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
                                                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
                                                                                                                                 280,
                                                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                                                                .addGap(544, 544, 544)
+                                                                                                .addGap(48, 48, 48)
                                                                                                 .addComponent(jLabel3,
                                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
                                                                                                                 78,
                                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                                .addPreferredGap(
-                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                                                .addGap(18, 18, 18)
                                                                                                 .addComponent(cbQuyenHan,
                                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
                                                                                                                 125,
-                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                                                .addGap(484, 484, 484)))
                                                                 .addContainerGap()));
                 jPanel1Layout.setVerticalGroup(
                                 jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -270,18 +277,22 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
                                                                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                                .addGap(12, 12, 12)
+                                                                .addGap(18, 18, 18)
                                                                 .addGroup(jPanel1Layout.createParallelGroup(
-                                                                                javax.swing.GroupLayout.Alignment.BASELINE)
-                                                                                .addComponent(jLabel2)
-                                                                                .addComponent(txtMatKhau,
-                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                                javax.swing.GroupLayout.Alignment.LEADING)
                                                                                 .addComponent(btnResetPassword,
+                                                                                                javax.swing.GroupLayout.Alignment.TRAILING,
                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
                                                                                                 30,
-                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                                .addGroup(jPanel1Layout
+                                                                                                .createParallelGroup(
+                                                                                                                javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                                                .addComponent(jLabel2)
+                                                                                                .addComponent(txtMatKhau,
+                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)))
                                                                 .addPreferredGap(
                                                                                 javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                                                 .addGroup(jPanel1Layout.createParallelGroup(
@@ -340,6 +351,23 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
         private void btnResetPasswordActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnResetPasswordActionPerformed
                 // TODO add your handling code here:
         }// GEN-LAST:event_btnResetPasswordActionPerformed
+
+        private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaTrangActionPerformed
+                // TODO add your handling code here:
+                refreshData();
+        }// GEN-LAST:event_btnXoaTrangActionPerformed
+
+        private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCapNhatActionPerformed
+                // TODO add your handling code here:
+        }// GEN-LAST:event_btnCapNhatActionPerformed
+
+        private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaActionPerformed
+                // TODO add your handling code here:
+        }// GEN-LAST:event_btnXoaActionPerformed
+
+        private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnThemActionPerformed
+                // TODO add your handling code here:
+        }// GEN-LAST:event_btnThemActionPerformed
 
         private void resetPlaceholder(JTextField textField, String placeholder) {
                 Color placeholderColor = new Color(153, 153, 153);
