@@ -18,15 +18,13 @@ public class PanelDanhSachNhanVien extends javax.swing.JPanel {
         initComponents();
         nhanVienService = new NhanVienService();
         customUI();
+        loadDataToComboBoxes();
         loadDataToTable();
     }
 
     private void customUI() {
         // Placeholder cho txtTimKiem
         setupPlaceholder(txtTimKiem, "Nhập tên hoặc số điện thoại");
-
-        // Load enum chức vụ lên ComboBox
-        ComboBoxEnumLoader.loadChucVuToComboBox(cbFilterChucVu);
 
         // Gắn sự kiện quay về Trang Chủ
         MainForm.attachGoHomeListener(btnTrangChu, this);
@@ -84,6 +82,35 @@ public class PanelDanhSachNhanVien extends javax.swing.JPanel {
         Color placeholderColor = new Color(153, 153, 153);
         textField.setText(placeholder);
         textField.setForeground(placeholderColor);
+    }
+
+    private void loadDataToComboBoxes() {
+        try {
+            // Save listeners
+            java.awt.event.ActionListener[] chucVuListeners = cbFilterChucVu.getActionListeners();
+
+            // Remove listeners
+            for (java.awt.event.ActionListener listener : chucVuListeners) {
+                cbFilterChucVu.removeActionListener(listener);
+            }
+
+            // Load ChucVu tu enum
+            cbFilterChucVu.removeAllItems();
+            cbFilterChucVu.addItem("Chức vụ");
+            for (com.restaurant.quanlydatbannhahang.entity.ChucVu chucVu : com.restaurant.quanlydatbannhahang.entity.ChucVu
+                    .values()) {
+                cbFilterChucVu.addItem(chucVu.getDisplayName());
+            }
+
+            // Re-add listeners
+            for (java.awt.event.ActionListener listener : chucVuListeners) {
+                cbFilterChucVu.addActionListener(listener);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Loi load du lieu filter: " + e.getMessage());
+        }
     }
 
     private void loadDataToTable() {
@@ -160,8 +187,7 @@ public class PanelDanhSachNhanVien extends javax.swing.JPanel {
             }
         });
 
-        cbFilterChucVu.setModel(new javax.swing.DefaultComboBoxModel<>(
-                new String[] { "Chức vụ", "Quản lý", "Thu ngân", "Phục vụ", "Bếp", " " }));
+        cbFilterChucVu.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {}));
         cbFilterChucVu.setPreferredSize(new java.awt.Dimension(72, 35));
         cbFilterChucVu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -258,7 +284,7 @@ public class PanelDanhSachNhanVien extends javax.swing.JPanel {
     }// GEN-LAST:event_btnXoaTrangActionPerformed
 
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTimKiemActionPerformed
-        searchAndFilter();
+        searchByText();
     }// GEN-LAST:event_btnTimKiemActionPerformed
 
     private void cbFilterChucVuActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterChucVuActionPerformed
@@ -266,22 +292,49 @@ public class PanelDanhSachNhanVien extends javax.swing.JPanel {
     }// GEN-LAST:event_cbFilterChucVuActionPerformed
 
     private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtTimKiemActionPerformed
-        searchAndFilter();
+        searchByText();
     }// GEN-LAST:event_txtTimKiemActionPerformed
 
-    private void searchAndFilter() {
+    private void filterByComboBoxes() {
         DefaultTableModel model = (DefaultTableModel) tableKhuVuc.getModel();
         model.setRowCount(0);
-        String searchText = txtTimKiem.getText().trim().toLowerCase();
-        
+
         String selectedChucVu = (String) cbFilterChucVu.getSelectedItem();
-        System.out.println("Cb = "+ selectedChucVu);
-       
+
         for (NhanVien nv : allNhanVien) {
-            // Check filters
+            // Check ChucVu filter
             if (selectedChucVu != null && !selectedChucVu.equals("Chức vụ")) {
                 if (!nv.getChucVu().getDisplayName().equals(selectedChucVu)) {
-                       continue;
+                    continue;
+                }
+            }
+
+            // Add to table
+            model.addRow(new Object[] {
+                    nv.getMaNV(),
+                    nv.getHoTen(),
+                    nv.getSdt(),
+                    nv.getChucVu().getDisplayName(),
+                    nv.getNgayVaoLam(),
+                    nv.getLuongCoBan(),
+                    nv.getTrangThai().getDisplayName()
+            });
+        }
+        centerTableColumns(tableKhuVuc);
+    }
+
+    private void searchByText() {
+        DefaultTableModel model = (DefaultTableModel) tableKhuVuc.getModel();
+        model.setRowCount(0);
+
+        String searchText = txtTimKiem.getText().trim().toLowerCase();
+        String selectedChucVu = (String) cbFilterChucVu.getSelectedItem();
+
+        for (NhanVien nv : allNhanVien) {
+            // Check ChucVu filter
+            if (selectedChucVu != null && !selectedChucVu.equals("Chức vụ")) {
+                if (!nv.getChucVu().getDisplayName().equals(selectedChucVu)) {
+                    continue;
                 }
             }
 
@@ -289,8 +342,11 @@ public class PanelDanhSachNhanVien extends javax.swing.JPanel {
             String tenNV = nv.getHoTen() != null ? nv.getHoTen().toLowerCase() : "";
             String sdtNV = nv.getSdt() != null ? nv.getSdt().trim() : "";
             String maNV = nv.getMaNV() != null ? nv.getMaNV().toLowerCase() : "";
-            if ((!searchText.isEmpty())
-                    && (!tenNV.contains(searchText) && !sdtNV.contains(searchText) && !maNV.contains(searchText))) {
+
+            if (!searchText.isEmpty()
+                    && !tenNV.contains(searchText)
+                    && !sdtNV.contains(searchText)
+                    && !maNV.contains(searchText)) {
                 continue;
             }
 
@@ -309,19 +365,14 @@ public class PanelDanhSachNhanVien extends javax.swing.JPanel {
     }
 
     private void filterTable() {
-        String selectedChucVu = (String) cbFilterChucVu.getSelectedItem();
-
-        if (selectedChucVu != null && !selectedChucVu.equals("Chức vụ")) {
-            searchAndFilter();
-        } else {
-            loadDataToTable();
-        }
+        filterByComboBoxes();
     }
 
     public void refreshData() {
         resetPlaceholder(txtTimKiem, "Nhập tên hoặc số điện thoại");
         cbFilterChucVu.setSelectedIndex(0);
-        filterTable();
+        filterByComboBoxes();
+        loadDataToTable();
         tableKhuVuc.clearSelection();
     }
 

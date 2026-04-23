@@ -21,6 +21,7 @@ public class PanelDanhSachThue extends javax.swing.JPanel {
 
         thueService = new ThueService();
         customUI();
+        loadDataToComboBoxes();
         loadDataToTable();
     }
 
@@ -65,7 +66,6 @@ public class PanelDanhSachThue extends javax.swing.JPanel {
         });
     }
 
-    
     private void loadDataToComboBoxes() {
         try {
             // Save listeners
@@ -77,9 +77,8 @@ public class PanelDanhSachThue extends javax.swing.JPanel {
             }
 
             // Load TrangThai
-           
-           ComboBoxEnumLoader.loadTrangThaiThueToComboBox(cbFilterTrangThai);
 
+            ComboBoxEnumLoader.loadTrangThaiThueToComboBox(cbFilterTrangThai);
 
             // Re-add listeners
             for (ActionListener listener : trangThaiListeners) {
@@ -90,7 +89,7 @@ public class PanelDanhSachThue extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Lỗi load dữ liệu filter: " + e.getMessage());
         }
     }
-    
+
     private void applyCardStyle(JPanel panel, int radius) {
         panel.setOpaque(false);
         panel.setUI(new javax.swing.plaf.PanelUI() {
@@ -174,6 +173,11 @@ public class PanelDanhSachThue extends javax.swing.JPanel {
         pnlThongTinThue.setBackground(new java.awt.Color(255, 251, 233));
 
         txtTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtTimKiem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtTimKiemActionPerformed(evt);
+            }
+        });
 
         btnTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnTimKiem.setText("Tìm kiếm");
@@ -183,8 +187,7 @@ public class PanelDanhSachThue extends javax.swing.JPanel {
             }
         });
 
-        cbFilterTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(
-                new String[] { "Trạng thái", "Còn áp dụng", "Ngưng áp dụng", " " }));
+        cbFilterTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {}));
         cbFilterTrangThai.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbFilterTrangThaiActionPerformed(evt);
@@ -275,19 +278,47 @@ public class PanelDanhSachThue extends javax.swing.JPanel {
     }// GEN-LAST:event_btnXoaTrangActionPerformed
 
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTimKiemActionPerformed
-        searchAndFilter();
+        searchByText();
     }// GEN-LAST:event_btnTimKiemActionPerformed
 
-    private void searchAndFilter() {
+    private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtTimKiemActionPerformed
+        searchByText();
+    }// GEN-LAST:event_txtTimKiemActionPerformed
+
+    private void filterByComboBoxes() {
+        DefaultTableModel model = (DefaultTableModel) tableThue.getModel();
+        model.setRowCount(0);
+        String selectedTrangThai = (String) cbFilterTrangThai.getSelectedItem();
+
+        for (Thue thue : allThue) {
+            // Check TrangThai filter
+            if (selectedTrangThai != null && !selectedTrangThai.equals("Trạng thái")) {
+                if (thue.getTrangThai() == null || !thue.getTrangThai().getDisplayName().equals(selectedTrangThai)) {
+                    continue;
+                }
+            }
+
+            // Add to table
+            model.addRow(new Object[] {
+                    thue.getMaThue(),
+                    thue.getTenThue(),
+                    thue.getThueSuat(),
+                    thue.getTrangThai().getDisplayName()
+            });
+        }
+        centerTableColumns(tableThue);
+    }
+
+    private void searchByText() {
         DefaultTableModel model = (DefaultTableModel) tableThue.getModel();
         model.setRowCount(0);
         String searchText = txtTimKiem.getText().trim().toLowerCase();
         String selectedTrangThai = (String) cbFilterTrangThai.getSelectedItem();
 
         for (Thue thue : allThue) {
-            // Check filters
+            // Check TrangThai filter
             if (selectedTrangThai != null && !selectedTrangThai.equals("Trạng thái")) {
-                if (!thue.getTrangThai().getDisplayName().equals(selectedTrangThai)) {
+                if (thue.getTrangThai() == null || !thue.getTrangThai().getDisplayName().equals(selectedTrangThai)) {
                     continue;
                 }
             }
@@ -311,13 +342,7 @@ public class PanelDanhSachThue extends javax.swing.JPanel {
     }
 
     private void filterTable() {
-        String selectedTrangThai = (String) cbFilterTrangThai.getSelectedItem();
-
-        if (selectedTrangThai != null && !selectedTrangThai.equals("Trạng thái")) {
-            searchAndFilter();
-        } else {
-            loadDataToTable();
-        }
+        filterByComboBoxes();
     }
 
     private void cbFilterTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterTrangThaiActionPerformed
@@ -327,7 +352,8 @@ public class PanelDanhSachThue extends javax.swing.JPanel {
     public void refreshData() {
         resetPlaceholder(txtTimKiem, "Nhập tên hoặc mã thuế");
         cbFilterTrangThai.setSelectedIndex(0);
-        filterTable();
+        filterByComboBoxes();
+        loadDataToTable();
         tableThue.clearSelection();
     }
 

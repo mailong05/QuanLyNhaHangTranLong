@@ -104,8 +104,7 @@ public class PanelLichSuHoaDon extends javax.swing.JPanel {
         jPanel1.setLayout(new javax.swing.BoxLayout(jPanel1, javax.swing.BoxLayout.X_AXIS));
         jPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 60, 10, 60));
 
-        cbFilterTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(
-                new String[] { "Trạng thái", "Đã thanh toán", "Chưa thanh toán", "Đã Hủy", " " }));
+        cbFilterTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {}));
         cbFilterTrangThai.setPreferredSize(new java.awt.Dimension(150, 35));
         cbFilterTrangThai.setMaximumSize(new java.awt.Dimension(150, 35));
         cbFilterTrangThai.addActionListener(this::cbFilterTrangThaiActionPerformed);

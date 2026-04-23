@@ -208,7 +208,7 @@ public class PanelDanhSachBan extends javax.swing.JPanel {
             }
         });
 
-        cbFilterKhuVuc.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Khu vực", "A", "B", "C" }));
+        cbFilterKhuVuc.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {}));
         cbFilterKhuVuc.setPreferredSize(new java.awt.Dimension(72, 35));
         cbFilterKhuVuc.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -216,8 +216,7 @@ public class PanelDanhSachBan extends javax.swing.JPanel {
             }
         });
 
-        cbFilterTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(
-                new String[] { "Trạng thái", "Trống", "Đang sử dụng", "Đang chờ", " " }));
+        cbFilterTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {}));
         cbFilterTrangThai.setPreferredSize(new java.awt.Dimension(72, 35));
         cbFilterTrangThai.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -423,7 +422,6 @@ public class PanelDanhSachBan extends javax.swing.JPanel {
         cbFilterKhuVuc.setSelectedIndex(0);
         cbFilterTrangThai.setSelectedIndex(0);
         filterByComboBoxes();
-        loadDataToTable();
         tableBan.clearSelection();
     }
 

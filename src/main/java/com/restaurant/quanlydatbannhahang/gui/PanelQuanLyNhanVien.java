@@ -22,9 +22,9 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
 
         private ActionListener cbFilterChucVuListener;
         private ComboBoxEnumLoader cbEnumLoader;
-        
+
         public PanelQuanLyNhanVien() {
-        		 cbEnumLoader = new ComboBoxEnumLoader();
+                cbEnumLoader = new ComboBoxEnumLoader();
                 initComponents();
                 customUI();
                 loadDataToComboBoxes();
@@ -67,10 +67,10 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
 
                         // Load ChucVu
                         cbFilterChucVu.removeAllItems();
-                        
+
                         cbEnumLoader.loadChucVuToComboBox(cbFilterChucVu);
                         cbEnumLoader.loadTrangThaiNhanVienToComboBox(cbTrangThai);
-                        
+
                         cbChucVu.removeAllItems();
                         cbEnumLoader.loadChucVuToComboBox(cbChucVu);
 
@@ -373,17 +373,15 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                 lblTrangThai.setText("Trạng thái:");
                 lblTrangThai.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
-                cbChucVu.setModel(new javax.swing.DefaultComboBoxModel<>(
-                                new String[] { "Quản lý", "Thu ngân", "Phục vụ", "Bếp", " " }));
+                cbChucVu.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {}));
                 cbChucVu.setPreferredSize(new java.awt.Dimension(72, 30));
 
-                cbTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Đang làm việc", " " }));
+                cbTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {}));
                 cbTrangThai.setMaximumSize(new java.awt.Dimension(32767, 30));
                 cbTrangThai.setMinimumSize(new java.awt.Dimension(72, 30));
                 cbTrangThai.setPreferredSize(new java.awt.Dimension(72, 30));
 
-                cbFilterChucVu.setModel(new javax.swing.DefaultComboBoxModel<>(
-                                new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+                cbFilterChucVu.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {}));
                 cbFilterChucVu.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
                                 cbFilterChucVuActionPerformed(evt);

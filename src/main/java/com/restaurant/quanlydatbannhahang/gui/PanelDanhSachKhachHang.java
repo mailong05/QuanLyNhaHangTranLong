@@ -8,7 +8,10 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import com.restaurant.quanlydatbannhahang.service.KhachHangService;
 import com.restaurant.quanlydatbannhahang.util.ComboBoxEnumLoader;
+import com.restaurant.quanlydatbannhahang.entity.Ban;
 import com.restaurant.quanlydatbannhahang.entity.KhachHang;
+import com.restaurant.quanlydatbannhahang.entity.NhanVien;
+
 import java.util.List;
 
 public class PanelDanhSachKhachHang extends javax.swing.JPanel {
@@ -23,8 +26,8 @@ public class PanelDanhSachKhachHang extends javax.swing.JPanel {
         khachHangService = new KhachHangService();
         cbEnumLoader = new ComboBoxEnumLoader();
         customUI();
-        loadDataToTable();
         loadDataToComboBoxes();
+        loadDataToTable();
     }
 
     private void customUI() {
@@ -107,14 +110,14 @@ public class PanelDanhSachKhachHang extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         pnlHeader2 = new javax.swing.JPanel();
         pnlThongTinKhachHang = new javax.swing.JPanel();
         txtTimKiem = new javax.swing.JTextField();
         btnTimKiem = new javax.swing.JButton();
-        cbLoaiThanhVien = new javax.swing.JComboBox<>();
+        cbFilterLoaiThanhVien = new javax.swing.JComboBox<>();
         scrTableKhachHang = new javax.swing.JScrollPane();
         tableKhachHang = new javax.swing.JTable();
         pnlButton = new javax.swing.JPanel();
@@ -132,73 +135,69 @@ public class PanelDanhSachKhachHang extends javax.swing.JPanel {
         pnlThongTinKhachHang.setBackground(new java.awt.Color(255, 251, 233));
 
         txtTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtTimKiem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtTimKiemActionPerformed(evt);
+            }
+        });
 
         btnTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnTimKiem.setText("Tìm kiếm");
 
-        cbLoaiThanhVien.setModel(new javax.swing.DefaultComboBoxModel<>(
-                new String[] { }));
-        cbLoaiThanhVien.setPreferredSize(new java.awt.Dimension(72, 35));
-        cbLoaiThanhVien.addActionListener(new java.awt.event.ActionListener() {
+        cbFilterLoaiThanhVien.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {}));
+        cbFilterLoaiThanhVien.setPreferredSize(new java.awt.Dimension(72, 35));
+        cbFilterLoaiThanhVien.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbLoaiThanhVienActionPerformed(evt);
+                cbFilterLoaiThanhVienActionPerformed(evt);
             }
         });
 
         javax.swing.GroupLayout pnlThongTinKhachHangLayout = new javax.swing.GroupLayout(pnlThongTinKhachHang);
         pnlThongTinKhachHang.setLayout(pnlThongTinKhachHangLayout);
         pnlThongTinKhachHangLayout.setHorizontalGroup(
-                pnlThongTinKhachHangLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
-                                pnlThongTinKhachHangLayout.createSequentialGroup()
-                                        .addComponent(cbLoaiThanhVien, javax.swing.GroupLayout.PREFERRED_SIZE, 136,
-                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 485,
-                                                Short.MAX_VALUE)
-                                        .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 297,
-                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 129,
-                                                javax.swing.GroupLayout.PREFERRED_SIZE)));
+            pnlThongTinKhachHangLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlThongTinKhachHangLayout.createSequentialGroup()
+                .addComponent(cbFilterLoaiThanhVien, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 485, Short.MAX_VALUE)
+                .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
         pnlThongTinKhachHangLayout.setVerticalGroup(
-                pnlThongTinKhachHangLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(pnlThongTinKhachHangLayout.createSequentialGroup()
-                                .addGroup(pnlThongTinKhachHangLayout
-                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35,
-                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35,
-                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(cbLoaiThanhVien, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 11, Short.MAX_VALUE)));
+            pnlThongTinKhachHangLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlThongTinKhachHangLayout.createSequentialGroup()
+                .addGroup(pnlThongTinKhachHangLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbFilterLoaiThanhVien, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 11, Short.MAX_VALUE))
+        );
 
         pnlHeader2.add(pnlThongTinKhachHang, java.awt.BorderLayout.PAGE_END);
 
         add(pnlHeader2, java.awt.BorderLayout.PAGE_START);
 
         tableKhachHang.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][] {
+            new Object [][] {
 
-                },
-                new String[] {
-                        "Mã KH", "Họ tên", "Số điện thoại", "Điểm tích lũy", "Loại thành viên"
-                }) {
-            Class[] types = new Class[] {
-                    java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class,
-                    java.lang.String.class
+            },
+            new String [] {
+                "Mã KH", "Họ tên", "Số điện thoại", "Điểm tích lũy", "Loại thành viên"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.String.class
             };
-            boolean[] canEdit = new boolean[] {
-                    false, false, false, false, false
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
-                return types[columnIndex];
+                return types [columnIndex];
             }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit[columnIndex];
+                return canEdit [columnIndex];
             }
         });
         tableKhachHang.setRowHeight(35);
@@ -230,6 +229,16 @@ public class PanelDanhSachKhachHang extends javax.swing.JPanel {
         add(pnlButton, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void cbFilterLoaiThanhVienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbFilterLoaiThanhVienActionPerformed
+        // TODO add your handling code here:
+    	filterTable();
+    }//GEN-LAST:event_cbFilterLoaiThanhVienActionPerformed
+
+    private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTimKiemActionPerformed
+        // TODO add your handling code here:
+    	searchByText();
+    }//GEN-LAST:event_txtTimKiemActionPerformed
+
     private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaTrangActionPerformed
         // TODO add your handling code here:
         refreshData();
@@ -244,19 +253,45 @@ public class PanelDanhSachKhachHang extends javax.swing.JPanel {
     }// GEN-LAST:event_cbLoaiThanhVienActionPerformed
 
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTimKiemActionPerformed
-        searchAndFilter();
+    	searchByText();
     }// GEN-LAST:event_btnTimKiemActionPerformed
 
-    private void searchAndFilter() {
+    
+    private void filterByComboBoxes() {
+        DefaultTableModel model = (DefaultTableModel) tableKhachHang.getModel();
+        model.setRowCount(0);
+        String selectedLoaiThanhVien = (String) cbFilterLoaiThanhVien.getSelectedItem();
+
+        for (KhachHang kh : allKhachHang) {
+            // Check LoaiThanhVien filter
+            if (selectedLoaiThanhVien != null && !selectedLoaiThanhVien.equals("Loại thành viên")) {
+                if (kh.getLoaiThanhVien() == null || !kh.getLoaiThanhVien().getDisplayName().equals(selectedLoaiThanhVien)) {
+                    continue;
+                }
+            }
+
+            // Add to table
+            model.addRow(new Object[] {
+                    kh.getMaKH(),
+                    kh.getHoTen(),
+                    kh.getSdt(),
+                    kh.getDiemTichLuy(),
+                    kh.getLoaiThanhVien() != null ? kh.getLoaiThanhVien().getDisplayName() : ""
+            });
+        }
+        centerTableColumns(tableKhachHang);
+    }
+
+    private void searchByText() {
         DefaultTableModel model = (DefaultTableModel) tableKhachHang.getModel();
         model.setRowCount(0);
         String searchText = txtTimKiem.getText().trim().toLowerCase();
-        String selectedLoaiThanhVien = (String) cbLoaiThanhVien.getSelectedItem();
+        String selectedLoaiThanhVien = (String) cbFilterLoaiThanhVien.getSelectedItem();
 
         for (KhachHang kh : allKhachHang) {
-            // Check filters
+            // Check LoaiThanhVien filter
             if (selectedLoaiThanhVien != null && !selectedLoaiThanhVien.equals("Loại thành viên")) {
-                if (!kh.getLoaiThanhVien().getDisplayName().equals(selectedLoaiThanhVien)) {
+                if (kh.getLoaiThanhVien() == null || !kh.getLoaiThanhVien().getDisplayName().equals(selectedLoaiThanhVien)) {
                     continue;
                 }
             }
@@ -283,32 +318,29 @@ public class PanelDanhSachKhachHang extends javax.swing.JPanel {
     }
 
     private void filterTable() {
-        String selectedLoaiThanhVien = (String) cbLoaiThanhVien.getSelectedItem();
-
-        if (selectedLoaiThanhVien != null && !selectedLoaiThanhVien.equals("Loại thành viên")) {
-            searchAndFilter();
-        } else {
-            loadDataToTable();
-        }
+        filterByComboBoxes();
     }
+
+       
 
     
     private void loadDataToComboBoxes() {
         try {
             // Save listeners
-            ActionListener[] loaiThanhVienListeners = cbLoaiThanhVien.getActionListeners();
+            ActionListener[] loaiThanhVienListeners = cbFilterLoaiThanhVien.getActionListeners();
 
             // Remove listeners
             for (ActionListener listener : loaiThanhVienListeners) {
-                cbLoaiThanhVien.removeActionListener(listener);
+                cbFilterLoaiThanhVien.removeActionListener(listener);
             }
 
             // Load LoaiThanhVien
-            cbLoaiThanhVien.removeAllItems();
-            cbEnumLoader.loadLoaiThanhVienToComboBox(cbLoaiThanhVien);
+            cbFilterLoaiThanhVien.removeAllItems();
+            cbFilterLoaiThanhVien.addItem("Loại thành viên");
+            cbEnumLoader.loadLoaiThanhVienToComboBox(cbFilterLoaiThanhVien);
             // Re-add listeners
             for (ActionListener listener : loaiThanhVienListeners) {
-                cbLoaiThanhVien.addActionListener(listener);
+                cbFilterLoaiThanhVien.addActionListener(listener);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -318,8 +350,9 @@ public class PanelDanhSachKhachHang extends javax.swing.JPanel {
     
     public void refreshData() {
         resetPlaceholder(txtTimKiem, "Nhập số điện thoại hoặc tên");
-        cbLoaiThanhVien.setSelectedIndex(0);
-        filterTable();
+        cbFilterLoaiThanhVien.setSelectedIndex(0);
+        filterByComboBoxes();
+        loadDataToTable();
         tableKhachHang.clearSelection();
     }
 
@@ -361,7 +394,7 @@ public class PanelDanhSachKhachHang extends javax.swing.JPanel {
     private javax.swing.JButton btnTimKiem;
     private javax.swing.JButton btnTrangChu;
     private javax.swing.JButton btnXoaTrang;
-    private javax.swing.JComboBox<String> cbLoaiThanhVien;
+    private javax.swing.JComboBox<String> cbFilterLoaiThanhVien;
     private javax.swing.JPanel pnlButton;
     private javax.swing.JPanel pnlHeader2;
     private javax.swing.JPanel pnlThongTinKhachHang;

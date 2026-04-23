@@ -17,15 +17,13 @@ public class PanelDanhSachKhuyenMai extends javax.swing.JPanel {
         initComponents();
         khuyenMaiService = new KhuyenMaiService();
         customUI();
+        loadDataToComboBoxes();
         loadDataToTable();
     }
 
     private void customUI() {
         // Placeholder cho txtTimKiem
         setupPlaceholder(txtTimKiem, "Nhập tên hoặc mã khuyến mãi");
-
-        // Load enum trạng thái lên ComboBox
-        ComboBoxEnumLoader.loadTrangThaiKhuyenMaiToComboBox(cbFilterTrangThai);
 
         // Gắn sự kiện quay về Trang Chủ
         MainForm.attachGoHomeListener(btnTrangChu, this);
@@ -69,6 +67,35 @@ public class PanelDanhSachKhuyenMai extends javax.swing.JPanel {
         Color placeholderColor = new Color(153, 153, 153);
         textField.setText(placeholder);
         textField.setForeground(placeholderColor);
+    }
+
+    private void loadDataToComboBoxes() {
+        try {
+            // Save listeners
+            java.awt.event.ActionListener[] trangThaiListeners = cbFilterTrangThai.getActionListeners();
+
+            // Remove listeners
+            for (java.awt.event.ActionListener listener : trangThaiListeners) {
+                cbFilterTrangThai.removeActionListener(listener);
+            }
+
+            // Load TrangThai
+            cbFilterTrangThai.removeAllItems();
+            cbFilterTrangThai.addItem("Trạng thái");
+            for (com.restaurant.quanlydatbannhahang.entity.TrangThaiKhuyenMai trangThai : com.restaurant.quanlydatbannhahang.entity.TrangThaiKhuyenMai
+                    .values()) {
+                cbFilterTrangThai.addItem(trangThai.getDisplayName());
+            }
+
+            // Re-add listeners
+            for (java.awt.event.ActionListener listener : trangThaiListeners) {
+                cbFilterTrangThai.addActionListener(listener);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Loi load du lieu filter: " + e.getMessage());
+        }
     }
 
     private void loadDataToTable() {
@@ -135,6 +162,11 @@ public class PanelDanhSachKhuyenMai extends javax.swing.JPanel {
         pnlThongTinKhuyenMai.setBackground(new java.awt.Color(255, 251, 233));
 
         txtTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtTimKiem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtTimKiemActionPerformed(evt);
+            }
+        });
 
         btnTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnTimKiem.setText("Tìm kiếm");
@@ -144,8 +176,7 @@ public class PanelDanhSachKhuyenMai extends javax.swing.JPanel {
             }
         });
 
-        cbFilterTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(
-                new String[] { "Trạng thái", "Còn áp dụng", "Ngưng áp dụng", " " }));
+        cbFilterTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {}));
         cbFilterTrangThai.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbFilterTrangThaiActionPerformed(evt);
@@ -246,19 +277,50 @@ public class PanelDanhSachKhuyenMai extends javax.swing.JPanel {
     }// GEN-LAST:event_cbFilterTrangThaiActionPerformed
 
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTimKiemActionPerformed
-        searchAndFilter();
+        searchByText();
     }// GEN-LAST:event_btnTimKiemActionPerformed
 
-    private void searchAndFilter() {
+    private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtTimKiemActionPerformed
+        searchByText();
+    }// GEN-LAST:event_txtTimKiemActionPerformed
+
+    private void filterByComboBoxes() {
+        DefaultTableModel model = (DefaultTableModel) tableKhuyenMai.getModel();
+        model.setRowCount(0);
+        String selectedTrangThai = (String) cbFilterTrangThai.getSelectedItem();
+
+        for (KhuyenMai km : allKhuyenMai) {
+            // Check TrangThai filter
+            if (selectedTrangThai != null && !selectedTrangThai.equals("Trạng thái")) {
+                if (km.getTrangThai() == null || !km.getTrangThai().getDisplayName().equals(selectedTrangThai)) {
+                    continue;
+                }
+            }
+
+            // Add to table
+            model.addRow(new Object[] {
+                    km.getMaKM(),
+                    km.getTenKM(),
+                    km.getGiaTriGiam(),
+                    km.getNgayBatDau(),
+                    km.getNgayKetThuc(),
+                    km.getDieuKienToiThieu(),
+                    km.getTrangThai().getDisplayName()
+            });
+        }
+        centerTableColumns(tableKhuyenMai);
+    }
+
+    private void searchByText() {
         DefaultTableModel model = (DefaultTableModel) tableKhuyenMai.getModel();
         model.setRowCount(0);
         String searchText = txtTimKiem.getText().trim().toLowerCase();
         String selectedTrangThai = (String) cbFilterTrangThai.getSelectedItem();
 
         for (KhuyenMai km : allKhuyenMai) {
-            // Check filters
+            // Check TrangThai filter
             if (selectedTrangThai != null && !selectedTrangThai.equals("Trạng thái")) {
-                if (!km.getTrangThai().getDisplayName().equals(selectedTrangThai)) {
+                if (km.getTrangThai() == null || !km.getTrangThai().getDisplayName().equals(selectedTrangThai)) {
                     continue;
                 }
             }
@@ -285,19 +347,14 @@ public class PanelDanhSachKhuyenMai extends javax.swing.JPanel {
     }
 
     private void filterTable() {
-        String selectedTrangThai = (String) cbFilterTrangThai.getSelectedItem();
-
-        if (selectedTrangThai != null && !selectedTrangThai.equals("Trạng thái")) {
-            searchAndFilter();
-        } else {
-            loadDataToTable();
-        }
+        filterByComboBoxes();
     }
 
     public void refreshData() {
         resetPlaceholder(txtTimKiem, "Nhập tên hoặc mã khuyến mãi");
         cbFilterTrangThai.setSelectedIndex(0);
-        filterTable();
+        filterByComboBoxes();
+        loadDataToTable();
         tableKhuyenMai.clearSelection();
     }
 

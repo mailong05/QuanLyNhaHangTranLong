@@ -9,10 +9,13 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import com.restaurant.quanlydatbannhahang.service.KhachHangService;
+import com.restaurant.quanlydatbannhahang.service.NhanVienService;
 import com.restaurant.quanlydatbannhahang.util.ComboBoxEnumLoader;
 import com.restaurant.quanlydatbannhahang.util.IDGeneratorHelper;
 import com.restaurant.quanlydatbannhahang.util.IDQueryHelper;
 import com.restaurant.quanlydatbannhahang.entity.KhachHang;
+import com.restaurant.quanlydatbannhahang.entity.NhanVien;
+
 import java.util.List;
 
 public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseListener {
@@ -25,7 +28,7 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseLis
     /**
      * Creates new form PanelKhachHang
      */
-    public PanelQuanLyKhachHang() {     
+    public PanelQuanLyKhachHang() {
         initComponents();
         idGeneratorHelper = new IDGeneratorHelper();
         idQueryHelper = new IDQueryHelper();
@@ -75,9 +78,13 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseLis
                 cbFilterLoaiThanhVien.removeActionListener(listener);
             }
 
-            // Load LoaiThanhVien
+            // Load LoaiThanhVien to both comboboxes
             cbFilterLoaiThanhVien.removeAllItems();
+            cbFilterLoaiThanhVien.addItem("Loại thành viên");
             cbEnumLoader.loadLoaiThanhVienToComboBox(cbFilterLoaiThanhVien);
+
+            cbLoaiThanhVien.removeAllItems();
+            cbEnumLoader.loadLoaiThanhVienToComboBox(cbLoaiThanhVien);
 
             // Re-add listeners
             for (ActionListener listener : loaiThanhVienListeners) {
@@ -103,8 +110,7 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseLis
             model.setRowCount(0);
 
             for (KhachHang kh : list) {
-                // Apply LoaiThanhVien filter
-                if (selectedLoaiThanhVien != null && !selectedLoaiThanhVien.equals("Loại Thành Viên")) {
+                if (selectedLoaiThanhVien != null && !selectedLoaiThanhVien.equals("Loại thành viên")) {
                     if (kh.getLoaiThanhVien() == null
                             || !kh.getLoaiThanhVien().getDisplayName().equals(selectedLoaiThanhVien)) {
                         continue;
@@ -138,7 +144,7 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseLis
 
             for (KhachHang kh : list) {
                 // Apply LoaiThanhVien filter
-                if (selectedLoaiThanhVien != null && !selectedLoaiThanhVien.equals("Loại Thành Viên")) {
+                if (selectedLoaiThanhVien != null && !selectedLoaiThanhVien.equals("Loại thành viên")) {
                     if (kh.getLoaiThanhVien() == null
                             || !kh.getLoaiThanhVien().getDisplayName().equals(selectedLoaiThanhVien)) {
                         continue;
@@ -374,11 +380,11 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseLis
             }
         });
 
-        cbLoaiThanhVien.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
+        cbLoaiThanhVien.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {}));
         cbLoaiThanhVien.setPreferredSize(new java.awt.Dimension(72, 35));
 
         cbFilterLoaiThanhVien.setModel(
-                new javax.swing.DefaultComboBoxModel<>(new String[] { }));
+                new javax.swing.DefaultComboBoxModel<>(new String[] {}));
         cbFilterLoaiThanhVien.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbFilterLoaiThanhVienActionPerformed(evt);
