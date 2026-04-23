@@ -27,6 +27,15 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
         loadDataToTable();
     }
 
+    
+    private void fillMaKhuVuc(JTextField txtMaKhuVuc) {
+		// TODO Auto-generated method stub
+	 String lastID = idQueryHelper.getLastID("KhuVuc", "maKhuVuc");
+     String maPDBNew = (lastID == null || lastID.isEmpty())? idGeneratorHelper.toString():idGeneratorHelper.generateNextIDFromFullID(lastID);
+     txtMaKhuVuc.setText(maPDBNew);
+	}
+    
+    
     private void customUI() {
         // Placeholder cho txtTimKiem
         setupPlaceholder(txtTimKiem, "Nhập tên hoặc mã khu vực");
@@ -38,6 +47,7 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
                 if (evt.getSource() != tableKhuVuc && !isMouseOverTable(evt)) {
                     tableKhuVuc.clearSelection();
                     clearFields();
+                    fillMaKhuVuc(txtMaKhuVuc);
                 }
             }
         });
@@ -408,6 +418,7 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
 
     public void refreshData() {
         clearFields();
+        fillMaKhuVuc(txtMaKhuVuc);
         resetPlaceholder(txtTimKiem, "Nhập tên hoặc mã khu vực");
         loadDataToTable();
         tableKhuVuc.clearSelection();

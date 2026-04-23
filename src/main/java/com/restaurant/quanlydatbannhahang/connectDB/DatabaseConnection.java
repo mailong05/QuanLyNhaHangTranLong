@@ -16,19 +16,14 @@ public class DatabaseConnection {
             if (connection == null || connection.isClosed()) {
                 Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
                 connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-                System.out.println("Kết nối Database thành công!");
                 return connection;
             }
             return connection;
         } catch (ClassNotFoundException e) {
-            System.out.println("SQL Server Driver không tìm thấy!");
-            System.out.println("Hãy thêm JDBC jar vào pom.xml hoặc lib folder");
-            e.printStackTrace();
+               e.printStackTrace();
             return null;
         } catch (SQLException e) {
-            System.out.println("Không thể kết nối đến Database!");
-            System.out.println("Kiểm tra: URL, username, password, và Service SQL Server");
-            e.printStackTrace();
+             e.printStackTrace();
             return null;
         }
     }
@@ -37,10 +32,8 @@ public class DatabaseConnection {
         try {
             if (connection != null && !connection.isClosed()) {
                 connection.close();
-                System.out.println("✓ Đóng kết nối Database");
             }
         } catch (SQLException e) {
-            System.out.println("Lỗi khi đóng kết nối");
             e.printStackTrace();
         }
     }

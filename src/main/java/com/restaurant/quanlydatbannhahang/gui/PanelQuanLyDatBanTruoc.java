@@ -69,6 +69,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                 try {
                         loadDataToTable();
                         clearFields();
+                        fillMaDatBan(txtMaPhieuDat);
                 } catch (Exception e) {
                         e.printStackTrace();
                 }

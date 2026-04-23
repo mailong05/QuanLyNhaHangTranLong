@@ -273,13 +273,15 @@ public class PanelDanhSachNhanVien extends javax.swing.JPanel {
         DefaultTableModel model = (DefaultTableModel) tableKhuVuc.getModel();
         model.setRowCount(0);
         String searchText = txtTimKiem.getText().trim().toLowerCase();
+        
         String selectedChucVu = (String) cbFilterChucVu.getSelectedItem();
-
+        System.out.println("Cb = "+ selectedChucVu);
+       
         for (NhanVien nv : allNhanVien) {
             // Check filters
             if (selectedChucVu != null && !selectedChucVu.equals("Chức vụ")) {
                 if (!nv.getChucVu().getDisplayName().equals(selectedChucVu)) {
-                    continue;
+                       continue;
                 }
             }
 
@@ -287,7 +289,7 @@ public class PanelDanhSachNhanVien extends javax.swing.JPanel {
             String tenNV = nv.getHoTen() != null ? nv.getHoTen().toLowerCase() : "";
             String sdtNV = nv.getSdt() != null ? nv.getSdt().trim() : "";
             String maNV = nv.getMaNV() != null ? nv.getMaNV().toLowerCase() : "";
-            if (!searchText.isEmpty()
+            if ((!searchText.isEmpty())
                     && (!tenNV.contains(searchText) && !sdtNV.contains(searchText) && !maNV.contains(searchText))) {
                 continue;
             }
