@@ -11,6 +11,7 @@ import javax.swing.table.DefaultTableModel;
 import com.restaurant.quanlydatbannhahang.service.MonAnService;
 import com.restaurant.quanlydatbannhahang.entity.MonAn;
 import java.util.List;
+import java.text.DecimalFormat;
 
 /**
  *
@@ -164,16 +165,12 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
         try {
             String maMon = (String) tableMonAn.getValueAt(rowIndex, 1);
             String tenMon = (String) tableMonAn.getValueAt(rowIndex, 2);
-            Object donGiaObj = tableMonAn.getValueAt(rowIndex, 3);
+            double donGia = (double) tableMonAn.getValueAt(rowIndex, 3);
             String donViTinh = (String) tableMonAn.getValueAt(rowIndex, 4);
 
             txtMaMon.setText(maMon);
             txtTenMon.setText(tenMon);
-            if (donGiaObj != null) {
-                txtDonGia.setText(donGiaObj.toString());
-            } else {
-                txtDonGia.setText("");
-            }
+            txtDonGia.setText(formatCurrency(donGia));
             cbDonViTinh.setSelectedItem(donViTinh);
         } catch (Exception e) {
             e.printStackTrace();
@@ -194,6 +191,11 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
         loadDataToComboBoxes();
         loadDataToTable();
         tableMonAn.clearSelection();
+    }
+
+    private String formatCurrency(double value) {
+        DecimalFormat df = new DecimalFormat("#,##0.00");
+        return df.format(value);
     }
 
     private boolean isMouseOverTable(java.awt.event.MouseEvent evt) {

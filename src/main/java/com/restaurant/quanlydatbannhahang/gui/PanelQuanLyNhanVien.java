@@ -13,6 +13,9 @@ import com.restaurant.quanlydatbannhahang.service.NhanVienService;
 import com.restaurant.quanlydatbannhahang.entity.NhanVien;
 import java.util.List;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.text.DecimalFormat;
 
 public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseListener {
 
@@ -38,15 +41,15 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                 this.addMouseListener(new java.awt.event.MouseAdapter() {
                         @Override
                         public void mousePressed(java.awt.event.MouseEvent evt) {
-                                if (evt.getSource() != tableKhuVuc && !isMouseOverTable(evt)) {
-                                        tableKhuVuc.clearSelection();
+                                if (evt.getSource() != tableNhanVien && !isMouseOverTable(evt)) {
+                                        tableNhanVien.clearSelection();
                                         clearFields();
                                 }
                         }
                 });
 
                 // Register mouse listener để populate fields khi click vào row
-                tableKhuVuc.addMouseListener(this);
+                tableNhanVien.addMouseListener(this);
         }
 
         private void loadDataToComboBoxes() {
@@ -91,13 +94,14 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                         List<NhanVien> list = service.getAllNhanVien();
                         String selectedChucVu = (String) cbFilterChucVu.getSelectedItem();
 
-                        DefaultTableModel model = (DefaultTableModel) tableKhuVuc.getModel();
+                        DefaultTableModel model = (DefaultTableModel) tableNhanVien.getModel();
                         model.setRowCount(0);
 
                         for (NhanVien nv : list) {
                                 // Apply ChucVu filter
                                 if (selectedChucVu != null && !selectedChucVu.equals("-- Tất cả --")) {
-                                        if (nv.getChucVu() == null || !nv.getChucVu().equals(selectedChucVu)) {
+                                        if (nv.getChucVu() == null
+                                                        || !nv.getChucVu().getDisplayName().equals(selectedChucVu)) {
                                                 continue;
                                         }
                                 }
@@ -108,13 +112,12 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                                                 nv.getSdt(),
                                                 nv.getChucVu().getDisplayName(),
                                                 nv.getNgayVaoLam(),
-                                               
-                                                
+
                                                 nv.getLuongCoBan(),
                                                 nv.getTrangThai().getDisplayName()
                                 });
                         }
-                        centerTableColumns(tableKhuVuc);
+                        centerTableColumns(tableNhanVien);
                 } catch (Exception e) {
                         e.printStackTrace();
                         JOptionPane.showMessageDialog(this, "Lỗi load dữ liệu: " + e.getMessage());
@@ -128,13 +131,14 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                         String searchText = txtTimKiem.getText().trim().toLowerCase();
                         String selectedChucVu = (String) cbFilterChucVu.getSelectedItem();
 
-                        DefaultTableModel model = (DefaultTableModel) tableKhuVuc.getModel();
+                        DefaultTableModel model = (DefaultTableModel) tableNhanVien.getModel();
                         model.setRowCount(0);
 
                         for (NhanVien nv : list) {
                                 // Apply ChucVu filter
                                 if (selectedChucVu != null && !selectedChucVu.equals("-- Tất cả --")) {
-                                        if (nv.getChucVu() == null || !nv.getChucVu().equals(selectedChucVu)) {
+                                        if (nv.getChucVu() == null
+                                                        || !nv.getChucVu().getDisplayName().equals(selectedChucVu)) {
                                                 continue;
                                         }
                                 }
@@ -161,7 +165,7 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                                                 nv.getTrangThai() != null ? nv.getTrangThai().getDisplayName() : ""
                                 });
                         }
-                        centerTableColumns(tableKhuVuc);
+                        centerTableColumns(tableNhanVien);
                 } catch (Exception e) {
                         e.printStackTrace();
                         JOptionPane.showMessageDialog(this, "Lỗi tìm kiếm dữ liệu: " + e.getMessage());
@@ -170,22 +174,25 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
 
         private void loadDataFromRow(int rowIndex) {
                 try {
-                        String maNhanVien = (String) tableKhuVuc.getValueAt(rowIndex, 0);
-                        String hoTen = (String) tableKhuVuc.getValueAt(rowIndex, 1);
-                        String chucVu = (String) tableKhuVuc.getValueAt(rowIndex, 2);
-                        Object ngayVaoLamObj = tableKhuVuc.getValueAt(rowIndex, 3);
-                        String sdt = (String) tableKhuVuc.getValueAt(rowIndex, 4);
-                        Object luongObj = tableKhuVuc.getValueAt(rowIndex, 5);
+                        String maNhanVien = (String) tableNhanVien.getValueAt(rowIndex, 0);
+                        String hoTen = (String) tableNhanVien.getValueAt(rowIndex, 1);
+                        String sdt = (String) tableNhanVien.getValueAt(rowIndex, 2);
+                        String chucVu = (String) tableNhanVien.getValueAt(rowIndex, 3);
+
+                        Object ngayVaoLamStr = tableNhanVien.getValueAt(rowIndex, 4);
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                        LocalDate ngayVaoLam = LocalDate.parse(ngayVaoLamStr.toString(), formatter);
+                        double luong = (double) tableNhanVien.getValueAt(rowIndex, 5);
+                        String trangThai = tableNhanVien.getValueAt(rowIndex, 6).toString();
 
                         txtMaNhanVien.setText(maNhanVien);
                         txtHoTen.setText(hoTen);
                         cbChucVu.setSelectedItem(chucVu);
                         txtSoDienThoai.setText(sdt);
-                        if (luongObj != null) {
-                                txtLuongCoBan.setText(luongObj.toString());
-                        } else {
-                                txtLuongCoBan.setText("");
-                        }
+                        dpNgayVaoLam.setDate(ngayVaoLam);
+                        txtLuongCoBan.setText(formatCurrency(luong));
+                        cbTrangThai.setSelectedItem(trangThai);
+
                 } catch (Exception e) {
                         e.printStackTrace();
                         JOptionPane.showMessageDialog(this, "Lỗi khi load dữ liệu từ row: " + e.getMessage());
@@ -208,13 +215,18 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                 cbFilterChucVu.setSelectedIndex(0);
                 loadDataToComboBoxes();
                 loadDataToTable();
-                tableKhuVuc.clearSelection();
+                tableNhanVien.clearSelection();
+        }
+
+        private String formatCurrency(double value) {
+                DecimalFormat df = new DecimalFormat("#,##0.00");
+                return df.format(value);
         }
 
         private boolean isMouseOverTable(java.awt.event.MouseEvent evt) {
                 java.awt.Point p = evt.getPoint();
-                java.awt.Point tablePoint = SwingUtilities.convertPoint(this, p, tableKhuVuc);
-                return tableKhuVuc.getBounds().contains(tablePoint);
+                java.awt.Point tablePoint = SwingUtilities.convertPoint(this, p, tableNhanVien);
+                return tableNhanVien.getBounds().contains(tablePoint);
         }
 
         /**
@@ -261,6 +273,7 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
         // <editor-fold defaultstate="collapsed" desc="Generated
         // <editor-fold defaultstate="collapsed" desc="Generated
         // <editor-fold defaultstate="collapsed" desc="Generated
+        // <editor-fold defaultstate="collapsed" desc="Generated
         // Code">//GEN-BEGIN:initComponents
         private void initComponents() {
 
@@ -284,8 +297,8 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                 dpNgayVaoLam = new com.github.lgooddatepicker.components.DatePicker();
                 cbTrangThai = new javax.swing.JComboBox<>();
                 cbFilterChucVu = new javax.swing.JComboBox<>();
-                scrTableKhuVuc = new javax.swing.JScrollPane();
-                tableKhuVuc = new javax.swing.JTable();
+                scrNhanVien = new javax.swing.JScrollPane();
+                tableNhanVien = new javax.swing.JTable();
                 pnlButton = new javax.swing.JPanel();
                 btnTrangChu = new javax.swing.JButton();
                 pnlRightButtons = new javax.swing.JPanel();
@@ -570,7 +583,7 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
 
                 add(pnlHeader, java.awt.BorderLayout.PAGE_START);
 
-                tableKhuVuc.setModel(new javax.swing.table.DefaultTableModel(
+                tableNhanVien.setModel(new javax.swing.table.DefaultTableModel(
                                 new Object[][] {
 
                                 },
@@ -595,10 +608,10 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                                 return canEdit[columnIndex];
                         }
                 });
-                tableKhuVuc.setRowHeight(35);
-                scrTableKhuVuc.setViewportView(tableKhuVuc);
+                tableNhanVien.setRowHeight(35);
+                scrNhanVien.setViewportView(tableNhanVien);
 
-                add(scrTableKhuVuc, java.awt.BorderLayout.CENTER);
+                add(scrNhanVien, java.awt.BorderLayout.CENTER);
 
                 pnlButton.setBackground(new java.awt.Color(255, 251, 233));
                 pnlButton.setLayout(new java.awt.BorderLayout());
@@ -719,8 +732,8 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
         private javax.swing.JPanel pnlHeader;
         private javax.swing.JPanel pnlRightButtons;
         private javax.swing.JPanel pnlThongTinNhanVien;
-        private javax.swing.JScrollPane scrTableKhuVuc;
-        private javax.swing.JTable tableKhuVuc;
+        private javax.swing.JScrollPane scrNhanVien;
+        private javax.swing.JTable tableNhanVien;
         private javax.swing.JTextField txtHoTen;
         private javax.swing.JTextField txtLuongCoBan;
         private javax.swing.JTextField txtMaNhanVien;
@@ -730,8 +743,8 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
         // End of variables declaration//GEN-END:variables
         @Override
         public void mouseClicked(MouseEvent e) {
-                if (e.getSource() == tableKhuVuc) {
-                        int row = tableKhuVuc.getSelectedRow();
+                if (e.getSource() == tableNhanVien) {
+                        int row = tableNhanVien.getSelectedRow();
                         if (row >= 0) {
                                 loadDataFromRow(row);
                         }

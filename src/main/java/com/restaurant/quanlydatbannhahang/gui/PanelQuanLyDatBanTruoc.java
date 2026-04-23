@@ -94,7 +94,8 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                                 if (evt.getSource() != tableBan && !isMouseOverTable(evt)) {
                                         tableBan.clearSelection();
                                         clearFields(); // Clear dữ liệu các field
-                                        btnCapNhat.setEnabled(false); // Enable button
+                                        btnCapNhat.setEnabled(false); 
+                                        fillMaDatBan(txtMaPhieuDat);
                                 }
                         }
                 });
@@ -261,9 +262,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
         txtMaPhieuDat.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtMaPhieuDat.setFocusable(false);
         txtMaPhieuDat.setPreferredSize(new java.awt.Dimension(0, 35));
-        String lastID = idQueryHelper.getLastID("PhieuDatBan", "maPhieuDat");
-        String maPDBNew = (lastID == null || lastID.isEmpty())? idGeneratorHelper.toString():idGeneratorHelper.generateNextIDFromFullID(lastID);
-        txtMaPhieuDat.setText(maPDBNew);
+       fillMaDatBan(txtMaPhieuDat);
         
         txtMaPhieuDat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -515,7 +514,14 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
         add(pnlButton, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaTrangActionPerformed
+    private void fillMaDatBan(JTextField txtMaPhieuDat) {
+			// TODO Auto-generated method stub
+    	 String lastID = idQueryHelper.getLastID("PhieuDatBan", "maPhieuDat");
+         String maPDBNew = (lastID == null || lastID.isEmpty())? idGeneratorHelper.toString():idGeneratorHelper.generateNextIDFromFullID(lastID);
+         txtMaPhieuDat.setText(maPDBNew);
+		}
+
+	private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaTrangActionPerformed
         // TODO add your handling code here:
     	refreshData();
     	 cbFilterTrangThai.setSelectedIndex(0);

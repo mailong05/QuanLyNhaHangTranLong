@@ -7,6 +7,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import com.restaurant.quanlydatbannhahang.service.BanService;
 import com.restaurant.quanlydatbannhahang.service.KhuVucService;
+import com.restaurant.quanlydatbannhahang.util.IDGeneratorHelper;
+import com.restaurant.quanlydatbannhahang.util.IDQueryHelper;
 import com.restaurant.quanlydatbannhahang.entity.Ban;
 import com.restaurant.quanlydatbannhahang.entity.KhuVuc;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiBan;
@@ -21,11 +23,16 @@ public class PanelQuanLyBan extends javax.swing.JPanel implements MouseListener 
     private ActionListener cbFilterTrangThaiListener;
     private BanService banService;
     private KhuVucService khuVucService;
+    private IDGeneratorHelper idGenerateHelper;
+    private IDQueryHelper idQueryHelper;
+
 
     public PanelQuanLyBan() {
         initComponents();
         banService = new BanService();
         khuVucService = new KhuVucService();
+        idGenerateHelper = new IDGeneratorHelper();
+        idQueryHelper = new IDQueryHelper();
         customUI();
         loadDataToComboBoxes();
         loadDataToTable();
@@ -43,6 +50,7 @@ public class PanelQuanLyBan extends javax.swing.JPanel implements MouseListener 
                 if (evt.getSource() != tableBan && !isMouseOverTable(evt)) {
                     tableBan.clearSelection();
                     clearFields();
+                    fillTxtMaBan(txtMaBan);
                 }
             }
         });
@@ -143,6 +151,7 @@ public class PanelQuanLyBan extends javax.swing.JPanel implements MouseListener 
         lblMaBan.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblMaBan.setText("Mã bàn:");
 
+        fillTxtMaBan(txtMaBan);
         txtMaBan.setEditable(false);
         txtMaBan.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtMaBan.setMinimumSize(new java.awt.Dimension(64, 35));
@@ -374,7 +383,16 @@ public class PanelQuanLyBan extends javax.swing.JPanel implements MouseListener 
         add(pnlButton, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaTrangActionPerformed
+    private void fillTxtMaBan(JTextField txtMaBan) {
+		// TODO Auto-generated method stub
+    	String lastMaBan = idQueryHelper.getLastID("BanAn", "maBan");
+    	String newMaBan =  (lastMaBan == null || lastMaBan.isEmpty()) ? idGenerateHelper.generateDefaultID("B"):idGenerateHelper.generateNextIDFromFullID(lastMaBan);
+    	txtMaBan.setText(newMaBan);
+   
+        
+	}
+
+	private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaTrangActionPerformed
         // TODO add your handling code here:
         refreshData();
     }// GEN-LAST:event_btnXoaTrangActionPerformed
@@ -671,6 +689,7 @@ public class PanelQuanLyBan extends javax.swing.JPanel implements MouseListener 
 
     public void refreshData() {
         clearFields();
+        fillTxtMaBan(txtMaBan);
         resetPlaceholder(txtTimKiem, "Nhập mã bàn");
         cbFilterKhuVuc.setSelectedIndex(0);
         cbFilterTrangThai.setSelectedIndex(0);

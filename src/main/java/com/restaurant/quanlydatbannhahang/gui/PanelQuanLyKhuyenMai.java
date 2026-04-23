@@ -15,6 +15,7 @@ import com.restaurant.quanlydatbannhahang.util.IDQueryHelper;
 import com.restaurant.quanlydatbannhahang.entity.KhuyenMai;
 import java.util.List;
 import java.time.LocalDate;
+import java.text.DecimalFormat;
 
 public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseListener {
 
@@ -22,9 +23,10 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
 
         private IDGeneratorHelper idGeneratorHelper;
         private IDQueryHelper idQueryHelper;
+
         public PanelQuanLyKhuyenMai() {
-        		idGeneratorHelper = new IDGeneratorHelper();
-        		idGeneratorHelper = new IDGeneratorHelper();
+                idGeneratorHelper = new IDGeneratorHelper();
+                idGeneratorHelper = new IDGeneratorHelper();
                 initComponents();
                 customUI();
                 loadDataToComboBoxes();
@@ -179,17 +181,13 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                         String tenKM = (String) tableKhuyenMai.getValueAt(rowIndex, 1);
                         Object ngayBDObj = tableKhuyenMai.getValueAt(rowIndex, 2);
                         Object ngayKTObj = tableKhuyenMai.getValueAt(rowIndex, 3);
-                        Object giaTriObj = tableKhuyenMai.getValueAt(rowIndex, 4);
+                        double giaTriGiam = (double) tableKhuyenMai.getValueAt(rowIndex, 4);
                         Object dieuKienObj = tableKhuyenMai.getValueAt(rowIndex, 5);
                         String trangThai = (String) tableKhuyenMai.getValueAt(rowIndex, 6);
 
                         txtMaKhuyenMai.setText(maKM);
                         txtTenKhuyenMai.setText(tenKM);
-                        if (giaTriObj != null) {
-                                txtGiaTriGiam.setText(giaTriObj.toString());
-                        } else {
-                                txtGiaTriGiam.setText("");
-                        }
+                        txtGiaTriGiam.setText(formatCurrency(giaTriGiam));
                         if (dieuKienObj != null) {
                                 txtDieuKienToiThieu.setText(dieuKienObj.toString());
                         } else {
@@ -222,6 +220,11 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                 loadDataToComboBoxes();
                 loadDataToTable();
                 tableKhuyenMai.clearSelection();
+        }
+
+        private String formatCurrency(double value) {
+                DecimalFormat df = new DecimalFormat("#,##0.00");
+                return df.format(value);
         }
 
         private boolean isMouseOverTable(java.awt.event.MouseEvent evt) {
@@ -328,9 +331,10 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                 txtMaKhuyenMai.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
                 txtMaKhuyenMai.setPreferredSize(new java.awt.Dimension(64, 35));
                 String lastID = idQueryHelper.getLastID("KhuyenMai", "maKM");
-                String maKMNew = (lastID == null || lastID.isEmpty())? idGeneratorHelper.toString():idGeneratorHelper.generateNextIDFromFullID(lastID);
+                String maKMNew = (lastID == null || lastID.isEmpty()) ? idGeneratorHelper.toString()
+                                : idGeneratorHelper.generateNextIDFromFullID(lastID);
                 txtMaKhuyenMai.setText(maKMNew);
-                
+
                 txtMaKhuyenMai.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
                                 txtMaKhuyenMaiActionPerformed(evt);

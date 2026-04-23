@@ -4,7 +4,9 @@ public enum LoaiMonAn {
     KHAI_VI("Khai vị"),
     MON_CHINH("Món chính"),
     HAI_SAN("Hải sản"),
-    DO_UONG("Đồ uống");
+    DO_UONG("Đồ uống"),
+    TRANG_MIENG("Tráng miệng")
+    ;
 
     private final String displayName;
 
