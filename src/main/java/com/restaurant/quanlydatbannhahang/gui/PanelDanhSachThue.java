@@ -1,6 +1,8 @@
 package com.restaurant.quanlydatbannhahang.gui;
 
 import java.awt.*;
+import java.awt.event.ActionListener;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -25,10 +27,6 @@ public class PanelDanhSachThue extends javax.swing.JPanel {
     private void customUI() {
         // Placeholder cho txtTimKiem
         setupPlaceholder(txtTimKiem, "Nhập tên hoặc mã thuế");
-
-        // Load enum trạng thái lên ComboBox
-        ComboBoxEnumLoader.loadTrangThaiThueToComboBox(cbFilterTrangThai);
-
         // Gắn sự kiện quay về Trang Chủ
         MainForm.attachGoHomeListener(btnTrangChu, this);
     }
@@ -67,6 +65,32 @@ public class PanelDanhSachThue extends javax.swing.JPanel {
         });
     }
 
+    
+    private void loadDataToComboBoxes() {
+        try {
+            // Save listeners
+            ActionListener[] trangThaiListeners = cbFilterTrangThai.getActionListeners();
+
+            // Remove listeners
+            for (ActionListener listener : trangThaiListeners) {
+                cbFilterTrangThai.removeActionListener(listener);
+            }
+
+            // Load TrangThai
+           
+           ComboBoxEnumLoader.loadTrangThaiThueToComboBox(cbFilterTrangThai);
+
+
+            // Re-add listeners
+            for (ActionListener listener : trangThaiListeners) {
+                cbFilterTrangThai.addActionListener(listener);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Lỗi load dữ liệu filter: " + e.getMessage());
+        }
+    }
+    
     private void applyCardStyle(JPanel panel, int radius) {
         panel.setOpaque(false);
         panel.setUI(new javax.swing.plaf.PanelUI() {

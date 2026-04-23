@@ -62,7 +62,7 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
 
             // Load Loai Mon
             cbFilterLoaiMonAn.removeAllItems();
-            cbFilterLoaiMonAn.addItem("-- Tất cả --");
+            cbFilterLoaiMonAn.addItem("Loại Món Ăn");
             // Load loai mon from service if available
             cbFilterLoaiMonAn.addItem("Khai vị");
             cbFilterLoaiMonAn.addItem("Món chính");
@@ -94,7 +94,7 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
 
             for (MonAn monan : list) {
                 // Apply Loai filter
-                if (selectedLoai != null && !selectedLoai.equals("-- Tất cả --")) {
+                if (selectedLoai != null && !selectedLoai.equals("Loại Món Ăn")) {
                     if (monan.getTenLoai() == null || !monan.getTenLoai().equals(selectedLoai)) {
                         continue;
                     }
@@ -129,7 +129,7 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
 
             for (MonAn monan : list) {
                 // Apply Loai filter
-                if (selectedLoai != null && !selectedLoai.equals("-- Tất cả --")) {
+                if (selectedLoai != null && !selectedLoai.equals("Loại Món Ăn")) {
                     if (monan.getTenLoai() == null || !monan.getTenLoai().equals(selectedLoai)) {
                         continue;
                     }

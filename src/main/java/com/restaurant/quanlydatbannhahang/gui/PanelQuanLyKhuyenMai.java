@@ -104,7 +104,7 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
 
                         for (KhuyenMai km : list) {
                                 // Apply TrangThai filter
-                                if (selectedTrangThai != null && !selectedTrangThai.equals("-- Tất cả --")) {
+                                if (selectedTrangThai != null && !selectedTrangThai.equals("Trạng thái")) {
                                         if (km.getTrangThai() == null || !km.getTrangThai().getDisplayName()
                                                         .equals(selectedTrangThai)) {
                                                 continue;
@@ -140,7 +140,7 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
 
                         for (KhuyenMai km : list) {
                                 // Apply TrangThai filter
-                                if (selectedTrangThai != null && !selectedTrangThai.equals("-- Tất cả --")) {
+                                if (selectedTrangThai != null && !selectedTrangThai.equals("Trạng thái")) {
                                         if (km.getTrangThai() == null || !km.getTrangThai().getDisplayName()
                                                         .equals(selectedTrangThai)) {
                                                 continue;

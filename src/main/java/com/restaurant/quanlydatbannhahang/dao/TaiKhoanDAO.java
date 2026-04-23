@@ -133,22 +133,22 @@ public class TaiKhoanDAO {
         return false;
 
     }
-    
-    public List<TaiKhoan> getAllTaiKhoan () {
-    	 Connection connection = DatabaseConnection.getConnection();
-         String query = "select * from TaiKhoan";
-         List<TaiKhoan> dsTaiKhoan = new ArrayList<TaiKhoan>();
-         try (PreparedStatement pstm = connection.prepareStatement(query)) {
-           
-             try (ResultSet rs = pstm.executeQuery()) {
-                 if (rs.next()) {
-                      dsTaiKhoan.add(buildTaiKhoanFromResultSet(rs));
-                 }
-             }
-         } catch (SQLException e) {
-             System.out.println("❌ Lỗi khi tìm tài khoản: " + e.getMessage());
-             e.printStackTrace();
-         }
-         return dsTaiKhoan;
-	}
+
+    public List<TaiKhoan> getAllTaiKhoan() {
+        Connection connection = DatabaseConnection.getConnection();
+        String query = SELECT_TAIKHOAN_WITH_NHANVIEN;
+        List<TaiKhoan> dsTaiKhoan = new ArrayList<TaiKhoan>();
+        try (PreparedStatement pstm = connection.prepareStatement(query)) {
+
+            try (ResultSet rs = pstm.executeQuery()) {
+                while (rs.next()) {
+                    dsTaiKhoan.add(buildTaiKhoanFromResultSet(rs));
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("❌ Lỗi khi tìm tài khoản: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return dsTaiKhoan;
+    }
 }

@@ -8,15 +8,17 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import com.restaurant.quanlydatbannhahang.service.ThueService;
+import com.restaurant.quanlydatbannhahang.util.ComboBoxEnumLoader;
 import com.restaurant.quanlydatbannhahang.entity.Thue;
 import java.util.List;
 
 public class PanelQuanLyThue extends javax.swing.JPanel implements MouseListener {
 
     private ActionListener cbFilterTrangThaiListener;
-
+    private ComboBoxEnumLoader cbEnumLoader;
     public PanelQuanLyThue() {
         initComponents();
+        cbEnumLoader = new ComboBoxEnumLoader();
         customUI();
         loadDataToComboBoxes();
         loadDataToTable();
@@ -113,15 +115,9 @@ public class PanelQuanLyThue extends javax.swing.JPanel implements MouseListener
             }
 
             // Load TrangThai
-            cbFilterTrangThai.removeAllItems();
-            cbFilterTrangThai.addItem("-- Tất cả --");
-            cbTrangThai.removeAllItems();
+           cbEnumLoader.loadTrangThaiThueToComboBox(cbFilterTrangThai);
+           cbEnumLoader.loadTrangThaiThueToComboBox(cbTrangThai);
 
-            // Assuming Thue has a TrangThaiThue enum, adjust as needed
-            cbFilterTrangThai.addItem("Hoạt động");
-            cbFilterTrangThai.addItem("Ngừng hoạt động");
-            cbTrangThai.addItem("Hoạt động");
-            cbTrangThai.addItem("Ngừng hoạt động");
 
             // Re-add listeners
             for (ActionListener listener : trangThaiListeners) {
@@ -148,7 +144,7 @@ public class PanelQuanLyThue extends javax.swing.JPanel implements MouseListener
 
             for (Thue thue : list) {
                 // Apply TrangThai filter
-                if (selectedTrangThai != null && !selectedTrangThai.equals("-- Tất cả --")) {
+                if (selectedTrangThai != null && !selectedTrangThai.equals("Trạng thái")) {
                     if (thue.getTrangThai() == null
                             || !thue.getTrangThai().getDisplayName().equals(selectedTrangThai)) {
                         continue;
@@ -181,7 +177,7 @@ public class PanelQuanLyThue extends javax.swing.JPanel implements MouseListener
 
             for (Thue thue : list) {
                 // Apply TrangThai filter
-                if (selectedTrangThai != null && !selectedTrangThai.equals("-- Tất cả --")) {
+                if (selectedTrangThai != null && !selectedTrangThai.equals("Trạng thái")) {
                     if (thue.getTrangThai() == null
                             || !thue.getTrangThai().getDisplayName().equals(selectedTrangThai)) {
                         continue;
@@ -326,7 +322,7 @@ public class PanelQuanLyThue extends javax.swing.JPanel implements MouseListener
         });
 
         cbFilterTrangThai.setModel(
-                new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+                new javax.swing.DefaultComboBoxModel<>(new String[] { }));
         cbFilterTrangThai.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbFilterTrangThaiActionPerformed(evt);
@@ -535,6 +531,8 @@ public class PanelQuanLyThue extends javax.swing.JPanel implements MouseListener
             table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
         }
     }
+    
+    
 
     private void cbFilterTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterTrangThaiActionPerformed
         loadFilteredData();

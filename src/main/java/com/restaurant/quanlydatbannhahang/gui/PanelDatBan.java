@@ -211,14 +211,14 @@ public class PanelDatBan extends javax.swing.JPanel {
             java.util.List<KhuVuc> khuVucList = khuVucService.getAllKhuVuc();
 
             cbFilterKhuVuc.removeAllItems();
-            cbFilterKhuVuc.addItem("-- Tất cả --");
+            cbFilterKhuVuc.addItem("Khu vực");
             for (KhuVuc kv : khuVucList) {
-            	cbFilterKhuVuc.addItem(kv.getMaKhuVuc());
+                cbFilterKhuVuc.addItem(kv.getMaKhuVuc());
             }
 
             // Load cbFilterTrangThai từ enum TrangThaiBan
             cbFilterTrangThai.removeAllItems();
-            cbFilterTrangThai.addItem("-- Tất cả --");
+            cbFilterTrangThai.addItem("Trạng thái");
             for (TrangThaiBan trangThai : TrangThaiBan.values()) {
                 cbFilterTrangThai.addItem(trangThai.getDisplayName());
             }
@@ -292,7 +292,7 @@ public class PanelDatBan extends javax.swing.JPanel {
             Map<String, java.util.List<Ban>> banByKhuVuc = new TreeMap<>();
             for (Ban ban : allBan) {
                 // Áp dụng filter khuVuc
-                if (selectedKhuVuc != null && !selectedKhuVuc.isEmpty() && !selectedKhuVuc.equals("-- Tất cả --")) {
+                if (selectedKhuVuc != null && !selectedKhuVuc.isEmpty() && !selectedKhuVuc.equals("Khu vực")) {
                     if (!ban.getKhuVuc().getMaKhuVuc().equals(selectedKhuVuc)) {
                         continue;
                     }
@@ -300,7 +300,7 @@ public class PanelDatBan extends javax.swing.JPanel {
 
                 // Áp dụng filter trangThai
                 if (selectedTrangThai != null && !selectedTrangThai.isEmpty()
-                        && !selectedTrangThai.equals("-- Tất cả --")) {
+                        && !selectedTrangThai.equals("Trạng thái")) {
                     if (!ban.getTrangThai().getDisplayName().equals(selectedTrangThai)) {
                         continue;
                     }
@@ -657,7 +657,7 @@ public class PanelDatBan extends javax.swing.JPanel {
         });
 
         cbFilterTrangThai.setModel(
-                new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất cả", "Trống", "Đang dùng", "Đã đặt" }));
+                new javax.swing.DefaultComboBoxModel<>(new String[] {}));
         cbFilterTrangThai.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbFilterTrangThaiActionPerformed(evt);
@@ -837,7 +837,7 @@ public class PanelDatBan extends javax.swing.JPanel {
 
     private void cbFilterTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterTrangThaiActionPerformed
         String selected = (String) cbFilterTrangThai.getSelectedItem();
-        if (selected != null && selected.equals("-- Tất cả --")) {
+        if (selected != null && selected.equals("Trạng thái")) {
             selectedTrangThai = null;
         } else {
             selectedTrangThai = selected;
@@ -889,7 +889,7 @@ public class PanelDatBan extends javax.swing.JPanel {
 
     private void cbFilterKhuVucActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterKhuVucActionPerformed
         String selected = (String) cbFilterKhuVuc.getSelectedItem();
-        if (selected != null && selected.equals("-- Tất cả --")) {
+        if (selected != null && selected.equals("Khu vực")) {
             selectedKhuVuc = null;
         } else {
             selectedKhuVuc = selected;

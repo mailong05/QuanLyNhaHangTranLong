@@ -51,7 +51,7 @@ public class PanelDanhSachBan extends javax.swing.JPanel {
 
             // Load KhuVuc tu database
             cbFilterKhuVuc.removeAllItems();
-            cbFilterKhuVuc.addItem("-- Tất cả --");
+            cbFilterKhuVuc.addItem("Khu vực");
             List<KhuVuc> dsKhuVuc = khuVucService.getAllKhuVuc();
             for (KhuVuc kv : dsKhuVuc) {
                 cbFilterKhuVuc.addItem(kv.getMaKhuVuc());
@@ -59,7 +59,7 @@ public class PanelDanhSachBan extends javax.swing.JPanel {
 
             // Load TrangThaiBan tu enum
             cbFilterTrangThai.removeAllItems();
-            cbFilterTrangThai.addItem("-- Tất cả --");
+            cbFilterTrangThai.addItem("Trạng thái");
             for (com.restaurant.quanlydatbannhahang.entity.TrangThaiBan trangThai : com.restaurant.quanlydatbannhahang.entity.TrangThaiBan
                     .values()) {
                 cbFilterTrangThai.addItem(trangThai.getDisplayName());
@@ -349,14 +349,14 @@ public class PanelDanhSachBan extends javax.swing.JPanel {
 
         for (Ban ban : allBans) {
             // Check KhuVuc filter
-            if (selectedKhuVuc != null && !selectedKhuVuc.equals("-- Tất cả --")) {
+            if (selectedKhuVuc != null && !selectedKhuVuc.equals("Khu vực")) {
                 if (ban.getKhuVuc() == null || !ban.getKhuVuc().getMaKhuVuc().equals(selectedKhuVuc)) {
                     continue;
                 }
             }
 
             // Check TrangThai filter
-            if (selectedTrangThai != null && !selectedTrangThai.equals("-- Tất cả --")) {
+            if (selectedTrangThai != null && !selectedTrangThai.equals("Trạng thái")) {
                 if (ban.getTrangThai() == null || !ban.getTrangThai().getDisplayName().equals(selectedTrangThai)) {
                     continue;
                 }
@@ -383,14 +383,14 @@ public class PanelDanhSachBan extends javax.swing.JPanel {
 
         for (Ban ban : allBans) {
             // Check KhuVuc filter
-            if (selectedKhuVuc != null && !selectedKhuVuc.equals("-- Tất cả --")) {
+            if (selectedKhuVuc != null && !selectedKhuVuc.equals("Khu vực")) {
                 if (ban.getKhuVuc() == null || !ban.getKhuVuc().getMaKhuVuc().equals(selectedKhuVuc)) {
                     continue;
                 }
             }
 
             // Check TrangThai filter
-            if (selectedTrangThai != null && !selectedTrangThai.equals("-- Tất cả --")) {
+            if (selectedTrangThai != null && !selectedTrangThai.equals("Trạng thái")) {
                 if (ban.getTrangThai() == null || !ban.getTrangThai().getDisplayName().equals(selectedTrangThai)) {
                     continue;
                 }

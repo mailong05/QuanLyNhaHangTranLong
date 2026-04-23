@@ -9,6 +9,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import com.restaurant.quanlydatbannhahang.service.KhachHangService;
+import com.restaurant.quanlydatbannhahang.util.ComboBoxEnumLoader;
 import com.restaurant.quanlydatbannhahang.util.IDGeneratorHelper;
 import com.restaurant.quanlydatbannhahang.util.IDQueryHelper;
 import com.restaurant.quanlydatbannhahang.entity.KhachHang;
@@ -17,16 +18,18 @@ import java.util.List;
 public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseListener {
 
     private ActionListener cbFilterLoaiThanhVienListener;
-
+    private ComboBoxEnumLoader cbEnumLoader;
     private IDGeneratorHelper idGeneratorHelper;
     private IDQueryHelper idQueryHelper;
+
     /**
      * Creates new form PanelKhachHang
      */
-    public PanelQuanLyKhachHang() {
-    	idGeneratorHelper = new IDGeneratorHelper();
-    	idQueryHelper = new IDQueryHelper();
+    public PanelQuanLyKhachHang() {     
         initComponents();
+        idGeneratorHelper = new IDGeneratorHelper();
+        idQueryHelper = new IDQueryHelper();
+        cbEnumLoader = new ComboBoxEnumLoader();
         customUI();
         loadDataToComboBoxes();
         loadDataToTable();
@@ -48,63 +51,18 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseLis
         // 4. Tùy chỉnh ScrollPane và Viền bảng
         scrTableKhachHang.setBorder(BorderFactory.createLineBorder(new Color(200, 190, 170), 1));
         scrTableKhachHang.setViewportBorder(null);
-        scrTableKhachHang.setOpaque(false);
-        scrTableKhachHang.getViewport().setOpaque(false);
 
-        // Khử ô vuông trắng góc ScrollBar
-        JPanel corner = new JPanel();
-        corner.setBackground(new Color(255, 251, 235));
-        scrTableKhachHang.setCorner(JScrollPane.UPPER_RIGHT_CORNER, corner);
-
-        // 4. Tùy chỉnh Table (Bảng Khách Hàng)
-        tableKhachHang.setShowGrid(false);
-        tableKhachHang.setIntercellSpacing(new Dimension(0, 0));
-        tableKhachHang.setRowHeight(45);
-        tableKhachHang.setSelectionBackground(new Color(245, 240, 220));
-
-        // Header Table
-        tableKhachHang.getTableHeader().setPreferredSize(new Dimension(tableKhachHang.getTableHeader().getWidth(), 45));
-        tableKhachHang.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-                    boolean hasFocus, int row, int column) {
-                JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row,
-                        column);
-                label.setBackground(new Color(255, 251, 235));
-                label.setForeground(new Color(148, 134, 111));
-                label.setFont(new Font("Segoe UI", Font.BOLD, 14));
-                label.setHorizontalAlignment(JLabel.CENTER);
-                label.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(230, 230, 230)));
-                return label;
-            }
-        });
+        // 5. Tùy chỉnh Table (Bảng Khách Hàng)
+        tableKhachHang.setRowHeight(35);
 
         // Căn giữa nội dung các cột
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        for (int i = 0; i < tableKhachHang.getColumnCount(); i++) {
-            tableKhachHang.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
-        }
+        centerTableColumns(tableKhachHang);
 
-        // 5. Bo góc cho Panel chứa thông tin nhập liệu
+        // 6. Bo góc cho Panel chứa thông tin nhập liệu
         applyCardStyle(pnlThongTinKhachHang, 20);
 
-        // 6. Gắn sự kiện quay về Trang Chủ
+        // 7. Gắn sự kiện quay về Trang Chủ
         MainForm.attachGoHomeListener(btnTrangChu, this);
-
-        // 7. ========== DESELECT WHEN CLICK OUTSIDE TABLE ==========
-        this.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                if (evt.getSource() != tableKhachHang && !isMouseOverTable(evt)) {
-                    tableKhachHang.clearSelection();
-                    clearFields();
-                }
-            }
-        });
-
-        // Register mouse listener để populate fields khi click vào row
-        tableKhachHang.addMouseListener(this);
     }
 
     private void loadDataToComboBoxes() {
@@ -119,15 +77,7 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseLis
 
             // Load LoaiThanhVien
             cbFilterLoaiThanhVien.removeAllItems();
-            cbFilterLoaiThanhVien.addItem("-- Tất cả --");
-            cbLoaiThanhVien.removeAllItems();
-            cbLoaiThanhVien.addItem("Thường");
-            cbLoaiThanhVien.addItem("Bạc");
-            cbLoaiThanhVien.addItem("Vàng");
-
-            cbFilterLoaiThanhVien.addItem("Thường");
-            cbFilterLoaiThanhVien.addItem("Bạc");
-            cbFilterLoaiThanhVien.addItem("Vàng");
+            cbEnumLoader.loadLoaiThanhVienToComboBox(cbFilterLoaiThanhVien);
 
             // Re-add listeners
             for (ActionListener listener : loaiThanhVienListeners) {
@@ -154,7 +104,7 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseLis
 
             for (KhachHang kh : list) {
                 // Apply LoaiThanhVien filter
-                if (selectedLoaiThanhVien != null && !selectedLoaiThanhVien.equals("-- Tất cả --")) {
+                if (selectedLoaiThanhVien != null && !selectedLoaiThanhVien.equals("Loại Thành Viên")) {
                     if (kh.getLoaiThanhVien() == null
                             || !kh.getLoaiThanhVien().getDisplayName().equals(selectedLoaiThanhVien)) {
                         continue;
@@ -188,7 +138,7 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseLis
 
             for (KhachHang kh : list) {
                 // Apply LoaiThanhVien filter
-                if (selectedLoaiThanhVien != null && !selectedLoaiThanhVien.equals("-- Tất cả --")) {
+                if (selectedLoaiThanhVien != null && !selectedLoaiThanhVien.equals("Loại Thành Viên")) {
                     if (kh.getLoaiThanhVien() == null
                             || !kh.getLoaiThanhVien().getDisplayName().equals(selectedLoaiThanhVien)) {
                         continue;
@@ -378,7 +328,8 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseLis
         txtMaKhachHang.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtMaKhachHang.setPreferredSize(new java.awt.Dimension(64, 35));
         String lastID = idQueryHelper.getLastID("KhachHang", "maKH");
-        String maKHNew = (lastID == null || lastID.isEmpty())? idGeneratorHelper.toString():idGeneratorHelper.generateNextIDFromFullID(lastID);
+        String maKHNew = (lastID == null || lastID.isEmpty()) ? idGeneratorHelper.toString()
+                : idGeneratorHelper.generateNextIDFromFullID(lastID);
         txtMaKhachHang.setText(maKHNew);
         txtMaKhachHang.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -427,7 +378,7 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseLis
         cbLoaiThanhVien.setPreferredSize(new java.awt.Dimension(72, 35));
 
         cbFilterLoaiThanhVien.setModel(
-                new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+                new javax.swing.DefaultComboBoxModel<>(new String[] { }));
         cbFilterLoaiThanhVien.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbFilterLoaiThanhVienActionPerformed(evt);

@@ -142,9 +142,10 @@ public class NhanVienDAO {
 	public java.util.List<NhanVien> getNhanVienDangLamViec() {
 		Connection connection = DatabaseConnection.getConnection();
 		java.util.List<NhanVien> list = new java.util.ArrayList<>();
-		String sql = "Select * from NhanVien where trangThai = 1";
+		String sql = "Select * from NhanVien where trangThai = ?";
 		try {
 			PreparedStatement pstm = connection.prepareStatement(sql);
+			pstm.setString(1, "DANG_LAM_VIEC");
 			ResultSet rs = pstm.executeQuery();
 			while (rs.next()) {
 				NhanVien nv = buildNhanVienFromResultSet(rs);

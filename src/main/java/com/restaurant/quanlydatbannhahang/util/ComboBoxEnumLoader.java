@@ -9,6 +9,8 @@ import com.restaurant.quanlydatbannhahang.entity.TrangThaiHoaDon;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiPhieuDat;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiNhanVien;
 import com.restaurant.quanlydatbannhahang.entity.LoaiMonAn;
+import com.restaurant.quanlydatbannhahang.entity.LoaiThanhVien;
+import com.restaurant.quanlydatbannhahang.entity.QuyenHan;
 import com.restaurant.quanlydatbannhahang.entity.ChucVu;
 import java.lang.reflect.Method;
 
@@ -276,6 +278,32 @@ public class ComboBoxEnumLoader {
         for (ChucVu chucVu : ChucVu.values()) {
             if (chucVu.getDisplayName().equals(displayText)) {
                 return chucVu;
+            }
+        }
+        return null;
+    }
+    
+    public static void loadLoaiThanhVienToComboBox(JComboBox<String> comboBox) {
+        loadEnumToComboBox(comboBox, "Loại thành viên", LoaiThanhVien.class);
+    }
+    
+    public static LoaiThanhVien getLoaiThanhVienFromDisplay(String displayText) {
+        for (LoaiThanhVien ltv : LoaiThanhVien.values()) {
+            if (ltv.getDisplayName().equals(displayText)) {
+                return ltv;
+            }
+        }
+        return null;
+    }
+    
+    public static void loadQuyenHanToComboBox(JComboBox<String> comboBox) {
+        loadEnumToComboBox(comboBox, "Quyền hạn", QuyenHan.class);
+    }
+    
+    public static QuyenHan getQuyenHanFromDisplay(String displayText) {
+        for (QuyenHan qh : QuyenHan.values()) {
+            if (qh.getDisplayName().equals(displayText)) {
+                return qh;
             }
         }
         return null;

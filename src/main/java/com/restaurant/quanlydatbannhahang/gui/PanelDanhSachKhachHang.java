@@ -1,25 +1,30 @@
 package com.restaurant.quanlydatbannhahang.gui;
 
 import java.awt.*;
+import java.awt.event.ActionListener;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import com.restaurant.quanlydatbannhahang.service.KhachHangService;
+import com.restaurant.quanlydatbannhahang.util.ComboBoxEnumLoader;
 import com.restaurant.quanlydatbannhahang.entity.KhachHang;
 import java.util.List;
 
 public class PanelDanhSachKhachHang extends javax.swing.JPanel {
     private KhachHangService khachHangService;
     private List<KhachHang> allKhachHang;
-
+    private ComboBoxEnumLoader cbEnumLoader;
     /**
      * Creates new form PanelKhachHang
      */
     public PanelDanhSachKhachHang() {
         initComponents();
         khachHangService = new KhachHangService();
+        cbEnumLoader = new ComboBoxEnumLoader();
         customUI();
         loadDataToTable();
+        loadDataToComboBoxes();
     }
 
     private void customUI() {
@@ -38,49 +43,49 @@ public class PanelDanhSachKhachHang extends javax.swing.JPanel {
         // 3. Tùy chỉnh ScrollPane và Viền bảng
         scrTableKhachHang.setBorder(BorderFactory.createLineBorder(new Color(200, 190, 170), 1));
         scrTableKhachHang.setViewportBorder(null);
-        scrTableKhachHang.setOpaque(false);
-        scrTableKhachHang.getViewport().setOpaque(false);
-
-        // Khử ô vuông trắng góc ScrollBar
-        JPanel corner = new JPanel();
-        corner.setBackground(new Color(255, 251, 235));
-        scrTableKhachHang.setCorner(JScrollPane.UPPER_RIGHT_CORNER, corner);
 
         // 4. Tùy chỉnh Table (Bảng Khách Hàng)
-        tableKhachHang.setShowGrid(false);
-        tableKhachHang.setIntercellSpacing(new Dimension(0, 0));
-        tableKhachHang.setRowHeight(45);
-        tableKhachHang.setSelectionBackground(new Color(245, 240, 220));
-
-        // Header Table
-        tableKhachHang.getTableHeader().setPreferredSize(new Dimension(tableKhachHang.getTableHeader().getWidth(), 45));
-        tableKhachHang.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-                    boolean hasFocus, int row, int column) {
-                JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row,
-                        column);
-                label.setBackground(new Color(255, 251, 235));
-                label.setForeground(new Color(148, 134, 111));
-                label.setFont(new Font("Segoe UI", Font.BOLD, 14));
-                label.setHorizontalAlignment(JLabel.CENTER);
-                label.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(230, 230, 230)));
-                return label;
-            }
-        });
+        tableKhachHang.setRowHeight(35);
 
         // Căn giữa nội dung các cột
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        for (int i = 0; i < tableKhachHang.getColumnCount(); i++) {
-            tableKhachHang.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
-        }
+        centerTableColumns(tableKhachHang);
 
         // 5. Bo góc cho Panel chứa thông tin nhập liệu
         applyCardStyle(pnlThongTinKhachHang, 20);
 
         // 6. Gắn sự kiện quay về Trang Chủ
         MainForm.attachGoHomeListener(btnTrangChu, this);
+    }
+
+    private void centerTableColumns(JTable table) {
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        for (int i = 0; i < table.getColumnCount(); i++) {
+            table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+    }
+
+    private void resetPlaceholder(JTextField textField, String placeholder) {
+        Color placeholderColor = new Color(153, 153, 153);
+        textField.setText(placeholder);
+        textField.setForeground(placeholderColor);
+    }
+
+    private void loadDataToTable() {
+        allKhachHang = khachHangService.getAllKhachHang();
+        DefaultTableModel model = (DefaultTableModel) tableKhachHang.getModel();
+        model.setRowCount(0);
+
+        for (KhachHang kh : allKhachHang) {
+            model.addRow(new Object[] {
+                    kh.getMaKH(),
+                    kh.getHoTen(),
+                    kh.getSdt(),
+                    kh.getDiemTichLuy(),
+                    kh.getLoaiThanhVien() != null ? kh.getLoaiThanhVien().getDisplayName() : ""
+            });
+        }
+        centerTableColumns(tableKhachHang);
     }
 
     private void applyCardStyle(JPanel panel, int radius) {
@@ -95,41 +100,6 @@ public class PanelDanhSachKhachHang extends javax.swing.JPanel {
                 g2.dispose();
             }
         });
-    }
-
-    private void resetPlaceholder(JTextField textField, String placeholder) {
-        Color placeholderColor = new Color(153, 153, 153);
-        textField.setText(placeholder);
-        textField.setForeground(placeholderColor);
-    }
-
-    private void loadDataToTable() {
-        try {
-            allKhachHang = khachHangService.getAllKhachHang();
-            DefaultTableModel model = (DefaultTableModel) tableKhachHang.getModel();
-            model.setRowCount(0);
-
-            for (KhachHang kh : allKhachHang) {
-                model.addRow(new Object[] {
-                        kh.getMaKH(),
-                        kh.getHoTen(),
-                        kh.getSdt(),
-                        kh.getDiemTichLuy(),
-                        kh.getLoaiThanhVien() != null ? kh.getLoaiThanhVien().getDisplayName() : ""
-                });
-            }
-            centerTableColumns(tableKhachHang);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void centerTableColumns(JTable table) {
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        for (int i = 0; i < table.getColumnCount(); i++) {
-            table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
-        }
     }
 
     @SuppressWarnings("unchecked")
@@ -167,7 +137,7 @@ public class PanelDanhSachKhachHang extends javax.swing.JPanel {
         btnTimKiem.setText("Tìm kiếm");
 
         cbLoaiThanhVien.setModel(new javax.swing.DefaultComboBoxModel<>(
-                new String[] { "Loại thành viên", "Vip", "Vàng", "Bạc ", "Đồng" }));
+                new String[] { }));
         cbLoaiThanhVien.setPreferredSize(new java.awt.Dimension(72, 35));
         cbLoaiThanhVien.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -322,6 +292,30 @@ public class PanelDanhSachKhachHang extends javax.swing.JPanel {
         }
     }
 
+    
+    private void loadDataToComboBoxes() {
+        try {
+            // Save listeners
+            ActionListener[] loaiThanhVienListeners = cbLoaiThanhVien.getActionListeners();
+
+            // Remove listeners
+            for (ActionListener listener : loaiThanhVienListeners) {
+                cbLoaiThanhVien.removeActionListener(listener);
+            }
+
+            // Load LoaiThanhVien
+            cbLoaiThanhVien.removeAllItems();
+            cbEnumLoader.loadLoaiThanhVienToComboBox(cbLoaiThanhVien);
+            // Re-add listeners
+            for (ActionListener listener : loaiThanhVienListeners) {
+                cbLoaiThanhVien.addActionListener(listener);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Lỗi load dữ liệu filter: " + e.getMessage());
+        }
+    }
+    
     public void refreshData() {
         resetPlaceholder(txtTimKiem, "Nhập số điện thoại hoặc tên");
         cbLoaiThanhVien.setSelectedIndex(0);

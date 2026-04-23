@@ -10,6 +10,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import com.restaurant.quanlydatbannhahang.service.NhanVienService;
+import com.restaurant.quanlydatbannhahang.util.ComboBoxEnumLoader;
 import com.restaurant.quanlydatbannhahang.entity.NhanVien;
 import java.util.List;
 import java.time.LocalDate;
@@ -20,8 +21,10 @@ import java.text.DecimalFormat;
 public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseListener {
 
         private ActionListener cbFilterChucVuListener;
-
+        private ComboBoxEnumLoader cbEnumLoader;
+        
         public PanelQuanLyNhanVien() {
+        		 cbEnumLoader = new ComboBoxEnumLoader();
                 initComponents();
                 customUI();
                 loadDataToComboBoxes();
@@ -64,15 +67,12 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
 
                         // Load ChucVu
                         cbFilterChucVu.removeAllItems();
-                        cbFilterChucVu.addItem("-- Tất cả --");
+                        
+                        cbEnumLoader.loadChucVuToComboBox(cbFilterChucVu);
+                        cbEnumLoader.loadTrangThaiNhanVienToComboBox(cbTrangThai);
+                        
                         cbChucVu.removeAllItems();
-                        cbChucVu.addItem("Quản lý");
-                        cbChucVu.addItem("Nhân viên");
-                        cbChucVu.addItem("Đầu bếp");
-
-                        cbFilterChucVu.addItem("Quản lý");
-                        cbFilterChucVu.addItem("Nhân viên");
-                        cbFilterChucVu.addItem("Đầu bếp");
+                        cbEnumLoader.loadChucVuToComboBox(cbChucVu);
 
                         // Re-add listeners
                         for (ActionListener listener : chucVuListeners) {
@@ -99,7 +99,7 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
 
                         for (NhanVien nv : list) {
                                 // Apply ChucVu filter
-                                if (selectedChucVu != null && !selectedChucVu.equals("-- Tất cả --")) {
+                                if (selectedChucVu != null && !selectedChucVu.equals("Chức vụ")) {
                                         if (nv.getChucVu() == null
                                                         || !nv.getChucVu().getDisplayName().equals(selectedChucVu)) {
                                                 continue;
@@ -136,7 +136,7 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
 
                         for (NhanVien nv : list) {
                                 // Apply ChucVu filter
-                                if (selectedChucVu != null && !selectedChucVu.equals("-- Tất cả --")) {
+                                if (selectedChucVu != null && !selectedChucVu.equals("Chức vụ")) {
                                         if (nv.getChucVu() == null
                                                         || !nv.getChucVu().getDisplayName().equals(selectedChucVu)) {
                                                 continue;
