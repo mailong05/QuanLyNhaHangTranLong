@@ -73,7 +73,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="cbFilterLoaiMonAn" min="-2" pref="139" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
-                      <Component id="cbFilterDonViTinh" min="-2" pref="145" max="-2" attributes="0"/>
+                      <Component id="cbFilterTrangThai" min="-2" pref="145" max="-2" attributes="0"/>
                       <EmptySpace pref="308" max="32767" attributes="0"/>
                       <Component id="txtTimKiem" min="-2" pref="294" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -96,7 +96,7 @@
                               <EmptySpace min="1" pref="1" max="-2" attributes="0"/>
                               <Component id="cbFilterLoaiMonAn" max="32767" attributes="0"/>
                           </Group>
-                          <Component id="cbFilterDonViTinh" alignment="0" max="32767" attributes="0"/>
+                          <Component id="cbFilterTrangThai" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -110,6 +110,9 @@
                   <Font name="Segoe UI" size="14" style="0"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtTimKiemActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="btnTimKiem">
               <Properties>
@@ -140,7 +143,7 @@
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
               </AuxValues>
             </Component>
-            <Component class="javax.swing.JComboBox" name="cbFilterDonViTinh">
+            <Component class="javax.swing.JComboBox" name="cbFilterTrangThai">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                   <StringArray count="4">
@@ -151,6 +154,9 @@
                   </StringArray>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbFilterTrangThaiActionPerformed"/>
+              </Events>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
               </AuxValues>

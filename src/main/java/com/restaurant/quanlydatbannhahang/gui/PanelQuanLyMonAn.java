@@ -10,8 +10,15 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import com.restaurant.quanlydatbannhahang.service.MonAnService;
 import com.restaurant.quanlydatbannhahang.entity.MonAn;
+import com.restaurant.quanlydatbannhahang.util.ComboBoxEntityLoader;
+import com.restaurant.quanlydatbannhahang.util.ComboBoxEnumLoader;
 import java.util.List;
+import java.util.ArrayList;
 import java.text.DecimalFormat;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.io.File;
+import javax.swing.ImageIcon;
+import com.restaurant.quanlydatbannhahang.util.ImageUtil;
 
 /**
  *
@@ -19,13 +26,22 @@ import java.text.DecimalFormat;
  */
 public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListener {
 
+    private static final int TABLE_IMAGE_SIZE = 72;
+    private static final int TABLE_IMAGE_ROW_HEIGHT = 84;
+    private static final int TABLE_IMAGE_VERTICAL_PADDING = 4;
+
     private ActionListener cbFilterLoaiMonAnListener;
+    private MonAnService monAnService;
+    private String selectedImagePath;
+    private List<MonAn> allMonAn;
+    private boolean imagePreloadStarted;
 
     /**
      * Creates new form PanelQuanLyMonAn
      */
     public PanelQuanLyMonAn() {
         initComponents();
+        monAnService = new MonAnService();
         customUI();
         loadDataToComboBoxes();
         loadDataToTable();
@@ -52,26 +68,50 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
 
     private void loadDataToComboBoxes() {
         try {
-            // Save listeners
-            ActionListener[] loaiMonListeners = cbFilterLoaiMonAn.getActionListeners();
+            // Load data from service first
+            if (allMonAn == null || allMonAn.isEmpty()) {
+                allMonAn = monAnService.getAllMonAn();
+            }
+
+            // Load LoaiMonAn enum
+            ActionListener[] loaiMonAnListener = cbFilterLoaiMonAn.getActionListeners();
+            ActionListener[] donViTinhListener = cbFilterTrangThai.getActionListeners();
 
             // Remove listeners
-            for (ActionListener listener : loaiMonListeners) {
+            for (ActionListener listener : loaiMonAnListener) {
                 cbFilterLoaiMonAn.removeActionListener(listener);
             }
 
-            // Load Loai Mon
-            cbFilterLoaiMonAn.removeAllItems();
-            cbFilterLoaiMonAn.addItem("Loại Món Ăn");
-            // Load loai mon from service if available
-            cbFilterLoaiMonAn.addItem("Khai vị");
-            cbFilterLoaiMonAn.addItem("Món chính");
-            cbFilterLoaiMonAn.addItem("Tráng miệng");
-            cbFilterLoaiMonAn.addItem("Đồ uống");
+            for (ActionListener listener : donViTinhListener) {
+                cbFilterTrangThai.removeActionListener(listener);
+            }
 
-            // Re-add listeners
-            for (ActionListener listener : loaiMonListeners) {
+            cbFilterTrangThai.removeAllItems();
+            cbFilterTrangThai.addItem("Trạng thái");
+            ComboBoxEnumLoader.loadTrangThaiMonAnToComboBox(cbFilterTrangThai);
+
+            cbTrangThai.removeAllItems();
+            cbTrangThai.addItem("Còn");
+            ComboBoxEnumLoader.loadTrangThaiMonAnToComboBox(cbTrangThai);
+
+            cbDonViTinh.removeAllItems();
+            cbDonViTinh.addItem("Dĩa");
+            ComboBoxEntityLoader.loadDonViTinhToComboBox(cbDonViTinh, allMonAn);
+
+            cbFilterLoaiMonAn.removeAllItems();
+            cbFilterLoaiMonAn.addItem("Loại món ăn");
+            ComboBoxEnumLoader.loadLoaiMonAnToComboBox(cbFilterLoaiMonAn);
+
+            cbLoaiMonAn.removeAllItems();
+            cbLoaiMonAn.addItem("Món chính");
+            ComboBoxEnumLoader.loadLoaiMonAnToComboBox(cbLoaiMonAn);
+
+            for (java.awt.event.ActionListener listener : loaiMonAnListener) {
                 cbFilterLoaiMonAn.addActionListener(listener);
+            }
+
+            for (java.awt.event.ActionListener listener : donViTinhListener) {
+                cbFilterTrangThai.addActionListener(listener);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -83,32 +123,60 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
         loadFilteredData();
     }
 
+    private List<MonAn> ensureMonAnDataLoaded() {
+        if (allMonAn == null) {
+            allMonAn = monAnService.getAllMonAn();
+        }
+        return allMonAn;
+    }
+
+    private void preloadImagesInBackground(List<MonAn> monAnList) {
+        if (imagePreloadStarted || monAnList == null || monAnList.isEmpty()) {
+            return;
+        }
+
+        List<String> imagePaths = new ArrayList<>();
+        for (MonAn monAn : monAnList) {
+            if (monAn != null && monAn.getUrlHinhAnh() != null && !monAn.getUrlHinhAnh().trim().isEmpty()) {
+                imagePaths.add(monAn.getUrlHinhAnh());
+            }
+        }
+
+        // Warm-up một phần ảnh đầu tiên để màn hình đầu mở mượt hơn.
+        ImageUtil.preloadFirstN(imagePaths, TABLE_IMAGE_SIZE, 20);
+        ImageUtil.preloadImagesAsync(imagePaths, TABLE_IMAGE_SIZE);
+        imagePreloadStarted = true;
+    }
+
     private void loadFilteredData() {
         try {
-            MonAnService service = new MonAnService();
-            List<MonAn> list = service.getAllMonAn();
+            List<MonAn> monAnList = ensureMonAnDataLoaded();
+            preloadImagesInBackground(monAnList);
+
             String selectedLoai = (String) cbFilterLoaiMonAn.getSelectedItem();
 
             DefaultTableModel model = (DefaultTableModel) tableMonAn.getModel();
             model.setRowCount(0);
 
-            for (MonAn monan : list) {
-                // Apply Loai filter
-                if (selectedLoai != null && !selectedLoai.equals("Loại Món Ăn")) {
-                    if (monan.getTenLoai() == null || !monan.getTenLoai().equals(selectedLoai)) {
-                        continue;
+            if (monAnList != null && !monAnList.isEmpty()) {
+                for (MonAn monan : monAnList) {
+                    // Apply Loai filter
+                    if (selectedLoai != null && !selectedLoai.isEmpty() && !selectedLoai.equals("Loại món ăn")) {
+                        if (monan.getTenLoai() == null || !monan.getTenLoai().getDisplayName().equals(selectedLoai)) {
+                            continue;
+                        }
                     }
-                }
 
-                model.addRow(new Object[] {
-                        null,
-                        monan.getMaMon(),
-                        monan.getTenMon(),
-                        monan.getDonGia(),
-                        monan.getDonViTinh(),
-                        monan.getTenLoai(),
-                        monan.getTrangThai().getDisplayName()
-                });
+                    model.addRow(new Object[] {
+                            ImageUtil.loadImageIcon(monan.getUrlHinhAnh(), TABLE_IMAGE_SIZE),
+                            monan.getMaMon(),
+                            monan.getTenMon(),
+                            monan.getDonGia(),
+                            monan.getDonViTinh(),
+                            monan.getTenLoai() != null ? monan.getTenLoai().getDisplayName() : "",
+                            monan.getTrangThai() != null ? monan.getTrangThai().getDisplayName() : ""
+                    });
+                }
             }
             centerTableColumns(tableMonAn);
         } catch (Exception e) {
@@ -119,18 +187,27 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
 
     private void searchByText() {
         try {
-            MonAnService service = new MonAnService();
-            List<MonAn> list = service.getAllMonAn();
+            List<MonAn> list = ensureMonAnDataLoaded();
             String searchText = txtTimKiem.getText().trim().toLowerCase();
             String selectedLoai = (String) cbFilterLoaiMonAn.getSelectedItem();
+            String selectedTrangThai = (String) cbFilterTrangThai.getSelectedItem();
 
             DefaultTableModel model = (DefaultTableModel) tableMonAn.getModel();
             model.setRowCount(0);
 
             for (MonAn monan : list) {
                 // Apply Loai filter
-                if (selectedLoai != null && !selectedLoai.equals("Loại Món Ăn")) {
-                    if (monan.getTenLoai() == null || !monan.getTenLoai().equals(selectedLoai)) {
+                if (selectedLoai != null && !selectedLoai.isEmpty() && !selectedLoai.equals("Loại món ăn")) {
+                    if (monan.getTenLoai() == null || !monan.getTenLoai().getDisplayName().equals(selectedLoai)) {
+                        continue;
+                    }
+                }
+
+                // Apply TrangThai filter
+                if (selectedTrangThai != null && !selectedTrangThai.isEmpty()
+                        && !selectedTrangThai.equals("Trạng thái")) {
+                    if (monan.getTrangThai() == null
+                            || !monan.getTrangThai().getDisplayName().equals(selectedTrangThai)) {
                         continue;
                     }
                 }
@@ -145,13 +222,13 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
                 }
 
                 model.addRow(new Object[] {
-                        null,
+                        ImageUtil.loadImageIcon(monan.getUrlHinhAnh(), TABLE_IMAGE_SIZE),
                         monan.getMaMon(),
                         monan.getTenMon(),
                         monan.getDonGia(),
                         monan.getDonViTinh(),
-                        monan.getTenLoai(),
-                        monan.getTrangThai().getDisplayName()
+                        monan.getTenLoai() != null ? monan.getTenLoai().getDisplayName() : "",
+                        monan.getTrangThai() != null ? monan.getTrangThai().getDisplayName() : ""
                 });
             }
             centerTableColumns(tableMonAn);
@@ -186,6 +263,8 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
 
     public void refreshData() {
         clearFields();
+        selectedImagePath = null;
+        lblHinhAnh.setIcon(null);
         resetPlaceholder(txtTimKiem, "Nhập tên món ăn");
         cbFilterLoaiMonAn.setSelectedIndex(0);
         loadDataToComboBoxes();
@@ -248,6 +327,8 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
     // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -267,10 +348,11 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
         lblHinhAnh = new javax.swing.JLabel();
         lblDonViTinh = new javax.swing.JLabel();
         cbDonViTinh = new javax.swing.JComboBox<>();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cbLoaiMonAn = new javax.swing.JComboBox<>();
         btnChonFileAnh = new javax.swing.JButton();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        cbTrangThai = new javax.swing.JComboBox<>();
         cbFilterLoaiMonAn = new javax.swing.JComboBox<>();
+        cbFilterTrangThai = new javax.swing.JComboBox<>();
         scrTableMonAn = new javax.swing.JScrollPane();
         tableMonAn = new javax.swing.JTable();
         pnlButton = new javax.swing.JPanel();
@@ -335,6 +417,11 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
         });
 
         txtTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtTimKiem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtTimKiemActionPerformed(evt);
+            }
+        });
 
         btnTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnTimKiem.setText("Tìm kiếm");
@@ -359,14 +446,9 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
             }
         });
 
-        jComboBox1.setModel(
+        cbLoaiMonAn.setModel(
                 new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jComboBox1.setPreferredSize(new java.awt.Dimension(72, 35));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
-            }
-        });
+        cbLoaiMonAn.setPreferredSize(new java.awt.Dimension(72, 35));
 
         btnChonFileAnh.setText("Chọn ảnh");
         btnChonFileAnh.setPreferredSize(new java.awt.Dimension(82, 35));
@@ -376,15 +458,23 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
             }
         });
 
-        jComboBox2.setModel(
+        cbTrangThai.setModel(
                 new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jComboBox2.setPreferredSize(new java.awt.Dimension(72, 35));
+        cbTrangThai.setPreferredSize(new java.awt.Dimension(72, 35));
 
         cbFilterLoaiMonAn.setModel(
                 new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cbFilterLoaiMonAn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbFilterLoaiMonAnActionPerformed(evt);
+            }
+        });
+
+        cbFilterTrangThai.setModel(
+                new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbFilterTrangThai.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbFilterTrangThaiActionPerformed(evt);
             }
         });
 
@@ -417,8 +507,12 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                                 .addComponent(cbDonViTinh, javax.swing.GroupLayout.PREFERRED_SIZE, 101,
                                                         javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addComponent(cbFilterLoaiMonAn, javax.swing.GroupLayout.PREFERRED_SIZE, 141,
-                                                javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(pnlThongTinKhuyenMaiLayout.createSequentialGroup()
+                                                .addComponent(cbFilterLoaiMonAn, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                        141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(28, 28, 28)
+                                                .addComponent(cbFilterTrangThai, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                        134, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(53, 53, 53)
                                 .addGroup(pnlThongTinKhuyenMaiLayout
                                         .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -438,12 +532,12 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
                                                 .addGroup(pnlThongTinKhuyenMaiLayout
                                                         .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING,
                                                                 false)
-                                                        .addComponent(jComboBox2, 0, 110, Short.MAX_VALUE)
+                                                        .addComponent(cbTrangThai, 0, 110, Short.MAX_VALUE)
                                                         .addComponent(btnChonFileAnh,
                                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
                                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
                                                                 javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(jComboBox1, 0,
+                                                        .addComponent(cbLoaiMonAn, 0,
                                                                 javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                                 .addGap(0, 334, Short.MAX_VALUE)))));
         pnlThongTinKhuyenMaiLayout.setVerticalGroup(
@@ -458,7 +552,7 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
                                                         .addComponent(lblLoaiMon,
                                                                 javax.swing.GroupLayout.PREFERRED_SIZE, 23,
                                                                 javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(jComboBox1,
+                                                        .addComponent(cbLoaiMonAn,
                                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
                                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
                                                                 javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -466,7 +560,7 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
                                                 .addGroup(pnlThongTinKhuyenMaiLayout
                                                         .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                                         .addComponent(lblTrangThai)
-                                                        .addComponent(jComboBox2,
+                                                        .addComponent(cbTrangThai,
                                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
                                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
                                                                 javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -509,16 +603,18 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
                                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
                                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
                                                                 javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGap(18, 18, Short.MAX_VALUE)
                                 .addGroup(pnlThongTinKhuyenMaiLayout
-                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                         .addGroup(pnlThongTinKhuyenMaiLayout
                                                 .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35,
-                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(cbFilterLoaiMonAn, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                        35, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35,
+                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35,
                                                         javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addComponent(cbFilterLoaiMonAn, javax.swing.GroupLayout.PREFERRED_SIZE, 35,
+                                        .addComponent(cbFilterTrangThai, javax.swing.GroupLayout.PREFERRED_SIZE, 37,
                                                 javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addContainerGap()));
 
@@ -611,16 +707,57 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
         add(pnlButton, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtTimKiemActionPerformed
+        // TODO add your handling code here:
+    }// GEN-LAST:event_txtTimKiemActionPerformed
+
+    private void cbFilterTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterTrangThaiActionPerformed
+        loadFilteredData();
+    }// GEN-LAST:event_cbFilterTrangThaiActionPerformed
+
     private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaTrangActionPerformed
         // TODO add your handling code here:
         refreshData();
     }// GEN-LAST:event_btnXoaTrangActionPerformed
 
     private void centerTableColumns(JTable table) {
+        // Column 0 là hình ảnh - dùng ImageRenderer
+        ImageRenderer imageRenderer = new ImageRenderer();
+        table.getColumnModel().getColumn(0).setCellRenderer(imageRenderer);
+        table.getColumnModel().getColumn(0).setPreferredWidth(100);
+        table.setRowHeight(TABLE_IMAGE_ROW_HEIGHT);
+
+        // Các column khác căn giữa
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        for (int i = 0; i < table.getColumnCount(); i++) {
+        for (int i = 1; i < table.getColumnCount(); i++) {
             table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+    }
+
+    // Image loading is now handled by ImageUtil class
+    // This method is deprecated but kept for backward compatibility
+    @Deprecated
+    private ImageIcon loadImageIcon(String imagePath) {
+        return ImageUtil.loadImageIcon(imagePath, TABLE_IMAGE_SIZE);
+    }
+
+    // Custom renderer for displaying images in table cells
+    private static class ImageRenderer extends DefaultTableCellRenderer {
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                boolean isSelected, boolean hasFocus, int row, int column) {
+            if (value instanceof ImageIcon) {
+                JLabel label = new JLabel((ImageIcon) value);
+                label.setHorizontalAlignment(JLabel.CENTER);
+                label.setVerticalAlignment(JLabel.CENTER);
+                label.setOpaque(true);
+                label.setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
+                label.setBorder(BorderFactory.createEmptyBorder(TABLE_IMAGE_VERTICAL_PADDING, 0,
+                        TABLE_IMAGE_VERTICAL_PADDING, 0));
+                return label;
+            }
+            return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
         }
     }
 
@@ -661,16 +798,25 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
     }// GEN-LAST:event_scrTableMonAnMouseClicked
 
     private void btnChonFileAnhActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnChonFileAnhActionPerformed
-        // TODO add your handling code here:
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Image Files", "jpg", "jpeg", "png", "gif", "bmp");
+        fileChooser.setFileFilter(filter);
+
+        int result = fileChooser.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            selectedImagePath = selectedFile.getAbsolutePath();
+            ImageIcon icon = new ImageIcon(selectedImagePath);
+            Image img = icon.getImage().getScaledInstance(150, 100, Image.SCALE_SMOOTH);
+            lblHinhAnh.setIcon(new ImageIcon(img));
+            JOptionPane.showMessageDialog(this, "Chọn ảnh thành công: " + selectedFile.getName());
+        }
     }// GEN-LAST:event_btnChonFileAnhActionPerformed
 
     private void cbDonViTinhActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbDonViTinhActionPerformed
         // TODO add your handling code here:
     }// GEN-LAST:event_cbDonViTinhActionPerformed
-
-    private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {
-        searchByText();
-    }
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jComboBox1ActionPerformed
         // TODO add your handling code here:
@@ -686,8 +832,9 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
     private javax.swing.JButton btnXoaTrang;
     private javax.swing.JComboBox<String> cbDonViTinh;
     private javax.swing.JComboBox<String> cbFilterLoaiMonAn;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
+    private javax.swing.JComboBox<String> cbFilterTrangThai;
+    private javax.swing.JComboBox<String> cbLoaiMonAn;
+    private javax.swing.JComboBox<String> cbTrangThai;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lblDonGia;
     private javax.swing.JLabel lblDonViTinh;

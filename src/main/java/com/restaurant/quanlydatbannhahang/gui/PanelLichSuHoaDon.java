@@ -3,14 +3,23 @@ package com.restaurant.quanlydatbannhahang.gui;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 import com.restaurant.quanlydatbannhahang.util.ComboBoxEnumLoader;
+import com.restaurant.quanlydatbannhahang.service.HoaDonService;
+import com.restaurant.quanlydatbannhahang.entity.HoaDon;
 import java.time.LocalDate;
+import java.util.List;
+import java.text.DecimalFormat;
 
 public class PanelLichSuHoaDon extends javax.swing.JPanel {
+    private HoaDonService hoaDonService;
+    private List<HoaDon> allHoaDon;
 
     public PanelLichSuHoaDon() {
         initComponents();
+        hoaDonService = new HoaDonService();
         customUI();
+        loadDataToTable();
     }
 
     private void customUI() {
@@ -204,7 +213,7 @@ public class PanelLichSuHoaDon extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaTrangActionPerformed
-        // TODO add your handling code here:
+        refreshData();
     }// GEN-LAST:event_btnXoaTrangActionPerformed
 
     private void btnTrangChuActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTrangChuActionPerformed
@@ -212,16 +221,110 @@ public class PanelLichSuHoaDon extends javax.swing.JPanel {
     }// GEN-LAST:event_btnTrangChuActionPerformed
 
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTimKiemActionPerformed
-        // TODO add your handling code here:
+        searchByText();
     }// GEN-LAST:event_btnTimKiemActionPerformed
 
     private void cbFilterTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterTrangThaiActionPerformed
-        // TODO add your handling code here:
+        loadFilteredData();
     }// GEN-LAST:event_cbFilterTrangThaiActionPerformed
 
     private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtTimKiemActionPerformed
-        // TODO add your handling code here:
+        searchByText();
     }// GEN-LAST:event_txtTimKiemActionPerformed
+
+    private void loadDataToTable() {
+        loadFilteredData();
+    }
+
+    private void loadFilteredData() {
+        try {
+            allHoaDon = hoaDonService.getAllHoaDon();
+            String selectedTrangThai = (String) cbFilterTrangThai.getSelectedItem();
+
+            DefaultTableModel model = (DefaultTableModel) tableLichSuHoaDon.getModel();
+            model.setRowCount(0);
+
+            for (HoaDon hd : allHoaDon) {
+                // Apply TrangThai filter
+                if (selectedTrangThai != null && !selectedTrangThai.isEmpty()) {
+                    if (hd.getTrangThaiThanhToan() == null
+                            || !hd.getTrangThaiThanhToan().getDisplayName().equals(selectedTrangThai)) {
+                        continue;
+                    }
+                }
+
+                model.addRow(new Object[] {
+                        hd.getMaHD(),
+                        hd.getBan() != null ? hd.getBan().getMaBan() : "",
+                        hd.getKhuyenMai() != null ? hd.getKhuyenMai().getMaKM() : "",
+                        hd.getThue() != null ? hd.getThue().getMaThue() : "",
+                        hd.getNgayTao(),
+                        hd.getGioVao(),
+                        hd.getGioRa(),
+                        hd.getTongTienGoc(),
+                        hd.getTienGiamGia(),
+                        hd.getTongThanhToan(),
+                        hd.getPhuongThucTT() != null ? hd.getPhuongThucTT().getDisplayName() : "",
+                        hd.getTrangThaiThanhToan() != null ? hd.getTrangThaiThanhToan().getDisplayName() : ""
+                });
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Lỗi load dữ liệu: " + e.getMessage());
+        }
+    }
+
+    private void searchByText() {
+        try {
+            String searchText = txtTimKiem.getText().trim().toLowerCase();
+            String selectedTrangThai = (String) cbFilterTrangThai.getSelectedItem();
+
+            DefaultTableModel model = (DefaultTableModel) tableLichSuHoaDon.getModel();
+            model.setRowCount(0);
+
+            for (HoaDon hd : allHoaDon) {
+                // Apply TrangThai filter
+                if (selectedTrangThai != null && !selectedTrangThai.isEmpty()) {
+                    if (hd.getTrangThaiThanhToan() == null
+                            || !hd.getTrangThaiThanhToan().getDisplayName().equals(selectedTrangThai)) {
+                        continue;
+                    }
+                }
+
+                // Apply text filter (search by invoice ID)
+                if (!searchText.isEmpty()) {
+                    String maHD = hd.getMaHD() != null ? hd.getMaHD().toLowerCase() : "";
+                    if (!maHD.contains(searchText)) {
+                        continue;
+                    }
+                }
+
+                model.addRow(new Object[] {
+                        hd.getMaHD(),
+                        hd.getBan() != null ? hd.getBan().getMaBan() : "",
+                        hd.getKhuyenMai() != null ? hd.getKhuyenMai().getMaKM() : "",
+                        hd.getThue() != null ? hd.getThue().getMaThue() : "",
+                        hd.getNgayTao(),
+                        hd.getGioVao(),
+                        hd.getGioRa(),
+                        hd.getTongTienGoc(),
+                        hd.getTienGiamGia(),
+                        hd.getTongThanhToan(),
+                        hd.getPhuongThucTT() != null ? hd.getPhuongThucTT().getDisplayName() : "",
+                        hd.getTrangThaiThanhToan() != null ? hd.getTrangThaiThanhToan().getDisplayName() : ""
+                });
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Lỗi tìm kiếm dữ liệu: " + e.getMessage());
+        }
+    }
+
+    public void refreshData() {
+        txtTimKiem.setText("");
+        cbFilterTrangThai.setSelectedIndex(0);
+        loadDataToTable();
+    }
 
     /**
      * Tao placeholder cho TextField

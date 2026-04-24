@@ -2,6 +2,8 @@ package com.restaurant.quanlydatbannhahang.util;
 
 import javax.swing.*;
 import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.lang.reflect.Method;
 
 /**
@@ -60,6 +62,9 @@ public class ComboBoxEntityLoader {
                 return;
             }
 
+            // Dùng Set để tracking các giá trị đã được thêm (tránh lặp)
+            Set<String> addedValues = new HashSet<>();
+
             for (T entity : entities) {
                 if (entity != null) {
                     // Lấy method từ class
@@ -67,7 +72,13 @@ public class ComboBoxEntityLoader {
                     Object value = getter.invoke(entity);
 
                     if (value != null) {
-                        comboBox.addItem(value.toString());
+                        String valueStr = value.toString();
+
+                        // Chỉ thêm vào comboBox nếu giá trị này chưa được thêm
+                        if (!addedValues.contains(valueStr)) {
+                            comboBox.addItem(valueStr);
+                            addedValues.add(valueStr); // Mark as added
+                        }
                     }
                 }
             }
@@ -117,5 +128,11 @@ public class ComboBoxEntityLoader {
             JComboBox<String> comboBox,
             List<?> bans) {
         loadEntitiesToComboBox(comboBox, "Bàn", bans, "getMaBan");
+    }
+
+    public static void loadDonViTinhToComboBox(
+            JComboBox<String> comboBox,
+            List<?> monAn) {
+        loadEntitiesToComboBox(comboBox, "Đơn vị tính", monAn, "getDonViTinh");
     }
 }

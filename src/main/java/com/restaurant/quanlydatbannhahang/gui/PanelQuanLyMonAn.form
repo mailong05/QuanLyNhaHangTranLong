@@ -21,7 +21,7 @@
     <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
-    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,3,26,0,0,4,-116"/>
+    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,3,40,0,0,4,-116"/>
   </AuxValues>
 
   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout">
@@ -93,7 +93,11 @@
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="cbDonViTinh" min="-2" pref="101" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="cbFilterLoaiMonAn" alignment="0" min="-2" pref="141" max="-2" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="cbFilterLoaiMonAn" min="-2" pref="141" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
+                              <Component id="cbFilterTrangThai" min="-2" pref="134" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                       <EmptySpace min="-2" pref="53" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
@@ -111,9 +115,9 @@
                           </Group>
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="jComboBox2" alignment="0" pref="110" max="32767" attributes="0"/>
+                                  <Component id="cbTrangThai" alignment="0" pref="110" max="32767" attributes="0"/>
                                   <Component id="btnChonFileAnh" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jComboBox1" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="cbLoaiMonAn" alignment="0" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace min="0" pref="334" max="32767" attributes="0"/>
                           </Group>
@@ -129,12 +133,12 @@
                               <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="lblLoaiMon" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
-                                  <Component id="jComboBox1" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="cbLoaiMonAn" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="lblTrangThai" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jComboBox2" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="cbTrangThai" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
@@ -164,13 +168,14 @@
                               </Group>
                           </Group>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
+                      <EmptySpace type="separate" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="btnTimKiem" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
+                              <Component id="cbFilterLoaiMonAn" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
                               <Component id="txtTimKiem" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
+                              <Component id="btnTimKiem" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="cbFilterLoaiMonAn" min="-2" pref="35" max="-2" attributes="0"/>
+                          <Component id="cbFilterTrangThai" alignment="1" min="-2" pref="37" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -180,10 +185,10 @@
           <SubComponents>
             <Component class="javax.swing.JLabel" name="lblMaMon">
               <Properties>
-                <Property name="text" type="java.lang.String" value="M&#xe3; m&#xf3;n:"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="14" style="0"/>
                 </Property>
+                <Property name="text" type="java.lang.String" value="M&#xe3; m&#xf3;n:"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="txtMaMon">
@@ -202,10 +207,10 @@
             </Component>
             <Component class="javax.swing.JLabel" name="lblTenMon">
               <Properties>
-                <Property name="text" type="java.lang.String" value="T&#xea;n m&#xf3;n:"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="14" style="0"/>
                 </Property>
+                <Property name="text" type="java.lang.String" value="T&#xea;n m&#xf3;n:"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="txtTenMon">
@@ -223,26 +228,26 @@
             </Component>
             <Component class="javax.swing.JLabel" name="lblLoaiMon">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Lo&#x1ea1;i m&#xf3;n:"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="14" style="0"/>
                 </Property>
+                <Property name="text" type="java.lang.String" value="Lo&#x1ea1;i m&#xf3;n:"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="lblTrangThai">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Tr&#x1ea1;ng th&#xe1;i:"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="14" style="0"/>
                 </Property>
+                <Property name="text" type="java.lang.String" value="Tr&#x1ea1;ng th&#xe1;i:"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="lblDonGia">
               <Properties>
-                <Property name="text" type="java.lang.String" value="&#x110;&#x1a1;n gi&#xe1;:"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="14" style="0"/>
                 </Property>
+                <Property name="text" type="java.lang.String" value="&#x110;&#x1a1;n gi&#xe1;:"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="txtDonGia">
@@ -264,13 +269,16 @@
                   <Font name="Segoe UI" size="14" style="0"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtTimKiemActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="btnTimKiem">
               <Properties>
-                <Property name="text" type="java.lang.String" value="T&#xec;m ki&#x1ebf;m"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="14" style="0"/>
                 </Property>
+                <Property name="text" type="java.lang.String" value="T&#xec;m ki&#x1ebf;m"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnTimKiemActionPerformed"/>
@@ -278,18 +286,18 @@
             </Component>
             <Component class="javax.swing.JLabel" name="lblHinhAnh">
               <Properties>
-                <Property name="text" type="java.lang.String" value="H&#xec;nh &#x1ea3;nh:"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="14" style="0"/>
                 </Property>
+                <Property name="text" type="java.lang.String" value="H&#xec;nh &#x1ea3;nh:"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="lblDonViTinh">
               <Properties>
-                <Property name="text" type="java.lang.String" value="&#x110;&#x1a1;n v&#x1ecb; t&#xed;nh:"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="14" style="0"/>
                 </Property>
+                <Property name="text" type="java.lang.String" value="&#x110;&#x1a1;n v&#x1ecb; t&#xed;nh:"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JComboBox" name="cbDonViTinh">
@@ -313,7 +321,7 @@
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
               </AuxValues>
             </Component>
-            <Component class="javax.swing.JComboBox" name="jComboBox1">
+            <Component class="javax.swing.JComboBox" name="cbLoaiMonAn">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                   <StringArray count="4">
@@ -327,9 +335,6 @@
                   <Dimension value="[72, 35]"/>
                 </Property>
               </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jComboBox1ActionPerformed"/>
-              </Events>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
               </AuxValues>
@@ -345,7 +350,7 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnChonFileAnhActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JComboBox" name="jComboBox2">
+            <Component class="javax.swing.JComboBox" name="cbTrangThai">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                   <StringArray count="4">
@@ -376,6 +381,24 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbFilterLoaiMonAnActionPerformed"/>
+              </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+              </AuxValues>
+            </Component>
+            <Component class="javax.swing.JComboBox" name="cbFilterTrangThai">
+              <Properties>
+                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                  <StringArray count="4">
+                    <StringItem index="0" value="Item 1"/>
+                    <StringItem index="1" value="Item 2"/>
+                    <StringItem index="2" value="Item 3"/>
+                    <StringItem index="3" value="Item 4"/>
+                  </StringArray>
+                </Property>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbFilterTrangThaiActionPerformed"/>
               </Events>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>

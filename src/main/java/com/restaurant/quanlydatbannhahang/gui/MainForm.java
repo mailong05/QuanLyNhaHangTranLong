@@ -20,6 +20,8 @@ import javax.swing.border.AbstractBorder;
 import com.restaurant.quanlydatbannhahang.entity.QuyenHan;
 import com.restaurant.quanlydatbannhahang.entity.TaiKhoan;
 import com.restaurant.quanlydatbannhahang.session.SessionManager;
+import com.restaurant.quanlydatbannhahang.util.AppConfig;
+import com.restaurant.quanlydatbannhahang.util.ImageUtil;
 
 public class MainForm extends javax.swing.JFrame {
 
@@ -87,6 +89,8 @@ public class MainForm extends javax.swing.JFrame {
     }
 
     private void initCustomComponents() {
+        AppConfig.initializeImagePaths();
+
         java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
         int width = (int) (screenSize.width * 0.9);
         int height = (int) (screenSize.height * 0.9);
@@ -115,6 +119,13 @@ public class MainForm extends javax.swing.JFrame {
 
         // Khởi tạo sớm các panel quan trọng để setup callback chúng chính xác
         initializePanelsEarly();
+
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                ImageUtil.shutdown();
+            }
+        });
     }
 
     /**
