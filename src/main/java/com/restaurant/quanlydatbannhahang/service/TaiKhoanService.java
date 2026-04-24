@@ -1,5 +1,6 @@
 package com.restaurant.quanlydatbannhahang.service;
 
+import java.sql.PreparedStatement;
 import java.util.List;
 
 import com.restaurant.quanlydatbannhahang.dao.TaiKhoanDAO;
@@ -49,5 +50,18 @@ public class TaiKhoanService {
 	public List<TaiKhoan> getAllTaiKhoan() {
 		// TODO Auto-generated method stub
 		return taiKhoanDAO.getAllTaiKhoan();
+	}
+	
+	public String getPasswordByUsername(String username, String maNV) {
+		if(username == null || maNV == null)
+			throw new IllegalArgumentException("username null hoặc maNV null");
+		if(username.isEmpty() || maNV.isEmpty()) {
+			throw new IllegalArgumentException("Vui lòng nhập username, maNV đầy đủ để thực hiện truy vấn");
+		}
+		if(taiKhoanDAO.getPasswordByUsernameAndID(username, maNV)== null) {
+			throw new RuntimeException("Không tìm thấy thông tin mật khẩu của tài khoản");
+		}
+		
+		return taiKhoanDAO.getPasswordByUsernameAndID(username, maNV);
 	}
 }

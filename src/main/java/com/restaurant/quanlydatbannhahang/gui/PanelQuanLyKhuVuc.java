@@ -308,9 +308,7 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
         refreshData();
     }// GEN-LAST:event_btnXoaTrangActionPerformed
 
-    private void loadDataToComboBoxes() {
-        // No combobox filters in this panel
-    }
+    
 
     private void loadDataToTable() {
         loadFilteredData();

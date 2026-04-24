@@ -151,4 +151,23 @@ public class TaiKhoanDAO {
         }
         return dsTaiKhoan;
     }
+
+    public String getPasswordByUsernameAndID(String username, String maNV) {
+        Connection con = DatabaseConnection.getConnection();
+        String sql = SELECT_TAIKHOAN_WITH_NHANVIEN + "WHERE tk.username = ? AND tk.maNV = ?";
+        try {
+            PreparedStatement pstm = con.prepareStatement(sql);
+            pstm.setString(1, username);
+            pstm.setString(2, maNV);
+            ResultSet rs = pstm.executeQuery();
+            if (rs.next()) {
+                TaiKhoan tk = buildTaiKhoanFromResultSet(rs);
+                return tk.getPassword();
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
