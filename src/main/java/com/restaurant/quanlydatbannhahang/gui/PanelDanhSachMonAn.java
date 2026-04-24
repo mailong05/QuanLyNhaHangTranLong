@@ -471,6 +471,7 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
 
     private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaTrangActionPerformed
         refreshData();
+        resetPlaceholder(txtTimKiem, "Nhập tên món ăn");
     }// GEN-LAST:event_btnXoaTrangActionPerformed
 
     private void cbFilterLoaiMonAnActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterLoaiMonAnActionPerformed
