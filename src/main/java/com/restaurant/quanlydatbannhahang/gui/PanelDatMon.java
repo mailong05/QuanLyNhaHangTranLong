@@ -5,7 +5,17 @@
 package com.restaurant.quanlydatbannhahang.gui;
 
 import java.awt.*;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import com.restaurant.quanlydatbannhahang.entity.LoaiMonAn;
+import com.restaurant.quanlydatbannhahang.entity.MonAn;
+import com.restaurant.quanlydatbannhahang.service.MonAnService;
+import com.restaurant.quanlydatbannhahang.util.ComboBoxEnumLoader;
+import com.restaurant.quanlydatbannhahang.util.ImageUtil;
 
 /**
  *
@@ -13,12 +23,22 @@ import javax.swing.*;
  */
 public class PanelDatMon extends javax.swing.JPanel {
 
+    private static final int TABLE_IMAGE_SIZE = 72;
+    private static final int TABLE_IMAGE_ROW_HEIGHT = 84;
+    private static final int TABLE_IMAGE_VERTICAL_PADDING = 4;
+
+    private MonAnService monAnService;
+    private List<MonAn> allMonAn;
+
     /**
      * Creates new form PanelDatMon
      */
     public PanelDatMon() {
         initComponents();
+        monAnService = new MonAnService();
         customUI();
+        loadDataToComboBoxes();
+        loadDataToTable();
     }
 
     private void customUI() {
@@ -37,6 +57,113 @@ public class PanelDatMon extends javax.swing.JPanel {
                 btnQuayLaiActionPerformed(evt);
             }
         });
+    }
+
+    private void loadDataToComboBoxes() {
+        try {
+            ActionListener[] loaiMonListeners = cbFilterLoaiMonAn.getActionListeners();
+
+            for (ActionListener listener : loaiMonListeners) {
+                cbFilterLoaiMonAn.removeActionListener(listener);
+            }
+
+            cbFilterLoaiMonAn.removeAllItems();
+            cbFilterLoaiMonAn.addItem("Loại món ăn");
+            ComboBoxEnumLoader.loadLoaiMonAnToComboBox(cbFilterLoaiMonAn);
+
+            for (ActionListener listener : loaiMonListeners) {
+                cbFilterLoaiMonAn.addActionListener(listener);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Lỗi load dữ liệu filter: " + e.getMessage());
+        }
+    }
+
+    private List<MonAn> ensureMonAnDataLoaded() {
+        if (allMonAn == null) {
+            allMonAn = monAnService.getAllMonAn();
+        }
+        return allMonAn;
+    }
+
+    private void loadDataToTable() {
+        try {
+            List<MonAn> monAnList = ensureMonAnDataLoaded();
+            String selectedLoai = (String) cbFilterLoaiMonAn.getSelectedItem();
+            String searchText = txtTimKiem.getText().trim().toLowerCase();
+
+            DefaultTableModel model = (DefaultTableModel) tableDanhSachMonAn.getModel();
+            model.setRowCount(0);
+
+            for (MonAn monAn : monAnList) {
+                if (selectedLoai != null && !selectedLoai.isEmpty() && !selectedLoai.equals("Loại món ăn")) {
+                    if (monAn.getTenLoai() == null || !monAn.getTenLoai().getDisplayName().equals(selectedLoai)) {
+                        continue;
+                    }
+                }
+
+                if (!searchText.isEmpty()) {
+                    String maMon = monAn.getMaMon() != null ? monAn.getMaMon().toLowerCase() : "";
+                    String tenMon = monAn.getTenMon() != null ? monAn.getTenMon().toLowerCase() : "";
+                    if (!maMon.contains(searchText) && !tenMon.contains(searchText)) {
+                        continue;
+                    }
+                }
+
+                model.addRow(new Object[] {
+                        ImageUtil.loadImageIcon(monAn.getUrlHinhAnh(), TABLE_IMAGE_SIZE),
+                        monAn.getMaMon(),
+                        monAn.getTenMon(),
+                        monAn.getDonViTinh(),
+                        monAn.getDonGia()
+                });
+            }
+
+            centerTableColumns(tableDanhSachMonAn);
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Lỗi load dữ liệu món ăn: " + e.getMessage());
+        }
+    }
+
+    private void searchAndFilter() {
+        loadDataToTable();
+    }
+
+    private void filterTable() {
+        loadDataToTable();
+    }
+
+    private void centerTableColumns(JTable table) {
+        ImageRenderer imageRenderer = new ImageRenderer();
+        table.getColumnModel().getColumn(0).setCellRenderer(imageRenderer);
+        table.getColumnModel().getColumn(0).setPreferredWidth(100);
+        table.setRowHeight(TABLE_IMAGE_ROW_HEIGHT);
+
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        for (int i = 1; i < table.getColumnCount(); i++) {
+            table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+    }
+
+    private static class ImageRenderer extends DefaultTableCellRenderer {
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                boolean isSelected, boolean hasFocus, int row, int column) {
+            if (value instanceof ImageIcon) {
+                JLabel label = new JLabel((ImageIcon) value);
+                label.setHorizontalAlignment(JLabel.CENTER);
+                label.setVerticalAlignment(JLabel.CENTER);
+                label.setOpaque(true);
+                label.setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
+                label.setBorder(BorderFactory.createEmptyBorder(TABLE_IMAGE_VERTICAL_PADDING, 0,
+                        TABLE_IMAGE_VERTICAL_PADDING, 0));
+                return label;
+            }
+            return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+        }
     }
 
     /**
@@ -311,23 +438,23 @@ public class PanelDatMon extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTimKiemActionPerformed
-        // TODO add your handling code here:
+        searchAndFilter();
     }// GEN-LAST:event_btnTimKiemActionPerformed
 
     private void cbFilterLoaiMonAnActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterLoaiMonAnActionPerformed
-        // TODO add your handling code here:
+        filterTable();
     }// GEN-LAST:event_cbFilterLoaiMonAnActionPerformed
 
     private void btnDoiBanActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnDoiBanActionPerformed
-        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(this, "Chức năng đổi bàn đang được phát triển.");
     }// GEN-LAST:event_btnDoiBanActionPerformed
 
     private void btnChonMonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnChonMonActionPerformed
-        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(this, "Chức năng chọn món đang được phát triển.");
     }// GEN-LAST:event_btnChonMonActionPerformed
 
     private void btnLuuActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnLuuActionPerformed
-        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(this, "Chức năng lưu đang được phát triển.");
     }// GEN-LAST:event_btnLuuActionPerformed
 
     private void btnThanhToanActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnThanhToanActionPerformed

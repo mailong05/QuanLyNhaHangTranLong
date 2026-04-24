@@ -57,8 +57,15 @@ public class PanelDanhSachKhachHang extends javax.swing.JPanel {
         // 5. Bo góc cho Panel chứa thông tin nhập liệu
         applyCardStyle(pnlThongTinKhachHang, 20);
 
-        // 6. Gắn sự kiện quay về Trang Chủ
-        MainForm.attachGoHomeListener(btnTrangChu, this);
+        this.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                if (evt.getSource() != tableKhachHang && !isMouseOverTable(evt)) {
+                    tableKhachHang.clearSelection();
+                    refreshData();
+                }
+            }
+        });
     }
 
     private void centerTableColumns(JTable table) {
@@ -255,7 +262,10 @@ public class PanelDanhSachKhachHang extends javax.swing.JPanel {
     }// GEN-LAST:event_btnXoaTrangActionPerformed
 
     private void btnTrangChuActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTrangChuActionPerformed
-        // TODO add your handling code here:
+        java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
+        if (parentFrame instanceof MainForm) {
+            ((MainForm) parentFrame).goToTrangChuFromPanel();
+        }
     }// GEN-LAST:event_btnTrangChuActionPerformed
 
     private void cbLoaiThanhVienActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbLoaiThanhVienActionPerformed
@@ -396,6 +406,12 @@ public class PanelDanhSachKhachHang extends javax.swing.JPanel {
                 }
             }
         });
+    }
+
+    private boolean isMouseOverTable(java.awt.event.MouseEvent evt) {
+        java.awt.Point p = evt.getPoint();
+        java.awt.Point tablePoint = SwingUtilities.convertPoint(this, p, tableKhachHang);
+        return tableKhachHang.getBounds().contains(tablePoint);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

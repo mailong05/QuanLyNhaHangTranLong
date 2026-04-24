@@ -66,6 +66,16 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseLis
 
         // 7. Gắn sự kiện quay về Trang Chủ
         MainForm.attachGoHomeListener(btnTrangChu, this);
+
+        this.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                if (evt.getSource() != tableKhachHang && !isMouseOverTable(evt)) {
+                    tableKhachHang.clearSelection();
+                    refreshData();
+                }
+            }
+        });
     }
 
     private void loadDataToComboBoxes() {
@@ -210,6 +220,10 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseLis
         clearFields();
         resetPlaceholder(txtTimKiem, "Nhập số điện thoại hoặc tên");
         cbFilterLoaiThanhVien.setSelectedIndex(0);
+        String lastID = idQueryHelper.getLastID("KhachHang", "maKH");
+        String maKHNew = (lastID == null || lastID.isEmpty()) ? idGeneratorHelper.toString()
+                : idGeneratorHelper.generateNextIDFromFullID(lastID);
+        txtMaKhachHang.setText(maKHNew);
         loadDataToComboBoxes();
         loadDataToTable();
         tableKhachHang.clearSelection();
@@ -595,7 +609,25 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseLis
     }// GEN-LAST:event_btnTimKiemActionPerformed
 
     private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaActionPerformed
-        // TODO add your handling code here:
+        String maKH = txtMaKhachHang.getText().trim();
+        if (maKH.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn khách hàng cần xóa.");
+            return;
+        }
+
+        int choice = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa khách hàng này không?",
+                "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
+        if (choice != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        KhachHangService service = new KhachHangService();
+        if (service.xoaKhachHang(maKH)) {
+            JOptionPane.showMessageDialog(this, "Xóa khách hàng thành công.");
+            refreshData();
+        } else {
+            JOptionPane.showMessageDialog(this, "Xóa khách hàng thất bại.");
+        }
     }// GEN-LAST:event_btnXoaActionPerformed
 
     private void cbFilterLoaiThanhVienActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterLoaiThanhVienActionPerformed
@@ -603,11 +635,59 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseLis
     }// GEN-LAST:event_cbFilterLoaiThanhVienActionPerformed
 
     private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCapNhatActionPerformed
-        // TODO add your handling code here:
+        try {
+            String maKH = txtMaKhachHang.getText().trim();
+            String hoTen = txtHoTen.getText().trim();
+            String sdt = txtSoDienThoai.getText().trim();
+            String diemText = txtDiemTichLuy.getText().trim();
+            String loaiDisplay = (String) cbLoaiThanhVien.getSelectedItem();
+            com.restaurant.quanlydatbannhahang.entity.LoaiThanhVien loaiThanhVien = ComboBoxEnumLoader
+                    .getLoaiThanhVienFromDisplay(loaiDisplay);
+
+            if (maKH.isEmpty() || hoTen.isEmpty() || sdt.isEmpty() || loaiThanhVien == null) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin khách hàng.");
+                return;
+            }
+
+            int diemTichLuy = diemText.isEmpty() ? 0 : Integer.parseInt(diemText);
+            KhachHang khachHang = new KhachHang(maKH, hoTen, sdt, diemTichLuy, loaiThanhVien);
+            KhachHangService service = new KhachHangService();
+            if (service.capNhatKhachHang(khachHang)) {
+                JOptionPane.showMessageDialog(this, "Cập nhật khách hàng thành công.");
+                refreshData();
+            } else {
+                JOptionPane.showMessageDialog(this, "Cập nhật khách hàng thất bại.");
+            }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Điểm tích lũy không hợp lệ.");
+        }
     }// GEN-LAST:event_btnCapNhatActionPerformed
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnThemActionPerformed
-        // TODO add your handling code here:
+        try {
+            String maKH = txtMaKhachHang.getText().trim();
+            String hoTen = txtHoTen.getText().trim();
+            String sdt = txtSoDienThoai.getText().trim();
+            String loaiDisplay = (String) cbLoaiThanhVien.getSelectedItem();
+            com.restaurant.quanlydatbannhahang.entity.LoaiThanhVien loaiThanhVien = ComboBoxEnumLoader
+                    .getLoaiThanhVienFromDisplay(loaiDisplay);
+
+            if (maKH.isEmpty() || hoTen.isEmpty() || sdt.isEmpty() || loaiThanhVien == null) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin khách hàng.");
+                return;
+            }
+
+            KhachHang khachHang = new KhachHang(maKH, hoTen, sdt, 0, loaiThanhVien);
+            KhachHangService service = new KhachHangService();
+            if (service.themKhachHang(khachHang)) {
+                JOptionPane.showMessageDialog(this, "Thêm khách hàng thành công.");
+                refreshData();
+            } else {
+                JOptionPane.showMessageDialog(this, "Thêm khách hàng thất bại.");
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Không thể thêm khách hàng: " + ex.getMessage());
+        }
     }// GEN-LAST:event_btnThemActionPerformed
 
     private void txtDiemTichLuyActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtDiemTichLuyActionPerformed

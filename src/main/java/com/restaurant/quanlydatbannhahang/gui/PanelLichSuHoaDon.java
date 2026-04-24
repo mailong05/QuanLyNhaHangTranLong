@@ -81,8 +81,16 @@ public class PanelLichSuHoaDon extends javax.swing.JPanel {
             dpNgayTao.setDate(LocalDate.now());
         }
 
-        // 4. Gắn sự kiện quay về Trang Chủ
-        MainForm.attachGoHomeListener(btnTrangChu, this);
+        // 4. Click ngoài bảng thì clear selection và refresh lại dữ liệu
+        this.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                if (evt.getSource() != tableLichSuHoaDon && !isMouseOverTable(evt)) {
+                    tableLichSuHoaDon.clearSelection();
+                    refreshData();
+                }
+            }
+        });
     }
 
     @SuppressWarnings("unchecked")
@@ -217,7 +225,10 @@ public class PanelLichSuHoaDon extends javax.swing.JPanel {
     }// GEN-LAST:event_btnXoaTrangActionPerformed
 
     private void btnTrangChuActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTrangChuActionPerformed
-        // TODO add your handling code here:
+        java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
+        if (parentFrame instanceof MainForm) {
+            ((MainForm) parentFrame).goToTrangChuFromPanel();
+        }
     }// GEN-LAST:event_btnTrangChuActionPerformed
 
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTimKiemActionPerformed
@@ -358,6 +369,12 @@ public class PanelLichSuHoaDon extends javax.swing.JPanel {
                 }
             }
         });
+    }
+
+    private boolean isMouseOverTable(java.awt.event.MouseEvent evt) {
+        java.awt.Point p = evt.getPoint();
+        java.awt.Point tablePoint = SwingUtilities.convertPoint(this, p, tableLichSuHoaDon);
+        return tableLichSuHoaDon.getBounds().contains(tablePoint);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

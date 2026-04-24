@@ -26,6 +26,16 @@ public class PanelDanhSachNhanVien extends javax.swing.JPanel {
         // Placeholder cho txtTimKiem
         setupPlaceholder(txtTimKiem, "Nhập tên hoặc số điện thoại");
 
+        this.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                if (evt.getSource() != tableKhuVuc && !isMouseOverTable(evt)) {
+                    tableKhuVuc.clearSelection();
+                    refreshData();
+                }
+            }
+        });
+
         // Gắn sự kiện quay về Trang Chủ
         MainForm.attachGoHomeListener(btnTrangChu, this);
     }
@@ -82,6 +92,12 @@ public class PanelDanhSachNhanVien extends javax.swing.JPanel {
         Color placeholderColor = new Color(153, 153, 153);
         textField.setText(placeholder);
         textField.setForeground(placeholderColor);
+    }
+
+    private boolean isMouseOverTable(java.awt.event.MouseEvent evt) {
+        java.awt.Point p = evt.getPoint();
+        java.awt.Point tablePoint = SwingUtilities.convertPoint(this, p, tableKhuVuc);
+        return tableKhuVuc.getBounds().contains(tablePoint);
     }
 
     private void loadDataToComboBoxes() {

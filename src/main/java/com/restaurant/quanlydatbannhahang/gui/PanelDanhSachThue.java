@@ -28,6 +28,16 @@ public class PanelDanhSachThue extends javax.swing.JPanel {
     private void customUI() {
         // Placeholder cho txtTimKiem
         setupPlaceholder(txtTimKiem, "Nhập tên hoặc mã thuế");
+
+        this.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                if (evt.getSource() != tableThue && !isMouseOverTable(evt)) {
+                    tableThue.clearSelection();
+                    refreshData();
+                }
+            }
+        });
         // Gắn sự kiện quay về Trang Chủ
         MainForm.attachGoHomeListener(btnTrangChu, this);
     }
@@ -108,6 +118,12 @@ public class PanelDanhSachThue extends javax.swing.JPanel {
         Color placeholderColor = new Color(153, 153, 153);
         textField.setText(placeholder);
         textField.setForeground(placeholderColor);
+    }
+
+    private boolean isMouseOverTable(java.awt.event.MouseEvent evt) {
+        java.awt.Point p = evt.getPoint();
+        java.awt.Point tablePoint = SwingUtilities.convertPoint(this, p, tableThue);
+        return tableThue.getBounds().contains(tablePoint);
     }
 
     private void loadDataToTable() {

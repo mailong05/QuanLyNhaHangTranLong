@@ -25,8 +25,15 @@ public class PanelDanhSachKhuyenMai extends javax.swing.JPanel {
         // Placeholder cho txtTimKiem
         setupPlaceholder(txtTimKiem, "Nhập tên hoặc mã khuyến mãi");
 
-        // Gắn sự kiện quay về Trang Chủ
-        MainForm.attachGoHomeListener(btnTrangChu, this);
+        this.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                if (evt.getSource() != tableKhuyenMai && !isMouseOverTable(evt)) {
+                    tableKhuyenMai.clearSelection();
+                    refreshData();
+                }
+            }
+        });
     }
 
     /**
@@ -61,6 +68,12 @@ public class PanelDanhSachKhuyenMai extends javax.swing.JPanel {
                 }
             }
         });
+    }
+
+    private boolean isMouseOverTable(java.awt.event.MouseEvent evt) {
+        java.awt.Point p = evt.getPoint();
+        java.awt.Point tablePoint = SwingUtilities.convertPoint(this, p, tableKhuyenMai);
+        return tableKhuyenMai.getBounds().contains(tablePoint);
     }
 
     private void resetPlaceholder(JTextField textField, String placeholder) {
@@ -271,6 +284,13 @@ public class PanelDanhSachKhuyenMai extends javax.swing.JPanel {
         // TODO add your handling code here:
         refreshData();
     }// GEN-LAST:event_btnXoaTrangActionPerformed
+
+    private void btnTrangChuActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTrangChuActionPerformed
+        java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
+        if (parentFrame instanceof MainForm) {
+            ((MainForm) parentFrame).goToTrangChuFromPanel();
+        }
+    }// GEN-LAST:event_btnTrangChuActionPerformed
 
     private void cbFilterTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterTrangThaiActionPerformed
         filterTable();

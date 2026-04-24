@@ -36,7 +36,7 @@ public class KhachHangService {
     /**
      * Thêm khách hàng mới
      */
-    public void themKhachHang(KhachHang khachHang) {
+    public boolean themKhachHang(KhachHang khachHang) {
         if (khachHang == null) {
             throw new IllegalArgumentException("Khách hàng không được để trống");
         }
@@ -46,39 +46,45 @@ public class KhachHangService {
         if (khachHang.getHoTen() == null || khachHang.getHoTen().trim().isEmpty()) {
             throw new IllegalArgumentException("Họ tên không được để trống");
         }
-        if (khachHangDAO.themKhachHang(khachHang)) {
+        boolean success = khachHangDAO.themKhachHang(khachHang);
+        if (success) {
             System.out.println(" Thêm khách hàng thành công");
         } else {
             System.out.println(" Thêm khách hàng thất bại");
         }
+        return success;
     }
 
     /**
      * Cập nhật khách hàng
      */
-    public void capNhatKhachHang(KhachHang khachHang) {
+    public boolean capNhatKhachHang(KhachHang khachHang) {
         if (khachHang == null) {
             throw new IllegalArgumentException("Khách hàng không được để trống");
         }
-        if (khachHangDAO.capNhatKhachHang(khachHang)) {
+        boolean success = khachHangDAO.capNhatKhachHang(khachHang);
+        if (success) {
             System.out.println(" Cập nhật khách hàng thành công");
         } else {
             System.out.println(" Cập nhật khách hàng thất bại");
         }
+        return success;
     }
 
     /**
      * Xóa khách hàng
      */
-    public void xoaKhachHang(String maKH) {
+    public boolean xoaKhachHang(String maKH) {
         if (maKH == null || maKH.trim().isEmpty()) {
             throw new IllegalArgumentException("Mã khách hàng không được để trống");
         }
-        if (khachHangDAO.xoaKhachHang(maKH)) {
+        boolean success = khachHangDAO.xoaKhachHang(maKH);
+        if (success) {
             System.out.println(" Xóa khách hàng thành công");
         } else {
             System.out.println(" Xóa khách hàng thất bại");
         }
+        return success;
     }
 
     /**

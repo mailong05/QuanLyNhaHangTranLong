@@ -198,6 +198,16 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
         // Placeholder cho txtTimKiem
         setupPlaceholder(txtTimKiem, "Nhập tên món ăn");
 
+        this.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                if (evt.getSource() != tableMonAn && !isMouseOverTable(evt)) {
+                    tableMonAn.clearSelection();
+                    refreshData();
+                }
+            }
+        });
+
         // Gắn sự kiện quay về Trang Chủ
         MainForm.attachGoHomeListener(btnTrangChu, this);
     }
@@ -467,6 +477,12 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
         Color placeholderColor = new Color(153, 153, 153);
         textField.setText(placeholder);
         textField.setForeground(placeholderColor);
+    }
+
+    private boolean isMouseOverTable(java.awt.event.MouseEvent evt) {
+        java.awt.Point p = evt.getPoint();
+        java.awt.Point tablePoint = SwingUtilities.convertPoint(this, p, tableMonAn);
+        return tableMonAn.getBounds().contains(tablePoint);
     }
 
     private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaTrangActionPerformed
