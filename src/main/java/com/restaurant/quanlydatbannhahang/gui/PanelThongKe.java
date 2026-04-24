@@ -1,15 +1,115 @@
 package com.restaurant.quanlydatbannhahang.gui;
 
+import com.restaurant.quanlydatbannhahang.entity.ChiTietHoaDon;
+import com.restaurant.quanlydatbannhahang.entity.HoaDon;
+import com.restaurant.quanlydatbannhahang.entity.MonAn;
+import com.restaurant.quanlydatbannhahang.entity.TrangThaiHoaDon;
+import com.restaurant.quanlydatbannhahang.service.ChiTietHoaDonService;
+import com.restaurant.quanlydatbannhahang.service.HoaDonService;
+import com.restaurant.quanlydatbannhahang.util.ImageUtil;
+
 import java.awt.*;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.border.EmptyBorder;
 
 public class PanelThongKe extends javax.swing.JPanel {
 
+    private HoaDonService hoaDonService;
+    private ChiTietHoaDonService chiTietHoaDonService;
+
     public PanelThongKe() {
         initComponents();
+        hoaDonService = new HoaDonService();
+        chiTietHoaDonService = new ChiTietHoaDonService();
         customUI();
+        loadStatistics();
+    }
+
+    private static class TopMonAnItem {
+        private String maMon;
+        private String tenMon;
+        private String imagePath;
+        private double donGia;
+        private int soLuong;
+
+        TopMonAnItem(MonAn monAn, int soLuong) {
+            this.maMon = monAn.getMaMon();
+            this.tenMon = monAn.getTenMon();
+            this.imagePath = monAn.getUrlHinhAnh();
+            this.donGia = monAn.getDonGia();
+            this.soLuong = soLuong;
+        }
+    }
+
+    private void loadStatistics() {
+        try {
+            List<HoaDon> dsHoaDon = hoaDonService.getAllHoaDon();
+            double tongDoanhThu = 0;
+            int tongHoaDonDaThanhToan = 0;
+
+            Map<String, TopMonAnItem> topMonMap = new HashMap<>();
+
+            for (HoaDon hd : dsHoaDon) {
+                if (hd == null || hd.getTrangThaiThanhToan() != TrangThaiHoaDon.DA_THANH_TOAN) {
+                    continue;
+                }
+
+                tongHoaDonDaThanhToan++;
+                tongDoanhThu += hd.getTongThanhToan();
+
+                List<ChiTietHoaDon> dsChiTiet = chiTietHoaDonService.getChiTietByMaHD(hd.getMaHD());
+                for (ChiTietHoaDon ct : dsChiTiet) {
+                    if (ct == null || ct.getMonAn() == null) {
+                        continue;
+                    }
+
+                    MonAn monAn = ct.getMonAn();
+                    TopMonAnItem item = topMonMap.get(monAn.getMaMon());
+                    if (item == null) {
+                        topMonMap.put(monAn.getMaMon(), new TopMonAnItem(monAn, ct.getSoLuong()));
+                    } else {
+                        item.soLuong += ct.getSoLuong();
+                    }
+                }
+            }
+
+            double doanhThuTrungBinh = tongHoaDonDaThanhToan == 0 ? 0 : tongDoanhThu / tongHoaDonDaThanhToan;
+            DecimalFormat moneyFormat = new DecimalFormat("#,##0.00");
+
+            lblTongDoanhThu.setText(moneyFormat.format(tongDoanhThu) + " VND");
+            lblTongSoHoaDon.setText(String.valueOf(tongHoaDonDaThanhToan));
+            lblDoanhThuTrungBinh.setText(moneyFormat.format(doanhThuTrungBinh) + " VND");
+
+            List<TopMonAnItem> topList = new ArrayList<>(topMonMap.values());
+            topList.sort(Comparator.comparingInt((TopMonAnItem i) -> i.soLuong).reversed());
+
+            DefaultTableModel model = (DefaultTableModel) tableTopMonAn.getModel();
+            model.setRowCount(0);
+            int top = 1;
+            for (TopMonAnItem item : topList) {
+                if (top > 10) {
+                    break;
+                }
+                model.addRow(new Object[] {
+                        top,
+                        ImageUtil.loadImageIcon(item.imagePath, 48),
+                        item.tenMon,
+                        item.donGia,
+                        item.soLuong
+                });
+                top++;
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Lỗi tải dữ liệu thống kê: " + ex.getMessage());
+        }
     }
 
     private void customUI() {
@@ -260,11 +360,14 @@ public class PanelThongKe extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnTrangChuActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTrangChuActionPerformed
-        // TODO add your handling code here:
+        java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
+        if (parentFrame instanceof MainForm) {
+            ((MainForm) parentFrame).goToTrangChuFromPanel();
+        }
     }// GEN-LAST:event_btnTrangChuActionPerformed
 
     private void btnInThongKeActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnInThongKeActionPerformed
-        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(this, "Chức năng in thống kê đang được phát triển.");
     }// GEN-LAST:event_btnInThongKeActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

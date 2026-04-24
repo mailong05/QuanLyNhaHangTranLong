@@ -88,6 +88,17 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                 // Gắn sự kiện quay về Trang Chủ
                 MainForm.attachGoHomeListener(btnTrangChu, this);
 
+                tableBan.addMouseListener(this);
+                tableBan.getSelectionModel().addListSelectionListener(e -> {
+                        if (!e.getValueIsAdjusting()) {
+                                int rowSelected = tableBan.getSelectedRow();
+                                if (rowSelected >= 0) {
+                                        pushDataToFieldsFromRow(rowSelected);
+                                }
+                                syncCapNhatButtonState();
+                        }
+                });
+
                 // ========== ENABLE BUTTON KHI CLICK RA NGOÀI TABLE ==========
                 this.addMouseListener(new java.awt.event.MouseAdapter() {
                         @Override
@@ -96,11 +107,13 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                                 if (evt.getSource() != tableBan && !isMouseOverTable(evt)) {
                                         tableBan.clearSelection();
                                         clearFields(); // Clear dữ liệu các field
-                                        btnCapNhat.setEnabled(false);
+                                        syncCapNhatButtonState();
                                         fillMaDatBan(txtMaPhieuDat);
                                 }
                         }
                 });
+
+                syncCapNhatButtonState();
         }
 
         /**
@@ -182,7 +195,6 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                 tableBan.getColumnModel().getColumn(4).setCellRenderer(renderer);
 
                 // ========== THÊM MOUSE LISTENER VÀO TABLE ==========
-                tableBan.addMouseListener(this);
         }
 
         private boolean isMouseOverTable(java.awt.event.MouseEvent evt) {
@@ -199,6 +211,10 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                 dtpThoiGianDen.setDateTimeStrict(LocalDateTime.now());
                 cbTrangThai.setSelectedIndex(0); // Reset ComboBox
 
+        }
+
+        private void syncCapNhatButtonState() {
+                btnCapNhat.setEnabled(tableBan.getSelectedRow() >= 0);
         }
 
         // Từ đây không chỉnh sửa bên dưới
@@ -609,6 +625,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
 
                 btnCapNhat.setText("Cập nhật");
                 btnCapNhat.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+                btnCapNhat.setEnabled(false);
                 btnCapNhat.setPreferredSize(new java.awt.Dimension(90, 27));
                 btnCapNhat.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -908,8 +925,8 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
 
                         loadDataToTable();
                         clearFields();
-
-                        btnCapNhat.setEnabled(false);
+                        tableBan.clearSelection();
+                        syncCapNhatButtonState();
 
                 } catch (Exception e) {
                         JOptionPane.showMessageDialog(this, "Lỗi khi cập nhật: " + e.getMessage(), "Lỗi",
@@ -951,7 +968,8 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
 
                                 loadDataToTable();
                                 clearFields();
-                                btnCapNhat.setEnabled(false);
+                                tableBan.clearSelection();
+                                syncCapNhatButtonState();
                         }
 
                 } catch (Exception e) {
@@ -1078,11 +1096,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
 
         @Override
         public void mouseClicked(MouseEvent e) {
-                int rowSelected = tableBan.getSelectedRow();
-                if (rowSelected >= 0) {
-                        pushDataToFieldsFromRow(rowSelected);
-                        btnCapNhat.setEnabled(true);
-                }
+                // Được xử lý tập trung trong selection listener của bảng
         }
 
         @Override

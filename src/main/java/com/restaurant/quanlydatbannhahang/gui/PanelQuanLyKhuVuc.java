@@ -17,28 +17,30 @@ import java.util.List;
 
 public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListener {
 
-	private IDGeneratorHelper idGeneratorHelper;
+    private IDGeneratorHelper idGeneratorHelper;
     private IDQueryHelper idQueryHelper;
+
     public PanelQuanLyKhuVuc() {
-    	idGeneratorHelper = new IDGeneratorHelper();
-    	idQueryHelper = new IDQueryHelper();
+        idGeneratorHelper = new IDGeneratorHelper();
+        idQueryHelper = new IDQueryHelper();
         initComponents();
         customUI();
         loadDataToTable();
     }
 
-    
     private void fillMaKhuVuc(JTextField txtMaKhuVuc) {
-		// TODO Auto-generated method stub
-	 String lastID = idQueryHelper.getLastID("KhuVuc", "maKhuVuc");
-     String maPDBNew = (lastID == null || lastID.isEmpty())? idGeneratorHelper.toString():idGeneratorHelper.generateNextIDFromFullID(lastID);
-     txtMaKhuVuc.setText(maPDBNew);
-	}
-    
-    
+        // TODO Auto-generated method stub
+        String lastID = idQueryHelper.getLastID("KhuVuc", "maKhuVuc");
+        String maPDBNew = (lastID == null || lastID.isEmpty()) ? idGeneratorHelper.toString()
+                : idGeneratorHelper.generateNextIDFromFullID(lastID);
+        txtMaKhuVuc.setText(maPDBNew);
+    }
+
     private void customUI() {
         // Placeholder cho txtTimKiem
         setupPlaceholder(txtTimKiem, "Nhập tên hoặc mã khu vực");
+
+        MainForm.attachGoHomeListener(btnTrangChu, this);
 
         // ========== DESELECT WHEN CLICK OUTSIDE TABLE ==========
         this.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -54,6 +56,17 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
 
         // Register mouse listener để populate fields khi click vào row
         tableKhuVuc.addMouseListener(this);
+        tableKhuVuc.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                int row = tableKhuVuc.getSelectedRow();
+                if (row >= 0) {
+                    loadDataFromRow(row);
+                }
+                syncCapNhatButtonState();
+            }
+        });
+
+        syncCapNhatButtonState();
     }
 
     /**
@@ -151,7 +164,8 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
         txtMaKhuVuc.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtMaKhuVuc.setPreferredSize(new java.awt.Dimension(64, 35));
         String lastID = idQueryHelper.getLastID("KhuVuc", "maKhuVuc");
-        String maKVNew = (lastID == null || lastID.isEmpty())? idGeneratorHelper.toString():idGeneratorHelper.generateNextIDFromFullID(lastID);
+        String maKVNew = (lastID == null || lastID.isEmpty()) ? idGeneratorHelper.toString()
+                : idGeneratorHelper.generateNextIDFromFullID(lastID);
         txtMaKhuVuc.setText(maKVNew);
         txtMaKhuVuc.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -273,6 +287,7 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
 
         btnCapNhat.setText("Cập nhật");
         btnCapNhat.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnCapNhat.setEnabled(false);
         btnCapNhat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCapNhatActionPerformed(evt);
@@ -307,8 +322,6 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
         // TODO add your handling code here:
         refreshData();
     }// GEN-LAST:event_btnXoaTrangActionPerformed
-
-    
 
     private void loadDataToTable() {
         loadFilteredData();
@@ -374,15 +387,66 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
     }
 
     private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaActionPerformed
-        // TODO add your handling code here:
+        String maKhuVuc = txtMaKhuVuc.getText().trim();
+        if (maKhuVuc.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn khu vực cần xóa.");
+            return;
+        }
+
+        int choice = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa khu vực này không?",
+                "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
+        if (choice != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        try {
+            KhuVucService service = new KhuVucService();
+            service.xoaKhuVuc(maKhuVuc);
+            JOptionPane.showMessageDialog(this, "Xóa khu vực thành công.");
+            refreshData();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Xóa khu vực thất bại: " + ex.getMessage());
+        }
     }// GEN-LAST:event_btnXoaActionPerformed
 
     private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCapNhatActionPerformed
-        // TODO add your handling code here:
+        String maKhuVuc = txtMaKhuVuc.getText().trim();
+        String tenKhuVuc = txtTenKhuVuc.getText().trim();
+
+        if (maKhuVuc.isEmpty() || tenKhuVuc.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin khu vực.");
+            return;
+        }
+
+        try {
+            KhuVuc khuVuc = new KhuVuc(maKhuVuc, tenKhuVuc);
+            KhuVucService service = new KhuVucService();
+            service.capNhatKhuVuc(khuVuc);
+            JOptionPane.showMessageDialog(this, "Cập nhật khu vực thành công.");
+            refreshData();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Cập nhật khu vực thất bại: " + ex.getMessage());
+        }
     }// GEN-LAST:event_btnCapNhatActionPerformed
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnThemActionPerformed
-        // TODO add your handling code here:
+        String maKhuVuc = txtMaKhuVuc.getText().trim();
+        String tenKhuVuc = txtTenKhuVuc.getText().trim();
+
+        if (maKhuVuc.isEmpty() || tenKhuVuc.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin khu vực.");
+            return;
+        }
+
+        try {
+            KhuVuc khuVuc = new KhuVuc(maKhuVuc, tenKhuVuc);
+            KhuVucService service = new KhuVucService();
+            service.themKhuVuc(khuVuc);
+            JOptionPane.showMessageDialog(this, "Thêm khu vực thành công.");
+            refreshData();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Thêm khu vực thất bại: " + ex.getMessage());
+        }
     }// GEN-LAST:event_btnThemActionPerformed
 
     private void txtMaKhuVucActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtMaKhuVucActionPerformed
@@ -412,6 +476,11 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
 
     private void clearFields() {
         txtTenKhuVuc.setText("");
+        txtTimKiem.setText("");
+    }
+
+    private void syncCapNhatButtonState() {
+        btnCapNhat.setEnabled(tableKhuVuc.getSelectedRow() >= 0);
     }
 
     public void refreshData() {
@@ -420,6 +489,7 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
         resetPlaceholder(txtTimKiem, "Nhập tên hoặc mã khu vực");
         loadDataToTable();
         tableKhuVuc.clearSelection();
+        syncCapNhatButtonState();
     }
 
     private void resetPlaceholder(JTextField textField, String placeholder) {
@@ -457,12 +527,7 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
     // End of variables declaration//GEN-END:variables
     @Override
     public void mouseClicked(MouseEvent e) {
-        if (e.getSource() == tableKhuVuc) {
-            int row = tableKhuVuc.getSelectedRow();
-            if (row >= 0) {
-                loadDataFromRow(row);
-            }
-        }
+        // Được xử lý tập trung trong selection listener của bảng
     }
 
     @Override

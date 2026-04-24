@@ -11,7 +11,11 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import com.restaurant.quanlydatbannhahang.service.NhanVienService;
 import com.restaurant.quanlydatbannhahang.util.ComboBoxEnumLoader;
+import com.restaurant.quanlydatbannhahang.util.IDGeneratorHelper;
+import com.restaurant.quanlydatbannhahang.util.IDQueryHelper;
+import com.restaurant.quanlydatbannhahang.entity.ChucVu;
 import com.restaurant.quanlydatbannhahang.entity.NhanVien;
+import com.restaurant.quanlydatbannhahang.entity.TrangThaiNhanVien;
 import java.util.List;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -34,6 +38,8 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
         private void customUI() {
                 // Placeholder cho txtTimKiem
                 setupPlaceholder(txtTimKiem, "Nhập tên hoặc số điện thoại");
+                fillTxtMaNhanVien();
+                MainForm.attachGoHomeListener(btnTrangChu, this);
 
                 // Set giá trị mặc định cho DatePicker (ngày hôm nay)
                 if (dpNgayVaoLam != null) {
@@ -47,12 +53,24 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                                 if (evt.getSource() != tableNhanVien && !isMouseOverTable(evt)) {
                                         tableNhanVien.clearSelection();
                                         clearFields();
+                                        syncCapNhatButtonState();
                                 }
                         }
                 });
 
                 // Register mouse listener để populate fields khi click vào row
                 tableNhanVien.addMouseListener(this);
+                tableNhanVien.getSelectionModel().addListSelectionListener(e -> {
+                        if (!e.getValueIsAdjusting()) {
+                                int row = tableNhanVien.getSelectedRow();
+                                if (row >= 0) {
+                                        loadDataFromRow(row);
+                                }
+                                syncCapNhatButtonState();
+                        }
+                });
+
+                syncCapNhatButtonState();
         }
 
         private void loadDataToComboBoxes() {
@@ -158,9 +176,9 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                                 model.addRow(new Object[] {
                                                 nv.getMaNV(),
                                                 nv.getHoTen(),
-                                                nv.getChucVu(),
-                                                nv.getNgayVaoLam(),
                                                 nv.getSdt(),
+                                                nv.getChucVu() != null ? nv.getChucVu().getDisplayName() : "",
+                                                nv.getNgayVaoLam(),
                                                 nv.getLuongCoBan(),
                                                 nv.getTrangThai() != null ? nv.getTrangThai().getDisplayName() : ""
                                 });
@@ -204,18 +222,34 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                 txtSoDienThoai.setText("");
                 txtLuongCoBan.setText("");
                 cbChucVu.setSelectedIndex(0);
+                cbTrangThai.setSelectedIndex(0);
                 if (dpNgayVaoLam != null) {
                         dpNgayVaoLam.setDate(LocalDate.now());
                 }
+
+        }
+
+        private void fillTxtMaNhanVien() {
+                String lastID = IDQueryHelper.getLastID("NhanVien", "maNV");
+                String maNVNew = (lastID == null || lastID.isEmpty()) ? IDGeneratorHelper.generateDefaultID("NV")
+                                : IDGeneratorHelper.generateNextIDFromFullID(lastID);
+                txtMaNhanVien.setText(maNVNew);
         }
 
         public void refreshData() {
                 clearFields();
+                fillTxtMaNhanVien();
                 resetPlaceholder(txtTimKiem, "Nhập tên hoặc số điện thoại");
                 cbFilterChucVu.setSelectedIndex(0);
                 loadDataToComboBoxes();
                 loadDataToTable();
                 tableNhanVien.clearSelection();
+                syncCapNhatButtonState();
+
+        }
+
+        private void syncCapNhatButtonState() {
+                btnCapNhat.setEnabled(tableNhanVien.getSelectedRow() >= 0);
         }
 
         private String formatCurrency(double value) {
@@ -632,6 +666,7 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
 
                 btnCapNhat.setText("Cập nhật");
                 btnCapNhat.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+                btnCapNhat.setEnabled(false);
                 btnCapNhat.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
                                 btnCapNhatActionPerformed(evt);
@@ -680,15 +715,92 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
         }// GEN-LAST:event_cbFilterChucVuActionPerformed
 
         private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaActionPerformed
-                // TODO add your handling code here:
+                String maNV = txtMaNhanVien.getText().trim();
+                if (maNV.isEmpty()) {
+                        JOptionPane.showMessageDialog(this, "Vui lòng chọn nhân viên cần xóa.");
+                        return;
+                }
+
+                int choice = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa nhân viên này không?",
+                                "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
+                if (choice != JOptionPane.YES_OPTION) {
+                        return;
+                }
+
+                try {
+                        NhanVienService service = new NhanVienService();
+                        service.xoaNhanVien(maNV);
+                        JOptionPane.showMessageDialog(this, "Xóa nhân viên thành công.");
+                        refreshData();
+                } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(this, "Xóa nhân viên thất bại: " + ex.getMessage());
+                }
         }// GEN-LAST:event_btnXoaActionPerformed
 
         private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCapNhatActionPerformed
-                // TODO add your handling code here:
+                try {
+                        String maNV = txtMaNhanVien.getText().trim();
+                        String hoTen = txtHoTen.getText().trim();
+                        String sdt = txtSoDienThoai.getText().trim();
+                        String luongText = txtLuongCoBan.getText().trim().replace(",", "");
+                        String chucVuDisplay = (String) cbChucVu.getSelectedItem();
+                        String trangThaiDisplay = (String) cbTrangThai.getSelectedItem();
+
+                        ChucVu chucVu = ComboBoxEnumLoader.getChucVuFromDisplay(chucVuDisplay);
+                        TrangThaiNhanVien trangThai = ComboBoxEnumLoader
+                                        .getTrangThaiNhanVienFromDisplay(trangThaiDisplay);
+                        LocalDate ngayVaoLam = dpNgayVaoLam != null ? dpNgayVaoLam.getDate() : LocalDate.now();
+
+                        if (maNV.isEmpty() || hoTen.isEmpty() || sdt.isEmpty() || luongText.isEmpty() || chucVu == null
+                                        || trangThai == null || ngayVaoLam == null) {
+                                JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin nhân viên.");
+                                return;
+                        }
+
+                        double luongCoBan = Double.parseDouble(luongText);
+                        NhanVien nhanVien = new NhanVien(maNV, hoTen, sdt, chucVu, ngayVaoLam, luongCoBan, trangThai);
+                        NhanVienService service = new NhanVienService();
+                        service.capNhatNhanVien(nhanVien);
+                        JOptionPane.showMessageDialog(this, "Cập nhật nhân viên thành công.");
+                        refreshData();
+                } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(this, "Lương cơ bản không hợp lệ.");
+                } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(this, "Cập nhật nhân viên thất bại: " + ex.getMessage());
+                }
         }// GEN-LAST:event_btnCapNhatActionPerformed
 
         private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnThemActionPerformed
-                // TODO add your handling code here:
+                try {
+                        String maNV = txtMaNhanVien.getText().trim();
+                        String hoTen = txtHoTen.getText().trim();
+                        String sdt = txtSoDienThoai.getText().trim();
+                        String luongText = txtLuongCoBan.getText().trim().replace(",", "");
+                        String chucVuDisplay = (String) cbChucVu.getSelectedItem();
+                        String trangThaiDisplay = (String) cbTrangThai.getSelectedItem();
+
+                        ChucVu chucVu = ComboBoxEnumLoader.getChucVuFromDisplay(chucVuDisplay);
+                        TrangThaiNhanVien trangThai = ComboBoxEnumLoader
+                                        .getTrangThaiNhanVienFromDisplay(trangThaiDisplay);
+                        LocalDate ngayVaoLam = dpNgayVaoLam != null ? dpNgayVaoLam.getDate() : LocalDate.now();
+
+                        if (maNV.isEmpty() || hoTen.isEmpty() || sdt.isEmpty() || luongText.isEmpty() || chucVu == null
+                                        || trangThai == null || ngayVaoLam == null) {
+                                JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin nhân viên.");
+                                return;
+                        }
+
+                        double luongCoBan = Double.parseDouble(luongText);
+                        NhanVien nhanVien = new NhanVien(maNV, hoTen, sdt, chucVu, ngayVaoLam, luongCoBan, trangThai);
+                        NhanVienService service = new NhanVienService();
+                        service.themNhanVien(nhanVien);
+                        JOptionPane.showMessageDialog(this, "Thêm nhân viên thành công.");
+                        refreshData();
+                } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(this, "Lương cơ bản không hợp lệ.");
+                } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(this, "Thêm nhân viên thất bại: " + ex.getMessage());
+                }
         }// GEN-LAST:event_btnThemActionPerformed
 
         private void txtMaNhanVienActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtMaNhanVienActionPerformed
@@ -741,12 +853,7 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
         // End of variables declaration//GEN-END:variables
         @Override
         public void mouseClicked(MouseEvent e) {
-                if (e.getSource() == tableNhanVien) {
-                        int row = tableNhanVien.getSelectedRow();
-                        if (row >= 0) {
-                                loadDataFromRow(row);
-                        }
-                }
+                // Được xử lý tập trung trong selection listener của bảng
         }
 
         @Override

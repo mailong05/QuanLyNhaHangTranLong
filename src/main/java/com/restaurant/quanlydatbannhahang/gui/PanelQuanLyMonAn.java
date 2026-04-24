@@ -10,8 +10,12 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import com.restaurant.quanlydatbannhahang.service.MonAnService;
 import com.restaurant.quanlydatbannhahang.entity.MonAn;
+import com.restaurant.quanlydatbannhahang.entity.LoaiMonAn;
+import com.restaurant.quanlydatbannhahang.entity.TrangThaiMonAn;
 import com.restaurant.quanlydatbannhahang.util.ComboBoxEntityLoader;
 import com.restaurant.quanlydatbannhahang.util.ComboBoxEnumLoader;
+import com.restaurant.quanlydatbannhahang.util.IDGeneratorHelper;
+import com.restaurant.quanlydatbannhahang.util.IDQueryHelper;
 import java.util.List;
 import java.util.ArrayList;
 import java.text.DecimalFormat;
@@ -50,6 +54,8 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
     private void customUI() {
         // Placeholder cho txtTimKiem
         setupPlaceholder(txtTimKiem, "Nhập tên món ăn");
+        fillTxtMaMon();
+        MainForm.attachGoHomeListener(btnTrangChu, this);
 
         // ========== DESELECT WHEN CLICK OUTSIDE TABLE ==========
         this.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -64,6 +70,17 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
 
         // Register mouse listener để populate fields khi click vào row
         tableMonAn.addMouseListener(this);
+        tableMonAn.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                int row = tableMonAn.getSelectedRow();
+                if (row >= 0) {
+                    loadDataFromRow(row);
+                }
+                syncCapNhatButtonState();
+            }
+        });
+
+        syncCapNhatButtonState();
     }
 
     private void loadDataToComboBoxes() {
@@ -244,11 +261,23 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
             String tenMon = (String) tableMonAn.getValueAt(rowIndex, 2);
             double donGia = (double) tableMonAn.getValueAt(rowIndex, 3);
             String donViTinh = (String) tableMonAn.getValueAt(rowIndex, 4);
+            String loaiMonDisplay = (String) tableMonAn.getValueAt(rowIndex, 5);
+            String trangThaiDisplay = (String) tableMonAn.getValueAt(rowIndex, 6);
 
             txtMaMon.setText(maMon);
             txtTenMon.setText(tenMon);
             txtDonGia.setText(formatCurrency(donGia));
             cbDonViTinh.setSelectedItem(donViTinh);
+            cbLoaiMonAn.setSelectedItem(loaiMonDisplay);
+            cbTrangThai.setSelectedItem(trangThaiDisplay);
+
+            MonAn monAn = monAnService.getMonAnTheoMa(maMon);
+            selectedImagePath = monAn != null ? monAn.getUrlHinhAnh() : null;
+            if (selectedImagePath != null && !selectedImagePath.trim().isEmpty()) {
+                lblHinhAnh.setIcon(ImageUtil.loadImageIcon(selectedImagePath, 96));
+            } else {
+                lblHinhAnh.setIcon(null);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Lỗi khi load dữ liệu từ row: " + e.getMessage());
@@ -259,10 +288,26 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
         txtTenMon.setText("");
         txtDonGia.setText("");
         cbDonViTinh.setSelectedIndex(0);
+        cbLoaiMonAn.setSelectedIndex(0);
+        cbTrangThai.setSelectedIndex(0);
+        fillTxtMaMon();
+    }
+
+    private void fillTxtMaMon() {
+        String lastID = IDQueryHelper.getLastID("MonAn", "maMon");
+        String maMonNew = (lastID == null || lastID.isEmpty()) ? IDGeneratorHelper.generateDefaultID("MA")
+                : IDGeneratorHelper.generateNextIDFromFullID(lastID);
+        txtMaMon.setText(maMonNew);
+    }
+
+    private void syncCapNhatButtonState() {
+        btnCapNhat.setEnabled(tableMonAn.getSelectedRow() >= 0);
     }
 
     public void refreshData() {
         clearFields();
+        allMonAn = null;
+        imagePreloadStarted = false;
         selectedImagePath = null;
         lblHinhAnh.setIcon(null);
         resetPlaceholder(txtTimKiem, "Nhập tên món ăn");
@@ -270,6 +315,7 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
         loadDataToComboBoxes();
         loadDataToTable();
         tableMonAn.clearSelection();
+        syncCapNhatButtonState();
     }
 
     private String formatCurrency(double value) {
@@ -708,7 +754,7 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtTimKiemActionPerformed
-        // TODO add your handling code here:
+        searchByText();
     }// GEN-LAST:event_txtTimKiemActionPerformed
 
     private void cbFilterTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterTrangThaiActionPerformed
@@ -766,7 +812,25 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
     }// GEN-LAST:event_cbFilterLoaiMonAnActionPerformed
 
     private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaActionPerformed
-        // TODO add your handling code here:
+        String maMon = txtMaMon.getText().trim();
+        if (maMon.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn món ăn cần xóa.");
+            return;
+        }
+
+        int choice = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa món ăn này không?",
+                "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
+        if (choice != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        try {
+            monAnService.xoaMonAn(maMon);
+            JOptionPane.showMessageDialog(this, "Xóa món ăn thành công.");
+            refreshData();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Xóa món ăn thất bại: " + ex.getMessage());
+        }
     }// GEN-LAST:event_btnXoaActionPerformed
 
     private void txtMaMonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtMaMonActionPerformed
@@ -786,11 +850,69 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
     }// GEN-LAST:event_txtTenMonActionPerformed
 
     private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCapNhatActionPerformed
-        // TODO add your handling code here:
+        try {
+            String maMon = txtMaMon.getText().trim();
+            String tenMon = txtTenMon.getText().trim();
+            String donGiaText = txtDonGia.getText().trim().replace(",", "");
+            String donViTinh = (String) cbDonViTinh.getSelectedItem();
+            String loaiDisplay = (String) cbLoaiMonAn.getSelectedItem();
+            String trangThaiDisplay = (String) cbTrangThai.getSelectedItem();
+
+            LoaiMonAn loaiMonAn = ComboBoxEnumLoader.getLoaiMonAnFromDisplay(loaiDisplay);
+            TrangThaiMonAn trangThai = ComboBoxEnumLoader.getTrangThaiMonAnFromDisplay(trangThaiDisplay);
+
+            if (maMon.isEmpty() || tenMon.isEmpty() || donGiaText.isEmpty() || donViTinh == null || loaiMonAn == null
+                    || trangThai == null) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin món ăn.");
+                return;
+            }
+
+            double donGia = Double.parseDouble(donGiaText);
+            String imagePath = selectedImagePath;
+            if (imagePath == null || imagePath.trim().isEmpty()) {
+                MonAn oldMonAn = monAnService.getMonAnTheoMa(maMon);
+                imagePath = oldMonAn != null ? oldMonAn.getUrlHinhAnh() : null;
+            }
+
+            MonAn monAn = new MonAn(maMon, tenMon, donGia, donViTinh, loaiMonAn, trangThai, imagePath);
+            monAnService.capNhatMonAn(monAn);
+            JOptionPane.showMessageDialog(this, "Cập nhật món ăn thành công.");
+            refreshData();
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Đơn giá không hợp lệ.");
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Cập nhật món ăn thất bại: " + ex.getMessage());
+        }
     }// GEN-LAST:event_btnCapNhatActionPerformed
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnThemActionPerformed
-        // TODO add your handling code here:
+        try {
+            String maMon = txtMaMon.getText().trim();
+            String tenMon = txtTenMon.getText().trim();
+            String donGiaText = txtDonGia.getText().trim().replace(",", "");
+            String donViTinh = (String) cbDonViTinh.getSelectedItem();
+            String loaiDisplay = (String) cbLoaiMonAn.getSelectedItem();
+            String trangThaiDisplay = (String) cbTrangThai.getSelectedItem();
+
+            LoaiMonAn loaiMonAn = ComboBoxEnumLoader.getLoaiMonAnFromDisplay(loaiDisplay);
+            TrangThaiMonAn trangThai = ComboBoxEnumLoader.getTrangThaiMonAnFromDisplay(trangThaiDisplay);
+
+            if (maMon.isEmpty() || tenMon.isEmpty() || donGiaText.isEmpty() || donViTinh == null || loaiMonAn == null
+                    || trangThai == null) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin món ăn.");
+                return;
+            }
+
+            double donGia = Double.parseDouble(donGiaText);
+            MonAn monAn = new MonAn(maMon, tenMon, donGia, donViTinh, loaiMonAn, trangThai, selectedImagePath);
+            monAnService.themMonAn(monAn);
+            JOptionPane.showMessageDialog(this, "Thêm món ăn thành công.");
+            refreshData();
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Đơn giá không hợp lệ.");
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Thêm món ăn thất bại: " + ex.getMessage());
+        }
     }// GEN-LAST:event_btnThemActionPerformed
 
     private void scrTableMonAnMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_scrTableMonAnMouseClicked
@@ -857,12 +979,7 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
     // End of variables declaration//GEN-END:variables
     @Override
     public void mouseClicked(MouseEvent e) {
-        if (e.getSource() == tableMonAn) {
-            int row = tableMonAn.getSelectedRow();
-            if (row >= 0) {
-                loadDataFromRow(row);
-            }
-        }
+        // Được xử lý tập trung trong selection listener của bảng
     }
 
     @Override

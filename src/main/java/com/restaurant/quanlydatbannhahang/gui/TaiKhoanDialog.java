@@ -1,8 +1,23 @@
 package com.restaurant.quanlydatbannhahang.gui;
 
+import com.restaurant.quanlydatbannhahang.entity.ChucVu;
+import com.restaurant.quanlydatbannhahang.entity.NhanVien;
+import com.restaurant.quanlydatbannhahang.entity.TaiKhoan;
+import com.restaurant.quanlydatbannhahang.service.AuthService.ValidationResult;
+import com.restaurant.quanlydatbannhahang.service.NhanVienService;
+import com.restaurant.quanlydatbannhahang.service.TaiKhoanService;
+import com.restaurant.quanlydatbannhahang.session.SessionManager;
+import com.restaurant.quanlydatbannhahang.util.ComboBoxEnumLoader;
+import java.time.LocalDate;
+import javax.swing.JOptionPane;
+
 // UIConfiguration để setup FlatLaf L&F
 
 public class TaiKhoanDialog extends javax.swing.JDialog {
+
+    private final TaiKhoanService taiKhoanService = new TaiKhoanService();
+    private final NhanVienService nhanVienService = new NhanVienService();
+    private TaiKhoan currentTaiKhoan;
 
     /**
      * Creates new form TaiKhoanDialog
@@ -14,11 +29,33 @@ public class TaiKhoanDialog extends javax.swing.JDialog {
     }
 
     private void loadDataToDialog() {
-		// TODO Auto-generated method stub
-		
-	}
+        currentTaiKhoan = SessionManager.getCurrentTaiKhoan();
+        ComboBoxEnumLoader.loadChucVuToComboBox(cbChucVu);
 
-	// <editor-fold defaultstate="collapsed" desc="Generated
+        if (currentTaiKhoan == null) {
+            return;
+        }
+
+        NhanVien nv = currentTaiKhoan.getNhanVien();
+        txtTenTaiKhoan.setText(currentTaiKhoan.getUsername());
+        txtQuyenHan
+                .setText(currentTaiKhoan.getQuyenHan() != null ? currentTaiKhoan.getQuyenHan().getDisplayName() : "");
+
+        if (nv != null) {
+            txtMaNhanVien.setText(nv.getMaNV());
+            txtHoTen.setText(nv.getHoTen());
+            jTextField5.setText(nv.getSdt());
+            if (nv.getNgayVaoLam() != null) {
+                dtNgayVaoLam.setDate(nv.getNgayVaoLam());
+            }
+            if (nv.getChucVu() != null) {
+                cbChucVu.setSelectedItem(nv.getChucVu().getDisplayName());
+            }
+        }
+    }
+
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -134,6 +171,7 @@ public class TaiKhoanDialog extends javax.swing.JDialog {
         jPanel1.add(txtXacNhanMatKhau, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 100, 150, -1));
 
         txtMaNhanVien.setEditable(false);
+        txtMaNhanVien.setFocusable(false);
         jPanel1.add(txtMaNhanVien, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 40, 150, -1));
 
         txtTenTaiKhoan.setEditable(false);
@@ -161,13 +199,45 @@ public class TaiKhoanDialog extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtQuyenHanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtQuyenHanActionPerformed
+    private void txtQuyenHanActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtQuyenHanActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtQuyenHanActionPerformed
+    }// GEN-LAST:event_txtQuyenHanActionPerformed
 
-    private void btnLuuThongTinCaNhanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLuuThongTinCaNhanActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnLuuThongTinCaNhanActionPerformed
+    private void btnLuuThongTinCaNhanActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnLuuThongTinCaNhanActionPerformed
+        if (currentTaiKhoan == null || currentTaiKhoan.getNhanVien() == null) {
+            JOptionPane.showMessageDialog(this, "Không tìm thấy thông tin phiên đăng nhập.");
+            return;
+        }
+
+        try {
+            NhanVien nv = currentTaiKhoan.getNhanVien();
+            String hoTen = txtHoTen.getText().trim();
+            String sdt = jTextField5.getText().trim();
+            LocalDate ngayVaoLam = dtNgayVaoLam.getDate();
+            ChucVu chucVu = ComboBoxEnumLoader.getChucVuFromDisplay((String) cbChucVu.getSelectedItem());
+
+            if (hoTen.isEmpty() || sdt.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ họ tên và số điện thoại.");
+                return;
+            }
+
+            NhanVien updated = new NhanVien(
+                    nv.getMaNV(),
+                    hoTen,
+                    sdt,
+                    chucVu != null ? chucVu : nv.getChucVu(),
+                    ngayVaoLam != null ? ngayVaoLam : nv.getNgayVaoLam(),
+                    nv.getLuongCoBan(),
+                    nv.getTrangThai());
+
+            nhanVienService.capNhatNhanVien(updated);
+            currentTaiKhoan.setNhanVien(updated);
+            SessionManager.setCurrentTaiKhoan(currentTaiKhoan);
+            JOptionPane.showMessageDialog(this, "Cập nhật thông tin cá nhân thành công.");
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Cập nhật thông tin thất bại: " + ex.getMessage());
+        }
+    }// GEN-LAST:event_btnLuuThongTinCaNhanActionPerformed
 
     private void txtHoTenActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtHoTenActionPerformed
         // TODO add your handling code here:
@@ -175,20 +245,42 @@ public class TaiKhoanDialog extends javax.swing.JDialog {
 
     private void btnSuaThongTinCaNhanActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnSuaThongTinCaNhanActionPerformed
         // TODO add your handling code here:
-    	luuAction();
+        luuAction();
     }// GEN-LAST:event_btnSuaThongTinCaNhanActionPerformed
 
     private void luuAction() {
-		// TODO Auto-generated method stub
-		
-	}
+        // TODO Auto-generated method stub
 
-	private void txtSoDienThoaiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtSoDienThoaiActionPerformed
+    }
+
+    private void txtSoDienThoaiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtSoDienThoaiActionPerformed
         // TODO add your handling code here:
     }// GEN-LAST:event_txtSoDienThoaiActionPerformed
 
     private void btnDoiMatKhauActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnDoiMatKhauActionPerformed
-        // TODO add your handling code here:
+        if (currentTaiKhoan == null) {
+            JOptionPane.showMessageDialog(this, "Không tìm thấy thông tin phiên đăng nhập.");
+            return;
+        }
+
+        String matKhauHienTai = new String(txtMatKhauHienTai.getPassword()).trim();
+        String matKhauMoi = new String(txtMatKhauMoi.getPassword()).trim();
+        String xacNhan = new String(txtXacNhanMatKhau.getPassword()).trim();
+
+        if (!currentTaiKhoan.getPassword().equals(matKhauHienTai)) {
+            JOptionPane.showMessageDialog(this, "Mật khẩu hiện tại không đúng.");
+            return;
+        }
+
+        ValidationResult result = TaiKhoanService.updatePassword(currentTaiKhoan.getUsername(), matKhauMoi, xacNhan);
+        JOptionPane.showMessageDialog(this, result.message);
+        if (result.success) {
+            currentTaiKhoan.setPassword(matKhauMoi);
+            SessionManager.setCurrentTaiKhoan(currentTaiKhoan);
+            txtMatKhauHienTai.setText("");
+            txtMatKhauMoi.setText("");
+            txtXacNhanMatKhau.setText("");
+        }
     }// GEN-LAST:event_btnDoiMatKhauActionPerformed
 
     /**

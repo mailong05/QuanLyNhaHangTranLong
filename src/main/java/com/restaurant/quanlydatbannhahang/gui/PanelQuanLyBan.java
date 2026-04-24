@@ -7,6 +7,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import com.restaurant.quanlydatbannhahang.service.BanService;
 import com.restaurant.quanlydatbannhahang.service.KhuVucService;
+import com.restaurant.quanlydatbannhahang.util.ComboBoxEnumLoader;
 import com.restaurant.quanlydatbannhahang.util.IDGeneratorHelper;
 import com.restaurant.quanlydatbannhahang.util.IDQueryHelper;
 import com.restaurant.quanlydatbannhahang.entity.Ban;
@@ -56,6 +57,17 @@ public class PanelQuanLyBan extends javax.swing.JPanel implements MouseListener 
 
         // Register mouse listener để populate fields khi click vào row
         tableBan.addMouseListener(this);
+        tableBan.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                int row = tableBan.getSelectedRow();
+                if (row >= 0) {
+                    loadDataFromRow(row);
+                }
+                syncCapNhatButtonState();
+            }
+        });
+
+        syncCapNhatButtonState();
     }
 
     /**
@@ -444,8 +456,10 @@ public class PanelQuanLyBan extends javax.swing.JPanel implements MouseListener 
     }// GEN-LAST:event_btnXoaTrangActionPerformed
 
     private void btnTrangChuActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTrangChuActionPerformed
-        // TODO add your handling code here:
-        MainForm.attachGoHomeListener(btnTrangChu, this);
+        java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
+        if (parentFrame instanceof MainForm) {
+            ((MainForm) parentFrame).goToTrangChuFromPanel();
+        }
     }// GEN-LAST:event_btnTrangChuActionPerformed
 
     private void loadDataToComboBoxes() {
@@ -464,6 +478,7 @@ public class PanelQuanLyBan extends javax.swing.JPanel implements MouseListener 
 
             // Load KhuVuc
             cbFilterKhuVuc.removeAllItems();
+            cbKhuVuc.removeAllItems();
             cbFilterKhuVuc.addItem("Khu vực");
             List<KhuVuc> dsKhuVuc = khuVucService.getAllKhuVuc();
             for (KhuVuc kv : dsKhuVuc) {
@@ -473,6 +488,7 @@ public class PanelQuanLyBan extends javax.swing.JPanel implements MouseListener 
 
             // Load TrangThaiBan
             cbFilterTrangThai.removeAllItems();
+            cbTrangThai.removeAllItems();
             cbFilterTrangThai.addItem("Trạng thái");
             for (TrangThaiBan trangThai : TrangThaiBan
                     .values()) {
@@ -629,7 +645,7 @@ public class PanelQuanLyBan extends javax.swing.JPanel implements MouseListener 
 
                 loadDataToTable();
                 clearFields();
-                btnCapNhat.setEnabled(false);
+                syncCapNhatButtonState();
             }
 
         } catch (Exception e) {
@@ -640,11 +656,57 @@ public class PanelQuanLyBan extends javax.swing.JPanel implements MouseListener 
     }
 
     private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCapNhatActionPerformed
-        // TODO add your handling code here:
+        try {
+            String maBan = txtMaBan.getText().trim();
+            String soGheText = txtSoGhe.getText().trim();
+            String viTri = txtViTri.getText().trim();
+            String maKhuVuc = (String) cbKhuVuc.getSelectedItem();
+            String trangThaiDisplay = (String) cbTrangThai.getSelectedItem();
+            TrangThaiBan trangThai = ComboBoxEnumLoader.getTrangThaiBanFromDisplay(trangThaiDisplay);
+
+            if (maBan.isEmpty() || soGheText.isEmpty() || viTri.isEmpty() || maKhuVuc == null || trangThai == null) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin bàn.");
+                return;
+            }
+
+            int soGhe = Integer.parseInt(soGheText);
+            KhuVuc khuVuc = khuVucService.getKhuVucTheoMa(maKhuVuc);
+            Ban ban = new Ban(maBan, soGhe, viTri, khuVuc, trangThai);
+            banService.capNhatBan(ban);
+            JOptionPane.showMessageDialog(this, "Cập nhật bàn thành công.");
+            refreshData();
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Số ghế không hợp lệ.");
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Cập nhật bàn thất bại: " + ex.getMessage());
+        }
     }// GEN-LAST:event_btnCapNhatActionPerformed
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnThemActionPerformed
-        // TODO add your handling code here:
+        try {
+            String maBan = txtMaBan.getText().trim();
+            String soGheText = txtSoGhe.getText().trim();
+            String viTri = txtViTri.getText().trim();
+            String maKhuVuc = (String) cbKhuVuc.getSelectedItem();
+            String trangThaiDisplay = (String) cbTrangThai.getSelectedItem();
+            TrangThaiBan trangThai = ComboBoxEnumLoader.getTrangThaiBanFromDisplay(trangThaiDisplay);
+
+            if (maBan.isEmpty() || soGheText.isEmpty() || viTri.isEmpty() || maKhuVuc == null || trangThai == null) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin bàn.");
+                return;
+            }
+
+            int soGhe = Integer.parseInt(soGheText);
+            KhuVuc khuVuc = khuVucService.getKhuVucTheoMa(maKhuVuc);
+            Ban ban = new Ban(maBan, soGhe, viTri, khuVuc, trangThai);
+            banService.themBan(ban);
+            JOptionPane.showMessageDialog(this, "Thêm bàn thành công.");
+            refreshData();
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Số ghế không hợp lệ.");
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Thêm bàn thất bại: " + ex.getMessage());
+        }
     }// GEN-LAST:event_btnThemActionPerformed
 
     private void txtMaBanActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtMaBanActionPerformed
@@ -694,13 +756,7 @@ public class PanelQuanLyBan extends javax.swing.JPanel implements MouseListener 
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if (e.getSource() == tableBan) {
-            int row = tableBan.getSelectedRow();
-            if (row >= 0) {
-                loadDataFromRow(row);
-                btnCapNhat.setEnabled(true);
-            }
-        }
+        // Được xử lý tập trung trong selection listener của bảng
     }
 
     private void loadDataFromRow(int rowIndex) {
@@ -733,6 +789,10 @@ public class PanelQuanLyBan extends javax.swing.JPanel implements MouseListener 
         cbTrangThai.setSelectedIndex(0);
     }
 
+    private void syncCapNhatButtonState() {
+        btnCapNhat.setEnabled(tableBan.getSelectedRow() >= 0);
+    }
+
     public void refreshData() {
         clearFields();
         fillTxtMaBan(txtMaBan);
@@ -742,6 +802,7 @@ public class PanelQuanLyBan extends javax.swing.JPanel implements MouseListener 
         loadDataToComboBoxes();
         loadDataToTable();
         tableBan.clearSelection();
+        syncCapNhatButtonState();
     }
 
     private boolean isMouseOverTable(java.awt.event.MouseEvent evt) {

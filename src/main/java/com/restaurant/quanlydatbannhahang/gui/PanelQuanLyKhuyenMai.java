@@ -26,7 +26,7 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
 
         public PanelQuanLyKhuyenMai() {
                 idGeneratorHelper = new IDGeneratorHelper();
-                idGeneratorHelper = new IDGeneratorHelper();
+                idQueryHelper = new IDQueryHelper();
                 initComponents();
                 customUI();
                 loadDataToComboBoxes();
@@ -61,9 +61,19 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
 
                 // Register mouse listener để populate fields khi click vào row
                 tableKhuyenMai.addMouseListener(this);
+                tableKhuyenMai.getSelectionModel().addListSelectionListener(e -> {
+                        if (!e.getValueIsAdjusting()) {
+                                int row = tableKhuyenMai.getSelectedRow();
+                                if (row >= 0) {
+                                        loadDataFromRow(row);
+                                }
+                                syncCapNhatButtonState();
+                        }
+                });
 
                 // Gắn sự kiện quay về Trang Chủ
                 MainForm.attachGoHomeListener(btnTrangChu, this);
+                syncCapNhatButtonState();
         }
 
         private void loadDataToComboBoxes() {
@@ -188,6 +198,12 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                         txtMaKhuyenMai.setText(maKM);
                         txtTenKhuyenMai.setText(tenKM);
                         txtGiaTriGiam.setText(formatCurrency(giaTriGiam));
+                        if (ngayBDObj instanceof LocalDate && dpNgayBatDau != null) {
+                                dpNgayBatDau.setDate((LocalDate) ngayBDObj);
+                        }
+                        if (ngayKTObj instanceof LocalDate && dbNgayKetThuc != null) {
+                                dbNgayKetThuc.setDate((LocalDate) ngayKTObj);
+                        }
                         if (dieuKienObj != null) {
                                 txtDieuKienToiThieu.setText(dieuKienObj.toString());
                         } else {
@@ -213,13 +229,26 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                 }
         }
 
+        private void syncCapNhatButtonState() {
+                btnCapNhat.setEnabled(tableKhuyenMai.getSelectedRow() >= 0);
+        }
+
         public void refreshData() {
                 clearFields();
+                fillTxtMaKhuyenMai();
                 resetPlaceholder(txtTimKiem, "Nhập tên hoặc mã khuyến mãi");
                 cbFilterTrangThai.setSelectedIndex(0);
                 loadDataToComboBoxes();
                 loadDataToTable();
                 tableKhuyenMai.clearSelection();
+                syncCapNhatButtonState();
+        }
+
+        private void fillTxtMaKhuyenMai() {
+                String lastID = idQueryHelper.getLastID("KhuyenMai", "maKM");
+                String maKMNew = (lastID == null || lastID.isEmpty()) ? idGeneratorHelper.generateDefaultID("KM")
+                                : idGeneratorHelper.generateNextIDFromFullID(lastID);
+                txtMaKhuyenMai.setText(maKMNew);
         }
 
         private String formatCurrency(double value) {
@@ -669,6 +698,11 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
 
                 btnXoa.setText("Xóa");
                 btnXoa.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+                btnXoa.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                btnXoaActionPerformed(evt);
+                        }
+                });
                 pnlRightButtons.add(btnXoa);
 
                 btnThem.setText("Thêm");
@@ -707,7 +741,7 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
         }// GEN-LAST:event_txtMaKhuyenMaiActionPerformed
 
         private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTimKiemActionPerformed
-                // TODO add your handling code here:
+                searchByText();
         }// GEN-LAST:event_btnTimKiemActionPerformed
 
         private void txtGiaTriGiamActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtGiaTriGiamActionPerformed
@@ -715,12 +749,97 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
         }// GEN-LAST:event_txtGiaTriGiamActionPerformed
 
         private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCapNhatActionPerformed
-                // TODO add your handling code here:
+                try {
+                        String maKM = txtMaKhuyenMai.getText().trim();
+                        String tenKM = txtTenKhuyenMai.getText().trim();
+                        String giaTriGiamText = txtGiaTriGiam.getText().trim().replace(",", "");
+                        String dieuKienText = txtDieuKienToiThieu.getText().trim().replace(",", "");
+                        LocalDate ngayBatDau = dpNgayBatDau != null ? dpNgayBatDau.getDate() : null;
+                        LocalDate ngayKetThuc = dbNgayKetThuc != null ? dbNgayKetThuc.getDate() : null;
+                        String trangThaiDisplay = (String) cbTrangThai.getSelectedItem();
+
+                        com.restaurant.quanlydatbannhahang.entity.TrangThaiKhuyenMai trangThai = ComboBoxEnumLoader
+                                        .getTrangThaiKhuyenMaiFromDisplay(trangThaiDisplay);
+
+                        if (maKM.isEmpty() || tenKM.isEmpty() || giaTriGiamText.isEmpty() || dieuKienText.isEmpty()
+                                        || ngayBatDau == null || ngayKetThuc == null || trangThai == null) {
+                                JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin khuyến mãi.");
+                                return;
+                        }
+
+                        double giaTriGiam = Double.parseDouble(giaTriGiamText);
+                        double dieuKienToiThieu = Double.parseDouble(dieuKienText);
+
+                        KhuyenMai km = new KhuyenMai(maKM, tenKM, giaTriGiam, ngayBatDau, ngayKetThuc,
+                                        dieuKienToiThieu, trangThai);
+                        KhuyenMaiService service = new KhuyenMaiService();
+                        service.capNhatKhuyenMai(km);
+                        JOptionPane.showMessageDialog(this, "Cập nhật khuyến mãi thành công.");
+                        refreshData();
+                } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(this, "Giá trị giảm hoặc điều kiện tối thiểu không hợp lệ.");
+                } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(this, "Cập nhật khuyến mãi thất bại: " + ex.getMessage());
+                }
         }// GEN-LAST:event_btnCapNhatActionPerformed
 
         private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnThemActionPerformed
-                // TODO add your handling code here:
+                try {
+                        String maKM = txtMaKhuyenMai.getText().trim();
+                        String tenKM = txtTenKhuyenMai.getText().trim();
+                        String giaTriGiamText = txtGiaTriGiam.getText().trim().replace(",", "");
+                        String dieuKienText = txtDieuKienToiThieu.getText().trim().replace(",", "");
+                        LocalDate ngayBatDau = dpNgayBatDau != null ? dpNgayBatDau.getDate() : null;
+                        LocalDate ngayKetThuc = dbNgayKetThuc != null ? dbNgayKetThuc.getDate() : null;
+                        String trangThaiDisplay = (String) cbTrangThai.getSelectedItem();
+
+                        com.restaurant.quanlydatbannhahang.entity.TrangThaiKhuyenMai trangThai = ComboBoxEnumLoader
+                                        .getTrangThaiKhuyenMaiFromDisplay(trangThaiDisplay);
+
+                        if (maKM.isEmpty() || tenKM.isEmpty() || giaTriGiamText.isEmpty() || dieuKienText.isEmpty()
+                                        || ngayBatDau == null || ngayKetThuc == null || trangThai == null) {
+                                JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin khuyến mãi.");
+                                return;
+                        }
+
+                        double giaTriGiam = Double.parseDouble(giaTriGiamText);
+                        double dieuKienToiThieu = Double.parseDouble(dieuKienText);
+
+                        KhuyenMai km = new KhuyenMai(maKM, tenKM, giaTriGiam, ngayBatDau, ngayKetThuc,
+                                        dieuKienToiThieu, trangThai);
+                        KhuyenMaiService service = new KhuyenMaiService();
+                        service.themKhuyenMai(km);
+                        JOptionPane.showMessageDialog(this, "Thêm khuyến mãi thành công.");
+                        refreshData();
+                } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(this, "Giá trị giảm hoặc điều kiện tối thiểu không hợp lệ.");
+                } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(this, "Thêm khuyến mãi thất bại: " + ex.getMessage());
+                }
         }// GEN-LAST:event_btnThemActionPerformed
+
+        private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {
+                String maKM = txtMaKhuyenMai.getText().trim();
+                if (maKM.isEmpty()) {
+                        JOptionPane.showMessageDialog(this, "Vui lòng chọn khuyến mãi cần xóa.");
+                        return;
+                }
+
+                int choice = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa khuyến mãi này không?",
+                                "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
+                if (choice != JOptionPane.YES_OPTION) {
+                        return;
+                }
+
+                try {
+                        KhuyenMaiService service = new KhuyenMaiService();
+                        service.xoaKhuyenMai(maKM);
+                        JOptionPane.showMessageDialog(this, "Xóa khuyến mãi thành công.");
+                        refreshData();
+                } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(this, "Xóa khuyến mãi thất bại: " + ex.getMessage());
+                }
+        }
 
         // Variables declaration - do not modify//GEN-BEGIN:variables
         private javax.swing.JButton btnCapNhat;
@@ -756,8 +875,7 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
         // End of variables declaration//GEN-END:variables
         @Override
         public void mouseClicked(MouseEvent e) {
-                // TODO Auto-generated method stub
-
+                // Được xử lý tập trung trong selection listener của bảng
         }
 
         @Override

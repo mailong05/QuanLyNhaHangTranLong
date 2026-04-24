@@ -4,18 +4,35 @@
  */
 package com.restaurant.quanlydatbannhahang.gui;
 
+import com.restaurant.quanlydatbannhahang.entity.KhachHang;
+import com.restaurant.quanlydatbannhahang.entity.KhuyenMai;
+import com.restaurant.quanlydatbannhahang.service.KhachHangService;
+import com.restaurant.quanlydatbannhahang.service.KhuyenMaiService;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author nguye
  */
 public class PanelLapHoaDon extends javax.swing.JPanel {
 
+    private KhachHangService khachHangService;
+    private KhuyenMaiService khuyenMaiService;
+    private List<KhachHang> allKhachHang;
+
     /**
      * Creates new form PanelLapHoaDon
      */
     public PanelLapHoaDon() {
         initComponents();
+        khachHangService = new KhachHangService();
+        khuyenMaiService = new KhuyenMaiService();
+        allKhachHang = new ArrayList<>();
         customUI();
+        loadKhachHangToTable();
+        loadKhuyenMaiToComboBox();
     }
 
     /**
@@ -374,23 +391,40 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnDungDiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnDungDiemActionPerformed
-        // TODO add your handling code here:
+        int row = tableThongTinKhachHang.getSelectedRow();
+        if (row < 0) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Vui lòng chọn khách hàng trước khi dùng điểm.");
+            return;
+        }
+
+        Object diemObj = tableThongTinKhachHang.getValueAt(row, 1);
+        int diem = diemObj instanceof Number ? ((Number) diemObj).intValue() : 0;
+        if (diem <= 0) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Khách hàng không đủ điểm để sử dụng.");
+            return;
+        }
+        javax.swing.JOptionPane.showMessageDialog(this,
+                "Điểm khả dụng: " + diem + ". Chức năng áp điểm trực tiếp vào hóa đơn đang được phát triển.");
     }// GEN-LAST:event_btnDungDiemActionPerformed
 
     private void cbKhuyenMaiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbKhuyenMaiActionPerformed
-        // TODO add your handling code here:
+        Object selected = cbKhuyenMai.getSelectedItem();
+        if (selected != null) {
+            cbKhuyenMai.setToolTipText(selected.toString());
+        }
     }// GEN-LAST:event_cbKhuyenMaiActionPerformed
 
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTimKiemActionPerformed
-        // TODO add your handling code here:
+        searchKhachHang();
     }// GEN-LAST:event_btnTimKiemActionPerformed
 
     private void btnTaoTaiKhoanActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTaoTaiKhoanActionPerformed
-        // TODO add your handling code here:
+        javax.swing.JOptionPane.showMessageDialog(this,
+                "Chức năng tạo tài khoản cho khách hàng đang được phát triển.");
     }// GEN-LAST:event_btnTaoTaiKhoanActionPerformed
 
     private void btnInHoaDonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnInHoaDonActionPerformed
-        // TODO add your handling code here:
+        javax.swing.JOptionPane.showMessageDialog(this, "Chức năng in hóa đơn đang được phát triển.");
     }// GEN-LAST:event_btnInHoaDonActionPerformed
 
     private void customUI() {
@@ -403,6 +437,76 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
                 btnTrangChuActionPerformed(evt);
             }
         });
+
+        tableThongTinKhachHang.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                int row = tableThongTinKhachHang.getSelectedRow();
+                if (row >= 0) {
+                    Object ten = tableThongTinKhachHang.getValueAt(row, 0);
+                    txtTenKhachHang.setText(ten != null ? ten.toString() : "");
+                }
+            }
+        });
+    }
+
+    private void loadKhachHangToTable() {
+        try {
+            allKhachHang = khachHangService.getAllKhachHang();
+            DefaultTableModel model = (DefaultTableModel) tableThongTinKhachHang.getModel();
+            model.setRowCount(0);
+
+            for (KhachHang kh : allKhachHang) {
+                model.addRow(new Object[] {
+                        kh.getHoTen(),
+                        kh.getDiemTichLuy(),
+                        kh.getLoaiThanhVien() != null ? kh.getLoaiThanhVien().getDisplayName() : ""
+                });
+            }
+        } catch (Exception ex) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Lỗi tải khách hàng: " + ex.getMessage());
+        }
+    }
+
+    private void loadKhuyenMaiToComboBox() {
+        try {
+            cbKhuyenMai.removeAllItems();
+            cbKhuyenMai.addItem("Không áp dụng");
+            List<KhuyenMai> dsKhuyenMai = khuyenMaiService.getKhuyenMaiHoatDong();
+            for (KhuyenMai km : dsKhuyenMai) {
+                cbKhuyenMai.addItem(km.getMaKM() + " - " + km.getTenKM());
+            }
+        } catch (Exception ex) {
+            cbKhuyenMai.removeAllItems();
+            cbKhuyenMai.addItem("Không áp dụng");
+        }
+    }
+
+    private void searchKhachHang() {
+        String key = txtTimKiem.getText().trim().toLowerCase();
+        DefaultTableModel model = (DefaultTableModel) tableThongTinKhachHang.getModel();
+        model.setRowCount(0);
+
+        if (key.isEmpty() || key.equals("tìm kiếm khách hàng")) {
+            loadKhachHangToTable();
+            return;
+        }
+
+        for (KhachHang kh : allKhachHang) {
+            String hoTen = kh.getHoTen() != null ? kh.getHoTen().toLowerCase() : "";
+            String sdt = kh.getSdt() != null ? kh.getSdt().toLowerCase() : "";
+            if (hoTen.contains(key) || sdt.contains(key)) {
+                model.addRow(new Object[] {
+                        kh.getHoTen(),
+                        kh.getDiemTichLuy(),
+                        kh.getLoaiThanhVien() != null ? kh.getLoaiThanhVien().getDisplayName() : ""
+                });
+            }
+        }
+
+        if (model.getRowCount() == 0) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Không tìm thấy khách hàng phù hợp.");
+        }
     }
 
     /**
@@ -448,7 +552,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
     }
 
     private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtTimKiemActionPerformed
-        // TODO add your handling code here:
+        searchKhachHang();
     }// GEN-LAST:event_txtTimKiemActionPerformed
 
     private void txtMaNhanVienActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtMaNhanVienActionPerformed

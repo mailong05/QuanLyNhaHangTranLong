@@ -10,6 +10,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import com.restaurant.quanlydatbannhahang.service.TaiKhoanService;
 import com.restaurant.quanlydatbannhahang.util.ComboBoxEnumLoader;
+import com.restaurant.quanlydatbannhahang.entity.QuyenHan;
 import com.restaurant.quanlydatbannhahang.entity.TaiKhoan;
 import java.util.List;
 
@@ -54,6 +55,15 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
 
                 // Register mouse listener để populate fields khi click vào row
                 tableTaiKhoan.addMouseListener(this);
+                tableTaiKhoan.getSelectionModel().addListSelectionListener(e -> {
+                        if (!e.getValueIsAdjusting()) {
+                                int row = tableTaiKhoan.getSelectedRow();
+                                if (row >= 0) {
+                                        loadDataFromRow(row);
+                                }
+                                syncEditStateBySelection();
+                        }
+                });
 
                 // 1. Tùy chỉnh ScrollPane và Viền bảng
                 scrTableTaiKhoan.setBorder(BorderFactory.createLineBorder(new Color(200, 190, 170), 1));
@@ -70,6 +80,7 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
 
                 // Gắn sự kiện quay về Trang Chủ
                 MainForm.attachGoHomeListener(btnTrangChu, this);
+                syncEditStateBySelection();
         }
 
         @SuppressWarnings("unchecked")
@@ -390,7 +401,30 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
         }// </editor-fold>//GEN-END:initComponents
 
         private void btnResetPasswordActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnResetPasswordActionPerformed
-                // TODO add your handling code here:
+                String username = txtTenTaiKhoan.getText().trim();
+                if (username.isEmpty()) {
+                        JOptionPane.showMessageDialog(this, "Vui lòng chọn tài khoản cần reset mật khẩu.");
+                        return;
+                }
+
+                int choice = JOptionPane.showConfirmDialog(this,
+                                "Reset mật khẩu tài khoản này về mặc định 123456?",
+                                "Xác nhận reset mật khẩu", JOptionPane.YES_NO_OPTION);
+                if (choice != JOptionPane.YES_OPTION) {
+                        return;
+                }
+
+                try {
+                        boolean ok = taiKhoanService.resetMatKhauMacDinh(username);
+                        if (ok) {
+                                txtMatKhau.setText("123456");
+                                JOptionPane.showMessageDialog(this, "Reset mật khẩu thành công.");
+                        } else {
+                                JOptionPane.showMessageDialog(this, "Reset mật khẩu thất bại.");
+                        }
+                } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(this, "Reset mật khẩu thất bại: " + ex.getMessage());
+                }
         }// GEN-LAST:event_btnResetPasswordActionPerformed
 
         private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaTrangActionPerformed
@@ -399,15 +433,79 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
         }// GEN-LAST:event_btnXoaTrangActionPerformed
 
         private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCapNhatActionPerformed
-                // TODO add your handling code here:
+                String username = txtTenTaiKhoan.getText().trim();
+                String maNV = txtMaNhanVien.getText().trim();
+                String quyenHanDisplay = (String) cbQuyenHan.getSelectedItem();
+                QuyenHan quyenHan = ComboBoxEnumLoader.getQuyenHanFromDisplay(quyenHanDisplay);
+
+                if (username.isEmpty() || maNV.isEmpty() || quyenHan == null) {
+                        JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin tài khoản.");
+                        return;
+                }
+
+                try {
+                        boolean ok = taiKhoanService.capNhatTaiKhoan(username, maNV, quyenHan);
+                        if (ok) {
+                                JOptionPane.showMessageDialog(this, "Cập nhật tài khoản thành công.");
+                                refreshData();
+                        } else {
+                                JOptionPane.showMessageDialog(this, "Cập nhật tài khoản thất bại.");
+                        }
+                } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(this, "Cập nhật tài khoản thất bại: " + ex.getMessage());
+                }
         }// GEN-LAST:event_btnCapNhatActionPerformed
 
         private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaActionPerformed
-                // TODO add your handling code here:
+                String username = txtTenTaiKhoan.getText().trim();
+                if (username.isEmpty()) {
+                        JOptionPane.showMessageDialog(this, "Vui lòng chọn tài khoản cần xóa.");
+                        return;
+                }
+
+                int choice = JOptionPane.showConfirmDialog(this,
+                                "Bạn có chắc muốn xóa tài khoản này không?",
+                                "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
+                if (choice != JOptionPane.YES_OPTION) {
+                        return;
+                }
+
+                try {
+                        boolean ok = taiKhoanService.xoaTaiKhoan(username);
+                        if (ok) {
+                                JOptionPane.showMessageDialog(this, "Xóa tài khoản thành công.");
+                                refreshData();
+                        } else {
+                                JOptionPane.showMessageDialog(this, "Xóa tài khoản thất bại.");
+                        }
+                } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(this, "Xóa tài khoản thất bại: " + ex.getMessage());
+                }
         }// GEN-LAST:event_btnXoaActionPerformed
 
         private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnThemActionPerformed
-                // TODO add your handling code here:
+                String username = txtTenTaiKhoan.getText().trim();
+                String maNV = txtMaNhanVien.getText().trim();
+                String password = new String(txtMatKhau.getPassword()).trim();
+                String quyenHanDisplay = (String) cbQuyenHan.getSelectedItem();
+                QuyenHan quyenHan = ComboBoxEnumLoader.getQuyenHanFromDisplay(quyenHanDisplay);
+
+                if (username.isEmpty() || maNV.isEmpty() || password.isEmpty() || quyenHan == null) {
+                        JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin tài khoản.");
+                        return;
+                }
+
+                try {
+                        boolean ok = taiKhoanService.themTaiKhoan(username, password, maNV, quyenHan);
+                        if (ok) {
+                                JOptionPane.showMessageDialog(this, "Thêm tài khoản thành công.");
+                                refreshData();
+                        } else {
+                                JOptionPane.showMessageDialog(this, "Thêm tài khoản thất bại.");
+                        }
+                } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(this, "Thêm tài khoản thất bại: " + ex.getMessage());
+                }
         }// GEN-LAST:event_btnThemActionPerformed
 
         private void resetPlaceholder(JTextField textField, String placeholder) {
@@ -458,7 +556,9 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
                         for (TaiKhoan tk : allTaiKhoan) {
                                 // Apply QuyenHan filter
                                 if (selectedQuyenHan != null && !selectedQuyenHan.equals("Quyền hạn")) {
-                                        if (tk.getQuyenHan() == null || !tk.getQuyenHan().equals(selectedQuyenHan)) {
+                                        if (tk.getQuyenHan() == null
+                                                        || !tk.getQuyenHan().getDisplayName()
+                                                                        .equals(selectedQuyenHan)) {
                                                 continue;
                                         }
                                 }
@@ -487,7 +587,9 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
                         for (TaiKhoan tk : allTaiKhoan) {
                                 // Apply QuyenHan filter
                                 if (selectedQuyenHan != null && !selectedQuyenHan.equals("Quyền hạn")) {
-                                        if (tk.getQuyenHan() == null || !tk.getQuyenHan().equals(selectedQuyenHan)) {
+                                        if (tk.getQuyenHan() == null
+                                                        || !tk.getQuyenHan().getDisplayName()
+                                                                        .equals(selectedQuyenHan)) {
                                                 continue;
                                         }
                                 }
@@ -503,9 +605,8 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
 
                                 model.addRow(new Object[] {
                                                 tk.getUsername(),
-                                                tk.getPassword(),
                                                 tk.getNhanVien() != null ? tk.getNhanVien().getMaNV() : "",
-                                                tk.getQuyenHan()
+                                                tk.getQuyenHan() != null ? tk.getQuyenHan().getDisplayName() : ""
                                 });
                         }
                         centerTableColumns(tableTaiKhoan);
@@ -540,6 +641,14 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
                 txtTimKiem.setText("");
         }
 
+        private void syncEditStateBySelection() {
+                boolean hasSelection = tableTaiKhoan.getSelectedRow() >= 0;
+                btnCapNhat.setEnabled(hasSelection);
+                btnResetPassword.setEnabled(hasSelection);
+                txtMaNhanVien.setEditable(!hasSelection);
+                txtMatKhau.setEditable(!hasSelection);
+        }
+
         public void refreshData() {
                 clearFields();
                 resetPlaceholder(txtTimKiem, "Nhập tên hoặc mã nhân viên");
@@ -547,10 +656,7 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
                 loadDataToComboBoxes();
                 loadDataToTable();
                 tableTaiKhoan.clearSelection();
-                btnResetPassword.setEnabled(false);
-                btnCapNhat.setEnabled(false);
-                txtMaNhanVien.setEditable(true);
-                txtMatKhau.setEditable(true);
+                syncEditStateBySelection();
 
         }
 
@@ -569,7 +675,10 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
         }
 
         private void btnTrangChuActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTrangChuActionPerformed
-                // TODO add your handling code here:
+                java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
+                if (parentFrame instanceof MainForm) {
+                        ((MainForm) parentFrame).goToTrangChuFromPanel();
+                }
         }// GEN-LAST:event_btnTrangChuActionPerformed
 
         private void txtMatKhauActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtMatKhauActionPerformed
@@ -640,16 +749,7 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
 
         @Override
         public void mouseClicked(MouseEvent e) {
-                if (e.getSource() == tableTaiKhoan) {
-                        int row = tableTaiKhoan.getSelectedRow();
-                        if (row >= 0) {
-                                btnCapNhat.setEnabled(true);
-                                btnResetPassword.setEnabled(true);
-                                txtMatKhau.setEditable(false);
-                                txtMaNhanVien.setEditable(false);
-                                loadDataFromRow(row);
-                        }
-                }
+                // Được xử lý tập trung trong selection listener của bảng
         }
 
         @Override

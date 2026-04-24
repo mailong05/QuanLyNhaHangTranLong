@@ -134,6 +134,50 @@ public class TaiKhoanDAO {
 
     }
 
+    public boolean themTaiKhoan(TaiKhoan taiKhoan) {
+        Connection con = DatabaseConnection.getConnection();
+        String sql = "INSERT INTO TaiKhoan (username, password, maNV, quyenHan) VALUES (?, ?, ?, ?)";
+        try {
+            PreparedStatement pstm = con.prepareStatement(sql);
+            pstm.setString(1, taiKhoan.getUsername());
+            pstm.setString(2, taiKhoan.getPassword());
+            pstm.setString(3, taiKhoan.getNhanVien().getMaNV());
+            pstm.setString(4, taiKhoan.getQuyenHan().name());
+            return pstm.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean capNhatTaiKhoan(TaiKhoan taiKhoan) {
+        Connection con = DatabaseConnection.getConnection();
+        String sql = "UPDATE TaiKhoan SET maNV = ?, quyenHan = ? WHERE username = ?";
+        try {
+            PreparedStatement pstm = con.prepareStatement(sql);
+            pstm.setString(1, taiKhoan.getNhanVien().getMaNV());
+            pstm.setString(2, taiKhoan.getQuyenHan().name());
+            pstm.setString(3, taiKhoan.getUsername());
+            return pstm.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean xoaTaiKhoan(String username) {
+        Connection con = DatabaseConnection.getConnection();
+        String sql = "DELETE FROM TaiKhoan WHERE username = ?";
+        try {
+            PreparedStatement pstm = con.prepareStatement(sql);
+            pstm.setString(1, username);
+            return pstm.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public List<TaiKhoan> getAllTaiKhoan() {
         Connection connection = DatabaseConnection.getConnection();
         String query = SELECT_TAIKHOAN_WITH_NHANVIEN;

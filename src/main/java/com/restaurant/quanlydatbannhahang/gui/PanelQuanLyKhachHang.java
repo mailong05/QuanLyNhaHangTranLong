@@ -67,6 +67,17 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseLis
         // 7. Gắn sự kiện quay về Trang Chủ
         MainForm.attachGoHomeListener(btnTrangChu, this);
 
+        tableKhachHang.addMouseListener(this);
+        tableKhachHang.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                int row = tableKhachHang.getSelectedRow();
+                if (row >= 0) {
+                    loadDataFromRow(row);
+                }
+                syncCapNhatButtonState();
+            }
+        });
+
         this.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mousePressed(java.awt.event.MouseEvent evt) {
@@ -76,6 +87,8 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseLis
                 }
             }
         });
+
+        syncCapNhatButtonState();
     }
 
     private void loadDataToComboBoxes() {
@@ -216,6 +229,10 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseLis
         cbLoaiThanhVien.setSelectedIndex(0);
     }
 
+    private void syncCapNhatButtonState() {
+        btnCapNhat.setEnabled(tableKhachHang.getSelectedRow() >= 0);
+    }
+
     public void refreshData() {
         clearFields();
         resetPlaceholder(txtTimKiem, "Nhập số điện thoại hoặc tên");
@@ -227,6 +244,7 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseLis
         loadDataToComboBoxes();
         loadDataToTable();
         tableKhachHang.clearSelection();
+        syncCapNhatButtonState();
     }
 
     private void resetPlaceholder(JTextField textField, String placeholder) {
@@ -732,12 +750,7 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseLis
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if (e.getSource() == tableKhachHang) {
-            int row = tableKhachHang.getSelectedRow();
-            if (row >= 0) {
-                loadDataFromRow(row);
-            }
-        }
+        // Được xử lý tập trung trong selection listener của bảng
     }
 
     @Override
