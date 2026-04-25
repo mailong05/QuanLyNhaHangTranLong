@@ -19,6 +19,7 @@ import javax.swing.border.AbstractBorder;
 
 import com.restaurant.quanlydatbannhahang.entity.QuyenHan;
 import com.restaurant.quanlydatbannhahang.entity.TaiKhoan;
+import com.restaurant.quanlydatbannhahang.session.HoaDonDraftSession;
 import com.restaurant.quanlydatbannhahang.session.SessionManager;
 import com.restaurant.quanlydatbannhahang.util.AppConfig;
 import com.restaurant.quanlydatbannhahang.util.ImageUtil;
@@ -255,10 +256,15 @@ public class MainForm extends javax.swing.JFrame {
     }
 
     public void openPanelDatMon() {
+        openPanelDatMon(null);
+    }
+
+    public void openPanelDatMon(String maBanContext) {
         // Nếu panelDatMon chưa được tạo, tạo mới
         if (panelDatMon == null) {
             panelDatMon = new PanelDatMon();
         }
+        panelDatMon.setDatMonContext(maBanContext);
         // Lưu panel hiện tại trước khi chuyển đi, để có thể quay lại
         lastVisitedPanel = panelQuanLyDatBanTruoc;
         // Lưu menu con để highlight lại khi quay lại
@@ -272,6 +278,8 @@ public class MainForm extends javax.swing.JFrame {
         if (panelLapHoaDon == null) {
             panelLapHoaDon = new PanelLapHoaDon();
         }
+        HoaDonDraftSession.setCurrentMaBanContext(panelDatMon != null ? panelDatMon.getDatMonContext() : null);
+        panelLapHoaDon.refreshDraftData();
         // Lưu panel hiện tại trước khi chuyển đi
         // (panelDatMon sẽ được giữ lại để quay lại)
         showPanel(panelLapHoaDon);

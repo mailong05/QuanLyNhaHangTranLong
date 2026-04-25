@@ -3,6 +3,7 @@ package com.restaurant.quanlydatbannhahang.gui;
 // UIConfiguration để setup FlatLaf L&F
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class LuaChonDatBanDialog extends javax.swing.JDialog {
 
@@ -74,11 +75,13 @@ public class LuaChonDatBanDialog extends javax.swing.JDialog {
     private void btnDatBanDungNgayActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnDatBanDungNgayActionPerformed
         // TODO add your handling code here:
         this.dispose();
-    	 java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
-         if (parentFrame instanceof MainForm) {
-                 ((MainForm) parentFrame).openPanelDatMon();
-         }
-         
+        java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
+        if (parentFrame instanceof MainForm) {
+            String maBanContext = selectedTables == null ? ""
+                    : selectedTables.stream().sorted().collect(Collectors.joining(","));
+            ((MainForm) parentFrame).openPanelDatMon(maBanContext);
+        }
+
     }// GEN-LAST:event_btnDatBanDungNgayActionPerformed
 
     private void btnDatBanTruocActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnDatBanTruocActionPerformed

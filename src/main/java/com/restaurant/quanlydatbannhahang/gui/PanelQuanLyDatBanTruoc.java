@@ -215,6 +215,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
 
         private void syncCapNhatButtonState() {
                 btnCapNhat.setEnabled(tableBan.getSelectedRow() >= 0);
+                btnChonMon.setEnabled(tableBan.getSelectedRow() >= 0);
         }
 
         // Từ đây không chỉnh sửa bên dưới
@@ -1029,9 +1030,17 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
         }// GEN-LAST:event_btnChonMonActionPerformed
 
         private void chonMonAction() {
+                int rowSelected = tableBan.getSelectedRow();
+                if (rowSelected < 0) {
+                        JOptionPane.showMessageDialog(this, "Vui lòng chọn phiếu đặt bàn trước khi chọn món.");
+                        return;
+                }
+
+                int modelRow = tableBan.convertRowIndexToModel(rowSelected);
+                String maBanContext = String.valueOf(tableBan.getModel().getValueAt(modelRow, 3));
                 java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
                 if (parentFrame instanceof MainForm) {
-                        ((MainForm) parentFrame).openPanelDatMon();
+                        ((MainForm) parentFrame).openPanelDatMon(maBanContext);
                 }
         }
 
