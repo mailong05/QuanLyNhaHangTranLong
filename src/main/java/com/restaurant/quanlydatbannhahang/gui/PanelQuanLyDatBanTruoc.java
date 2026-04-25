@@ -217,6 +217,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
         private void syncCapNhatButtonState() {
                 btnCapNhat.setEnabled(tableBan.getSelectedRow() >= 0);
                 btnChonMon.setEnabled(tableBan.getSelectedRow() >= 0);
+                btnXoa.setEnabled(tableBan.getSelectedRow() >= 0);
         }
 
         // Từ đây không chỉnh sửa bên dưới

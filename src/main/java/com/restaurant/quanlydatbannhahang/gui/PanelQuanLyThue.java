@@ -239,7 +239,9 @@ public class PanelQuanLyThue extends javax.swing.JPanel implements MouseListener
 
     private void syncCapNhatButtonState() {
         btnCapNhat.setEnabled(tableThue.getSelectedRow() >= 0);
+        btnXoa.setEnabled(tableThue.getSelectedRow() >= 0);
     }
+
 
     public void refreshData() {
         clearFields();

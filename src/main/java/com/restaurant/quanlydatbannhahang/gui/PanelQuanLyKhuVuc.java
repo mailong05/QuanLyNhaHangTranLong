@@ -481,6 +481,7 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
 
     private void syncCapNhatButtonState() {
         btnCapNhat.setEnabled(tableKhuVuc.getSelectedRow() >= 0);
+        btnXoa.setEnabled(tableKhuVuc.getSelectedRow() >= 0);
     }
 
     public void refreshData() {

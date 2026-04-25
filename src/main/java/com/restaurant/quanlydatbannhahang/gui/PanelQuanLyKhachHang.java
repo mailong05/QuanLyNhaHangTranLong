@@ -231,6 +231,7 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseLis
 
     private void syncCapNhatButtonState() {
         btnCapNhat.setEnabled(tableKhachHang.getSelectedRow() >= 0);
+        btnXoa.setEnabled(tableKhachHang.getSelectedRow() >= 0);
     }
 
     public void refreshData() {

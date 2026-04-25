@@ -791,6 +791,7 @@ public class PanelQuanLyBan extends javax.swing.JPanel implements MouseListener 
 
     private void syncCapNhatButtonState() {
         btnCapNhat.setEnabled(tableBan.getSelectedRow() >= 0);
+        btnXoa.setEnabled(tableBan.getSelectedRow() >= 0);
     }
 
     public void refreshData() {

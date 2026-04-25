@@ -271,13 +271,7 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
             cbLoaiMonAn.setSelectedItem(loaiMonDisplay);
             cbTrangThai.setSelectedItem(trangThaiDisplay);
 
-            MonAn monAn = monAnService.getMonAnTheoMa(maMon);
-            selectedImagePath = monAn != null ? monAn.getUrlHinhAnh() : null;
-            if (selectedImagePath != null && !selectedImagePath.trim().isEmpty()) {
-                lblHinhAnh.setIcon(ImageUtil.loadImageIcon(selectedImagePath, 96));
-            } else {
-                lblHinhAnh.setIcon(null);
-            }
+
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Lỗi khi load dữ liệu từ row: " + e.getMessage());
@@ -302,6 +296,7 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
 
     private void syncCapNhatButtonState() {
         btnCapNhat.setEnabled(tableMonAn.getSelectedRow() >= 0);
+        btnXoa.setEnabled(tableMonAn.getSelectedRow() >= 0);
     }
 
     public void refreshData() {

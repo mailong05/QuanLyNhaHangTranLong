@@ -647,6 +647,7 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
                 btnResetPassword.setEnabled(hasSelection);
                 txtMaNhanVien.setEditable(!hasSelection);
                 txtMatKhau.setEditable(!hasSelection);
+                btnXoa.setEnabled(hasSelection);
         }
 
         public void refreshData() {

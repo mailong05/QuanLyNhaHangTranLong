@@ -124,9 +124,9 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                                 model.addRow(new Object[] {
                                                 km.getMaKM(),
                                                 km.getTenKM(),
-                                                km.getNgayBatDau(),
-                                                km.getNgayKetThuc(),
                                                 km.getGiaTriGiam(),
+                                                km.getNgayBatDau(),
+                                                km.getNgayKetThuc(),                                               
                                                 km.getDieuKienToiThieu(),
                                                 km.getTrangThai() != null ? km.getTrangThai().getDisplayName() : ""
                                 });
@@ -230,8 +230,10 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
         }
 
         private void syncCapNhatButtonState() {
-                btnCapNhat.setEnabled(tableKhuyenMai.getSelectedRow() >= 0);
+            btnCapNhat.setEnabled(tableKhuyenMai.getSelectedRow() >= 0);
+            btnXoa.setEnabled(tableKhuyenMai.getSelectedRow() >= 0);
         }
+
 
         public void refreshData() {
                 clearFields();

@@ -249,8 +249,10 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
         }
 
         private void syncCapNhatButtonState() {
-                btnCapNhat.setEnabled(tableNhanVien.getSelectedRow() >= 0);
+            btnCapNhat.setEnabled(tableNhanVien.getSelectedRow() >= 0);
+            btnXoa.setEnabled(tableNhanVien.getSelectedRow() >= 0);
         }
+
 
         private String formatCurrency(double value) {
                 DecimalFormat df = new DecimalFormat("#,##0.00");
