@@ -14,6 +14,7 @@ public final class HoaDonDraftSession {
 
     private static final Map<String, List<DraftMonItem>> monItemsByMaBan = new LinkedHashMap<>();
     private static String currentMaBanContext = "";
+    private static String currentPhoneNumber = "";
 
     private HoaDonDraftSession() {
     }
@@ -37,6 +38,18 @@ public final class HoaDonDraftSession {
 
     public static void setCurrentMaBanContext(String maBanContext) {
         currentMaBanContext = normalizeMaBanContext(maBanContext);
+    }
+
+    public static String getCurrentPhoneNumber() {
+        return currentPhoneNumber;
+    }
+
+    public static void setCurrentPhoneNumber(String phoneNumber) {
+        currentPhoneNumber = phoneNumber == null ? "" : phoneNumber.trim();
+    }
+
+    public static void clearCurrentPhoneNumber() {
+        currentPhoneNumber = "";
     }
 
     public static List<DraftMonItem> getMonItems() {
@@ -73,6 +86,7 @@ public final class HoaDonDraftSession {
     public static void clear() {
         monItemsByMaBan.clear();
         currentMaBanContext = "";
+        currentPhoneNumber = "";
     }
 
     public static class DraftMonItem {

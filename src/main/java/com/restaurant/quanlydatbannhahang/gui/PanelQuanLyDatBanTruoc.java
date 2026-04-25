@@ -24,6 +24,7 @@ import com.restaurant.quanlydatbannhahang.service.PhieuDatBanService;
 import com.restaurant.quanlydatbannhahang.util.IDGeneratorHelper;
 import com.restaurant.quanlydatbannhahang.util.IDQueryHelper;
 import com.restaurant.quanlydatbannhahang.service.BanService;
+import com.restaurant.quanlydatbannhahang.session.HoaDonDraftSession;
 
 import com.restaurant.quanlydatbannhahang.entity.PhieuDatBan;
 import com.restaurant.quanlydatbannhahang.entity.Ban;
@@ -1038,6 +1039,8 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
 
                 int modelRow = tableBan.convertRowIndexToModel(rowSelected);
                 String maBanContext = String.valueOf(tableBan.getModel().getValueAt(modelRow, 3));
+                String soDienThoai = String.valueOf(tableBan.getModel().getValueAt(modelRow, 1));
+                HoaDonDraftSession.setCurrentPhoneNumber(soDienThoai);
                 java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
                 if (parentFrame instanceof MainForm) {
                         ((MainForm) parentFrame).openPanelDatMon(maBanContext);

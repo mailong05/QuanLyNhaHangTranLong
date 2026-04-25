@@ -256,6 +256,7 @@ public class MainForm extends javax.swing.JFrame {
     }
 
     public void openPanelDatMon() {
+        HoaDonDraftSession.clearCurrentPhoneNumber();
         openPanelDatMon(null);
     }
 

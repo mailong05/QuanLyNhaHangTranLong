@@ -2,6 +2,7 @@ package com.restaurant.quanlydatbannhahang.gui;
 
 // UIConfiguration để setup FlatLaf L&F
 
+import com.restaurant.quanlydatbannhahang.session.HoaDonDraftSession;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -74,6 +75,7 @@ public class LuaChonDatBanDialog extends javax.swing.JDialog {
 
     private void btnDatBanDungNgayActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnDatBanDungNgayActionPerformed
         // TODO add your handling code here:
+        HoaDonDraftSession.clearCurrentPhoneNumber();
         this.dispose();
         java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
         if (parentFrame instanceof MainForm) {

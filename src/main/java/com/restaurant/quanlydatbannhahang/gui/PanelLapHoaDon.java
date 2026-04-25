@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.awt.event.ItemEvent;
 import javax.swing.JOptionPane;
 import javax.swing.JLabel;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -39,6 +40,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
     private KhachHang selectedKhachHang = null;
     private int diemDaApDung = 0;
     private static final int VND_PER_DIEM = 1000;
+    private boolean loadingKhuyenMai = false;
 
     /**
      * Creates new form PanelLapHoaDon
@@ -254,7 +256,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         jLabel3.setText("Khuyến mãi:");
 
         cbKhuyenMai.setModel(
-                new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+                new javax.swing.DefaultComboBoxModel<>(new String[] {}));
         cbKhuyenMai.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbKhuyenMaiActionPerformed(evt);
@@ -444,6 +446,9 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
     }// GEN-LAST:event_btnDungDiemActionPerformed
 
     private void cbKhuyenMaiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbKhuyenMaiActionPerformed
+        if (loadingKhuyenMai) {
+            return;
+        }
         Object selected = cbKhuyenMai.getSelectedItem();
         if (selected != null) {
             cbKhuyenMai.setToolTipText(selected.toString());
@@ -477,6 +482,12 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         btnTrangChu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTrangChuActionPerformed(evt);
+            }
+        });
+
+        cbKhuyenMai.addItemListener(evt -> {
+            if (!loadingKhuyenMai && evt.getStateChange() == ItemEvent.SELECTED) {
+                updateTongTienSummary();
             }
         });
 
@@ -545,23 +556,48 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         initHoaDonHeader();
         loadHoaDonDraft();
         loadKhuyenMaiToComboBox();
-        populateCustomerInfo();
         selectedKhachHang = null;
         diemDaApDung = 0;
+        populateCustomerInfoFromReservation();
         updateTongTienSummary();
     }
 
-    private void populateCustomerInfo() {
-        String maBan = HoaDonDraftSession.getCurrentMaBanContext();
-        if (maBan == null || maBan.isEmpty()) {
-            // Walk-in customer
-            txtTenKhachHang.setText("Khách vãng lại");
-            loadKhachHangToTable();
-        } else {
-            // Try to find reservation info to get customer phone
-            loadKhachHangToTable();
-            txtTenKhachHang.setText("");
+    private void populateCustomerInfoFromReservation() {
+        String soDienThoai = HoaDonDraftSession.getCurrentPhoneNumber();
+        DefaultTableModel model = (DefaultTableModel) tableThongTinKhachHang.getModel();
+        model.setRowCount(0);
+        searchedKhachHang.clear();
+        selectedKhachHang = null;
+
+        if (soDienThoai == null || soDienThoai.trim().isEmpty()) {
+            txtTimKiem.setText("");
+            txtTenKhachHang.setText("Khách vãng lai");
+            centerTableColumns(tableThongTinKhachHang);
+            return;
         }
+
+        String phone = soDienThoai.trim();
+        txtTimKiem.setText(phone);
+
+        try {
+            KhachHang khachHang = khachHangService.getKhachHangTheoSDT(phone);
+            if (khachHang != null) {
+                selectedKhachHang = khachHang;
+                searchedKhachHang.add(khachHang);
+                txtTenKhachHang.setText(khachHang.getHoTen() != null ? khachHang.getHoTen() : "");
+                model.addRow(new Object[] {
+                        khachHang.getHoTen(),
+                        khachHang.getDiemTichLuy(),
+                        khachHang.getLoaiThanhVien() != null ? khachHang.getLoaiThanhVien().getDisplayName() : ""
+                });
+            } else {
+                txtTenKhachHang.setText("Khách vãng lại");
+            }
+        } catch (Exception ex) {
+            txtTenKhachHang.setText("Khách vãng lại");
+        }
+
+        centerTableColumns(tableThongTinKhachHang);
     }
 
     private void loadKhachHangToTable() {
@@ -577,6 +613,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
     }
 
     private void loadKhuyenMaiToComboBox() {
+        loadingKhuyenMai = true;
         try {
             cbKhuyenMai.removeAllItems();
             khuyenMaiByDisplay.clear();
@@ -591,6 +628,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
             cbKhuyenMai.removeAllItems();
             cbKhuyenMai.addItem("Không áp dụng");
         } finally {
+            loadingKhuyenMai = false;
             updateTongTienSummary();
         }
     }
