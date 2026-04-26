@@ -76,6 +76,7 @@ public class LuaChonDatBanDialog extends javax.swing.JDialog {
     private void btnDatBanDungNgayActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnDatBanDungNgayActionPerformed
         // TODO add your handling code here:
         HoaDonDraftSession.clearCurrentPhoneNumber();
+        HoaDonDraftSession.clearCurrentMaPhieuDatContext();
         this.dispose();
         java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
         if (parentFrame instanceof MainForm) {

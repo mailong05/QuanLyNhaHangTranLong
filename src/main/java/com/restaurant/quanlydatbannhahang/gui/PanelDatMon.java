@@ -14,14 +14,21 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import com.restaurant.quanlydatbannhahang.entity.MonAn;
+import com.restaurant.quanlydatbannhahang.entity.PhieuDatBan;
+import com.restaurant.quanlydatbannhahang.entity.TrangThaiBan;
 import com.restaurant.quanlydatbannhahang.session.HoaDonDraftSession;
+import com.restaurant.quanlydatbannhahang.service.BanService;
 import com.restaurant.quanlydatbannhahang.service.MonAnService;
+import com.restaurant.quanlydatbannhahang.service.PhieuDatBanService;
 import com.restaurant.quanlydatbannhahang.util.ComboBoxEnumLoader;
 import com.restaurant.quanlydatbannhahang.util.ImageUtil;
 import java.text.DecimalFormat;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  *
@@ -43,6 +50,7 @@ public class PanelDatMon extends javax.swing.JPanel {
     private final Map<String, OrderItem> phieuGoiMonMap = new LinkedHashMap<>();
     private boolean refreshingPhieuGoiMonTable = false;
     private String datMonContext = "";
+    private Set<String> maBanContextSet = new LinkedHashSet<>();
 
     /**
      * Creates new form PanelDatMon
@@ -83,10 +91,12 @@ public class PanelDatMon extends javax.swing.JPanel {
 
     public void setDatMonContext(String maBanContext) {
         String normalized = HoaDonDraftSession.normalizeMaBanContext(maBanContext);
-        boolean changed = !Objects.equals(this.datMonContext, normalized);
+        String resolvedContext = HoaDonDraftSession.resolveMaBanContext(normalized);
+        boolean changed = !Objects.equals(this.datMonContext, resolvedContext);
 
-        this.datMonContext = normalized;
-        HoaDonDraftSession.setCurrentMaBanContext(normalized);
+        this.datMonContext = resolvedContext;
+        this.maBanContextSet = HoaDonDraftSession.parseMaBanContextToSet(resolvedContext);
+        HoaDonDraftSession.setCurrentMaBanContext(resolvedContext);
 
         if (changed) {
             loadDraftFromSession();
@@ -385,6 +395,66 @@ public class PanelDatMon extends javax.swing.JPanel {
             }
             HoaDonDraftSession.setCurrentMaBanContext(datMonContext);
             HoaDonDraftSession.setMonItems(datMonContext, draftItems);
+        }
+    }
+
+    private Set<String> getMaBanSetFromContext() {
+        if (maBanContextSet == null || maBanContextSet.isEmpty()) {
+            maBanContextSet = HoaDonDraftSession.parseMaBanContextToSet(datMonContext);
+        }
+        return new LinkedHashSet<>(maBanContextSet);
+    }
+
+    private java.util.List<String> getMaBanListFromContext() {
+        return new ArrayList<>(getMaBanSetFromContext());
+    }
+
+    public void updateMaBanContextForEdit(Set<String> newSelectedTables) {
+        if (newSelectedTables == null || newSelectedTables.isEmpty()) {
+            return;
+        }
+
+        String oldContext = datMonContext;
+        String newContext = HoaDonDraftSession.normalizeMaBanContext(String.join(",", newSelectedTables));
+        if (newContext.isEmpty() || newContext.equals(oldContext)) {
+            return;
+        }
+
+        saveDraftToSession();
+        java.util.List<HoaDonDraftSession.DraftMonItem> draftItems = HoaDonDraftSession.getMonItems(oldContext);
+        if (draftItems.isEmpty()) {
+            for (OrderItem item : phieuGoiMonMap.values()) {
+                draftItems.add(new HoaDonDraftSession.DraftMonItem(item.maMon, item.tenMon, item.soLuong, item.donGia));
+            }
+        }
+
+        HoaDonDraftSession.setMonItems(newContext, draftItems);
+        HoaDonDraftSession.clear(oldContext);
+        setDatMonContext(newContext);
+        JOptionPane.showMessageDialog(this, "Đã cập nhật bàn phục vụ: " + newContext, "Thành công",
+                JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void capNhatTrangThaiSauKhiLuu() {
+        java.util.List<String> maBanList = getMaBanListFromContext();
+        if (maBanList.isEmpty()) {
+            return;
+        }
+
+        BanService banService = new BanService();
+        String maPhieuDatContext = HoaDonDraftSession.getCurrentMaPhieuDatContext();
+
+        if (maPhieuDatContext != null && !maPhieuDatContext.isEmpty()) {
+            PhieuDatBanService phieuDatBanService = new PhieuDatBanService();
+            phieuDatBanService.batDauSuDung(maPhieuDatContext);
+            for (String maBan : maBanList) {
+                banService.capNhatTrangThaiBan(maBan, TrangThaiBan.DANG_DUNG);
+            }
+            return;
+        }
+
+        for (String maBan : maBanList) {
+            banService.capNhatTrangThaiBan(maBan, TrangThaiBan.DANG_DUNG);
         }
     }
 
@@ -837,7 +907,31 @@ public class PanelDatMon extends javax.swing.JPanel {
     }// GEN-LAST:event_cbFilterLoaiMonAnActionPerformed
 
     private void btnDoiBanActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnDoiBanActionPerformed
-        JOptionPane.showMessageDialog(this, "Chức năng đổi bàn đang được phát triển.");
+        try {
+            Set<String> oldBanSet = getMaBanSetFromContext();
+            if (oldBanSet.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Không có bàn trong context để đổi.", "Thông báo",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            int response = JOptionPane.showConfirmDialog(this,
+                    "Bạn chắn chắc muốn chọn lại bàn?",
+                    "Nhắc nhở",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.INFORMATION_MESSAGE);
+
+            if (response == JOptionPane.YES_OPTION) {
+                MainForm mainForm = (MainForm) SwingUtilities.getWindowAncestor(this);
+                if (mainForm != null) {
+                    mainForm.startEditBanFromDatMon(oldBanSet, this);
+                }
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi chọn bàn: " + e.getMessage(), "Lỗi",
+                    JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
     }// GEN-LAST:event_btnDoiBanActionPerformed
 
     private void btnChonMonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnChonMonActionPerformed
@@ -845,8 +939,14 @@ public class PanelDatMon extends javax.swing.JPanel {
     }// GEN-LAST:event_btnChonMonActionPerformed
 
     private void btnLuuActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnLuuActionPerformed
-        saveDraftToSession();
-        JOptionPane.showMessageDialog(this, "Đã lưu phiếu gọi món tạm thời.");
+        try {
+            saveDraftToSession();
+            capNhatTrangThaiSauKhiLuu();
+            JOptionPane.showMessageDialog(this, "Đã lưu phiếu gọi món tạm thời.");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi lưu phiếu gọi món: " + e.getMessage(), "Lỗi",
+                    JOptionPane.ERROR_MESSAGE);
+        }
     }// GEN-LAST:event_btnLuuActionPerformed
 
     private void btnThanhToanActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnThanhToanActionPerformed

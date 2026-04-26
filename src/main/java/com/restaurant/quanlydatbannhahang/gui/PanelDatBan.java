@@ -7,6 +7,7 @@ import com.restaurant.quanlydatbannhahang.service.BanService;
 import com.restaurant.quanlydatbannhahang.service.KhuVucService;
 
 import com.restaurant.quanlydatbannhahang.service.ChiTietPhieuDatBanService;
+import com.restaurant.quanlydatbannhahang.session.HoaDonDraftSession;
 import com.restaurant.quanlydatbannhahang.entity.Ban;
 import com.restaurant.quanlydatbannhahang.entity.KhuVuc;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiBan;
@@ -23,6 +24,7 @@ public class PanelDatBan extends javax.swing.JPanel {
     private String selectedKhuVuc = null;
     private String selectedTrangThai = null;
     private PanelQuanLyDatBanTruoc panelQuanLyDatBanTruoc = null; // Reference để callback khi edit mode
+    private PanelDatMon panelDatMon = null; // Reference để callback khi đổi bàn từ PanelDatMon
     private boolean editMode = false; // Để biết có phải ở chế độ chỉnh sửa bàn
 
     public PanelDatBan() {
@@ -84,6 +86,15 @@ public class PanelDatBan extends javax.swing.JPanel {
      */
     public void setPanelQuanLyDatBanTruoc(PanelQuanLyDatBanTruoc panelQuanLyDatBanTruoc) {
         this.panelQuanLyDatBanTruoc = panelQuanLyDatBanTruoc;
+        this.panelDatMon = null;
+    }
+
+    /**
+     * Setter để pass PanelDatMon reference (callback khi đổi bàn từ PanelDatMon)
+     */
+    public void setPanelDatMon(PanelDatMon panelDatMon) {
+        this.panelDatMon = panelDatMon;
+        this.panelQuanLyDatBanTruoc = null;
     }
 
     /**
@@ -444,8 +455,7 @@ public class PanelDatBan extends javax.swing.JPanel {
 
         // Xử lý bàn đang dùng
         if (trangThai == TrangThaiBan.DANG_DUNG) {
-            // Nếu không phải highlight từ edit mode, không cho click
-            JOptionPane.showMessageDialog(this, "Bàn này đang phục vụ!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            showDangDungOptions(maBan);
             return;
         }
 
@@ -476,6 +486,40 @@ public class PanelDatBan extends javax.swing.JPanel {
         }
         card.revalidate();
         card.repaint();
+    }
+
+    private void showDangDungOptions(String maBan) {
+        Object[] options = { "Làm trống", "Chọn món", "Hủy" };
+        int choice = JOptionPane.showOptionDialog(
+                this,
+                "Bàn " + maBan + " đang ở trạng thái Đang dùng.",
+                "Chọn thao tác",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[1]);
+
+        if (choice == 0) {
+            BanService banService = new BanService();
+            try {
+                banService.giaiphongBan(maBan);
+                HoaDonDraftSession.clear(maBan);
+                updateBanStatusUI(maBan, TrangThaiBan.TRONG);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Không thể làm trống bàn: " + ex.getMessage());
+            }
+            return;
+        }
+
+        if (choice == 1) {
+            java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
+            if (parentFrame instanceof MainForm) {
+                HoaDonDraftSession.clearCurrentPhoneNumber();
+                HoaDonDraftSession.clearCurrentMaPhieuDatContext();
+                ((MainForm) parentFrame).openPanelDatMon(maBan);
+            }
+        }
     }
 
     /**
@@ -569,20 +613,43 @@ public class PanelDatBan extends javax.swing.JPanel {
             // ========== EDIT MODE: chuyển tab + cập nhật txtMaBan (không callback DB trực
             // tiếp) ==========
             if (editMode) {
-                // Cập nhật txtMaBan với danh sách bàn đã chọn
-                panelQuanLyDatBanTruoc.updateMaBanForEdit(new HashSet<>(selectedTables));
+                if (panelDatMon != null) {
+                    panelDatMon.updateMaBanContextForEdit(new HashSet<>(selectedTables));
 
-                // Reset UI cho tất cả bàn về trạng thái gốc
-                resetAllTablesUI();
-                repaintAllUI();
+                    resetAllTablesUI();
+                    repaintAllUI();
 
-                // Chuyển sang tab PanelQuanLyDatBanTruoc để user bấm btnCapNhat
-                java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
-                if (parentFrame instanceof MainForm) {
-                    ((MainForm) parentFrame).switchToQuanLyDatBanTruocTab();
+                    java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
+                    if (parentFrame instanceof MainForm) {
+                        ((MainForm) parentFrame).goBackToPanelDatMon();
+                    }
+
+                    this.editMode = false;
+                    this.panelDatMon = null;
+                    return;
                 }
 
-                // Reset edit mode flag
+                if (panelQuanLyDatBanTruoc != null) {
+                    // Cập nhật txtMaBan với danh sách bàn đã chọn
+                    panelQuanLyDatBanTruoc.updateMaBanForEdit(new HashSet<>(selectedTables));
+
+                    // Reset UI cho tất cả bàn về trạng thái gốc
+                    resetAllTablesUI();
+                    repaintAllUI();
+
+                    // Chuyển sang tab PanelQuanLyDatBanTruoc để user bấm btnCapNhat
+                    java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
+                    if (parentFrame instanceof MainForm) {
+                        ((MainForm) parentFrame).switchToQuanLyDatBanTruocTab();
+                    }
+
+                    // Reset edit mode flag
+                    this.editMode = false;
+                    return;
+                }
+
+                JOptionPane.showMessageDialog(this, "Không tìm thấy panel callback cho chế độ đổi bàn.",
+                        "Lỗi", JOptionPane.ERROR_MESSAGE);
                 this.editMode = false;
                 return;
             }

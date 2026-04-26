@@ -257,6 +257,7 @@ public class MainForm extends javax.swing.JFrame {
 
     public void openPanelDatMon() {
         HoaDonDraftSession.clearCurrentPhoneNumber();
+        HoaDonDraftSession.clearCurrentMaPhieuDatContext();
         openPanelDatMon(null);
     }
 
@@ -1308,6 +1309,20 @@ public class MainForm extends javax.swing.JFrame {
             }
             isMenuClick = true; // Reset flag
         }
+    }
+
+    /**
+     * Chuẩn bị flow đổi bàn từ PanelDatMon: pre-select các bàn cũ, bật edit mode,
+     * rồi chuyển sang PanelDatBan.
+     */
+    public void startEditBanFromDatMon(java.util.Set<String> oldBanSet, PanelDatMon sourcePanel) {
+        if (panelDatBan == null) {
+            panelDatBan = new PanelDatBan();
+        }
+
+        panelDatBan.setPanelDatMon(sourcePanel);
+        panelDatBan.setSelectedTablesForEdit(oldBanSet);
+        switchToPanelDatBan();
     }
 
     /**

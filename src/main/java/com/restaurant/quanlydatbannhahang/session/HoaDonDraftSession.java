@@ -2,9 +2,11 @@ package com.restaurant.quanlydatbannhahang.session;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -13,8 +15,10 @@ import java.util.stream.Collectors;
 public final class HoaDonDraftSession {
 
     private static final Map<String, List<DraftMonItem>> monItemsByMaBan = new LinkedHashMap<>();
+    private static final Map<String, String> contextByMaBan = new LinkedHashMap<>();
     private static String currentMaBanContext = "";
     private static String currentPhoneNumber = "";
+    private static String currentMaPhieuDatContext = "";
 
     private HoaDonDraftSession() {
     }
@@ -30,6 +34,57 @@ public final class HoaDonDraftSession {
                 .sorted()
                 .distinct()
                 .collect(Collectors.joining(","));
+    }
+
+    public static Set<String> parseMaBanContextToSet(String maBanRaw) {
+        String normalized = normalizeMaBanContext(maBanRaw);
+        Set<String> maBanSet = new LinkedHashSet<>();
+        if (normalized.isEmpty()) {
+            return maBanSet;
+        }
+
+        for (String maBan : normalized.split(",")) {
+            String value = maBan.trim();
+            if (!value.isEmpty()) {
+                maBanSet.add(value);
+            }
+        }
+        return maBanSet;
+    }
+
+    public static boolean isMaBanInContext(String maBanContext, String maBan) {
+        if (maBan == null || maBan.trim().isEmpty()) {
+            return false;
+        }
+        return parseMaBanContextToSet(maBanContext).contains(maBan.trim());
+    }
+
+    public static String resolveMaBanContext(String maBanContext) {
+        String normalized = normalizeMaBanContext(maBanContext);
+        if (normalized.isEmpty()) {
+            return "";
+        }
+
+        if (monItemsByMaBan.containsKey(normalized)) {
+            return normalized;
+        }
+
+        Set<String> maBanSet = parseMaBanContextToSet(normalized);
+        if (maBanSet.size() == 1) {
+            String maBan = maBanSet.iterator().next();
+            String mappedContext = contextByMaBan.get(maBan);
+            if (mappedContext != null && !mappedContext.isEmpty() && monItemsByMaBan.containsKey(mappedContext)) {
+                return mappedContext;
+            }
+
+            for (String storedContext : monItemsByMaBan.keySet()) {
+                if (isMaBanInContext(storedContext, maBan)) {
+                    return storedContext;
+                }
+            }
+        }
+
+        return normalized;
     }
 
     public static String getCurrentMaBanContext() {
@@ -52,6 +107,18 @@ public final class HoaDonDraftSession {
         currentPhoneNumber = "";
     }
 
+    public static String getCurrentMaPhieuDatContext() {
+        return currentMaPhieuDatContext;
+    }
+
+    public static void setCurrentMaPhieuDatContext(String maPhieuDat) {
+        currentMaPhieuDatContext = maPhieuDat == null ? "" : maPhieuDat.trim();
+    }
+
+    public static void clearCurrentMaPhieuDatContext() {
+        currentMaPhieuDatContext = "";
+    }
+
     public static List<DraftMonItem> getMonItems() {
         return getMonItems(currentMaBanContext);
     }
@@ -70,6 +137,11 @@ public final class HoaDonDraftSession {
         String normalized = normalizeMaBanContext(maBanContext);
         List<DraftMonItem> copied = (items == null) ? new ArrayList<>() : new ArrayList<>(items);
         monItemsByMaBan.put(normalized, copied);
+
+        Set<String> maBanSet = parseMaBanContextToSet(normalized);
+        for (String maBan : maBanSet) {
+            contextByMaBan.put(maBan, normalized);
+        }
     }
 
     public static boolean hasDraft(String maBanContext) {
@@ -81,12 +153,24 @@ public final class HoaDonDraftSession {
     public static void clear(String maBanContext) {
         String normalized = normalizeMaBanContext(maBanContext);
         monItemsByMaBan.remove(normalized);
+
+        Set<String> maBanToRemove = new LinkedHashSet<>();
+        for (Map.Entry<String, String> entry : contextByMaBan.entrySet()) {
+            if (normalized.equals(entry.getValue())) {
+                maBanToRemove.add(entry.getKey());
+            }
+        }
+        for (String maBan : maBanToRemove) {
+            contextByMaBan.remove(maBan);
+        }
     }
 
     public static void clear() {
         monItemsByMaBan.clear();
+        contextByMaBan.clear();
         currentMaBanContext = "";
         currentPhoneNumber = "";
+        currentMaPhieuDatContext = "";
     }
 
     public static class DraftMonItem {
