@@ -140,11 +140,11 @@ INSERT INTO ChiTietPhieuDatBan (maPhieuDat, maBan, ghiChu) VALUES
 ('PD004', 'B005', N'Gần khu vui chơi');
 
 -- 2.11. BẢNG HÓA ĐƠN
-INSERT INTO HoaDon (maHD, maBan, maNV, maKM, maThue, ngayTao, gioVao, gioRa, trangThaiThanhToan, phuongThucTT, tienGiamGia) VALUES 
-('HD001', 'B002', 'NV002', NULL, 'TH001', '2026-04-04', '11:00:00', '12:30:00', N'DA_THANH_TOAN', N'TIEN_MAT', 0),
-('HD002', 'B001', 'NV002', 'KM002', 'TH002', '2026-04-04', '18:00:00', NULL, N'CHUA_THANH_TOAN', NULL, 100000),
-('HD003', 'B006', 'NV005', 'KM004', 'TH003', '2026-04-04', '19:30:00', '21:00:00', N'DA_THANH_TOAN', N'THE', 30000),
-('HD004', 'B002', 'NV005', NULL, 'TH002', '2026-04-04', '14:00:00', '15:00:00', N'DA_HUY', NULL, 0);
+INSERT INTO HoaDon (maHD, maBan, maNV, maKM, maThue, thueSuat, tienThue, tyLePhiDV, tienPhiDV, ngayTao, gioVao, gioRa, tongTienGoc, tienGiamGia, tongThanhToan, trangThaiThanhToan, phuongThucTT) VALUES 
+('HD001', 'B002', 'NV002', NULL, 'TH001', 0, 0, 0, 0, '2026-04-04', '11:00:00', '12:30:00', 0, 0, 0, N'DA_THANH_TOAN', N'TIEN_MAT'),
+('HD002', 'B001', 'NV002', 'KM002', 'TH002', 0, 0, 0, 0, '2026-04-04', '18:00:00', NULL, 0, 100000, 0, N'CHUA_THANH_TOAN', NULL),
+('HD003', 'B006', 'NV005', 'KM004', 'TH003', 0, 0, 0, 0, '2026-04-04', '19:30:00', '21:00:00', 0, 30000, 0, N'DA_THANH_TOAN', N'THE'),
+('HD004', 'B002', 'NV005', NULL, 'TH002', 0, 0, 0, 0, '2026-04-04', '14:00:00', '15:00:00', 0, 0, 0, N'DA_HUY', NULL);
 
 -- 2.12. CHI TIẾT HÓA ĐƠN
 INSERT INTO ChiTietHoaDon (maHD, maMon, soLuong, donGiaLuuTru, ghiChu) VALUES 
@@ -165,17 +165,34 @@ WITH SumCTE AS (
     SELECT maHD, SUM(thanhTien) as SumGoc
     FROM ChiTietHoaDon
     GROUP BY maHD
+),
+PhiDichVuCTE AS (
+    SELECT TOP 1 thueSuat AS TyLePhiDichVu
+    FROM Thue
+    WHERE maThue = 'TH003'
 )
 UPDATE H
 SET H.tongTienGoc = S.SumGoc,
-    H.tongThanhToan = CASE 
-        WHEN H.trangThaiThanhToan = N'DA_HUY' THEN 0 
-        ELSE (S.SumGoc - H.tienGiamGia) * (1 + T.thueSuat) 
+    H.tyLePhiDV = P.TyLePhiDichVu,
+    H.tienPhiDV = S.SumGoc * P.TyLePhiDichVu,
+    H.thueSuat = T.thueSuat,
+    H.tienThue = CASE
+        WHEN H.trangThaiThanhToan = N'DA_HUY' THEN 0
+        WHEN (S.SumGoc + S.SumGoc * P.TyLePhiDichVu - H.tienGiamGia) <= 0 THEN 0
+        ELSE (S.SumGoc + S.SumGoc * P.TyLePhiDichVu - H.tienGiamGia) * T.thueSuat
+    END,
+    H.tongThanhToan = CASE
+        WHEN H.trangThaiThanhToan = N'DA_HUY' THEN 0
+        WHEN (S.SumGoc + S.SumGoc * P.TyLePhiDichVu - H.tienGiamGia) <= 0 THEN 0
+        ELSE (S.SumGoc + S.SumGoc * P.TyLePhiDichVu - H.tienGiamGia)
+             + ((S.SumGoc + S.SumGoc * P.TyLePhiDichVu - H.tienGiamGia) * T.thueSuat)
     END
 FROM HoaDon H
 JOIN SumCTE S ON H.maHD = S.maHD
-JOIN Thue T ON H.maThue = T.maThue;
+JOIN Thue T ON H.maThue = T.maThue
+CROSS JOIN PhiDichVuCTE P;
 GO
 
 -- XEM KẾT QUẢ
-SELECT maHD, tongTienGoc, tienGiamGia, tongThanhToan, trangThaiThanhToan FROM HoaDon;
+SELECT maHD, thueSuat, tienThue, tyLePhiDV, tienPhiDV, tongTienGoc, tienGiamGia, tongThanhToan, trangThaiThanhToan
+FROM HoaDon;

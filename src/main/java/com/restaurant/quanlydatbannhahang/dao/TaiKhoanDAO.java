@@ -152,12 +152,12 @@ public class TaiKhoanDAO {
 
     public boolean capNhatTaiKhoan(TaiKhoan taiKhoan) {
         Connection con = DatabaseConnection.getConnection();
-        String sql = "UPDATE TaiKhoan SET maNV = ?, quyenHan = ? WHERE username = ?";
+        String sql = "UPDATE TaiKhoan SET username = ?, quyenHan = ? WHERE maNV = ?";
         try {
             PreparedStatement pstm = con.prepareStatement(sql);
-            pstm.setString(1, taiKhoan.getNhanVien().getMaNV());
+            pstm.setString(3, taiKhoan.getNhanVien().getMaNV());
             pstm.setString(2, taiKhoan.getQuyenHan().name());
-            pstm.setString(3, taiKhoan.getUsername());
+            pstm.setString(1, taiKhoan.getUsername());
             return pstm.executeUpdate() > 0;
         } catch (Exception e) {
             e.printStackTrace();
@@ -214,4 +214,22 @@ public class TaiKhoanDAO {
         }
         return null;
     }
+
+	public TaiKhoan getTaiKhoanByMaNV(String maNV) {
+		// TODO Auto-generated method stub
+		Connection con = DatabaseConnection.getConnection();
+		String sql = SELECT_TAIKHOAN_WITH_NHANVIEN + "where tk.maNV = ?";
+		try {
+			PreparedStatement pstm = con.prepareStatement(sql);
+			pstm.setString(1, maNV);
+			ResultSet rs = pstm.executeQuery();
+			if(rs.next()) {
+				return buildTaiKhoanFromResultSet(rs);
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return null;
+	}
 }

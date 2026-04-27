@@ -33,6 +33,7 @@ public class MainForm extends javax.swing.JFrame {
     private JLabel activeSubLabel = null;
     private boolean isMenuClick = true; // Flag để track: click từ menu (true) hay từ button (false)
     private PanelTrangChu currentTrangChuPanel = null;
+    private PanelQuanLyKhachHang panelQuanLyKhachHang;
 
     // Lưu trữ các panel để bảo toàn trạng thái khi chuyển đổi
     private PanelDatBan panelDatBan = null;
@@ -50,6 +51,7 @@ public class MainForm extends javax.swing.JFrame {
     // 3. CÁC HÀM KHỞI TẠO (CONSTRUCTORS)
     public MainForm() {
         this("Quản lý");
+        panelQuanLyKhachHang = new PanelQuanLyKhachHang();
     }
 
     public MainForm(String role) {
@@ -225,6 +227,12 @@ public class MainForm extends javax.swing.JFrame {
     }
 
     private void showPanel(JPanel panel) {
+        if (activePanel instanceof PanelDatMon && panel != activePanel) {
+            ((PanelDatMon) activePanel).showSaveDraftReminderIfNecessary();
+        }
+        if (activePanel instanceof PanelLapHoaDon && panel != activePanel) {
+            ((PanelLapHoaDon) activePanel).showSaveHoaDonReminderIfNecessary();
+        }
         if (panel != null) {
             panelBody.removeAll();
             panelBody.add(panel, BorderLayout.CENTER);
@@ -1370,5 +1378,14 @@ public class MainForm extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(() -> {
             new MainForm().setVisible(true);
         });
+    }
+
+    public void openPanelQuanLyKhachHang() {
+        // TODO Auto-generated method stub
+        if (panelQuanLyKhachHang == null) {
+            panelQuanLyKhachHang = new PanelQuanLyKhachHang();
+        }
+        showPanel(panelQuanLyKhachHang);
+        lblTenTrang.setText("QUẢN LÝ KHÁCH HÀNG");
     }
 }

@@ -9,6 +9,10 @@ public class HoaDon {
     private NhanVien nhanVien;
     private KhuyenMai khuyenMai;
     private Thue thue;
+    private double thueSuat;
+    private double tienThue;
+    private double tyLePhiDV;
+    private double tienPhiDV;
     private LocalDate ngayTao;
     private LocalTime gioVao;
     private LocalTime gioRa;
@@ -32,6 +36,10 @@ public class HoaDon {
         this.nhanVien = nhanVien;
         this.khuyenMai = khuyenMai;
         this.thue = thue;
+        this.thueSuat = 0;
+        this.tienThue = 0;
+        this.tyLePhiDV = 0;
+        this.tienPhiDV = 0;
         this.ngayTao = ngayTao;
         this.gioVao = gioVao;
         this.gioRa = gioRa;
@@ -40,6 +48,21 @@ public class HoaDon {
         this.tongThanhToan = tongThanhToan;
         this.phuongThucTT = phuongThucTT;
         this.trangThaiThanhToan = trangThaiThanhToan;
+    }
+
+    public HoaDon(String maHD, Ban ban, NhanVien nhanVien, KhuyenMai khuyenMai, Thue thue,
+            double thueSuat, double tienThue, double tyLePhiDV, double tienPhiDV,
+            LocalDate ngayTao, LocalTime gioVao, LocalTime gioRa,
+            double tongTienGoc, double tienGiamGia, double tongThanhToan,
+            PhuongThucTT phuongThucTT, TrangThaiHoaDon trangThaiThanhToan) {
+        this(maHD, ban, nhanVien, khuyenMai, thue,
+                ngayTao, gioVao, gioRa,
+                tongTienGoc, tienGiamGia, tongThanhToan,
+                phuongThucTT, trangThaiThanhToan);
+        this.thueSuat = thueSuat;
+        this.tienThue = tienThue;
+        this.tyLePhiDV = tyLePhiDV;
+        this.tienPhiDV = tienPhiDV;
     }
 
     // Getter và Setter
@@ -51,7 +74,11 @@ public class HoaDon {
         return ban;
     }
 
-    public void setBan(Ban ban) {
+    public void setMaHD(String maHD) {
+		this.maHD = maHD;
+	}
+
+	public void setBan(Ban ban) {
         this.ban = ban;
     }
 
@@ -77,6 +104,38 @@ public class HoaDon {
 
     public void setThue(Thue thue) {
         this.thue = thue;
+    }
+
+    public double getThueSuat() {
+        return thueSuat;
+    }
+
+    public void setThueSuat(double thueSuat) {
+        this.thueSuat = thueSuat;
+    }
+
+    public double getTienThue() {
+        return tienThue;
+    }
+
+    public void setTienThue(double tienThue) {
+        this.tienThue = tienThue;
+    }
+
+    public double getTyLePhiDV() {
+        return tyLePhiDV;
+    }
+
+    public void setTyLePhiDV(double tyLePhiDV) {
+        this.tyLePhiDV = tyLePhiDV;
+    }
+
+    public double getTienPhiDV() {
+        return tienPhiDV;
+    }
+
+    public void setTienPhiDV(double tienPhiDV) {
+        this.tienPhiDV = tienPhiDV;
     }
 
     public LocalDate getNgayTao() {
@@ -202,6 +261,10 @@ public class HoaDon {
                 ", ngayTao=" + ngayTao +
                 ", gioVao=" + gioVao +
                 ", gioRa=" + gioRa +
+                ", thueSuat=" + thueSuat +
+                ", tienThue=" + tienThue +
+                ", tyLePhiDV=" + tyLePhiDV +
+                ", tienPhiDV=" + tienPhiDV +
                 ", tongTienGoc=" + tongTienGoc +
                 ", tienGiamGia=" + tienGiamGia +
                 ", tongThanhToan=" + tongThanhToan +

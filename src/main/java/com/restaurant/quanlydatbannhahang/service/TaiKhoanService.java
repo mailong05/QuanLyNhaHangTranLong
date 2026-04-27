@@ -68,6 +68,11 @@ public class TaiKhoanService {
     }
 
     public boolean themTaiKhoan(String username, String password, String maNV, QuyenHan quyenHan) {
+    	
+    	if(taiKhoanDAO.getTaiKhoanByMaNV(maNV) == null) {
+    		throw new IllegalArgumentException("Không tìm thấy nhân viến với mã "+ maNV);
+    	}
+    	
         if (username == null || username.trim().isEmpty()) {
             throw new IllegalArgumentException("Tên tài khoản không được để trống");
         }

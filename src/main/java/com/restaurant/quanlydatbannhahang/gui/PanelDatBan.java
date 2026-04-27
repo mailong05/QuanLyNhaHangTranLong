@@ -616,13 +616,14 @@ public class PanelDatBan extends javax.swing.JPanel {
                 if (panelDatMon != null) {
                     panelDatMon.updateMaBanContextForEdit(new HashSet<>(selectedTables));
 
-                    resetAllTablesUI();
-                    repaintAllUI();
+                    String newContext = panelDatMon.getDatMonContext();
 
                     java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
                     if (parentFrame instanceof MainForm) {
-                        ((MainForm) parentFrame).goBackToPanelDatMon();
+                        ((MainForm) parentFrame).openPanelDatMon(newContext);
                     }
+
+                    refreshData();
 
                     this.editMode = false;
                     this.panelDatMon = null;

@@ -49,6 +49,7 @@ public class PanelDatMon extends javax.swing.JPanel {
     private List<MonAn> allMonAn;
     private final Map<String, OrderItem> phieuGoiMonMap = new LinkedHashMap<>();
     private boolean refreshingPhieuGoiMonTable = false;
+    private boolean draftSaved = false;
     private String datMonContext = "";
     private Set<String> maBanContextSet = new LinkedHashSet<>();
 
@@ -111,6 +112,7 @@ public class PanelDatMon extends javax.swing.JPanel {
                     new OrderItem(draft.getMaMon(), draft.getTenMon(), draft.getDonGia(), draft.getSoLuong()));
         }
         refreshPhieuGoiMonTable();
+        draftSaved = true;
     }
 
     private void initPhieuGoiMonTable() {
@@ -161,7 +163,10 @@ public class PanelDatMon extends javax.swing.JPanel {
 
                 Object value = tablePhieuGoiMon.getValueAt(row, PHIEU_COL_SO_LUONG);
                 int soLuongMoi = parsePositiveInt(value, item.soLuong);
-                item.soLuong = soLuongMoi;
+                if (soLuongMoi != item.soLuong) {
+                    item.soLuong = soLuongMoi;
+                    markDraftModified();
+                }
 
                 DefaultTableModel model = (DefaultTableModel) tablePhieuGoiMon.getModel();
                 double thanhTien = item.soLuong * item.donGia;
@@ -294,6 +299,7 @@ public class PanelDatMon extends javax.swing.JPanel {
         }
 
         item.soLuong++;
+        markDraftModified();
         refreshPhieuGoiMonTable();
     }
 
@@ -311,6 +317,7 @@ public class PanelDatMon extends javax.swing.JPanel {
 
         if (item.soLuong > 1) {
             item.soLuong--;
+            markDraftModified();
             refreshPhieuGoiMonTable();
         }
     }
@@ -323,6 +330,7 @@ public class PanelDatMon extends javax.swing.JPanel {
 
         String maMon = String.valueOf(tablePhieuGoiMon.getValueAt(row, PHIEU_COL_MA_MON));
         phieuGoiMonMap.remove(maMon);
+        markDraftModified();
         refreshPhieuGoiMonTable();
     }
 
@@ -346,6 +354,7 @@ public class PanelDatMon extends javax.swing.JPanel {
             item.soLuong++;
         }
 
+        markDraftModified();
         refreshPhieuGoiMonTable();
     }
 
@@ -387,6 +396,19 @@ public class PanelDatMon extends javax.swing.JPanel {
         lblTongTienTamTinh.setText(df.format(tongTien) + " VND");
     }
 
+    private void markDraftModified() {
+        draftSaved = false;
+    }
+
+    public void showSaveDraftReminderIfNecessary() {
+        if (!draftSaved && !phieuGoiMonMap.isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                    "Vui lòng bấm nút Lưu để lưu phiếu gọi món vào bộ nhớ tạm.",
+                    "Nhắc nhở",
+                    JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
     private void saveDraftToSession() {
         if (datMonContext != null && !datMonContext.isEmpty()) {
             List<HoaDonDraftSession.DraftMonItem> draftItems = new ArrayList<>();
@@ -395,6 +417,7 @@ public class PanelDatMon extends javax.swing.JPanel {
             }
             HoaDonDraftSession.setCurrentMaBanContext(datMonContext);
             HoaDonDraftSession.setMonItems(datMonContext, draftItems);
+            draftSaved = true;
         }
     }
 
@@ -414,6 +437,7 @@ public class PanelDatMon extends javax.swing.JPanel {
             return;
         }
 
+        Set<String> oldBanSet = getMaBanSetFromContext();
         String oldContext = datMonContext;
         String newContext = HoaDonDraftSession.normalizeMaBanContext(String.join(",", newSelectedTables));
         if (newContext.isEmpty() || newContext.equals(oldContext)) {
@@ -430,9 +454,27 @@ public class PanelDatMon extends javax.swing.JPanel {
 
         HoaDonDraftSession.setMonItems(newContext, draftItems);
         HoaDonDraftSession.clear(oldContext);
+
+        capNhatTrangThaiBanSauKhiDoiBan(oldBanSet, newSelectedTables);
+
         setDatMonContext(newContext);
         JOptionPane.showMessageDialog(this, "Đã cập nhật bàn phục vụ: " + newContext, "Thành công",
                 JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void capNhatTrangThaiBanSauKhiDoiBan(Set<String> oldBanSet, Set<String> newBanSet) {
+        BanService banService = new BanService();
+
+        Set<String> banDaHuyChon = new HashSet<>(oldBanSet);
+        banDaHuyChon.removeAll(newBanSet);
+
+        for (String maBan : banDaHuyChon) {
+            banService.capNhatTrangThaiBan(maBan, TrangThaiBan.TRONG);
+        }
+
+        for (String maBan : newBanSet) {
+            banService.capNhatTrangThaiBan(maBan, TrangThaiBan.DANG_DUNG);
+        }
     }
 
     private void capNhatTrangThaiSauKhiLuu() {

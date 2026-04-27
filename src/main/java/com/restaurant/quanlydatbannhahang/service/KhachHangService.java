@@ -116,16 +116,13 @@ public class KhachHangService {
     public boolean suDungDiemTichLuy(String maKH, int diemSuDung) {
         KhachHang khachHang = getKhachHangTheoMa(maKH);
         if (khachHang != null) {
-            if (khachHang.getDiemTichLuy() >= diemSuDung) {
-                int diemConLai = khachHang.getDiemTichLuy() - diemSuDung;
+           
+                int diemConLai = Math.max(khachHang.getDiemTichLuy() - diemSuDung, 0);
                 khachHang.setDiemTichLuy(diemConLai);
                 capNhatKhachHang(khachHang);
                 System.out.println(" Sử dụng điểm tích lũy thành công. Điểm còn lại: " + diemConLai);
                 return true;
-            } else {
-                System.out.println(" Điểm tích lũy không đủ");
-                return false;
-            }
+           
         }
         return false;
     }

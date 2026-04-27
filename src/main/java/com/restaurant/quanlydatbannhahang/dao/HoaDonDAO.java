@@ -41,6 +41,10 @@ public class HoaDonDAO {
             String maNV = rs.getString("maNV");
             String maKM = rs.getString("maKM");
             String maThue = rs.getString("maThue");
+            double thueSuat = rs.getDouble("thueSuat");
+            double tienThue = rs.getDouble("tienThue");
+            double tyLePhiDV = rs.getDouble("tyLePhiDV");
+            double tienPhiDV = rs.getDouble("tienPhiDV");
             LocalDate ngayTao = rs.getDate("ngayTao").toLocalDate();
             LocalTime gioVao = rs.getTime("gioVao") != null ? rs.getTime("gioVao").toLocalTime() : null;
             LocalTime gioRa = rs.getTime("gioRa") != null ? rs.getTime("gioRa").toLocalTime() : null;
@@ -56,6 +60,10 @@ public class HoaDonDAO {
                     nhanVienDAO.getNhanVienTheoMa(maNV),
                     khuyenMaiDAO.getKhuyenMaiTheoMa(maKM),
                     thueDAO.getThueTheoMa(maThue),
+                    thueSuat,
+                    tienThue,
+                    tyLePhiDV,
+                    tienPhiDV,
                     ngayTao,
                     gioVao,
                     gioRa,
@@ -76,7 +84,7 @@ public class HoaDonDAO {
 
     public boolean themHoaDon(HoaDon hd) {
         Connection connection = DatabaseConnection.getConnection();
-        String sql = "insert into HoaDon (maHD, maBan, maNV, maKM, maThue, ngayTao, gioVao, gioRa, tongTienGoc, tienGiamGia, tongThanhToan, phuongThucTT, trangThaiThanhToan) values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "insert into HoaDon (maHD, maBan, maNV, maKM, maThue, thueSuat, tienThue, tyLePhiDV, tienPhiDV, ngayTao, gioVao, gioRa, tongTienGoc, tienGiamGia, tongThanhToan, phuongThucTT, trangThaiThanhToan) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
             pstm.setString(1, hd.getMaHD());
@@ -84,14 +92,18 @@ public class HoaDonDAO {
             pstm.setString(3, hd.getNhanVien().getMaNV());
             pstm.setString(4, hd.getKhuyenMai() != null ? hd.getKhuyenMai().getMaKM() : null);
             pstm.setString(5, hd.getThue().getMaThue());
-            pstm.setDate(6, java.sql.Date.valueOf(hd.getNgayTao()));
-            pstm.setTime(7, hd.getGioVao() != null ? java.sql.Time.valueOf(hd.getGioVao()) : null);
-            pstm.setTime(8, hd.getGioRa() != null ? java.sql.Time.valueOf(hd.getGioRa()) : null);
-            pstm.setDouble(9, hd.getTongTienGoc());
-            pstm.setDouble(10, hd.getTienGiamGia());
-            pstm.setDouble(11, hd.getTongThanhToan());
-            pstm.setString(12, hd.getPhuongThucTT() != null ? hd.getPhuongThucTT().name() : null);
-            pstm.setString(13, hd.getTrangThaiThanhToan().name());
+            pstm.setDouble(6, hd.getThueSuat());
+            pstm.setDouble(7, hd.getTienThue());
+            pstm.setDouble(8, hd.getTyLePhiDV());
+            pstm.setDouble(9, hd.getTienPhiDV());
+            pstm.setDate(10, java.sql.Date.valueOf(hd.getNgayTao()));
+            pstm.setTime(11, hd.getGioVao() != null ? java.sql.Time.valueOf(hd.getGioVao()) : null);
+            pstm.setTime(12, hd.getGioRa() != null ? java.sql.Time.valueOf(hd.getGioRa()) : null);
+            pstm.setDouble(13, hd.getTongTienGoc());
+            pstm.setDouble(14, hd.getTienGiamGia());
+            pstm.setDouble(15, hd.getTongThanhToan());
+            pstm.setString(16, hd.getPhuongThucTT() != null ? hd.getPhuongThucTT().name() : null);
+            pstm.setString(17, hd.getTrangThaiThanhToan().name());
             return pstm.executeUpdate() > 0;
         } catch (Exception e) {
             e.printStackTrace();
@@ -203,22 +215,26 @@ public class HoaDonDAO {
 
     public boolean capNhatHoaDon(HoaDon hd) {
         Connection connection = DatabaseConnection.getConnection();
-        String sql = "update HoaDon set maBan = ?, maNV = ?, maKM = ?, maThue = ?, ngayTao = ?, gioVao = ?, gioRa = ?, tongTienGoc = ?, tienGiamGia = ?, tongThanhToan = ?, phuongThucTT = ?, trangThaiThanhToan = ? where maHD = ?";
+        String sql = "update HoaDon set maBan = ?, maNV = ?, maKM = ?, maThue = ?, thueSuat = ?, tienThue = ?, tyLePhiDV = ?, tienPhiDV = ?, ngayTao = ?, gioVao = ?, gioRa = ?, tongTienGoc = ?, tienGiamGia = ?, tongThanhToan = ?, phuongThucTT = ?, trangThaiThanhToan = ? where maHD = ?";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
             pstm.setString(1, hd.getBan().getMaBan());
             pstm.setString(2, hd.getNhanVien().getMaNV());
             pstm.setString(3, hd.getKhuyenMai() != null ? hd.getKhuyenMai().getMaKM() : null);
             pstm.setString(4, hd.getThue().getMaThue());
-            pstm.setDate(5, java.sql.Date.valueOf(hd.getNgayTao()));
-            pstm.setTime(6, hd.getGioVao() != null ? java.sql.Time.valueOf(hd.getGioVao()) : null);
-            pstm.setTime(7, hd.getGioRa() != null ? java.sql.Time.valueOf(hd.getGioRa()) : null);
-            pstm.setDouble(8, hd.getTongTienGoc());
-            pstm.setDouble(9, hd.getTienGiamGia());
-            pstm.setDouble(10, hd.getTongThanhToan());
-            pstm.setString(11, hd.getPhuongThucTT() != null ? hd.getPhuongThucTT().name() : null);
-            pstm.setString(12, hd.getTrangThaiThanhToan().name());
-            pstm.setString(13, hd.getMaHD());
+            pstm.setDouble(5, hd.getThueSuat());
+            pstm.setDouble(6, hd.getTienThue());
+            pstm.setDouble(7, hd.getTyLePhiDV());
+            pstm.setDouble(8, hd.getTienPhiDV());
+            pstm.setDate(9, java.sql.Date.valueOf(hd.getNgayTao()));
+            pstm.setTime(10, hd.getGioVao() != null ? java.sql.Time.valueOf(hd.getGioVao()) : null);
+            pstm.setTime(11, hd.getGioRa() != null ? java.sql.Time.valueOf(hd.getGioRa()) : null);
+            pstm.setDouble(12, hd.getTongTienGoc());
+            pstm.setDouble(13, hd.getTienGiamGia());
+            pstm.setDouble(14, hd.getTongThanhToan());
+            pstm.setString(15, hd.getPhuongThucTT() != null ? hd.getPhuongThucTT().name() : null);
+            pstm.setString(16, hd.getTrangThaiThanhToan().name());
+            pstm.setString(17, hd.getMaHD());
             return pstm.executeUpdate() > 0;
         } catch (Exception e) {
             e.printStackTrace();

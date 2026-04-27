@@ -10,6 +10,7 @@ import com.restaurant.quanlydatbannhahang.entity.TrangThaiPhieuDat;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiNhanVien;
 import com.restaurant.quanlydatbannhahang.entity.LoaiMonAn;
 import com.restaurant.quanlydatbannhahang.entity.LoaiThanhVien;
+import com.restaurant.quanlydatbannhahang.entity.PhuongThucTT;
 import com.restaurant.quanlydatbannhahang.entity.QuyenHan;
 import com.restaurant.quanlydatbannhahang.entity.ChucVu;
 import java.lang.reflect.Method;
@@ -302,6 +303,19 @@ public class ComboBoxEnumLoader {
     
     public static QuyenHan getQuyenHanFromDisplay(String displayText) {
         for (QuyenHan qh : QuyenHan.values()) {
+            if (qh.getDisplayName().equals(displayText)) {
+                return qh;
+            }
+        }
+        return null;
+    }
+    
+    public static void loadPTTTToComboBox(JComboBox<String> comboBox) {
+        loadEnumToComboBox(comboBox, "Tiền mặt", PhuongThucTT.class);
+    }
+    
+    public static PhuongThucTT getPTTTFromDisplay(String displayText) {
+        for (PhuongThucTT qh : PhuongThucTT.values()) {
             if (qh.getDisplayName().equals(displayText)) {
                 return qh;
             }
