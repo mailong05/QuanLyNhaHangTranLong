@@ -180,5 +180,3 @@ public class BanService {
         capNhatTrangThaiBan(maBan, TrangThaiBan.TRONG);
     }
 }
-
-   

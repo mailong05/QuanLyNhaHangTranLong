@@ -227,12 +227,7 @@ public class MainForm extends javax.swing.JFrame {
     }
 
     private void showPanel(JPanel panel) {
-        if (activePanel instanceof PanelDatMon && panel != activePanel) {
-            ((PanelDatMon) activePanel).showSaveDraftReminderIfNecessary();
-        }
-        if (activePanel instanceof PanelLapHoaDon && panel != activePanel) {
-            ((PanelLapHoaDon) activePanel).showSaveHoaDonReminderIfNecessary();
-        }
+       
         if (panel != null) {
             panelBody.removeAll();
             panelBody.add(panel, BorderLayout.CENTER);

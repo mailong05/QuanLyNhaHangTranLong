@@ -46,7 +46,8 @@ public class NhanVienService {
             throw new IllegalArgumentException("Số điện thoại nhân viên không được để trống");
         }
         if (!phonePattern.matcher(nhanVien.getSdt()).matches()) {
-            throw new IllegalArgumentException("Số điện thoại nhân viên không hợp lệ (phải 10 chữ số và bắt đầu bằng 0)");
+            throw new IllegalArgumentException(
+                    "Số điện thoại nhân viên không hợp lệ (phải 10 chữ số và bắt đầu bằng 0)");
         }
         if (nhanVien.getChucVu() == null) {
             throw new IllegalArgumentException("Vui lòng chọn chức vụ cho nhân viên");

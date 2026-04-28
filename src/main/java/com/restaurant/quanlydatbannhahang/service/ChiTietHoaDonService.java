@@ -194,7 +194,6 @@ public class ChiTietHoaDonService {
         return chiTietHoaDonDAO.getTongTienHoaDon(maHD);
     }
 
-
     /**
      * Đếm tổng số chi tiết trong hóa đơn
      */
@@ -267,6 +266,4 @@ public class ChiTietHoaDonService {
         return minChiTiet;
     }
 
-	
-    
 }

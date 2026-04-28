@@ -101,10 +101,10 @@
               <SubComponents>
                 <Component class="javax.swing.JLabel" name="lblPhieuGoiMon">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Phi&#x1ebf;u g&#x1ecd;i m&#xf3;n"/>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Segoe UI" size="16" style="1"/>
                     </Property>
+                    <Property name="text" type="java.lang.String" value="Phi&#x1ebf;u g&#x1ecd;i m&#xf3;n"/>
                   </Properties>
                 </Component>
               </SubComponents>
@@ -434,19 +434,6 @@
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
               <AbsoluteConstraints x="1020" y="620" width="134" height="33"/>
-            </Constraint>
-          </Constraints>
-        </Component>
-        <Component class="javax.swing.JButton" name="btnLuu">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="L&#x1b0;u"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnLuuActionPerformed"/>
-          </Events>
-          <Constraints>
-            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="900" y="620" width="89" height="33"/>
             </Constraint>
           </Constraints>
         </Component>

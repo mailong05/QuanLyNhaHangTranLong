@@ -14,7 +14,6 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import com.restaurant.quanlydatbannhahang.entity.MonAn;
-import com.restaurant.quanlydatbannhahang.entity.PhieuDatBan;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiBan;
 import com.restaurant.quanlydatbannhahang.session.HoaDonDraftSession;
 import com.restaurant.quanlydatbannhahang.service.BanService;
@@ -49,9 +48,9 @@ public class PanelDatMon extends javax.swing.JPanel {
     private List<MonAn> allMonAn;
     private final Map<String, OrderItem> phieuGoiMonMap = new LinkedHashMap<>();
     private boolean refreshingPhieuGoiMonTable = false;
-    private boolean draftSaved = false;
     private String datMonContext = "";
     private Set<String> maBanContextSet = new LinkedHashSet<>();
+    private static boolean isChanged = false;
 
     /**
      * Creates new form PanelDatMon
@@ -62,12 +61,37 @@ public class PanelDatMon extends javax.swing.JPanel {
         customUI();
         loadDataToComboBoxes();
         loadDataToTable();
-        this.addComponentListener(new java.awt.event.ComponentAdapter() {
+        this.addHierarchyListener(new java.awt.event.HierarchyListener() {
             @Override
-            public void componentHidden(java.awt.event.ComponentEvent evt) {
-                // Gọi hàm nhắc nhở khi panel bị ẩn đi
-            	showSaveDraftReminderIfNecessary();
+            public void hierarchyChanged(java.awt.event.HierarchyEvent e) {
+                // Kiểm tra xem trạng thái SHOWING có thay đổi không
+                if ((e.getChangeFlags() & java.awt.event.HierarchyEvent.SHOWING_CHANGED) != 0) {
+                    // Nếu hiện tại Panel KHÔNG còn hiển thị trên màn hình
+                    if (!isShowing() && isChanged) {
+                        autoSavePhieuGoiMonDraft();
+                        isChanged = false;
+                    }
+                }
             }
+
+			private void autoSavePhieuGoiMonDraft() {
+				// TODO Auto-generated method stub
+				    // Chỉ lưu nếu có món ăn và chưa được lưu (draftSaved == false)
+				    if (!phieuGoiMonMap.isEmpty()) {
+				        try {
+				            saveDraftToSession(); // Lưu món vào Session 
+				            capNhatTrangThaiSauKhiLuu(); // Cập nhật trạng thái bàn xuống DB 
+				            
+				            // Thông báo nhẹ vào Console hoặc một Label trạng thái thay vì JOptionPane
+				            JOptionPane.showMessageDialog(null,"Hệ thống: Đã tự động phiếu gọi món vào bộ nhớ tạm","Thông báo", JOptionPane.INFORMATION_MESSAGE );
+				            
+				        } catch (Exception e) {
+				            // Với Auto-save, chỉ hiện Popup khi có LỖI THỰC SỰ xảy ra
+				            JOptionPane.showMessageDialog(null, "Lỗi tự động lưu: " + e.getMessage());
+				        }
+				    }
+				
+			}
         });
     }
 
@@ -119,7 +143,6 @@ public class PanelDatMon extends javax.swing.JPanel {
                     new OrderItem(draft.getMaMon(), draft.getTenMon(), draft.getDonGia(), draft.getSoLuong()));
         }
         refreshPhieuGoiMonTable();
-        draftSaved = true;
     }
 
     private void initPhieuGoiMonTable() {
@@ -172,7 +195,6 @@ public class PanelDatMon extends javax.swing.JPanel {
                 int soLuongMoi = parsePositiveInt(value, item.soLuong);
                 if (soLuongMoi != item.soLuong) {
                     item.soLuong = soLuongMoi;
-                    markDraftModified();
                 }
 
                 DefaultTableModel model = (DefaultTableModel) tablePhieuGoiMon.getModel();
@@ -306,7 +328,6 @@ public class PanelDatMon extends javax.swing.JPanel {
         }
 
         item.soLuong++;
-        markDraftModified();
         refreshPhieuGoiMonTable();
     }
 
@@ -315,7 +336,6 @@ public class PanelDatMon extends javax.swing.JPanel {
         if (row < 0) {
             return;
         }
-
         String maMon = String.valueOf(tablePhieuGoiMon.getValueAt(row, PHIEU_COL_MA_MON));
         OrderItem item = phieuGoiMonMap.get(maMon);
         if (item == null) {
@@ -324,7 +344,6 @@ public class PanelDatMon extends javax.swing.JPanel {
 
         if (item.soLuong > 1) {
             item.soLuong--;
-            markDraftModified();
             refreshPhieuGoiMonTable();
         }
     }
@@ -337,7 +356,6 @@ public class PanelDatMon extends javax.swing.JPanel {
 
         String maMon = String.valueOf(tablePhieuGoiMon.getValueAt(row, PHIEU_COL_MA_MON));
         phieuGoiMonMap.remove(maMon);
-        markDraftModified();
         refreshPhieuGoiMonTable();
     }
 
@@ -361,7 +379,6 @@ public class PanelDatMon extends javax.swing.JPanel {
             item.soLuong++;
         }
 
-        markDraftModified();
         refreshPhieuGoiMonTable();
     }
 
@@ -403,18 +420,9 @@ public class PanelDatMon extends javax.swing.JPanel {
         lblTongTienTamTinh.setText(df.format(tongTien) + " VND");
     }
 
-    private void markDraftModified() {
-        draftSaved = false;
-    }
+ 
 
-    public void showSaveDraftReminderIfNecessary() {
-        if (!draftSaved && !phieuGoiMonMap.isEmpty()) {
-            JOptionPane.showMessageDialog(this,
-                    "Vui lòng bấm nút Lưu để lưu phiếu gọi món vào bộ nhớ tạm.",
-                    "Nhắc nhở",
-                    JOptionPane.INFORMATION_MESSAGE);
-        }
-    }
+    
 
     private void saveDraftToSession() {
         if (datMonContext != null && !datMonContext.isEmpty()) {
@@ -424,7 +432,6 @@ public class PanelDatMon extends javax.swing.JPanel {
             }
             HoaDonDraftSession.setCurrentMaBanContext(datMonContext);
             HoaDonDraftSession.setMonItems(datMonContext, draftItems);
-            draftSaved = true;
         }
     }
 
@@ -628,6 +635,7 @@ public class PanelDatMon extends javax.swing.JPanel {
                 if (confirm == JOptionPane.YES_OPTION) {
                     phieuMap.remove(maMon);
                     panel.refreshPhieuGoiMonTable();
+                    isChanged = true;
                 }
             }
             fireEditingStopped();
@@ -709,7 +717,7 @@ public class PanelDatMon extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
@@ -732,7 +740,6 @@ public class PanelDatMon extends javax.swing.JPanel {
         btnChonMon = new javax.swing.JButton();
         jPanel7 = new javax.swing.JPanel();
         btnThanhToan = new javax.swing.JButton();
-        btnLuu = new javax.swing.JButton();
         btnQuayLai = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 251, 233));
@@ -749,46 +756,49 @@ public class PanelDatMon extends javax.swing.JPanel {
 
         jPanel5.setBackground(new java.awt.Color(255, 251, 233));
 
-        lblPhieuGoiMon.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         lblPhieuGoiMon.setText("Phiếu gọi món");
+        lblPhieuGoiMon.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
-                jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel5Layout.createSequentialGroup()
-                                .addGap(14, 14, 14)
-                                .addComponent(lblPhieuGoiMon)
-                                .addContainerGap(384, Short.MAX_VALUE)));
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addComponent(lblPhieuGoiMon)
+                .addContainerGap(384, Short.MAX_VALUE))
+        );
         jPanel5Layout.setVerticalGroup(
-                jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel5Layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(lblPhieuGoiMon)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblPhieuGoiMon)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         jPanel2.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 1, 509, -1));
 
         tablePhieuGoiMon.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][] {
+            new Object [][] {
 
-                },
-                new String[] {
-                        "Tên món ăn", "Số lượng", "Đơn giá", "Thành tiền"
-                }) {
-            Class[] types = new Class[] {
-                    java.lang.String.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class
+            },
+            new String [] {
+                "Tên món ăn", "Số lượng", "Đơn giá", "Thành tiền"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class
             };
-            boolean[] canEdit = new boolean[] {
-                    false, false, false, false
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
-                return types[columnIndex];
+                return types [columnIndex];
             }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit[columnIndex];
+                return canEdit [columnIndex];
             }
         });
         scrTablePhieuGoiMon.setViewportView(tablePhieuGoiMon);
@@ -815,11 +825,13 @@ public class PanelDatMon extends javax.swing.JPanel {
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
-                jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 510, Short.MAX_VALUE));
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 510, Short.MAX_VALUE)
+        );
         jPanel6Layout.setVerticalGroup(
-                jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 0, Short.MAX_VALUE));
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
 
         jPanel3.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 480, 510, 0));
 
@@ -827,8 +839,7 @@ public class PanelDatMon extends javax.swing.JPanel {
         jPanel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 0, 5));
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        cbFilterLoaiMonAn.setModel(
-                new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbFilterLoaiMonAn.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cbFilterLoaiMonAn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbFilterLoaiMonAnActionPerformed(evt);
@@ -857,26 +868,26 @@ public class PanelDatMon extends javax.swing.JPanel {
         scrDanhSachMonAn.setBackground(new java.awt.Color(255, 251, 233));
 
         tableDanhSachMonAn.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][] {
+            new Object [][] {
 
-                },
-                new String[] {
-                        "Hình ảnh", "Mã món ăn", "Tên món ăn", "Đơn vị tính", "Đơn giá"
-                }) {
-            Class[] types = new Class[] {
-                    java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.String.class,
-                    java.lang.Double.class
+            },
+            new String [] {
+                "Hình ảnh", "Mã món ăn", "Tên món ăn", "Đơn vị tính", "Đơn giá"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class
             };
-            boolean[] canEdit = new boolean[] {
-                    false, false, false, false, false
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
-                return types[columnIndex];
+                return types [columnIndex];
             }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit[columnIndex];
+                return canEdit [columnIndex];
             }
         });
         scrDanhSachMonAn.setViewportView(tableDanhSachMonAn);
@@ -887,6 +898,7 @@ public class PanelDatMon extends javax.swing.JPanel {
         btnDoiBan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDoiBanActionPerformed(evt);
+                isChanged = true;
             }
         });
         jPanel3.add(btnDoiBan, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 550, 90, 30));
@@ -895,6 +907,7 @@ public class PanelDatMon extends javax.swing.JPanel {
         btnChonMon.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnChonMonActionPerformed(evt);
+                isChanged = true;
             }
         });
         jPanel3.add(btnChonMon, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 550, 90, 30));
@@ -906,11 +919,13 @@ public class PanelDatMon extends javax.swing.JPanel {
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
-                jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 1110, Short.MAX_VALUE));
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1110, Short.MAX_VALUE)
+        );
         jPanel7Layout.setVerticalGroup(
-                jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 60, Short.MAX_VALUE));
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 60, Short.MAX_VALUE)
+        );
 
         jPanel1.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 520, 1110, 60));
 
@@ -921,14 +936,6 @@ public class PanelDatMon extends javax.swing.JPanel {
             }
         });
         jPanel1.add(btnThanhToan, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 620, 134, 33));
-
-        btnLuu.setText("Lưu");
-        btnLuu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLuuActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnLuu, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 620, 89, 33));
 
         btnQuayLai.setText("Quay lại");
         btnQuayLai.addActionListener(new java.awt.event.ActionListener() {
@@ -1022,7 +1029,6 @@ public class PanelDatMon extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnChonMon;
     private javax.swing.JButton btnDoiBan;
-    private javax.swing.JButton btnLuu;
     private javax.swing.JButton btnQuayLai;
     private javax.swing.JButton btnThanhToan;
     private javax.swing.JButton btnTimKiem;

@@ -689,9 +689,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="btnTrangChu" min="-2" pref="105" max="-2" attributes="0"/>
-                      <EmptySpace pref="807" max="32767" attributes="0"/>
-                      <Component id="btnLuuHoaDon" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="44" max="-2" attributes="0"/>
+                      <EmptySpace pref="948" max="32767" attributes="0"/>
                       <Component id="btnInHoaDon" min="-2" pref="96" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
                   </Group>
@@ -704,14 +702,8 @@
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <EmptySpace min="0" pref="2" max="32767" attributes="0"/>
-                              <Component id="btnInHoaDon" min="-2" pref="36" max="-2" attributes="0"/>
-                          </Group>
-                          <Component id="btnLuuHoaDon" max="32767" attributes="0"/>
-                      </Group>
+                      <EmptySpace pref="8" max="32767" attributes="0"/>
+                      <Component id="btnInHoaDon" min="-2" pref="36" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -730,14 +722,6 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Quay l&#x1ea1;i"/>
               </Properties>
-            </Component>
-            <Component class="javax.swing.JButton" name="btnLuuHoaDon">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="L&#x1b0;u h&#xf3;a &#x111;&#x1a1;n"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnLuuHoaDonActionPerformed"/>
-              </Events>
             </Component>
           </SubComponents>
         </Container>

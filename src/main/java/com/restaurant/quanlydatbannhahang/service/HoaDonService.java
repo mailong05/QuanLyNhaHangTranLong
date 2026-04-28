@@ -165,7 +165,7 @@ public class HoaDonService {
         if (chiTiet == null) {
             throw new IllegalArgumentException("Chi tiết hóa đơn không được để trống");
         }
-        if (chiTiet.getHoaDon().getMaHD() == null || chiTiet.getHoaDon().getMaHD() .isBlank()) {
+        if (chiTiet.getHoaDon().getMaHD() == null || chiTiet.getHoaDon().getMaHD().isBlank()) {
             throw new IllegalArgumentException("Mã hóa đơn không được để trống");
         }
         if (!maHDPattern.matcher(chiTiet.getHoaDon().getMaHD()).matches()) {

@@ -1,12 +1,18 @@
 package com.restaurant.quanlydatbannhahang.gui;
 
 import java.awt.*;
+import java.awt.event.ActionListener;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import com.restaurant.quanlydatbannhahang.util.ComboBoxEnumLoader;
 import com.restaurant.quanlydatbannhahang.service.HoaDonService;
 import com.restaurant.quanlydatbannhahang.entity.HoaDon;
+import com.restaurant.quanlydatbannhahang.entity.KhuVuc;
+import com.restaurant.quanlydatbannhahang.entity.TrangThaiBan;
+import com.restaurant.quanlydatbannhahang.entity.TrangThaiHoaDon;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.text.DecimalFormat;
@@ -19,7 +25,40 @@ public class PanelLichSuHoaDon extends javax.swing.JPanel {
         initComponents();
         hoaDonService = new HoaDonService();
         customUI();
+        loadDataToComboBoxes();
         loadDataToTable();
+
+    }
+
+    private void loadDataToComboBoxes() {
+        // TODO Auto-generated method stub
+        try {
+            // Save listeners
+            ActionListener[] trangThaiListeners = cbFilterTrangThai.getActionListeners();
+
+            // Remove listeners
+
+            for (ActionListener listener : trangThaiListeners) {
+                cbFilterTrangThai.removeActionListener(listener);
+            }
+
+            // Load TrangThaiBan
+            cbFilterTrangThai.removeAllItems();
+            cbFilterTrangThai.addItem("Trạng thái");
+            for (TrangThaiHoaDon trangThai : TrangThaiHoaDon
+                    .values()) {
+                cbFilterTrangThai.addItem(trangThai.getDisplayName());
+            }
+
+            // Re-add listeners
+
+            for (ActionListener listener : trangThaiListeners) {
+                cbFilterTrangThai.addActionListener(listener);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Lỗi load dữ liệu filter: " + e.getMessage());
+        }
     }
 
     private void customUI() {
@@ -79,6 +118,7 @@ public class PanelLichSuHoaDon extends javax.swing.JPanel {
         // Set giá trị mặc định cho DatePicker (ngày hôm nay)
         if (dpNgayTao != null) {
             dpNgayTao.setDate(LocalDate.now());
+            dpNgayTao.addDateChangeListener(event -> loadFilteredData());
         }
 
         // 4. Click ngoài bảng thì clear selection và refresh lại dữ liệu
@@ -264,6 +304,13 @@ public class PanelLichSuHoaDon extends javax.swing.JPanel {
                     }
                 }
 
+                if (dpNgayTao != null && dpNgayTao.getDate() != null) {
+                    LocalDate selectedDate = dpNgayTao.getDate();
+                    if (hd.getNgayTao() == null || !hd.getNgayTao().isEqual(selectedDate)) {
+                        continue;
+                    }
+                }
+
                 model.addRow(new Object[] {
                         hd.getMaHD(),
                         hd.getBan() != null ? hd.getBan().getMaBan() : "",
@@ -302,6 +349,13 @@ public class PanelLichSuHoaDon extends javax.swing.JPanel {
                     }
                 }
 
+                if (dpNgayTao != null && dpNgayTao.getDate() != null) {
+                    LocalDate selectedDate = dpNgayTao.getDate();
+                    if (hd.getNgayTao() == null || !hd.getNgayTao().isEqual(selectedDate)) {
+                        continue;
+                    }
+                }
+
                 // Apply text filter (search by invoice ID)
                 if (!searchText.isEmpty()) {
                     String maHD = hd.getMaHD() != null ? hd.getMaHD().toLowerCase() : "";
@@ -332,9 +386,12 @@ public class PanelLichSuHoaDon extends javax.swing.JPanel {
     }
 
     public void refreshData() {
-        txtTimKiem.setText("");
         cbFilterTrangThai.setSelectedIndex(0);
+        if (dpNgayTao != null) {
+            dpNgayTao.setDate(LocalDate.now());
+        }
         loadDataToTable();
+        setupPlaceholder(txtTimKiem, "Nhập mã hóa đơn");
     }
 
     /**
