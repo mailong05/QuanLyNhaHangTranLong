@@ -72,6 +72,8 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                         loadDataToTable();
                         clearFields();
                         fillMaDatBan(txtMaPhieuDat);
+                        tableBan.clearSelection();
+                        syncCapNhatButtonState();
                 } catch (Exception e) {
                         e.printStackTrace();
                 }
@@ -794,10 +796,8 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                         JOptionPane.showMessageDialog(this, "Cập nhật phiếu đặt bàn thành công", "Thành công",
                                         JOptionPane.INFORMATION_MESSAGE);
 
-                        loadDataToTable();
-                        clearFields();
-                        tableBan.clearSelection();
-                        syncCapNhatButtonState();
+                        refreshData();
+                        
 
                 } catch (Exception e) {
                         JOptionPane.showMessageDialog(this, "Lỗi khi cập nhật: " + e.getMessage(), "Lỗi",
@@ -837,10 +837,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                                 JOptionPane.showMessageDialog(this, "Xóa phiếu đặt bàn thành công", "Thành công",
                                                 JOptionPane.INFORMATION_MESSAGE);
 
-                                loadDataToTable();
-                                clearFields();
-                                tableBan.clearSelection();
-                                syncCapNhatButtonState();
+                                refreshData();
                         }
 
                 } catch (Exception e) {

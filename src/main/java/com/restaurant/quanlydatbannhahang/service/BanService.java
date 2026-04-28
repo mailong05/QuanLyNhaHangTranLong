@@ -82,9 +82,15 @@ public class BanService {
      * Cập nhật thông tin bàn
      */
     public void capNhatBan(Ban ban) {
-        if (ban == null) {
-            throw new IllegalArgumentException("Bàn không được để trống");
-        }
+    	 if (ban == null) {
+             throw new IllegalArgumentException("Bàn không được để trống");
+         }
+         if (ban.getMaBan() == null || ban.getMaBan().trim().isEmpty()) {
+             throw new IllegalArgumentException("Mã bàn không được để trống");
+         }
+         if (ban.getSoGhe() <= 0) {
+             throw new IllegalArgumentException("Số ghế phải lớn hơn 0");
+         }
         if (banDAO.capNhatBan(ban)) {
             System.out.println(" Cập nhật bàn thành công");
         } else {

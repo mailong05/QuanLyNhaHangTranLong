@@ -43,6 +43,7 @@ import java.util.List;
 import java.util.Map;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -569,7 +570,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
     }// GEN-LAST:event_cbKhuyenMaiActionPerformed
 
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTimKiemActionPerformed
-        searchKhachHang();
+       searchKhachHang();
     }// GEN-LAST:event_btnTimKiemActionPerformed
 
     private void btnTaoTaiKhoanActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTaoTaiKhoanActionPerformed
@@ -821,8 +822,11 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         txtTenKhachHang.setText("");
 
         if (key.isEmpty() || key.equals("nhập số điện thoại khách hàng")) {
+        	JOptionPane.showMessageDialog(this, "Vui lòng nhập số điện thoại", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
+        
+        
 
         for (KhachHang kh : allKhachHang) {
             String sdt = kh.getSdt() != null ? kh.getSdt().toLowerCase() : "";
@@ -888,8 +892,8 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
 
             try (PDPageContentStream content = new PDPageContentStream(document, page)) {
                 // 1. Tiêu đề
-                content.beginText();
-                content.setFont(fontUnicode, 20);
+            	content.beginText();
+                content.setFont(fontUnicode, 20); 
                 content.newLineAtOffset(50, 780);
                 content.showText("NHÀ HÀNG TRẦN LONG");
                 content.endText();
@@ -956,7 +960,8 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
 
                 // 5. Phần Tổng kết (Fix lỗi lặp chữ và lệch lề)
                 currentY -= 20;
-                content.moveTo(350, currentY + 10);
+                content.setLineWidth(1f);
+                content.moveTo(50, currentY + 10); // Đường kẻ bắt đầu từ lề trái (50) thay vì 350
                 content.lineTo(550, currentY + 10);
                 content.stroke();
 
@@ -972,8 +977,8 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
                         "");
 
                 content.setFont(fontUnicode, 11);
-                float labelX = 350;
-                float valueX = 150; // Khoảng cách từ label đến giá trị
+                float labelX = 50;  // Chỉnh labelX về 50 để căn trái hoàn toàn [cite: 6]
+                float valueX = 150; // Khoảng cách từ label đến giá trị số
 
                 String[][] summary = {
                         { "Tổng tiền món:", rawTongMon },
@@ -987,6 +992,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
                     content.newLineAtOffset(labelX, currentY);
                     content.showText(line[0]);
                     content.newLineAtOffset(valueX, 0);
+                    
                     content.showText(line[1] + " VND");
                     content.endText();
                     currentY -= 18;
@@ -1004,7 +1010,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
             document.save(saveFile);
         }
         JOptionPane.showMessageDialog(this, "Hóa đơn đã được lưu PDF tại: " + saveFile.getAbsolutePath());
-
+        capNhatTrangThaiBan(txtMaBan.toString());
         // Sau khi in PDF thành công, lưu hóa đơn vào DB với trạng thái DA_THAN_TOAN
         try {
             saveHoaDonToDatabase();
@@ -1014,7 +1020,12 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         }
     }
 
-    private void saveHoaDonToDatabase() throws Exception {
+    private void capNhatTrangThaiBan(String string) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void saveHoaDonToDatabase() throws Exception {
         // Lấy thông tin cần thiết
         String maHD = txtMaHoaDon.getText().trim();
         String maBan = txtMaBan.getText().trim();
