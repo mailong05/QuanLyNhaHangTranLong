@@ -5,30 +5,59 @@ import com.restaurant.quanlydatbannhahang.entity.MonAn;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiMonAn;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class MonAnService {
     private MonAnDAO monAnDAO;
+
+    private static final String MAMON_PATTERN = "^MA\\d{3}$";
+    private static final String TENMON_PATTERN = "^[\\p{Lu}][\\p{Ll}]+(\\s[\\p{Lu}][\\p{Ll}]+)*$";
+
+    private static final Pattern maMonPattern = Pattern.compile(MAMON_PATTERN);
+    private static final Pattern tenMonPattern = Pattern.compile(TENMON_PATTERN);
 
     public MonAnService() {
         this.monAnDAO = new MonAnDAO();
     }
 
     /**
+     * Validate đối tượng MonAn
+     */
+    public void validateMonAn(MonAn monAn) {
+        if (monAn == null) {
+            throw new IllegalArgumentException("Đối tượng món ăn không được để trống");
+        }
+        if (monAn.getMaMon() == null || monAn.getMaMon().isBlank()) {
+            throw new IllegalArgumentException("Mã món không được để trống");
+        }
+        if (!maMonPattern.matcher(monAn.getMaMon()).matches()) {
+            throw new IllegalArgumentException("Mã món phải có dạng MAxxx (ví dụ: MA001)");
+        }
+        if (monAn.getTenMon() == null || monAn.getTenMon().isBlank()) {
+            throw new IllegalArgumentException("Tên món không được để trống");
+        }
+        if (!tenMonPattern.matcher(monAn.getTenMon()).matches()) {
+            throw new IllegalArgumentException("Tên món phải viết hoa chữ cái đầu mỗi từ");
+        }
+        if (monAn.getDonGia() <= 0) {
+            throw new IllegalArgumentException("Đơn giá phải lớn hơn 0");
+        }
+        if (monAn.getDonViTinh() == null || monAn.getDonViTinh().isBlank()) {
+            throw new IllegalArgumentException("Đơn vị tính không được để trống");
+        }
+        if (monAn.getTenLoai() == null) {
+            throw new IllegalArgumentException("Loại món ăn không được để trống");
+        }
+        if (monAn.getTrangThai() == null) {
+            throw new IllegalArgumentException("Trạng thái món ăn không được để trống");
+        }
+    }
+
+    /**
      * Thêm món ăn mới
      */
     public void themMonAn(MonAn monAn) {
-        if (monAn == null) {
-            throw new IllegalArgumentException("Món ăn không được để trống");
-        }
-        if (monAn.getMaMon() == null || monAn.getMaMon().trim().isEmpty()) {
-            throw new IllegalArgumentException("Mã món không được để trống");
-        }
-        if (monAn.getTenMon() == null || monAn.getTenMon().trim().isEmpty()) {
-            throw new IllegalArgumentException("Tên món không được để trống");
-        }
-        if (monAn.getDonGia() <= 0) {
-            throw new IllegalArgumentException("Giá phải lớn hơn 0");
-        }
+        validateMonAn(monAn);
         if (monAnDAO.themMonAn(monAn)) {
             System.out.println(" Thêm món ăn thành công");
         } else {
@@ -40,8 +69,11 @@ public class MonAnService {
      * Lấy món ăn theo mã
      */
     public MonAn getMonAnTheoMa(String maMon) {
-        if (maMon == null || maMon.trim().isEmpty()) {
+        if (maMon == null || maMon.isBlank()) {
             throw new IllegalArgumentException("Mã món không được để trống");
+        }
+        if (!maMonPattern.matcher(maMon).matches()) {
+            throw new IllegalArgumentException("Mã món phải có dạng MAxxx (ví dụ: MA001)");
         }
         MonAn monAn = monAnDAO.getMonAnTheoMa(maMon);
         if (monAn == null) {
@@ -61,7 +93,7 @@ public class MonAnService {
      * Lấy món ăn theo loại
      */
     public List<MonAn> getMonAnTheoLoai(String maLoai) {
-        if (maLoai == null || maLoai.trim().isEmpty()) {
+        if (maLoai == null || maLoai.isBlank()) {
             throw new IllegalArgumentException("Mã loại không được để trống");
         }
         return monAnDAO.getMonAnTheoLoai(maLoai);
@@ -78,9 +110,7 @@ public class MonAnService {
      * Cập nhật thông tin món ăn
      */
     public void capNhatMonAn(MonAn monAn) {
-        if (monAn == null) {
-            throw new IllegalArgumentException("Món ăn không được để trống");
-        }
+        validateMonAn(monAn);
         if (monAnDAO.capNhatMonAn(monAn)) {
             System.out.println(" Cập nhật món ăn thành công");
         } else {
@@ -92,8 +122,11 @@ public class MonAnService {
      * Cập nhật giá món ăn
      */
     public void capNhatGiaMonAn(String maMon, double giaMoi) {
-        if (maMon == null || maMon.trim().isEmpty()) {
+        if (maMon == null || maMon.isBlank()) {
             throw new IllegalArgumentException("Mã món không được để trống");
+        }
+        if (!maMonPattern.matcher(maMon).matches()) {
+            throw new IllegalArgumentException("Mã món phải có dạng MAxxx (ví dụ: MA001)");
         }
         if (giaMoi <= 0) {
             throw new IllegalArgumentException("Giá phải lớn hơn 0");
@@ -109,11 +142,14 @@ public class MonAnService {
      * Cập nhật trạng thái món ăn
      */
     public void capNhatTrangThaiMonAn(String maMon, TrangThaiMonAn trangThai) {
-        if (maMon == null || maMon.trim().isEmpty()) {
+        if (maMon == null || maMon.isBlank()) {
             throw new IllegalArgumentException("Mã món không được để trống");
         }
+        if (!maMonPattern.matcher(maMon).matches()) {
+            throw new IllegalArgumentException("Mã món phải có dạng MAxxx (ví dụ: MA001)");
+        }
         if (trangThai == null) {
-            throw new IllegalArgumentException("Trạng thái không được để trống");
+            throw new IllegalArgumentException("Trạng thái món ăn không được để trống");
         }
         MonAn monAn = getMonAnTheoMa(maMon);
         if (monAn != null) {
@@ -126,8 +162,11 @@ public class MonAnService {
      * Xóa món ăn
      */
     public void xoaMonAn(String maMon) {
-        if (maMon == null || maMon.trim().isEmpty()) {
+        if (maMon == null || maMon.isBlank()) {
             throw new IllegalArgumentException("Mã món không được để trống");
+        }
+        if (!maMonPattern.matcher(maMon).matches()) {
+            throw new IllegalArgumentException("Mã món phải có dạng MAxxx (ví dụ: MA001)");
         }
         if (monAnDAO.xoaMonAn(maMon)) {
             System.out.println(" Xóa món ăn thành công");
@@ -162,7 +201,7 @@ public class MonAnService {
 
     /**
      * Lấy mã món ăn cuối cùng để sinh mã tiếp theo
-     * 
+     *
      * @return Mã món ăn cuối cùng (VD: MA000) hoặc null nếu bảng rỗng
      */
     public String getLastMonAnID() {

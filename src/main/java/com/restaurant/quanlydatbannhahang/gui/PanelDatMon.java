@@ -62,6 +62,13 @@ public class PanelDatMon extends javax.swing.JPanel {
         customUI();
         loadDataToComboBoxes();
         loadDataToTable();
+        this.addComponentListener(new java.awt.event.ComponentAdapter() {
+            @Override
+            public void componentHidden(java.awt.event.ComponentEvent evt) {
+                // Gọi hàm nhắc nhở khi panel bị ẩn đi
+            	showSaveDraftReminderIfNecessary();
+            }
+        });
     }
 
     private void customUI() {

@@ -13,6 +13,7 @@ import com.restaurant.quanlydatbannhahang.entity.KhuyenMai;
 import com.restaurant.quanlydatbannhahang.entity.MonAn;
 import com.restaurant.quanlydatbannhahang.entity.NhanVien;
 import com.restaurant.quanlydatbannhahang.entity.PhieuDatBan;
+import com.restaurant.quanlydatbannhahang.entity.PhuongThucTT;
 import com.restaurant.quanlydatbannhahang.entity.Thue;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiBan;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiHoaDon;
@@ -82,6 +83,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
     private static final String MA_PHI_DICH_VU_MAC_DINH = "TH003";
     private boolean loadingKhuyenMai = false;
     private boolean hoaDonSaved = false;
+    private double tongThanhToanLuuTam = 0;
 
     /**
      * Creates new form PanelLapHoaDon
@@ -102,6 +104,14 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         loadKhachHangToTable();
         loadKhuyenMaiToComboBox();
         loadHoaDonDraft();
+        
+        this.addComponentListener(new java.awt.event.ComponentAdapter() {
+            @Override
+            public void componentHidden(java.awt.event.ComponentEvent evt) {
+                // Gọi hàm nhắc nhở khi panel bị ẩn đi
+                showSaveHoaDonReminderIfNecessary();
+            }
+        });
     }
 
     /**
@@ -498,7 +508,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
 
         try {
             // Tạo hóa đơn với trạng thái CHUA_THANH_TOAN
-            saveHoaDonDraftToDatabase();
+            thucHienLuuHoaDon(TrangThaiHoaDon.CHUA_THANH_TOAN);
 
             // Lưu draft của hóa đơn
             saveHoaDonDraftToSession();
@@ -1010,154 +1020,116 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
             document.save(saveFile);
         }
         JOptionPane.showMessageDialog(this, "Hóa đơn đã được lưu PDF tại: " + saveFile.getAbsolutePath());
-        capNhatTrangThaiBan(txtMaBan.toString());
+        capNhatTrangThaiBan(txtMaBan.getText().trim());
+        congDiemTichLuyChoKhachHang(txtTenKhachHang.getText().trim());
         // Sau khi in PDF thành công, lưu hóa đơn vào DB với trạng thái DA_THAN_TOAN
         try {
-            saveHoaDonToDatabase();
+            thucHienLuuHoaDon(TrangThaiHoaDon.DA_THANH_TOAN);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Lỗi khi lưu hóa đơn vào cơ sở dữ liệu: " + ex.getMessage());
             ex.printStackTrace();
         }
     }
 
-    private void capNhatTrangThaiBan(String string) {
+    private void congDiemTichLuyChoKhachHang(String tenKhachHang) {
 		// TODO Auto-generated method stub
+		if(tableThongTinKhachHang.getRowCount() != -1) {
+			String sdt = txtTimKiem.getText().trim();
+			if(!sdt.isBlank()) {
+				KhachHang kh = khachHangService.getKhachHangTheoSDT(sdt);
+				if(kh!=null) {
+					khachHangService.capNhatDiemTichLuy(kh.getMaKH(),(int) (tongThanhToanLuuTam/1000));
+					System.out.println( "Cập nhật điểm tích lũy thành công cho khách hàng có mã "+ kh.getMaKH());
+				}
+			}
+			
+		}
 		
 	}
 
-	private void saveHoaDonToDatabase() throws Exception {
-        // Lấy thông tin cần thiết
-        String maHD = txtMaHoaDon.getText().trim();
-        String maBan = txtMaBan.getText().trim();
-        String maNV = txtMaNhanVien.getText().trim();
+	private void capNhatTrangThaiBan(String string) {
+		// TODO Auto-generated method stub
+		// Test để viết method này
+		System.out.println(string);
+	}
 
-        // Lấy entities
-        Ban ban = banService.getBanTheoMa(maBan);
-        NhanVien nhanVien = nhanVienService.getNhanVienTheoMa(maNV);
-        KhuyenMai khuyenMai = getSelectedKhuyenMai();
-        Thue thueVAT = thueService.getThueTheoMa(MA_THUE_VAT_MAC_DINH);
-        Thue thuePhiDV = thueService.getThueTheoMa(MA_PHI_DICH_VU_MAC_DINH);
+	private void thucHienLuuHoaDon(TrangThaiHoaDon trangThai) throws Exception {
+	    // 1. Lấy thông tin cơ bản từ giao diện
+	    String maHD = txtMaHoaDon.getText().trim();
+	    String maBan = txtMaBan.getText().trim();
+	    String maNV = txtMaNhanVien.getText().trim();
 
-        // Tính toán các giá trị
-        double tongTien = tinhTongTienMonAn();
-        double tienPhiDV = apDungPhiDichVu(MA_PHI_DICH_VU_MAC_DINH, tongTien);
-        double tongSauPhiDV = tongTien + tienPhiDV;
-        double giamKhuyenMai = khuyenMai != null ? Math.min(khuyenMai.getGiaTriGiam(), tongSauPhiDV) : 0;
-        double coSoTinhVAT = Math.max(0, tongSauPhiDV - giamKhuyenMai);
-        double tienThueVAT = apDungThue(MA_THUE_VAT_MAC_DINH, coSoTinhVAT);
-        double tongThanhToan = coSoTinhVAT + tienThueVAT;
+	    // 2. Truy vấn các thực thể liên quan
+	    Ban ban = banService.getBanTheoMa(maBan);
+	    NhanVien nhanVien = nhanVienService.getNhanVienTheoMa(maNV);
+	    KhuyenMai khuyenMai = getSelectedKhuyenMai();
+	    Thue thueVAT = thueService.getThueTheoMa(MA_THUE_VAT_MAC_DINH);
+	    Thue thuePhiDV = thueService.getThueTheoMa(MA_PHI_DICH_VU_MAC_DINH);
 
-        // Tạo HoaDon
-        HoaDon hoaDon = new HoaDon();
-        hoaDon.setMaHD(maHD);
-        hoaDon.setBan(ban);
-        hoaDon.setNhanVien(nhanVien);
-        hoaDon.setKhuyenMai(khuyenMai);
-        hoaDon.setThue(thueVAT);
-        hoaDon.setThueSuat(thueVAT != null ? thueVAT.getThueSuat() : 0);
-        hoaDon.setTienThue(tienThueVAT);
-        hoaDon.setTyLePhiDV(thuePhiDV != null ? thuePhiDV.getThueSuat() : 0);
-        hoaDon.setTienPhiDV(tienPhiDV);
-        hoaDon.setNgayTao(java.time.LocalDate.now());
-        hoaDon.setGioVao(java.time.LocalTime.now());
-        hoaDon.setGioRa(java.time.LocalTime.now());
-        hoaDon.setTongTienGoc(tongTien);
-        hoaDon.setTienGiamGia(giamKhuyenMai + (diemDaApDung * VND_PER_DIEM));
-        hoaDon.setTongThanhToan(tongThanhToan);
-        hoaDon.setPhuongThucTT(null); // Có thể thêm sau
-        hoaDon.setTrangThaiThanhToan(TrangThaiHoaDon.DA_THANH_TOAN);
+	    // 3. Logic tính toán tài chính (Đồng bộ với UI)
+	    double tongTien = tinhTongTienMonAn();
+	    double tienPhiDV = apDungPhiDichVu(MA_PHI_DICH_VU_MAC_DINH, tongTien);
+	    double tongSauPhiDV = tongTien + tienPhiDV;
+	    
+	    double giamKhuyenMai = khuyenMai != null ? Math.min(khuyenMai.getGiaTriGiam(), tongSauPhiDV) : 0;
+	    double giamDiem = (double) diemDaApDung * VND_PER_DIEM;
+	    double tongGiamGia = giamKhuyenMai + giamDiem;
+	    
+	    double coSoTinhVAT = Math.max(0, tongSauPhiDV - tongGiamGia);
+	    double tienThueVAT = apDungThue(MA_THUE_VAT_MAC_DINH, coSoTinhVAT);
+	    double tongThanhToan = coSoTinhVAT + tienThueVAT;
 
-        // Lưu HoaDon
-        hoaDonService.themHoaDon(hoaDon);
+	    // 4. Khởi tạo đối tượng HoaDon
+	    HoaDon hoaDon = new HoaDon();
+	    hoaDon.setMaHD(maHD);
+	    hoaDon.setBan(ban);
+	    hoaDon.setNhanVien(nhanVien);
+	    hoaDon.setKhuyenMai(khuyenMai);
+	    hoaDon.setThue(thueVAT);
+	    hoaDon.setThueSuat(thueVAT != null ? thueVAT.getThueSuat() : 0);
+	    hoaDon.setTienThue(tienThueVAT);
+	    hoaDon.setTyLePhiDV(thuePhiDV != null ? thuePhiDV.getThueSuat() : 0);
+	    hoaDon.setTienPhiDV(tienPhiDV);
+	    
+	    hoaDon.setNgayTao(java.time.LocalDate.now());
+	    hoaDon.setGioVao(java.time.LocalTime.now()); // Có thể lấy gioVao cũ nếu là update
+	    
+	    // Nếu thanh toán thì mới set giờ ra, nếu nháp thì để null
+	    hoaDon.setGioRa(trangThai == TrangThaiHoaDon.DA_THANH_TOAN ? java.time.LocalTime.now() : null);
+	    
+	    hoaDon.setTongTienGoc(tongTien);
+	    hoaDon.setTienGiamGia(tongGiamGia);
+	    hoaDon.setTongThanhToan(tongThanhToan);
+	    hoaDon.setTrangThaiThanhToan(trangThai);
+	    
+	    // Lưu phương thức thanh toán từ ComboBox
+	    if (trangThai == TrangThaiHoaDon.DA_THANH_TOAN) {
+	        hoaDon.setPhuongThucTT(PhuongThucTT.valueOf(cbPTTT.getSelectedItem().toString()));
+	    }
 
-        // Tạo ChiTietHoaDon
-        DefaultTableModel model = (DefaultTableModel) tableThongTinHoaDon.getModel();
-        for (int i = 0; i < model.getRowCount(); i++) {
-            String tenMon = (String) model.getValueAt(i, 0);
-            int soLuong = (Integer) model.getValueAt(i, 1);
-            double donGia = (Double) model.getValueAt(i, 2);
+	    // 5. Lưu HoaDon vào Database
+	    // Nếu mã đã tồn tại (lưu nháp trước đó), bạn nên gọi update thay vì add
+	    if (hoaDonService.getHoaDonTheoMa(maHD) != null) {
+	        hoaDonService.capNhatHoaDon(hoaDon);
+	    } else {
+	        hoaDonService.themHoaDon(hoaDon);
+	    }
 
-            // Tìm MonAn theo tên (giả sử có method)
-            MonAn monAn = monAnService.getMonAnTheoMa(tenMon);
-            if (monAn != null) {
-                ChiTietHoaDon chiTiet = new ChiTietHoaDon(hoaDon, monAn, soLuong, donGia, "");
-                chiTietHoaDonService.themChiTietHoaDon(chiTiet);
-            }
-        }
+	    // 6. Lưu Chi tiết hóa đơn (Sửa lỗi logic tìm MonAn theo mã)
+	    List<HoaDonDraftSession.DraftMonItem> draftItems = HoaDonDraftSession
+	            .getMonItems(HoaDonDraftSession.getCurrentMaBanContext());
+	            
+	    // Xóa chi tiết cũ nếu là cập nhật hóa đơn nháp để tránh trùng lặp
+	    chiTietHoaDonService.xoaAllChiTietByMaHD(maHD); 
 
-        // Cập nhật trạng thái phiếu đặt bàn nếu có
-        String maPhieuDat = HoaDonDraftSession.getCurrentMaPhieuDatContext();
-        if (maPhieuDat != null && !maPhieuDat.isEmpty()) {
-            PhieuDatBan phieu = phieuDatBanService.getPhieuDatBanTheoMa(maPhieuDat);
-            if (phieu != null) {
-                phieuDatBanService.capNhatTrangThaiPhieu(maPhieuDat, TrangThaiPhieuDat.DA_SU_DUNG);
-
-                // Set bàn về trống
-                for (ChiTietPhieuDatBan chiTiet : phieuDatBanService.getChiTietPhieu(phieu.getMaPhieuDat())) {
-                    banService.capNhatTrangThaiBan(chiTiet.getBan().getMaBan(), TrangThaiBan.TRONG);
-                }
-            }
-        }
-
-        // Xóa draft sau khi lưu
-        HoaDonDraftSession.clear(HoaDonDraftSession.getCurrentMaBanContext());
-
-        JOptionPane.showMessageDialog(this, "Hóa đơn đã được lưu thành công!");
-    }
-
-    private void saveHoaDonDraftToDatabase() throws Exception {
-        // Tương tự saveHoaDonToDatabase nhưng với trạng thái CHUA_THANH_TOAN
-        String maHD = txtMaHoaDon.getText().trim();
-        String maBan = txtMaBan.getText().trim();
-        String maNV = txtMaNhanVien.getText().trim();
-
-        Ban ban = banService.getBanTheoMa(maBan);
-        NhanVien nhanVien = nhanVienService.getNhanVienTheoMa(maNV);
-        KhuyenMai khuyenMai = getSelectedKhuyenMai();
-        Thue thueVAT = thueService.getThueTheoMa(MA_THUE_VAT_MAC_DINH);
-        Thue thuePhiDV = thueService.getThueTheoMa(MA_PHI_DICH_VU_MAC_DINH);
-
-        double tongTien = tinhTongTienMonAn();
-        double tienPhiDV = apDungPhiDichVu(MA_PHI_DICH_VU_MAC_DINH, tongTien);
-        double tongSauPhiDV = tongTien + tienPhiDV;
-        double giamKhuyenMai = khuyenMai != null ? Math.min(khuyenMai.getGiaTriGiam(), tongSauPhiDV) : 0;
-        double coSoTinhVAT = Math.max(0, tongSauPhiDV - giamKhuyenMai);
-        double tienThueVAT = apDungThue(MA_THUE_VAT_MAC_DINH, coSoTinhVAT);
-        double tongThanhToan = coSoTinhVAT + tienThueVAT;
-
-        HoaDon hoaDon = new HoaDon();
-        hoaDon.setMaHD(maHD);
-        hoaDon.setBan(ban);
-        hoaDon.setNhanVien(nhanVien);
-        hoaDon.setKhuyenMai(khuyenMai);
-        hoaDon.setThue(thueVAT);
-        hoaDon.setThueSuat(thueVAT != null ? thueVAT.getThueSuat() : 0);
-        hoaDon.setTienThue(tienThueVAT);
-        hoaDon.setTyLePhiDV(thuePhiDV != null ? thuePhiDV.getThueSuat() : 0);
-        hoaDon.setTienPhiDV(tienPhiDV);
-        hoaDon.setNgayTao(java.time.LocalDate.now());
-        hoaDon.setGioVao(java.time.LocalTime.now());
-        hoaDon.setGioRa(null); // Chưa ra
-        hoaDon.setTongTienGoc(tongTien);
-        hoaDon.setTienGiamGia(giamKhuyenMai + (diemDaApDung * VND_PER_DIEM));
-        hoaDon.setTongThanhToan(tongThanhToan);
-        hoaDon.setPhuongThucTT(null);
-        hoaDon.setTrangThaiThanhToan(TrangThaiHoaDon.CHUA_THANH_TOAN);
-
-        hoaDonService.themHoaDon(hoaDon);
-
-        // Tạo ChiTietHoaDon
-        List<HoaDonDraftSession.DraftMonItem> draftItems = HoaDonDraftSession
-                .getMonItems(HoaDonDraftSession.getCurrentMaBanContext());
-        for (HoaDonDraftSession.DraftMonItem item : draftItems) {
-            MonAn monAn = monAnService.getMonAnTheoMa(item.getMaMon());
-            if (monAn != null) {
-                ChiTietHoaDon chiTiet = new ChiTietHoaDon(hoaDon, monAn, item.getSoLuong(), item.getDonGia(),
-                        "");
-            }
-        }
-    }
-
+	    for (HoaDonDraftSession.DraftMonItem item : draftItems) {
+	        MonAn monAn = monAnService.getMonAnTheoMa(item.getMaMon()); // Sử dụng getMaMon() thay vì tên
+	        if (monAn != null) {
+	            ChiTietHoaDon chiTiet = new ChiTietHoaDon(hoaDon, monAn, item.getSoLuong(), item.getDonGia(), "");
+	            chiTietHoaDonService.themChiTietHoaDon(chiTiet);
+	        }
+	    }
+	}
     private void saveHoaDonDraftToSession() {
         // Lưu các thông tin draft của hóa đơn: khuyenMai, diemDaApDung, etc.
         // Có thể mở rộng HoaDonDraftSession để lưu thêm
@@ -1244,6 +1216,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         double coSoTinhVAT = Math.max(0, tongSauPhiDichVu - tongGiamGia);
         double tienThueVat = apDungThue(MA_THUE_VAT_MAC_DINH, coSoTinhVAT);
         double tongThanhToan = coSoTinhVAT + tienThueVat;
+        tongThanhToanLuuTam = tongThanhToan;
 
         lblTongTien.setText("Tổng tiền: " + formatVnd(tongTien));
         lblPhiDichVu.setText("Phí dịch vụ: " + formatVnd(tienPhiDichVu));
