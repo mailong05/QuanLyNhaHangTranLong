@@ -187,6 +187,12 @@ public final class HoaDonDraftSession {
                 maKH != null && !maKH.isBlank() ? maKH : null,
                 maKM != null && !maKM.isBlank() ? maKM : null,
                 diemDung);
+
+        boolean activeSession = normalizeMaBanContext(currentMaBanContext).equals(oldNormalized);
+        if (activeSession) {
+            setCurrentMaBanContext(newNormalized);
+        }
+
         clear(oldNormalized);
     }
 

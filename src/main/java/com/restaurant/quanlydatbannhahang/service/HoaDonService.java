@@ -148,9 +148,44 @@ public class HoaDonService {
         }
 
         HoaDon hoaDon = getHoaDonTheoMa(maHD);
-        if (hoaDon != null) {
-            hoaDon.setBan(new Ban(maBanMoi, 0, "", null, null));
-            capNhatHoaDon(hoaDon);
+        if (hoaDon == null) {
+            throw new RuntimeException("Không tìm thấy hóa đơn với mã: " + maHD);
+        }
+        hoaDon.setBan(new Ban(maBanMoi, 0, "", null, null));
+        capNhatHoaDon(hoaDon);
+    }
+
+    public void chuyenMaBanChoHoaDonDraft(String oldMaBan, String newMaBan) {
+        if (oldMaBan == null || oldMaBan.isBlank()) {
+            throw new IllegalArgumentException("Mã bàn cũ không được để trống");
+        }
+        if (newMaBan == null || newMaBan.isBlank()) {
+            throw new IllegalArgumentException("Mã bàn mới không được để trống");
+        }
+        if (!maBanPattern.matcher(oldMaBan).matches()) {
+            throw new IllegalArgumentException("Mã bàn cũ phải có dạng Bxxx hoặc Bxxx,Byyy");
+        }
+        if (!maBanPattern.matcher(newMaBan).matches()) {
+            throw new IllegalArgumentException("Mã bàn mới phải có dạng Bxxx hoặc Bxxx,Byyy");
+        }
+
+        List<HoaDon> hoaDons = hoaDonDAO.getHoaDonTheoMaBan(oldMaBan);
+        if (hoaDons == null || hoaDons.isEmpty()) {
+            throw new RuntimeException("Không tìm thấy hóa đơn chưa thanh toán cho bàn: " + oldMaBan);
+        }
+
+        boolean updated = false;
+        for (HoaDon hoaDon : hoaDons) {
+            if (hoaDon != null && hoaDon.getTrangThaiThanhToan() == TrangThaiHoaDon.CHUA_THANH_TOAN) {
+                hoaDon.setBan(new Ban(newMaBan, 0, "", null, null));
+                hoaDonDAO.capNhatHoaDon(hoaDon);
+                updated = true;
+                break;
+            }
+        }
+
+        if (!updated) {
+            throw new RuntimeException("Không tìm thấy hóa đơn chưa thanh toán cho bàn: " + oldMaBan);
         }
     }
 

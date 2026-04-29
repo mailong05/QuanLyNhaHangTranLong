@@ -36,6 +36,8 @@ public class PanelQuanLyBan extends javax.swing.JPanel implements MouseListener 
         customUI();
         loadDataToComboBoxes();
         loadDataToTable();
+        fillTxtMaBan(txtMaBan);
+
     }
 
     private void customUI() {

@@ -26,6 +26,7 @@ public class PanelDatBan extends javax.swing.JPanel {
     private PanelQuanLyDatBanTruoc panelQuanLyDatBanTruoc = null; // Reference để callback khi edit mode
     private PanelDatMon panelDatMon = null; // Reference để callback khi đổi bàn từ PanelDatMon
     private boolean editMode = false; // Để biết có phải ở chế độ chỉnh sửa bàn
+    private static final Color EDIT_MODE_SELECTED_COLOR = new Color(51, 153, 255);
 
     public PanelDatBan() {
         selectedTables = new HashSet<>();
@@ -43,10 +44,16 @@ public class PanelDatBan extends javax.swing.JPanel {
             public void hierarchyChanged(java.awt.event.HierarchyEvent e) {
                 if ((e.getChangeFlags() & java.awt.event.HierarchyEvent.SHOWING_CHANGED) != 0) {
                     if (isShowing()) {
-                        // KHI PANEL HIỂN THỊ LẠI
-                    	refreshData();
-                    } 
-                    
+                        // Nếu đang ở chế độ edit, không refresh lại toàn bộ panel vì sẽ mất edit state.
+                        if (!editMode) {
+                            refreshData();
+                        } else {
+                            panelSoDoBan.revalidate();
+                            panelSoDoBan.repaint();
+                            PanelDatBan.this.revalidate();
+                            PanelDatBan.this.repaint();
+                        }
+                    }
                 }
             }
         });
@@ -82,7 +89,7 @@ public class PanelDatBan extends javax.swing.JPanel {
             for (String maBan : selectedTables) {
                 JPanel card = tableCards.get(maBan);
                 if (card != null) {
-                    card.setBackground(new java.awt.Color(51, 153, 255));
+                    card.setBackground(EDIT_MODE_SELECTED_COLOR);
                     card.setBorder(BorderFactory.createCompoundBorder(
                             BorderFactory.createLineBorder(new Color(34, 139, 34), 2, true),
                             BorderFactory.createEmptyBorder(10, 10, 10, 10)));
@@ -90,6 +97,11 @@ public class PanelDatBan extends javax.swing.JPanel {
                     card.repaint();
                 }
             }
+
+            panelSoDoBan.revalidate();
+            panelSoDoBan.repaint();
+            this.revalidate();
+            this.repaint();
         }
     }
 
@@ -441,10 +453,9 @@ public class PanelDatBan extends javax.swing.JPanel {
     }
 
     private void toggleTableSelection(String maBan, JPanel card) {
-        // Kiểm tra nếu click vào bàn highlight (background xanh 51, 153, 255) từ edit
-        // mode
-        // → Hủy chọn + cập nhật về TRONG
-        if (card.getBackground().equals(new Color(51, 153, 255))) {
+        // Kiểm tra nếu click vào bàn highlight từ edit mode.
+        // Nếu bàn đang được edit thì hủy chọn và trả về trạng thái TRONG.
+        if (isEditSelectedCard(card)) {
             selectedTables.remove(maBan);
             updateBanStatusUI(maBan, TrangThaiBan.TRONG);
             return;
@@ -471,14 +482,6 @@ public class PanelDatBan extends javax.swing.JPanel {
             return;
         }
 
-        if (card.getBackground().equals(new Color(51, 153, 255))) {
-            selectedTables.remove(maBan);
-            updateBanStatusUI(maBan, TrangThaiBan.TRONG);
-            return;
-
-        }
-        // Nếu là highlight từ edit mode, cho phép click để hủy chọn
-
         // Logic chọn/hủy chọn cho bàn Trống (cả normal mode và edit mode)
         if (selectedTables.contains(maBan)) {
             selectedTables.remove(maBan);
@@ -498,6 +501,10 @@ public class PanelDatBan extends javax.swing.JPanel {
         }
         card.revalidate();
         card.repaint();
+    }
+
+    private boolean isEditSelectedCard(JPanel card) {
+        return card != null && EDIT_MODE_SELECTED_COLOR.equals(card.getBackground());
     }
 
     private void showDangDungOptions(String maBan) {
@@ -625,11 +632,9 @@ public class PanelDatBan extends javax.swing.JPanel {
                 if (panelDatMon != null) {
                     panelDatMon.updateMaBanContextForEdit(new HashSet<>(selectedTables));
 
-                    String newContext = panelDatMon.getDatMonContext();
-
                     java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
                     if (parentFrame instanceof MainForm) {
-                        ((MainForm) parentFrame).openPanelDatMon(newContext);
+                        ((MainForm) parentFrame).goBackToPanelDatMon();
                     }
 
                     refreshData();

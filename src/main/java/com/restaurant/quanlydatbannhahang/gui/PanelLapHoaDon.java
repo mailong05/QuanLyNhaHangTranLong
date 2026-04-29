@@ -117,7 +117,6 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
                             saveHoaDonDraftToSession();
                             thucHienLuuHoaDon(TrangThaiHoaDon.CHUA_THANH_TOAN);
                         } catch (Exception e1) {
-                            // TODO Auto-generated catch block
                             e1.printStackTrace();
                         }
                     }
@@ -621,9 +620,16 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Chưa có dữ liệu món ăn để in hóa đơn.");
             return;
         }
+
+        String maBanContext = txtMaBan.getText().trim();
+        if (maBanContext.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn bàn trước khi in hóa đơn.");
+            return;
+        }
+
         try {
             generatePdfInvoice();
-            capNhatTrangThaiBan(txtMaBan.getText().trim());
+            capNhatTrangThaiBan(maBanContext);
             congDiemTichLuyChoKhachHang();
             // Chuyển sang panel đặt bàn
             Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
@@ -1084,12 +1090,34 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         // Sau khi in PDF thành công, lưu hóa đơn vào DB với trạng thái DA_THANH_TOAN
         try {
             thucHienLuuHoaDon(TrangThaiHoaDon.DA_THANH_TOAN);
-            HoaDonDraftSession.clear(HoaDonDraftSession.getCurrentMaBanContext());
+            clearInvoiceDraftAndReservationContext();
             refreshDraftData();
         } catch (Exception ex) {
             ex.printStackTrace();
             throw new IOException("Lỗi khi lưu hóa đơn vào cơ sở dữ liệu: " + ex.getMessage(), ex);
         }
+    }
+
+    private void clearInvoiceDraftAndReservationContext() {
+        String currentMaBanContext = HoaDonDraftSession.getCurrentMaBanContext();
+        String currentMaPhieuDat = HoaDonDraftSession.getCurrentMaPhieuDatContext();
+
+        if (currentMaPhieuDat != null && !currentMaPhieuDat.isBlank()) {
+            try {
+                phieuDatBanService.capNhatTrangThaiPhieu(currentMaPhieuDat, TrangThaiPhieuDat.DA_HUY);
+            } catch (Exception ex) {
+                throw new RuntimeException(
+                        "Không thể cập nhật trạng thái phiếu đặt bàn sau khi thanh toán: " + ex.getMessage(), ex);
+            }
+        }
+
+        if (currentMaBanContext != null && !currentMaBanContext.isBlank()) {
+            HoaDonDraftSession.clear(currentMaBanContext);
+        }
+
+        HoaDonDraftSession.setCurrentMaBanContext(null);
+        HoaDonDraftSession.clearCurrentMaPhieuDatContext();
+        HoaDonDraftSession.clearCurrentPhoneNumber();
     }
 
     private void congDiemTichLuyChoKhachHang() {
@@ -1149,7 +1177,14 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         // 1. Lấy thông tin cơ bản từ giao diện
         String maHD = txtMaHoaDon.getText().trim();
         String maBan = txtMaBan.getText().trim();
-        Ban ban = banService.getBanTheoMa(maBan);
+        if (maBan == null || maBan.isBlank()) {
+            throw new IllegalArgumentException("Vui lòng chọn bàn trước khi lưu hóa đơn.");
+        }
+        String primaryMaBan = maBan.split(",")[0].trim();
+        if (primaryMaBan.isEmpty()) {
+            throw new IllegalArgumentException("Mã bàn không hợp lệ.");
+        }
+        Ban ban = banService.getBanTheoMa(primaryMaBan);
         NhanVien nhanVien = SessionManager.getCurrentNhanVien();
         KhuyenMai khuyenMai = getSelectedKhuyenMai();
         Thue thueVAT = thueService.getThueTheoMa(MA_THUE_VAT_MAC_DINH);

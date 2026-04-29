@@ -2,9 +2,13 @@ package com.restaurant.quanlydatbannhahang.gui;
 
 // UIConfiguration để setup FlatLaf L&F
 
+import com.restaurant.quanlydatbannhahang.entity.TrangThaiBan;
+import com.restaurant.quanlydatbannhahang.service.BanService;
 import com.restaurant.quanlydatbannhahang.session.HoaDonDraftSession;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import javax.swing.JOptionPane;
 
 public class LuaChonDatBanDialog extends javax.swing.JDialog {
 
@@ -74,9 +78,25 @@ public class LuaChonDatBanDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnDatBanDungNgayActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnDatBanDungNgayActionPerformed
-        // TODO add your handling code here:
         HoaDonDraftSession.clearCurrentPhoneNumber();
         HoaDonDraftSession.clearCurrentMaPhieuDatContext();
+
+        if (selectedTables != null && !selectedTables.isEmpty()) {
+            BanService banService = new BanService();
+            for (String maBan : selectedTables) {
+                try {
+                    banService.capNhatTrangThaiBan(maBan, TrangThaiBan.DANG_DUNG);
+                    if (panelDatBan != null) {
+                        panelDatBan.updateBanStatusUI(maBan, TrangThaiBan.DANG_DUNG);
+                    }
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(this,
+                            "Không thể cập nhật trạng thái bàn " + maBan + ": " + e.getMessage(), "Lỗi",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+
         this.dispose();
         java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
         if (parentFrame instanceof MainForm) {

@@ -16,8 +16,10 @@ import javax.swing.table.DefaultTableModel;
 
 import com.restaurant.quanlydatbannhahang.entity.HoaDon;
 import com.restaurant.quanlydatbannhahang.entity.MonAn;
+import com.restaurant.quanlydatbannhahang.entity.PhieuDatBan;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiBan;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiHoaDon;
+import com.restaurant.quanlydatbannhahang.entity.TrangThaiPhieuDat;
 import com.restaurant.quanlydatbannhahang.session.HoaDonDraftSession;
 import com.restaurant.quanlydatbannhahang.service.BanService;
 import com.restaurant.quanlydatbannhahang.service.HoaDonService;
@@ -75,6 +77,7 @@ public class PanelDatMon extends javax.swing.JPanel {
                     // Nếu hiện tại Panel KHÔNG còn hiển thị trên màn hình
                     if (!isShowing() && isChanged) {
                         autoSavePhieuGoiMonDraft();
+                        capNhatTrangThaiSauKhiLuu();
                         isChanged = false;
                     }
                 }
@@ -473,7 +476,6 @@ public class PanelDatMon extends javax.swing.JPanel {
 
         capNhatTrangThaiBanSauKhiDoiBan(oldBanSet, newSelectedTables);
 
-        setDatMonContext(newContext);
         JOptionPane.showMessageDialog(this, "Đã cập nhật bàn phục vụ: " + newContext, "Thành công",
                 JOptionPane.INFORMATION_MESSAGE);
     }
@@ -504,11 +506,10 @@ public class PanelDatMon extends javax.swing.JPanel {
 
         if (maPhieuDatContext != null && !maPhieuDatContext.isEmpty()) {
             PhieuDatBanService phieuDatBanService = new PhieuDatBanService();
-            phieuDatBanService.batDauSuDung(maPhieuDatContext);
-            for (String maBan : maBanList) {
-                banService.capNhatTrangThaiBan(maBan, TrangThaiBan.DANG_DUNG);
+            PhieuDatBan phieuDatBan = phieuDatBanService.getPhieuDatBanTheoMa(maPhieuDatContext);
+            if (phieuDatBan != null && phieuDatBan.getTrangThai() == TrangThaiPhieuDat.DANG_CHO) {
+                phieuDatBanService.batDauSuDung(maPhieuDatContext);
             }
-            return;
         }
 
         for (String maBan : maBanList) {
@@ -897,7 +898,6 @@ public class PanelDatMon extends javax.swing.JPanel {
         btnDoiBan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDoiBanActionPerformed(evt);
-                isChanged = true;
             }
         });
         jPanel3.add(btnDoiBan, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 550, 90, 30));
