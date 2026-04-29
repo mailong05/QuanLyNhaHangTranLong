@@ -74,24 +74,25 @@ public class PanelDatMon extends javax.swing.JPanel {
                 }
             }
 
-			private void autoSavePhieuGoiMonDraft() {
-				// TODO Auto-generated method stub
-				    // Chỉ lưu nếu có món ăn và chưa được lưu (draftSaved == false)
-				    if (!phieuGoiMonMap.isEmpty()) {
-				        try {
-				            saveDraftToSession(); // Lưu món vào Session 
-				            capNhatTrangThaiSauKhiLuu(); // Cập nhật trạng thái bàn xuống DB 
-				            
-				            // Thông báo nhẹ vào Console hoặc một Label trạng thái thay vì JOptionPane
-				            JOptionPane.showMessageDialog(null,"Hệ thống: Đã tự động phiếu gọi món vào bộ nhớ tạm","Thông báo", JOptionPane.INFORMATION_MESSAGE );
-				            
-				        } catch (Exception e) {
-				            // Với Auto-save, chỉ hiện Popup khi có LỖI THỰC SỰ xảy ra
-				            JOptionPane.showMessageDialog(null, "Lỗi tự động lưu: " + e.getMessage());
-				        }
-				    }
-				
-			}
+            private void autoSavePhieuGoiMonDraft() {
+                // TODO Auto-generated method stub
+                // Chỉ lưu nếu có món ăn và chưa được lưu (draftSaved == false)
+                if (!phieuGoiMonMap.isEmpty()) {
+                    try {
+                        saveDraftToSession(); // Lưu món vào Session
+                        capNhatTrangThaiSauKhiLuu(); // Cập nhật trạng thái bàn xuống DB
+
+                        // Thông báo nhẹ vào Console hoặc một Label trạng thái thay vì JOptionPane
+                        JOptionPane.showMessageDialog(null, "Hệ thống: Đã tự động phiếu gọi món vào bộ nhớ tạm",
+                                "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+
+                    } catch (Exception e) {
+                        // Với Auto-save, chỉ hiện Popup khi có LỖI THỰC SỰ xảy ra
+                        JOptionPane.showMessageDialog(null, "Lỗi tự động lưu: " + e.getMessage());
+                    }
+                }
+
+            }
         });
     }
 
@@ -420,10 +421,6 @@ public class PanelDatMon extends javax.swing.JPanel {
         lblTongTienTamTinh.setText(df.format(tongTien) + " VND");
     }
 
- 
-
-    
-
     private void saveDraftToSession() {
         if (datMonContext != null && !datMonContext.isEmpty()) {
             List<HoaDonDraftSession.DraftMonItem> draftItems = new ArrayList<>();
@@ -467,6 +464,15 @@ public class PanelDatMon extends javax.swing.JPanel {
         }
 
         HoaDonDraftSession.setMonItems(newContext, draftItems);
+
+        String maKH = HoaDonDraftSession.getMaKH(oldContext);
+        String maKM = HoaDonDraftSession.getMaKM(oldContext);
+        int diemDung = HoaDonDraftSession.getDiemDung(oldContext);
+        HoaDonDraftSession.setInvoiceMetadata(newContext,
+                maKH != null && !maKH.isBlank() ? maKH : null,
+                maKM != null && !maKM.isBlank() ? maKM : null,
+                diemDung);
+
         HoaDonDraftSession.clear(oldContext);
 
         capNhatTrangThaiBanSauKhiDoiBan(oldBanSet, newSelectedTables);
@@ -717,7 +723,8 @@ public class PanelDatMon extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
@@ -762,43 +769,40 @@ public class PanelDatMon extends javax.swing.JPanel {
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addComponent(lblPhieuGoiMon)
-                .addContainerGap(384, Short.MAX_VALUE))
-        );
+                jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addGap(14, 14, 14)
+                                .addComponent(lblPhieuGoiMon)
+                                .addContainerGap(384, Short.MAX_VALUE)));
         jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblPhieuGoiMon)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+                jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(lblPhieuGoiMon)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
         jPanel2.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 1, 509, -1));
 
         tablePhieuGoiMon.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+                new Object[][] {
 
-            },
-            new String [] {
-                "Tên món ăn", "Số lượng", "Đơn giá", "Thành tiền"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class
+                },
+                new String[] {
+                        "Tên món ăn", "Số lượng", "Đơn giá", "Thành tiền"
+                }) {
+            Class[] types = new Class[] {
+                    java.lang.String.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class
             };
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false
+            boolean[] canEdit = new boolean[] {
+                    false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
+                return types[columnIndex];
             }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
+                return canEdit[columnIndex];
             }
         });
         scrTablePhieuGoiMon.setViewportView(tablePhieuGoiMon);
@@ -825,13 +829,11 @@ public class PanelDatMon extends javax.swing.JPanel {
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 510, Short.MAX_VALUE)
-        );
+                jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 510, Short.MAX_VALUE));
         jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+                jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 0, Short.MAX_VALUE));
 
         jPanel3.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 480, 510, 0));
 
@@ -839,7 +841,8 @@ public class PanelDatMon extends javax.swing.JPanel {
         jPanel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 0, 5));
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        cbFilterLoaiMonAn.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbFilterLoaiMonAn.setModel(
+                new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cbFilterLoaiMonAn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbFilterLoaiMonAnActionPerformed(evt);
@@ -868,26 +871,26 @@ public class PanelDatMon extends javax.swing.JPanel {
         scrDanhSachMonAn.setBackground(new java.awt.Color(255, 251, 233));
 
         tableDanhSachMonAn.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+                new Object[][] {
 
-            },
-            new String [] {
-                "Hình ảnh", "Mã món ăn", "Tên món ăn", "Đơn vị tính", "Đơn giá"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class
+                },
+                new String[] {
+                        "Hình ảnh", "Mã món ăn", "Tên món ăn", "Đơn vị tính", "Đơn giá"
+                }) {
+            Class[] types = new Class[] {
+                    java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.String.class,
+                    java.lang.Double.class
             };
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+            boolean[] canEdit = new boolean[] {
+                    false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
+                return types[columnIndex];
             }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
+                return canEdit[columnIndex];
             }
         });
         scrDanhSachMonAn.setViewportView(tableDanhSachMonAn);
@@ -919,13 +922,11 @@ public class PanelDatMon extends javax.swing.JPanel {
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1110, Short.MAX_VALUE)
-        );
+                jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 1110, Short.MAX_VALUE));
         jPanel7Layout.setVerticalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 60, Short.MAX_VALUE)
-        );
+                jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 60, Short.MAX_VALUE));
 
         jPanel1.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 520, 1110, 60));
 

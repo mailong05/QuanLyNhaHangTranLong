@@ -16,6 +16,9 @@ public final class HoaDonDraftSession {
 
     private static final Map<String, List<DraftMonItem>> monItemsByMaBan = new LinkedHashMap<>();
     private static final Map<String, String> contextByMaBan = new LinkedHashMap<>();
+    private static final Map<String, String> maKHByMaBan = new LinkedHashMap<>();
+    private static final Map<String, String> maKMByMaBan = new LinkedHashMap<>();
+    private static final Map<String, Integer> diemDungByMaBan = new LinkedHashMap<>();
     private static String currentMaBanContext = "";
     private static String currentPhoneNumber = "";
     private static String currentMaPhieuDatContext = "";
@@ -162,12 +165,55 @@ public final class HoaDonDraftSession {
         }
         for (String maBan : maBanToRemove) {
             contextByMaBan.remove(maBan);
+            maKHByMaBan.remove(maBan);
+            maKMByMaBan.remove(maBan);
+            diemDungByMaBan.remove(maBan);
         }
+    }
+
+    public static void setInvoiceMetadata(String maBanContext, String maKH, String maKM, int diemDung) {
+        String normalized = normalizeMaBanContext(maBanContext);
+        if (normalized.isEmpty()) {
+            return;
+        }
+        if (maKH == null) {
+            maKHByMaBan.remove(normalized);
+        } else {
+            maKHByMaBan.put(normalized, maKH);
+        }
+        if (maKM == null) {
+            maKMByMaBan.remove(normalized);
+        } else {
+            maKMByMaBan.put(normalized, maKM);
+        }
+        if (diemDung <= 0) {
+            diemDungByMaBan.remove(normalized);
+        } else {
+            diemDungByMaBan.put(normalized, diemDung);
+        }
+    }
+
+    public static String getMaKH(String maBanContext) {
+        String normalized = normalizeMaBanContext(maBanContext);
+        return normalized.isEmpty() ? "" : maKHByMaBan.getOrDefault(normalized, "");
+    }
+
+    public static String getMaKM(String maBanContext) {
+        String normalized = normalizeMaBanContext(maBanContext);
+        return normalized.isEmpty() ? "" : maKMByMaBan.getOrDefault(normalized, "");
+    }
+
+    public static int getDiemDung(String maBanContext) {
+        String normalized = normalizeMaBanContext(maBanContext);
+        return normalized.isEmpty() ? 0 : diemDungByMaBan.getOrDefault(normalized, 0);
     }
 
     public static void clear() {
         monItemsByMaBan.clear();
         contextByMaBan.clear();
+        maKHByMaBan.clear();
+        maKMByMaBan.clear();
+        diemDungByMaBan.clear();
         currentMaBanContext = "";
         currentPhoneNumber = "";
         currentMaPhieuDatContext = "";

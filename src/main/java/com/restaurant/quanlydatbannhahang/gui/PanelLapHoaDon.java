@@ -718,46 +718,68 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         loadHoaDonDraft();
         loadKhuyenMaiToComboBox();
         selectedKhachHang = null;
-        diemDaApDung = 0;
         populateCustomerInfoFromReservation();
         updateTongTienSummary();
     }
 
     private void populateCustomerInfoFromReservation() {
+        String maBanContext = HoaDonDraftSession.getCurrentMaBanContext();
+        String maKH = HoaDonDraftSession.getMaKH(maBanContext);
         String soDienThoai = HoaDonDraftSession.getCurrentPhoneNumber();
         DefaultTableModel model = (DefaultTableModel) tableThongTinKhachHang.getModel();
         model.setRowCount(0);
         searchedKhachHang.clear();
         selectedKhachHang = null;
+        diemDaApDung = HoaDonDraftSession.getDiemDung(maBanContext);
 
-        if (soDienThoai == null || soDienThoai.trim().isEmpty()) {
-            txtTimKiem.setText("");
-            txtTenKhachHang.setText("Khách vãng lai");
-            centerTableColumns(tableThongTinKhachHang);
-            return;
-        }
-
-        String phone = soDienThoai.trim();
-        txtTimKiem.setText(phone);
-
-        try {
-            KhachHang khachHang = khachHangService.getKhachHangTheoSDT(phone);
-            if (khachHang != null) {
-                selectedKhachHang = khachHang;
-                searchedKhachHang.add(khachHang);
-                txtTenKhachHang.setText(khachHang.getHoTen() != null ? khachHang.getHoTen() : "");
-                model.addRow(new Object[] {
-                        khachHang.getHoTen(),
-                        khachHang.getDiemTichLuy(),
-                        khachHang.getLoaiThanhVien() != null ? khachHang.getLoaiThanhVien().getDisplayName() : ""
-                });
-            } else {
+        if (maKH != null && !maKH.trim().isEmpty()) {
+            try {
+                KhachHang khachHang = khachHangService.getKhachHangTheoMa(maKH);
+                if (khachHang != null) {
+                    selectedKhachHang = khachHang;
+                    searchedKhachHang.add(khachHang);
+                    txtTenKhachHang.setText(khachHang.getHoTen() != null ? khachHang.getHoTen() : "");
+                    txtTimKiem.setText(khachHang.getSdt() != null ? khachHang.getSdt() : "");
+                    model.addRow(new Object[] {
+                            khachHang.getHoTen(),
+                            khachHang.getDiemTichLuy(),
+                            khachHang.getLoaiThanhVien() != null ? khachHang.getLoaiThanhVien().getDisplayName() : ""
+                    });
+                } else {
+                    txtTimKiem.setText(soDienThoai != null ? soDienThoai : "");
+                    txtTenKhachHang.setText("Khách vãng lai");
+                }
+            } catch (Exception ex) {
+                txtTimKiem.setText(soDienThoai != null ? soDienThoai : "");
                 txtTenKhachHang.setText("Khách vãng lai");
             }
-        } catch (Exception ex) {
+        } else if (soDienThoai != null && !soDienThoai.trim().isEmpty()) {
+            String phone = soDienThoai.trim();
+            txtTimKiem.setText(phone);
+            try {
+                KhachHang khachHang = khachHangService.getKhachHangTheoSDT(phone);
+                if (khachHang != null) {
+                    selectedKhachHang = khachHang;
+                    searchedKhachHang.add(khachHang);
+                    txtTenKhachHang.setText(khachHang.getHoTen() != null ? khachHang.getHoTen() : "");
+                    model.addRow(new Object[] {
+                            khachHang.getHoTen(),
+                            khachHang.getDiemTichLuy(),
+                            khachHang.getLoaiThanhVien() != null ? khachHang.getLoaiThanhVien().getDisplayName() : ""
+                    });
+                } else {
+                    txtTenKhachHang.setText("Khách vãng lai");
+                }
+            } catch (Exception ex) {
+                txtTenKhachHang.setText("Khách vãng lai");
+            }
+        } else {
+            txtTimKiem.setText("");
             txtTenKhachHang.setText("Khách vãng lai");
         }
 
+        String maKM = HoaDonDraftSession.getMaKM(maBanContext);
+        restoreSelectedKhuyenMai(maKM);
         centerTableColumns(tableThongTinKhachHang);
     }
 
@@ -946,13 +968,15 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
                 content.newLineAtOffset(0, -15);
                 content.showText("Mã bàn: " + txtMaBan.getText());
                 content.newLineAtOffset(0, -15);
-                content.showText("Họ tên nhân viên: "+ nhanVienService.getNhanVienTheoMa(txtMaNhanVien.getText()).getHoTen());
+                content.showText(
+                        "Họ tên nhân viên: " + nhanVienService.getNhanVienTheoMa(txtMaNhanVien.getText()).getHoTen());
                 content.newLineAtOffset(0, -15);
                 content.showText("Họ tên khách hàng: " + txtTenKhachHang.getText());
                 content.newLineAtOffset(0, -15);
                 content.showText("Ngày tạo: " + txtNgayTao.getText());
                 content.newLineAtOffset(0, -15);
                 content.showText("Phương thức thanh toán: " + cbPTTT.getSelectedItem().toString());
+                content.newLineAtOffset(0, -15);
                 content.endText();
 
                 // 3. Header bảng (Canh lề cột)
@@ -1056,9 +1080,11 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         JOptionPane.showMessageDialog(this, "Hóa đơn đã được lưu PDF tại: " + saveFile.getAbsolutePath());
         capNhatTrangThaiBan(txtMaBan.getText().trim());
         congDiemTichLuyChoKhachHang(txtTenKhachHang.getText().trim());
-        // Sau khi in PDF thành công, lưu hóa đơn vào DB với trạng thái DA_THAN_TOAN
+        // Sau khi in PDF thành công, lưu hóa đơn vào DB với trạng thái DA_THANH_TOAN
         try {
             thucHienLuuHoaDon(TrangThaiHoaDon.DA_THANH_TOAN);
+            HoaDonDraftSession.clear(HoaDonDraftSession.getCurrentMaBanContext());
+            refreshDraftData();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Lỗi khi lưu hóa đơn vào cơ sở dữ liệu: " + ex.getMessage());
             ex.printStackTrace();
@@ -1136,9 +1162,12 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         hoaDon.setTongThanhToan(tongThanhToan);
         hoaDon.setTrangThaiThanhToan(trangThai);
 
-        // Lưu phương thức thanh toán từ ComboBox
         if (trangThai == TrangThaiHoaDon.DA_THANH_TOAN) {
-            hoaDon.setPhuongThucTT(PhuongThucTT.valueOf(cbPTTT.getSelectedItem().toString()));
+        	Object selectedItem = cbPTTT.getSelectedItem();
+            if (selectedItem != null) {
+                PhuongThucTT pttt = PhuongThucTT.fromDisplayName(selectedItem.toString());
+                hoaDon.setPhuongThucTT(pttt);
+            }
         }
 
         // 5. Lưu HoaDon vào Database
@@ -1186,21 +1215,38 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
             HoaDonDraftSession.setCurrentPhoneNumber(soDienThoai);
         }
 
+        String maKH = selectedKhachHang != null ? selectedKhachHang.getMaKH() : null;
+        KhuyenMai selectedKM = getSelectedKhuyenMai();
+        String maKM = selectedKM != null ? selectedKM.getMaKM() : null;
+        int diemDung = diemDaApDung;
+
         HoaDonDraftSession.setCurrentMaBanContext(maBanContext);
+        HoaDonDraftSession.setInvoiceMetadata(maBanContext, maKH, maKM, diemDung);
+
         if (draftItems.isEmpty()) {
             HoaDonDraftSession.clear(maBanContext);
         } else {
             HoaDonDraftSession.setMonItems(maBanContext, draftItems);
         }
-
-        JOptionPane.showMessageDialog(this,
-                "Đã tự động lưu hóa đơn vào bộ nhớ tạm.",
-                "Thông báo",
-                JOptionPane.INFORMATION_MESSAGE);
     }
 
     private String formatVnd(double amount) {
         return String.format("%,.0f VND", Math.max(amount, 0));
+    }
+
+    private void restoreSelectedKhuyenMai(String maKM) {
+        if (maKM == null || maKM.isBlank()) {
+            cbKhuyenMai.setSelectedItem(NO_PROMO_DISPLAY);
+            return;
+        }
+        for (Map.Entry<String, KhuyenMai> entry : khuyenMaiByDisplay.entrySet()) {
+            KhuyenMai km = entry.getValue();
+            if (km != null && maKM.equals(km.getMaKM())) {
+                cbKhuyenMai.setSelectedItem(entry.getKey());
+                return;
+            }
+        }
+        cbKhuyenMai.setSelectedItem(NO_PROMO_DISPLAY);
     }
 
     private String findMaMonByTenMon(String tenMon) {

@@ -14,4 +14,13 @@ public enum PhuongThucTT {
     public String getDisplayName() {
         return displayName;
     }
+    
+    public static PhuongThucTT fromDisplayName(String text) {
+        for (PhuongThucTT b : PhuongThucTT.values()) {
+            if (b.displayName.equalsIgnoreCase(text)) {
+                return b;
+            }
+        }
+        return null; 
+    }
 }
