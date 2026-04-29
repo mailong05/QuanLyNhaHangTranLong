@@ -24,9 +24,7 @@ public class UIConfiguration {
             // Setup FlatLight Look and Feel
             FlatLightLaf.setup();
             isSetup = true;
-            System.out.println("✅ FlatLaf UI setup thành công");
         } catch (Exception ex) {
-            System.err.println("❌ Lỗi thiết lập FlatLaf: " + ex.getMessage());
             ex.printStackTrace();
         }
     }

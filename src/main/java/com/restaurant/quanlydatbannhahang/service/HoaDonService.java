@@ -68,6 +68,16 @@ public class HoaDonService {
         return hoaDon;
     }
 
+    public HoaDon findHoaDonTheoMa(String maHD) {
+        if (maHD == null || maHD.isBlank()) {
+            throw new IllegalArgumentException("Mã hóa đơn không được để trống");
+        }
+        if (!maHDPattern.matcher(maHD).matches()) {
+            throw new IllegalArgumentException("Mã hóa đơn phải có dạng HDxxx (ví dụ: HD001)");
+        }
+        return hoaDonDAO.getHoaDonTheoMa(maHD);
+    }
+
     /**
      * Lấy tất cả hóa đơn
      */

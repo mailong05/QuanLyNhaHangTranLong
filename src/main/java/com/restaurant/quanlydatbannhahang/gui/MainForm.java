@@ -61,7 +61,6 @@ public class MainForm extends javax.swing.JFrame {
             initComponents();
             initCustomComponents();
         } catch (Exception e) {
-            System.out.println("❌ MainForm: Lỗi " + e.getMessage());
             e.printStackTrace();
             throw new RuntimeException("Lỗi khởi tạo MainForm", e);
         }
@@ -227,7 +226,7 @@ public class MainForm extends javax.swing.JFrame {
     }
 
     private void showPanel(JPanel panel) {
-       
+
         if (panel != null) {
             panelBody.removeAll();
             panelBody.add(panel, BorderLayout.CENTER);
@@ -1383,11 +1382,11 @@ public class MainForm extends javax.swing.JFrame {
         showPanel(panelQuanLyKhachHang);
         lblTenTrang.setText("QUẢN LÝ KHÁCH HÀNG");
     }
-    
+
     public void openPanelDatBan() {
         // TODO Auto-generated method stub
         if (panelDatBan == null) {
-        	panelDatBan = new PanelDatBan();
+            panelDatBan = new PanelDatBan();
         }
         showPanel(panelDatBan);
         lblTenTrang.setText("Đặt bàn");

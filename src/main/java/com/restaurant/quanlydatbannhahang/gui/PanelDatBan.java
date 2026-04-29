@@ -38,6 +38,18 @@ public class PanelDatBan extends javax.swing.JPanel {
         scrSoDoBan.getViewport().setBackground(new java.awt.Color(255, 251, 233));
         loadDataToComboBoxes();
         loadSoDoBanFromDatabase();
+        this.addHierarchyListener(new java.awt.event.HierarchyListener() {
+            @Override
+            public void hierarchyChanged(java.awt.event.HierarchyEvent e) {
+                if ((e.getChangeFlags() & java.awt.event.HierarchyEvent.SHOWING_CHANGED) != 0) {
+                    if (isShowing()) {
+                        // KHI PANEL HIỂN THỊ LẠI
+                    	refreshData();
+                    } 
+                    
+                }
+            }
+        });
     }
 
     /**
@@ -533,8 +545,7 @@ public class PanelDatBan extends javax.swing.JPanel {
     public void updateBanStatusUI(String maBan, TrangThaiBan newTrangThai) {
         JPanel card = tableCards.get(maBan);
         if (card == null) {
-            System.err.println("❌ Không tìm thấy card cho bàn: " + maBan);
-            return;
+            throw new IllegalStateException("Không tìm thấy card cho bàn: " + maBan);
         }
 
         tableTrangThai.put(maBan, newTrangThai);
@@ -550,8 +561,6 @@ public class PanelDatBan extends javax.swing.JPanel {
         JLabel lblStatus = tableLabelStatus.get(maBan);
         if (lblStatus != null) {
             lblStatus.setText(newTrangThai.getDisplayName());
-        } else {
-            System.err.println("label status not found for " + maBan);
         }
 
         card.setBorder(BorderFactory.createCompoundBorder(

@@ -40,8 +40,7 @@ public class UIComboBoxHelper {
                 comboBox.addItem(displayValue);
             }
         } catch (Exception e) {
-            System.err.println("Error loading enum to ComboBox: " + e.getMessage());
-            e.printStackTrace();
+            throw new RuntimeException("Không thể load enum vào ComboBox: " + e.getMessage(), e);
         }
     }
 

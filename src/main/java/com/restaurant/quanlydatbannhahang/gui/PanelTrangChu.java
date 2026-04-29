@@ -22,7 +22,8 @@ public class PanelTrangChu extends javax.swing.JPanel {
             lblCountBanDatTruoc.setText(String.valueOf(countBanDangSuDung));
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Lỗi khi load dữ liệu Trang chủ");
+            JOptionPane.showMessageDialog(this, "Lỗi khi load dữ liệu Trang chủ: " + e.getMessage(), "Lỗi",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 

@@ -134,7 +134,8 @@ public class ChiTietHoaDonDAO {
 
         try (PreparedStatement pstm = connection.prepareStatement(sql)) {
             pstm.setString(1, maHD);
-            return pstm.executeUpdate() > 0;
+            pstm.executeUpdate();
+            return true;
         } catch (SQLException e) {
             System.out.println("❌ Lỗi khi xóa tất cả chi tiết hóa đơn: " + e.getMessage());
             e.printStackTrace();
