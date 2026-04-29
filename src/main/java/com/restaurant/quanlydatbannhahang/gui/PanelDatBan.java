@@ -187,7 +187,8 @@ public class PanelDatBan extends javax.swing.JPanel {
                 if (trangThaiPhieu == null) {
                     // Bàn không trong phiếu nào → TRONG
                     trangThaiBan = TrangThaiBan.TRONG;
-                } else if (trangThaiPhieu == TrangThaiPhieuDat.DA_HUY) {
+                } else if (trangThaiPhieu == TrangThaiPhieuDat.DA_HUY
+                        || trangThaiPhieu == TrangThaiPhieuDat.DA_SU_DUNG) {
                     trangThaiBan = TrangThaiBan.TRONG;
                 } else if (trangThaiPhieu == TrangThaiPhieuDat.DANG_SU_DUNG) {
                     trangThaiBan = TrangThaiBan.DANG_DUNG;

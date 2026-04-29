@@ -1388,6 +1388,7 @@ public class MainForm extends javax.swing.JFrame {
         if (panelDatBan == null) {
             panelDatBan = new PanelDatBan();
         }
+        panelDatBan.refreshData();
         showPanel(panelDatBan);
         lblTenTrang.setText("Đặt bàn");
     }

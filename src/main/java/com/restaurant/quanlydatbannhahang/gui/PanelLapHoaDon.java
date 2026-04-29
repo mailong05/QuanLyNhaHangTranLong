@@ -109,16 +109,10 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         this.addHierarchyListener(new java.awt.event.HierarchyListener() {
             @Override
             public void hierarchyChanged(java.awt.event.HierarchyEvent e) {
-                // Kiểm tra xem trạng thái SHOWING có thay đổi không
                 if ((e.getChangeFlags() & java.awt.event.HierarchyEvent.SHOWING_CHANGED) != 0) {
-                    // Nếu hiện tại Panel KHÔNG còn hiển thị trên màn hình
+                    // Khi Panel bị ẩn đi (chuyển trang)
                     if (!isShowing()) {
-                        try {
-                            saveHoaDonDraftToSession();
-                            thucHienLuuHoaDon(TrangThaiHoaDon.CHUA_THANH_TOAN);
-                        } catch (Exception e1) {
-                            e1.printStackTrace();
-                        }
+                        performAutoSaveOnHide();
                     }
                 }
             }
@@ -608,6 +602,26 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         searchKhachHang();
     }// GEN-LAST:event_btnTimKiemActionPerformed
 
+    private void performAutoSaveOnHide() {
+        String context = HoaDonDraftSession.getCurrentMaBanContext();
+
+        /* * ĐIỀU KIỆN QUAN TRỌNG:
+         * 1. Context phải tồn tại (Nếu thanh toán xong, context đã bị set về null).
+         * 2. Bảng hóa đơn phải có món ăn.
+         */
+        if (context != null && !context.isBlank() && tableThongTinHoaDon.getRowCount() > 0) {
+            try {
+                saveHoaDonDraftToSession();
+                // Chỉ lưu trạng thái CHƯA_THANH_TOÁN khi nhân viên tự ý rời trang
+                thucHienLuuHoaDon(TrangThaiHoaDon.CHUA_THANH_TOAN);
+                System.out.println("Hệ thống: Tự động lưu hóa đơn nháp cho bàn " + context);
+            } catch (Exception ex) {
+                // In lỗi ra console để debug, không dùng Dialog ở đây tránh gây treo UI khi chuyển trang
+                ex.printStackTrace();
+            }
+        }
+    }
+
     private void btnTaoTaiKhoanActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTaoTaiKhoanActionPerformed
         Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
         if (parentFrame instanceof MainForm) {
@@ -629,7 +643,6 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
 
         try {
             generatePdfInvoice();
-            capNhatTrangThaiBan(maBanContext);
             congDiemTichLuyChoKhachHang();
             // Chuyển sang panel đặt bàn
             Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
@@ -1089,7 +1102,10 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
 
         // Sau khi in PDF thành công, lưu hóa đơn vào DB với trạng thái DA_THANH_TOAN
         try {
+            String currentMaBanContext = HoaDonDraftSession.getCurrentMaBanContext();
+
             thucHienLuuHoaDon(TrangThaiHoaDon.DA_THANH_TOAN);
+            capNhatTrangThaiBan(currentMaBanContext);
             clearInvoiceDraftAndReservationContext();
             refreshDraftData();
         } catch (Exception ex) {
@@ -1104,7 +1120,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
 
         if (currentMaPhieuDat != null && !currentMaPhieuDat.isBlank()) {
             try {
-                phieuDatBanService.capNhatTrangThaiPhieu(currentMaPhieuDat, TrangThaiPhieuDat.DA_HUY);
+                capNhatTrangThaiPhieuDatBanTruoc(currentMaPhieuDat, TrangThaiPhieuDat.DA_SU_DUNG);
             } catch (Exception ex) {
                 throw new RuntimeException(
                         "Không thể cập nhật trạng thái phiếu đặt bàn sau khi thanh toán: " + ex.getMessage(), ex);
@@ -1144,6 +1160,19 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Lỗi cập nhật điểm tích lũy: " + ex.getMessage(), "Lỗi",
                     JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void capNhatTrangThaiPhieuDatBanTruoc(String maPhieuDat, TrangThaiPhieuDat trangThai) {
+        if (maPhieuDat == null || maPhieuDat.isBlank() || trangThai == null) {
+            return;
+        }
+
+        try {
+            phieuDatBanService.capNhatTrangThaiPhieu(maPhieuDat.trim(), trangThai);
+        } catch (Exception ex) {
+            throw new RuntimeException(
+                    "Khong the cap nhat trang thai phieu dat ban truoc sau khi thanh toan: " + ex.getMessage(), ex);
         }
     }
 
