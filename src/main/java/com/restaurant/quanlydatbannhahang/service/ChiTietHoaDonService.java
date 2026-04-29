@@ -83,10 +83,8 @@ public class ChiTietHoaDonService {
      */
     public void themChiTietHoaDon(ChiTietHoaDon chiTiet) {
         validateChiTietHoaDon(chiTiet);
-        if (chiTietHoaDonDAO.themChiTietHoaDon(chiTiet)) {
-            System.out.println(" Thêm chi tiết hóa đơn thành công");
-        } else {
-            System.out.println(" Thêm chi tiết hóa đơn thất bại");
+        if (!chiTietHoaDonDAO.themChiTietHoaDon(chiTiet)) {
+            throw new RuntimeException("Thêm chi tiết hóa đơn thất bại");
         }
     }
 
@@ -95,10 +93,8 @@ public class ChiTietHoaDonService {
      */
     public void capNhatChiTietHoaDon(ChiTietHoaDon chiTiet) {
         validateChiTietHoaDon(chiTiet);
-        if (chiTietHoaDonDAO.capNhatChiTietHoaDon(chiTiet)) {
-            System.out.println(" Cập nhật chi tiết hóa đơn thành công");
-        } else {
-            System.out.println(" Cập nhật chi tiết hóa đơn thất bại");
+        if (!chiTietHoaDonDAO.capNhatChiTietHoaDon(chiTiet)) {
+            throw new RuntimeException("Cập nhật chi tiết hóa đơn thất bại");
         }
     }
 
@@ -118,10 +114,8 @@ public class ChiTietHoaDonService {
         if (!maMonPattern.matcher(maMon).matches()) {
             throw new IllegalArgumentException("Mã món phải có dạng MAxxx (ví dụ: MA001)");
         }
-        if (chiTietHoaDonDAO.xoaChiTietHoaDon(maHD, maMon)) {
-            System.out.println(" Xóa chi tiết hóa đơn thành công");
-        } else {
-            System.out.println(" Xóa chi tiết hóa đơn thất bại");
+        if (!chiTietHoaDonDAO.xoaChiTietHoaDon(maHD, maMon)) {
+            throw new RuntimeException("Xóa chi tiết hóa đơn thất bại");
         }
     }
 
@@ -135,10 +129,8 @@ public class ChiTietHoaDonService {
         if (!maHDPattern.matcher(maHD).matches()) {
             throw new IllegalArgumentException("Mã hóa đơn phải có dạng HDxxx (ví dụ: HD001)");
         }
-        if (chiTietHoaDonDAO.xoaAllChiTietByMaHD(maHD)) {
-            System.out.println(" Xóa tất cả chi tiết hóa đơn thành công");
-        } else {
-            System.out.println(" Xóa tất cả chi tiết hóa đơn thất bại");
+        if (!chiTietHoaDonDAO.xoaAllChiTietByMaHD(maHD)) {
+            throw new RuntimeException("Xóa tất cả chi tiết hóa đơn thất bại");
         }
     }
 

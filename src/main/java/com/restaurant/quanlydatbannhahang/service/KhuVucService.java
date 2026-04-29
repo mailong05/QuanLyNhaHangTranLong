@@ -21,7 +21,7 @@ public class KhuVucService {
         }
         KhuVuc khuVuc = khuVucDAO.getKhuVucTheoMa(maKhuVuc);
         if (khuVuc == null) {
-            System.out.println(" Không tìm thấy khu vực với mã: " + maKhuVuc);
+            throw new RuntimeException("Không tìm thấy khu vực với mã: " + maKhuVuc);
         }
         return khuVuc;
     }
@@ -46,10 +46,8 @@ public class KhuVucService {
         if (khuVuc.getTenKhuVuc() == null || khuVuc.getTenKhuVuc().trim().isEmpty()) {
             throw new IllegalArgumentException("Tên khu vực không được để trống");
         }
-        if (khuVucDAO.themKhuVuc(khuVuc)) {
-            System.out.println(" Thêm khu vực thành công");
-        } else {
-            System.out.println(" Thêm khu vực thất bại");
+        if (!khuVucDAO.themKhuVuc(khuVuc)) {
+            throw new RuntimeException("Thêm khu vực thất bại");
         }
     }
 
@@ -60,10 +58,8 @@ public class KhuVucService {
         if (khuVuc == null) {
             throw new IllegalArgumentException("Khu vực không được để trống");
         }
-        if (khuVucDAO.capNhatKhuVuc(khuVuc)) {
-            System.out.println(" Cập nhật khu vực thành công");
-        } else {
-            System.out.println(" Cập nhật khu vực thất bại");
+        if (!khuVucDAO.capNhatKhuVuc(khuVuc)) {
+            throw new RuntimeException("Cập nhật khu vực thất bại");
         }
     }
 
@@ -74,10 +70,8 @@ public class KhuVucService {
         if (maKhuVuc == null || maKhuVuc.trim().isEmpty()) {
             throw new IllegalArgumentException("Mã khu vực không được để trống");
         }
-        if (khuVucDAO.xoaKhuVuc(maKhuVuc)) {
-            System.out.println(" Xóa khu vực thành công");
-        } else {
-            System.out.println(" Xóa khu vực thất bại");
+        if (!khuVucDAO.xoaKhuVuc(maKhuVuc)) {
+            throw new RuntimeException("Xóa khu vực thất bại");
         }
     }
 
@@ -85,7 +79,10 @@ public class KhuVucService {
      * Kiểm tra khu vực tồn tại
      */
     public boolean existKhuVuc(String maKhuVuc) {
-        return getKhuVucTheoMa(maKhuVuc) != null;
+        if (maKhuVuc == null || maKhuVuc.trim().isEmpty()) {
+            return false;
+        }
+        return khuVucDAO.getKhuVucTheoMa(maKhuVuc) != null;
     }
 
     /**
@@ -105,5 +102,4 @@ public class KhuVucService {
         return khuVucDAO.getLastKhuVucID();
     }
 
-	
 }

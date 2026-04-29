@@ -28,7 +28,7 @@ public class PhuongThucTTService {
         }
         PhuongThucTT phuongThuc = phuongThucTTDAO.findByName(name);
         if (phuongThuc == null) {
-            System.out.println(" Không tìm thấy phương thức thanh toán: " + name);
+            throw new RuntimeException("Không tìm thấy phương thức thanh toán: " + name);
         }
         return phuongThuc;
     }
@@ -37,7 +37,10 @@ public class PhuongThucTTService {
      * Kiểm tra phương thức thanh toán tồn tại
      */
     public boolean exists(String name) {
-        return findByName(name) != null;
+        if (name == null || name.trim().isEmpty()) {
+            return false;
+        }
+        return phuongThucTTDAO.findByName(name) != null;
     }
 
     /**

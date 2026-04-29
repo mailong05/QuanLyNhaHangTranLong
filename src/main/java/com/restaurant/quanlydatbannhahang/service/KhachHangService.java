@@ -30,14 +30,14 @@ public class KhachHangService {
         if (maKH == null || maKH.isBlank()) {
             throw new IllegalArgumentException("Mã khách hàng không được để trống");
         }
-        
+
         if (!maKHPattern.matcher(maKH).matches()) {
             throw new IllegalArgumentException("Mã khách hàng phải có dạng KHxxx (ví dụ: KH001)");
         }
-        
+
         KhachHang khachHang = khachHangDAO.getKhachHangTheoMa(maKH);
         if (khachHang == null) {
-            System.out.println(" Không tìm thấy khách hàng với mã: " + maKH);
+            throw new RuntimeException("Không tìm thấy khách hàng với mã: " + maKH);
         }
         return khachHang;
     }
@@ -53,88 +53,78 @@ public class KhachHangService {
      * Thêm khách hàng mới
      */
     public boolean themKhachHang(KhachHang khachHang) {
-       validateKhachHang(khachHang);
-       
+        validateKhachHang(khachHang);
+
         boolean success = khachHangDAO.themKhachHang(khachHang);
-        if (success) {
-            System.out.println(" Thêm khách hàng thành công");
-        } else {
-            System.out.println(" Thêm khách hàng thất bại");
+        if (!success) {
+            throw new RuntimeException("Thêm khách hàng thất bại");
         }
         return success;
     }
 
-
-   
-
-    
     public void validateKhachHang(KhachHang kh) {
         if (kh == null) {
             throw new IllegalArgumentException("Đối tượng khách hàng không tồn tại");
         }
-        
+
         if (kh.getMaKH() == null || kh.getMaKH().isBlank()) {
             throw new IllegalArgumentException("Mã khách hàng không được để trống");
         }
         if (!maKHPattern.matcher(kh.getMaKH()).matches()) {
             throw new IllegalArgumentException("Mã khách hàng phải có dạng KHxxx (ví dụ: KH001)");
         }
-        
+
         if (kh.getHoTen() == null || kh.getHoTen().isBlank()) {
             throw new IllegalArgumentException("Họ tên khách hàng không được để trống");
         }
         if (!hoTenPattern.matcher(kh.getHoTen()).matches()) {
             throw new IllegalArgumentException("Tên khách hàng phải viết hoa chữ cái đầu mỗi từ");
         }
-        
+
         if (kh.getSdt() == null || kh.getSdt().isBlank()) {
             throw new IllegalArgumentException("Số điện thoại không được để trống");
         }
         if (!phonePattern.matcher(kh.getSdt()).matches()) {
             throw new IllegalArgumentException("Số điện thoại không hợp lệ (phải 10 số và bắt đầu bằng 0)");
         }
-        
+
         if (kh.getDiemTichLuy() < 0) {
             throw new IllegalArgumentException("Điểm tích lũy không được là số âm");
         }
-        
+
         if (kh.getLoaiThanhVien() == null) {
             throw new IllegalArgumentException("Vui lòng chọn loại thành viên");
         }
-        
+
     }
-    
+
     /**
      * Cập nhật khách hàng
      */
     public boolean capNhatKhachHang(KhachHang khachHang) {
         validateKhachHang(khachHang);
         boolean success = khachHangDAO.capNhatKhachHang(khachHang);
-        if (success) {
-            System.out.println(" Cập nhật khách hàng thành công");
-        } else {
-            System.out.println(" Cập nhật khách hàng thất bại");
+        if (!success) {
+            throw new RuntimeException("Cập nhật khách hàng thất bại");
         }
-        return success;
+        return true;
     }
 
     /**
      * Xóa khách hàng
      */
     public boolean xoaKhachHang(String maKH) {
-    	if (maKH == null || maKH.isBlank()) {
+        if (maKH == null || maKH.isBlank()) {
             throw new IllegalArgumentException("Mã khách hàng không được để trống");
         }
         if (!maKHPattern.matcher(maKH).matches()) {
             throw new IllegalArgumentException("Mã khách hàng phải có dạng KHxxx (ví dụ: KH001)");
         }
         boolean success = khachHangDAO.xoaKhachHang(maKH);
-        if (success) {
-            System.out.println(" Xóa khách hàng thành công");
-        } else {
-            System.out.println(" Xóa khách hàng thất bại");
+        if (!success) {
+            throw new RuntimeException("Xóa khách hàng thất bại");
         }
-        return success;
+        return true;
     }
 
     /**
@@ -159,7 +149,6 @@ public class KhachHangService {
             int diemMoi = khachHang.getDiemTichLuy() + diemThem;
             khachHang.setDiemTichLuy(diemMoi);
             capNhatKhachHang(khachHang);
-            System.out.println(" Cập nhật điểm tích lũy thành công. Điểm hiện tại: " + diemMoi);
         }
     }
 
@@ -169,13 +158,10 @@ public class KhachHangService {
     public boolean suDungDiemTichLuy(String maKH, int diemSuDung) {
         KhachHang khachHang = getKhachHangTheoMa(maKH);
         if (khachHang != null) {
-           
-                int diemConLai = Math.max(khachHang.getDiemTichLuy() - diemSuDung, 0);
-                khachHang.setDiemTichLuy(diemConLai);
-                capNhatKhachHang(khachHang);
-                System.out.println(" Sử dụng điểm tích lũy thành công. Điểm còn lại: " + diemConLai);
-                return true;
-           
+            int diemConLai = Math.max(khachHang.getDiemTichLuy() - diemSuDung, 0);
+            khachHang.setDiemTichLuy(diemConLai);
+            capNhatKhachHang(khachHang);
+            return true;
         }
         return false;
     }

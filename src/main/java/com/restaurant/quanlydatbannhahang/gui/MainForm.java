@@ -1383,4 +1383,13 @@ public class MainForm extends javax.swing.JFrame {
         showPanel(panelQuanLyKhachHang);
         lblTenTrang.setText("QUẢN LÝ KHÁCH HÀNG");
     }
+    
+    public void openPanelDatBan() {
+        // TODO Auto-generated method stub
+        if (panelDatBan == null) {
+        	panelDatBan = new PanelDatBan();
+        }
+        showPanel(panelDatBan);
+        lblTenTrang.setText("Đặt bàn");
+    }
 }

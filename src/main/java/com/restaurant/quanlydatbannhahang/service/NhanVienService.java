@@ -75,7 +75,7 @@ public class NhanVienService {
         }
         NhanVien nhanVien = nhanVienDAO.getNhanVienTheoMa(maNV);
         if (nhanVien == null) {
-            System.out.println(" Không tìm thấy nhân viên với mã: " + maNV);
+            throw new RuntimeException("Không tìm thấy nhân viên với mã: " + maNV);
         }
         return nhanVien;
     }
@@ -92,10 +92,8 @@ public class NhanVienService {
      */
     public void themNhanVien(NhanVien nhanVien) {
         validateNhanVien(nhanVien);
-        if (nhanVienDAO.themNhanVien(nhanVien)) {
-            System.out.println(" Thêm nhân viên thành công");
-        } else {
-            System.out.println(" Thêm nhân viên thất bại");
+        if (!nhanVienDAO.themNhanVien(nhanVien)) {
+            throw new RuntimeException("Thêm nhân viên thất bại");
         }
     }
 
@@ -104,10 +102,8 @@ public class NhanVienService {
      */
     public void capNhatNhanVien(NhanVien nhanVien) {
         validateNhanVien(nhanVien);
-        if (nhanVienDAO.capNhatNhanVien(nhanVien)) {
-            System.out.println(" Cập nhật nhân viên thành công");
-        } else {
-            System.out.println(" Cập nhật nhân viên thất bại");
+        if (!nhanVienDAO.capNhatNhanVien(nhanVien)) {
+            throw new RuntimeException("Cập nhật nhân viên thất bại");
         }
     }
 
@@ -121,10 +117,8 @@ public class NhanVienService {
         if (!maNVPattern.matcher(maNV).matches()) {
             throw new IllegalArgumentException("Mã nhân viên phải có dạng NVxxx (ví dụ: NV001)");
         }
-        if (nhanVienDAO.xoaNhanVien(maNV)) {
-            System.out.println(" Xóa nhân viên thành công");
-        } else {
-            System.out.println(" Xóa nhân viên thất bại");
+        if (!nhanVienDAO.xoaNhanVien(maNV)) {
+            throw new RuntimeException("Xóa nhân viên thất bại");
         }
     }
 

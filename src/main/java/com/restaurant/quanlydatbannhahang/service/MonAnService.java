@@ -58,10 +58,8 @@ public class MonAnService {
      */
     public void themMonAn(MonAn monAn) {
         validateMonAn(monAn);
-        if (monAnDAO.themMonAn(monAn)) {
-            System.out.println(" Thêm món ăn thành công");
-        } else {
-            System.out.println(" Thêm món ăn thất bại");
+        if (!monAnDAO.themMonAn(monAn)) {
+            throw new RuntimeException("Thêm món ăn thất bại");
         }
     }
 
@@ -77,7 +75,7 @@ public class MonAnService {
         }
         MonAn monAn = monAnDAO.getMonAnTheoMa(maMon);
         if (monAn == null) {
-            System.out.println(" Không tìm thấy món ăn với mã: " + maMon);
+            throw new RuntimeException("Không tìm thấy món ăn với mã: " + maMon);
         }
         return monAn;
     }
@@ -111,10 +109,8 @@ public class MonAnService {
      */
     public void capNhatMonAn(MonAn monAn) {
         validateMonAn(monAn);
-        if (monAnDAO.capNhatMonAn(monAn)) {
-            System.out.println(" Cập nhật món ăn thành công");
-        } else {
-            System.out.println(" Cập nhật món ăn thất bại");
+        if (!monAnDAO.capNhatMonAn(monAn)) {
+            throw new RuntimeException("Cập nhật món ăn thất bại");
         }
     }
 
@@ -131,10 +127,8 @@ public class MonAnService {
         if (giaMoi <= 0) {
             throw new IllegalArgumentException("Giá phải lớn hơn 0");
         }
-        if (monAnDAO.capNhatGiaMonAn(maMon, giaMoi)) {
-            System.out.println(" Cập nhật giá món ăn thành công");
-        } else {
-            System.out.println(" Cập nhật giá món ăn thất bại");
+        if (!monAnDAO.capNhatGiaMonAn(maMon, giaMoi)) {
+            throw new RuntimeException("Cập nhật giá món ăn thất bại");
         }
     }
 
@@ -168,10 +162,8 @@ public class MonAnService {
         if (!maMonPattern.matcher(maMon).matches()) {
             throw new IllegalArgumentException("Mã món phải có dạng MAxxx (ví dụ: MA001)");
         }
-        if (monAnDAO.xoaMonAn(maMon)) {
-            System.out.println(" Xóa món ăn thành công");
-        } else {
-            System.out.println(" Xóa món ăn thất bại");
+        if (!monAnDAO.xoaMonAn(maMon)) {
+            throw new RuntimeException("Xóa món ăn thất bại");
         }
     }
 

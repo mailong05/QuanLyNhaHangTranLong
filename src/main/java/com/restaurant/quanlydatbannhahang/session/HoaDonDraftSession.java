@@ -171,6 +171,25 @@ public final class HoaDonDraftSession {
         }
     }
 
+    public static void migrateContext(String oldMaBanContext, String newMaBanContext) {
+        String oldNormalized = normalizeMaBanContext(oldMaBanContext);
+        String newNormalized = normalizeMaBanContext(newMaBanContext);
+        if (oldNormalized.isEmpty() || newNormalized.isEmpty() || oldNormalized.equals(newNormalized)) {
+            return;
+        }
+
+        List<DraftMonItem> oldItems = getMonItems(oldNormalized);
+        setMonItems(newNormalized, oldItems);
+        String maKH = getMaKH(oldNormalized);
+        String maKM = getMaKM(oldNormalized);
+        int diemDung = getDiemDung(oldNormalized);
+        setInvoiceMetadata(newNormalized,
+                maKH != null && !maKH.isBlank() ? maKH : null,
+                maKM != null && !maKM.isBlank() ? maKM : null,
+                diemDung);
+        clear(oldNormalized);
+    }
+
     public static void setInvoiceMetadata(String maBanContext, String maKH, String maKM, int diemDung) {
         String normalized = normalizeMaBanContext(maBanContext);
         if (normalized.isEmpty()) {

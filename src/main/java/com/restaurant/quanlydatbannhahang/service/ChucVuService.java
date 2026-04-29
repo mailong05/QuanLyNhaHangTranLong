@@ -28,7 +28,7 @@ public class ChucVuService {
         }
         ChucVu chucVu = chucVuDAO.findByName(name);
         if (chucVu == null) {
-            System.out.println(" Không tìm thấy chức vụ: " + name);
+            throw new RuntimeException("Không tìm thấy chức vụ: " + name);
         }
         return chucVu;
     }
@@ -37,7 +37,10 @@ public class ChucVuService {
      * Kiểm tra chức vụ tồn tại
      */
     public boolean exists(String name) {
-        return findByName(name) != null;
+        if (name == null || name.trim().isEmpty()) {
+            return false;
+        }
+        return chucVuDAO.findByName(name) != null;
     }
 
     /**

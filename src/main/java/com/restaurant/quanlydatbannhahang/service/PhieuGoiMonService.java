@@ -25,7 +25,7 @@ public class PhieuGoiMonService {
         }
         PhieuGoiMon phieu = phieuGoiMonDAO.getPhieuGoiMonTheoMa(maPhieu);
         if (phieu == null) {
-            System.out.println(" Không tìm thấy phiếu gọi món với mã: " + maPhieu);
+            throw new RuntimeException("Không tìm thấy phiếu gọi món với mã: " + maPhieu);
         }
         return phieu;
     }
@@ -47,10 +47,8 @@ public class PhieuGoiMonService {
         if (phieu.getMaPhieuGoi() == null || phieu.getMaPhieuGoi().trim().isEmpty()) {
             throw new IllegalArgumentException("Mã phiếu gọi món không được để trống");
         }
-        if (phieuGoiMonDAO.themPhieuGoiMon(phieu)) {
-            System.out.println(" Thêm phiếu gọi món thành công");
-        } else {
-            System.out.println(" Thêm phiếu gọi món thất bại");
+        if (!phieuGoiMonDAO.themPhieuGoiMon(phieu)) {
+            throw new RuntimeException("Thêm phiếu gọi món thất bại");
         }
     }
 
@@ -61,10 +59,8 @@ public class PhieuGoiMonService {
         if (phieu == null) {
             throw new IllegalArgumentException("Phiếu gọi món không được để trống");
         }
-        if (phieuGoiMonDAO.capNhatPhieuGoiMon(phieu)) {
-            System.out.println(" Cập nhật phiếu gọi món thành công");
-        } else {
-            System.out.println(" Cập nhật phiếu gọi món thất bại");
+        if (!phieuGoiMonDAO.capNhatPhieuGoiMon(phieu)) {
+            throw new RuntimeException("Cập nhật phiếu gọi món thất bại");
         }
     }
 
@@ -75,10 +71,8 @@ public class PhieuGoiMonService {
         if (maPhieu == null || maPhieu.trim().isEmpty()) {
             throw new IllegalArgumentException("Mã phiếu gọi món không được để trống");
         }
-        if (phieuGoiMonDAO.xoaPhieuGoiMon(maPhieu)) {
-            System.out.println(" Xóa phiếu gọi món thành công");
-        } else {
-            System.out.println(" Xóa phiếu gọi món thất bại");
+        if (!phieuGoiMonDAO.xoaPhieuGoiMon(maPhieu)) {
+            throw new RuntimeException("Xóa phiếu gọi món thất bại");
         }
     }
 
@@ -122,10 +116,8 @@ public class PhieuGoiMonService {
         if (chiTiet == null) {
             throw new IllegalArgumentException("Chi tiết gọi món không được để trống");
         }
-        if (chiTietGoiMonDAO.themChiTietGoiMon(chiTiet)) {
-            System.out.println(" Thêm chi tiết gọi món thành công");
-        } else {
-            System.out.println(" Thêm chi tiết gọi món thất bại");
+        if (!chiTietGoiMonDAO.themChiTietGoiMon(chiTiet)) {
+            throw new RuntimeException("Thêm chi tiết gọi món thất bại");
         }
     }
 
@@ -139,10 +131,8 @@ public class PhieuGoiMonService {
         if (maMon == null || maMon.trim().isEmpty()) {
             throw new IllegalArgumentException("Mã món không được để trống");
         }
-        if (chiTietGoiMonDAO.xoaChiTietGoiMon(maPhieu, maMon)) {
-            System.out.println(" Xóa chi tiết gọi món thành công");
-        } else {
-            System.out.println(" Xóa chi tiết gọi món thất bại");
+        if (!chiTietGoiMonDAO.xoaChiTietGoiMon(maPhieu, maMon)) {
+            throw new RuntimeException("Xóa chi tiết gọi món thất bại");
         }
     }
 
@@ -151,10 +141,11 @@ public class PhieuGoiMonService {
      */
     public void capNhatTrangThaiChiTiet(String maPhieu, String maMon, String trangThai) {
         ChiTietGoiMon chiTiet = getChiTietByMaPhieuAndMaMon(maPhieu, maMon);
-        if (chiTiet != null && chiTietGoiMonDAO.capNhatChiTietGoiMon(chiTiet)) {
-            System.out.println(" Cập nhật trạng thái thành công");
-        } else {
-            System.out.println(" Cập nhật trạng thái thất bại");
+        if (chiTiet == null) {
+            throw new RuntimeException("Không tìm thấy chi tiết gọi món với mã phiếu hoặc mã món không hợp lệ");
+        }
+        if (!chiTietGoiMonDAO.capNhatChiTietGoiMon(chiTiet)) {
+            throw new RuntimeException("Cập nhật trạng thái chi tiết gọi món thất bại");
         }
     }
 

@@ -53,7 +53,7 @@ public class ThueService {
         }
         Thue thue = thueDAO.getThueTheoMa(maThue);
         if (thue == null) {
-            System.out.println(" Không tìm thấy thuế với mã: " + maThue);
+            throw new RuntimeException("Không tìm thấy thuế với mã: " + maThue);
         }
         return thue;
     }
@@ -77,10 +77,8 @@ public class ThueService {
      */
     public void themThue(Thue thue) {
         validateThue(thue);
-        if (thueDAO.themThue(thue)) {
-            System.out.println(" Thêm thuế thành công");
-        } else {
-            System.out.println(" Thêm thuế thất bại");
+        if (!thueDAO.themThue(thue)) {
+            throw new RuntimeException("Thêm thuế thất bại");
         }
     }
 
@@ -89,10 +87,8 @@ public class ThueService {
      */
     public void capNhatThue(Thue thue) {
         validateThue(thue);
-        if (thueDAO.capNhatThue(thue)) {
-            System.out.println(" Cập nhật thuế thành công");
-        } else {
-            System.out.println(" Cập nhật thuế thất bại");
+        if (!thueDAO.capNhatThue(thue)) {
+            throw new RuntimeException("Cập nhật thuế thất bại");
         }
     }
 
@@ -106,10 +102,8 @@ public class ThueService {
         if (!maThuePattern.matcher(maThue).matches()) {
             throw new IllegalArgumentException("Mã thuế phải có dạng THxxx (ví dụ: TH001)");
         }
-        if (thueDAO.xoaThue(maThue)) {
-            System.out.println(" Xóa thuế thành công");
-        } else {
-            System.out.println(" Xóa thuế thất bại");
+        if (!thueDAO.xoaThue(maThue)) {
+            throw new RuntimeException("Xóa thuế thất bại");
         }
     }
 
@@ -158,7 +152,6 @@ public class ThueService {
      */
     public void kichHoat(String maThue) {
         capNhatTrangThaiThue(maThue, TrangThaiThue.CON_AP_DUNG);
-        System.out.println(" Thuế đã được kích hoạt");
     }
 
     /**
@@ -166,7 +159,6 @@ public class ThueService {
      */
     public void voHieuHoa(String maThue) {
         capNhatTrangThaiThue(maThue, TrangThaiThue.NGUNG_AP_DUNG);
-        System.out.println(" Thuế đã được vô hiệu hóa");
     }
 
     /**

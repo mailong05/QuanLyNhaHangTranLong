@@ -17,8 +17,7 @@ public class LoaiMonAnService {
         try {
             return LoaiMonAn.valueOf(maLoai);
         } catch (IllegalArgumentException e) {
-            System.out.println(" Không tìm thấy loại món ăn với mã: " + maLoai);
-            return null;
+            throw new RuntimeException("Không tìm thấy loại món ăn với mã: " + maLoai);
         }
     }
 
@@ -33,7 +32,15 @@ public class LoaiMonAnService {
      * Kiểm tra loại món ăn tồn tại
      */
     public boolean existLoaiMonAn(String maLoai) {
-        return getLoaiMonAnTheoMa(maLoai) != null;
+        if (maLoai == null || maLoai.trim().isEmpty()) {
+            return false;
+        }
+        try {
+            LoaiMonAn.valueOf(maLoai);
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
     }
 
     /**

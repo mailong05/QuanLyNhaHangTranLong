@@ -39,10 +39,8 @@ public class ChiTietPhieuDatBanService {
         if (chiTiet.getPhieuDatBan() == null || chiTiet.getBan() == null) {
             throw new IllegalArgumentException("Phiếu đặt bàn và bàn không được để trống");
         }
-        if (chiTietPhieuDatBanDAO.themChiTietPhieuDatBan(chiTiet)) {
-            System.out.println(" Thêm chi tiết phiếu đặt bàn thành công");
-        } else {
-            System.out.println(" Thêm chi tiết phiếu đặt bàn thất bại");
+        if (!chiTietPhieuDatBanDAO.themChiTietPhieuDatBan(chiTiet)) {
+            throw new RuntimeException("Thêm chi tiết phiếu đặt bàn thất bại");
         }
     }
 
@@ -53,10 +51,8 @@ public class ChiTietPhieuDatBanService {
         if (chiTiet == null) {
             throw new IllegalArgumentException("Chi tiết phiếu đặt bàn không được để trống");
         }
-        if (chiTietPhieuDatBanDAO.capNhatChiTietPhieuDatBan(chiTiet)) {
-            System.out.println(" Cập nhật chi tiết phiếu đặt bàn thành công");
-        } else {
-            System.out.println(" Cập nhật chi tiết phiếu đặt bàn thất bại");
+        if (!chiTietPhieuDatBanDAO.capNhatChiTietPhieuDatBan(chiTiet)) {
+            throw new RuntimeException("Cập nhật chi tiết phiếu đặt bàn thất bại");
         }
     }
 
@@ -70,10 +66,8 @@ public class ChiTietPhieuDatBanService {
         if (maBan == null || maBan.trim().isEmpty()) {
             throw new IllegalArgumentException("Mã bàn không được để trống");
         }
-        if (chiTietPhieuDatBanDAO.xoaChiTietPhieuDatBan(maPhieu, maBan)) {
-            System.out.println(" Xóa chi tiết phiếu đặt bàn thành công");
-        } else {
-            System.out.println(" Xóa chi tiết phiếu đặt bàn thất bại");
+        if (!chiTietPhieuDatBanDAO.xoaChiTietPhieuDatBan(maPhieu, maBan)) {
+            throw new RuntimeException("Xóa chi tiết phiếu đặt bàn thất bại");
         }
     }
 
@@ -84,10 +78,8 @@ public class ChiTietPhieuDatBanService {
         if (maPhieu == null || maPhieu.trim().isEmpty()) {
             throw new IllegalArgumentException("Mã phiếu không được để trống");
         }
-        if (chiTietPhieuDatBanDAO.xoaAllChiTietByMaPhieuDat(maPhieu)) {
-            System.out.println(" Xóa tất cả chi tiết phiếu thành công");
-        } else {
-            System.out.println(" Xóa tất cả chi tiết phiếu thất bại");
+        if (!chiTietPhieuDatBanDAO.xoaAllChiTietByMaPhieuDat(maPhieu)) {
+            throw new RuntimeException("Xóa tất cả chi tiết phiếu thất bại");
         }
     }
 
@@ -108,7 +100,7 @@ public class ChiTietPhieuDatBanService {
                 }
             }
         }
-        System.out.println(" Không tìm thấy chi tiết phiếu với mã bàn: " + maBan);
+        throw new RuntimeException("Không tìm thấy chi tiết phiếu với mã bàn: " + maBan);
     }
 
     /**

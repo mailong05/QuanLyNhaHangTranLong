@@ -45,10 +45,8 @@ public class ChiTietGoiMonService {
         if (chiTiet.getSoLuong() <= 0) {
             throw new IllegalArgumentException("Số lượng phải lớn hơn 0");
         }
-        if (chiTietGoiMonDAO.themChiTietGoiMon(chiTiet)) {
-            System.out.println(" Thêm chi tiết gọi món thành công");
-        } else {
-            System.out.println(" Thêm chi tiết gọi món thất bại");
+        if (!chiTietGoiMonDAO.themChiTietGoiMon(chiTiet)) {
+            throw new RuntimeException("Thêm chi tiết gọi món thất bại");
         }
     }
 
@@ -59,10 +57,8 @@ public class ChiTietGoiMonService {
         if (chiTiet == null) {
             throw new IllegalArgumentException("Chi tiết gọi món không được để trống");
         }
-        if (chiTietGoiMonDAO.capNhatChiTietGoiMon(chiTiet)) {
-            System.out.println(" Cập nhật chi tiết gọi món thành công");
-        } else {
-            System.out.println(" Cập nhật chi tiết gọi món thất bại");
+        if (!chiTietGoiMonDAO.capNhatChiTietGoiMon(chiTiet)) {
+            throw new RuntimeException("Cập nhật chi tiết gọi món thất bại");
         }
     }
 
@@ -76,10 +72,8 @@ public class ChiTietGoiMonService {
         if (maMon == null || maMon.trim().isEmpty()) {
             throw new IllegalArgumentException("Mã món không được để trống");
         }
-        if (chiTietGoiMonDAO.xoaChiTietGoiMon(maPhieu, maMon)) {
-            System.out.println(" Xóa chi tiết gọi món thành công");
-        } else {
-            System.out.println(" Xóa chi tiết gọi món thất bại");
+        if (!chiTietGoiMonDAO.xoaChiTietGoiMon(maPhieu, maMon)) {
+            throw new RuntimeException("Xóa chi tiết gọi món thất bại");
         }
     }
 
@@ -101,10 +95,8 @@ public class ChiTietGoiMonService {
      * Cập nhật trạng thái chi tiết
      */
     public void capNhatTrangThai(String maPhieu, String maMon, String trangThai) {
-        if (chiTietGoiMonDAO.capNhatTrangThaiChiTietGoiMon(maPhieu, maMon, trangThai)) {
-            System.out.println(" Cập nhật trạng thái thành công");
-        } else {
-            System.out.println(" Cập nhật trạng thái thất bại");
+        if (!chiTietGoiMonDAO.capNhatTrangThaiChiTietGoiMon(maPhieu, maMon, trangThai)) {
+            throw new RuntimeException("Cập nhật trạng thái thất bại");
         }
     }
 
@@ -162,10 +154,8 @@ public class ChiTietGoiMonService {
         if (maPhieu == null || maPhieu.trim().isEmpty()) {
             throw new IllegalArgumentException("Mã phiếu không được để trống");
         }
-        if (chiTietGoiMonDAO.xoaAllChiTietByMaPhieu(maPhieu)) {
-            System.out.println(" Xóa tất cả chi tiết thành công");
-        } else {
-            System.out.println(" Xóa tất cả chi tiết thất bại");
+        if (!chiTietGoiMonDAO.xoaAllChiTietByMaPhieu(maPhieu)) {
+            throw new RuntimeException("Xóa tất cả chi tiết thất bại");
         }
     }
 }

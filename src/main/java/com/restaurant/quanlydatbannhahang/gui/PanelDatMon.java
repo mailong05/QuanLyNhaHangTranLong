@@ -13,10 +13,14 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+
+import com.restaurant.quanlydatbannhahang.entity.HoaDon;
 import com.restaurant.quanlydatbannhahang.entity.MonAn;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiBan;
+import com.restaurant.quanlydatbannhahang.entity.TrangThaiHoaDon;
 import com.restaurant.quanlydatbannhahang.session.HoaDonDraftSession;
 import com.restaurant.quanlydatbannhahang.service.BanService;
+import com.restaurant.quanlydatbannhahang.service.HoaDonService;
 import com.restaurant.quanlydatbannhahang.service.MonAnService;
 import com.restaurant.quanlydatbannhahang.service.PhieuDatBanService;
 import com.restaurant.quanlydatbannhahang.util.ComboBoxEnumLoader;
@@ -45,6 +49,7 @@ public class PanelDatMon extends javax.swing.JPanel {
     private static final int PHIEU_COL_THANH_TIEN = 4;
 
     private MonAnService monAnService;
+    private HoaDonService hoaDonService;
     private List<MonAn> allMonAn;
     private final Map<String, OrderItem> phieuGoiMonMap = new LinkedHashMap<>();
     private boolean refreshingPhieuGoiMonTable = false;
@@ -58,6 +63,7 @@ public class PanelDatMon extends javax.swing.JPanel {
     public PanelDatMon() {
         initComponents();
         monAnService = new MonAnService();
+        hoaDonService = new HoaDonService();
         customUI();
         loadDataToComboBoxes();
         loadDataToTable();
@@ -456,24 +462,14 @@ public class PanelDatMon extends javax.swing.JPanel {
         }
 
         saveDraftToSession();
-        java.util.List<HoaDonDraftSession.DraftMonItem> draftItems = HoaDonDraftSession.getMonItems(oldContext);
-        if (draftItems.isEmpty()) {
-            for (OrderItem item : phieuGoiMonMap.values()) {
-                draftItems.add(new HoaDonDraftSession.DraftMonItem(item.maMon, item.tenMon, item.soLuong, item.donGia));
+        HoaDonDraftSession.migrateContext(oldContext, newContext);
+
+        List<HoaDon> hoaDons = hoaDonService.getHoaDonTheoMaBan(oldContext);
+        for (HoaDon hoaDon : hoaDons) {
+            if (hoaDon.getTrangThaiThanhToan() == TrangThaiHoaDon.CHUA_THANH_TOAN) {
+                hoaDonService.capNhatBanChoHoaDonDraft(hoaDon.getMaHD(), newContext);
             }
         }
-
-        HoaDonDraftSession.setMonItems(newContext, draftItems);
-
-        String maKH = HoaDonDraftSession.getMaKH(oldContext);
-        String maKM = HoaDonDraftSession.getMaKM(oldContext);
-        int diemDung = HoaDonDraftSession.getDiemDung(oldContext);
-        HoaDonDraftSession.setInvoiceMetadata(newContext,
-                maKH != null && !maKH.isBlank() ? maKH : null,
-                maKM != null && !maKM.isBlank() ? maKM : null,
-                diemDung);
-
-        HoaDonDraftSession.clear(oldContext);
 
         capNhatTrangThaiBanSauKhiDoiBan(oldBanSet, newSelectedTables);
 

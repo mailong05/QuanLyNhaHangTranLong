@@ -28,7 +28,7 @@ public class QuyenHanService {
         }
         QuyenHan quyenHan = quyenHanDAO.findByName(name);
         if (quyenHan == null) {
-            System.out.println(" Không tìm thấy quyền hạn: " + name);
+            throw new RuntimeException("Không tìm thấy quyền hạn: " + name);
         }
         return quyenHan;
     }
@@ -37,7 +37,10 @@ public class QuyenHanService {
      * Kiểm tra quyền hạn tồn tại
      */
     public boolean exists(String name) {
-        return findByName(name) != null;
+        if (name == null || name.trim().isEmpty()) {
+            return false;
+        }
+        return quyenHanDAO.findByName(name) != null;
     }
 
     /**

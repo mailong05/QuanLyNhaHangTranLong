@@ -2,6 +2,7 @@ package com.restaurant.quanlydatbannhahang.service;
 
 import com.restaurant.quanlydatbannhahang.dao.HoaDonDAO;
 import com.restaurant.quanlydatbannhahang.dao.ChiTietHoaDonDAO;
+import com.restaurant.quanlydatbannhahang.entity.Ban;
 import com.restaurant.quanlydatbannhahang.entity.HoaDon;
 import com.restaurant.quanlydatbannhahang.entity.ChiTietHoaDon;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiHoaDon;
@@ -14,7 +15,7 @@ public class HoaDonService {
     private ChiTietHoaDonDAO chiTietHoaDonDAO;
 
     private static final String MAHD_PATTERN = "^HD\\d{3}$";
-    private static final String MABAN_PATTERN = "^B\\d{3}$";
+    private static final String MABAN_PATTERN = "^B\\d{3}(?:,B\\d{3})*$";
     private static final String MAMON_PATTERN = "^MA\\d{3}$";
 
     private static final Pattern maHDPattern = Pattern.compile(MAHD_PATTERN);
@@ -43,7 +44,7 @@ public class HoaDonService {
             throw new IllegalArgumentException("Mã bàn không được để trống");
         }
         if (!maBanPattern.matcher(hoaDon.getBan().getMaBan()).matches()) {
-            throw new IllegalArgumentException("Mã bàn phải có dạng Bxxx (ví dụ: B001)");
+            throw new IllegalArgumentException("Mã bàn phải có dạng Bxxx hoặc Bxxx,Byyy (ví dụ: B001 hoặc B001,B002)");
         }
         if (hoaDon.getTrangThaiThanhToan() == null) {
             throw new IllegalArgumentException("Trạng thái thanh toán không được để trống");
@@ -62,7 +63,7 @@ public class HoaDonService {
         }
         HoaDon hoaDon = hoaDonDAO.getHoaDonTheoMa(maHD);
         if (hoaDon == null) {
-            System.out.println(" Không tìm thấy hóa đơn với mã: " + maHD);
+            throw new RuntimeException("Không tìm thấy hóa đơn với mã: " + maHD);
         }
         return hoaDon;
     }
@@ -79,10 +80,8 @@ public class HoaDonService {
      */
     public void themHoaDon(HoaDon hoaDon) {
         validateHoaDon(hoaDon);
-        if (hoaDonDAO.themHoaDon(hoaDon)) {
-            System.out.println(" Thêm hóa đơn thành công");
-        } else {
-            System.out.println(" Thêm hóa đơn thất bại");
+        if (!hoaDonDAO.themHoaDon(hoaDon)) {
+            throw new RuntimeException("Thêm hóa đơn thất bại");
         }
     }
 
@@ -91,10 +90,8 @@ public class HoaDonService {
      */
     public void capNhatHoaDon(HoaDon hoaDon) {
         validateHoaDon(hoaDon);
-        if (hoaDonDAO.capNhatHoaDon(hoaDon)) {
-            System.out.println(" Cập nhật hóa đơn thành công");
-        } else {
-            System.out.println(" Cập nhật hóa đơn thất bại");
+        if (!hoaDonDAO.capNhatHoaDon(hoaDon)) {
+            throw new RuntimeException("Cập nhật hóa đơn thất bại");
         }
     }
 
@@ -108,10 +105,8 @@ public class HoaDonService {
         if (!maHDPattern.matcher(maHD).matches()) {
             throw new IllegalArgumentException("Mã hóa đơn phải có dạng HDxxx (ví dụ: HD001)");
         }
-        if (hoaDonDAO.xoaHoaDon(maHD)) {
-            System.out.println(" Xóa hóa đơn thành công");
-        } else {
-            System.out.println(" Xóa hóa đơn thất bại");
+        if (!hoaDonDAO.xoaHoaDon(maHD)) {
+            throw new RuntimeException("Xóa hóa đơn thất bại");
         }
     }
 
@@ -123,9 +118,30 @@ public class HoaDonService {
             throw new IllegalArgumentException("Mã bàn không được để trống");
         }
         if (!maBanPattern.matcher(maBan).matches()) {
-            throw new IllegalArgumentException("Mã bàn phải có dạng Bxxx (ví dụ: B001)");
+            throw new IllegalArgumentException("Mã bàn phải có dạng Bxxx hoặc Bxxx,Byyy (ví dụ: B001 hoặc B001,B002)");
         }
         return hoaDonDAO.getHoaDonTheoMaBan(maBan);
+    }
+
+    public void capNhatBanChoHoaDonDraft(String maHD, String maBanMoi) {
+        if (maHD == null || maHD.isBlank()) {
+            throw new IllegalArgumentException("Mã hóa đơn không được để trống");
+        }
+        if (!maHDPattern.matcher(maHD).matches()) {
+            throw new IllegalArgumentException("Mã hóa đơn phải có dạng HDxxx (ví dụ: HD001)");
+        }
+        if (maBanMoi == null || maBanMoi.isBlank()) {
+            throw new IllegalArgumentException("Mã bàn mới không được để trống");
+        }
+        if (!maBanPattern.matcher(maBanMoi).matches()) {
+            throw new IllegalArgumentException("Mã bàn phải có dạng Bxxx hoặc Bxxx,Byyy (ví dụ: B001 hoặc B001,B002)");
+        }
+
+        HoaDon hoaDon = getHoaDonTheoMa(maHD);
+        if (hoaDon != null) {
+            hoaDon.setBan(new Ban(maBanMoi, 0, "", null, null));
+            capNhatHoaDon(hoaDon);
+        }
     }
 
     /**
@@ -183,10 +199,8 @@ public class HoaDonService {
         if (chiTiet.getDonGiaLuuTru() < 0) {
             throw new IllegalArgumentException("Đơn giá không được âm");
         }
-        if (chiTietHoaDonDAO.themChiTietHoaDon(chiTiet)) {
-            System.out.println(" Thêm chi tiết hóa đơn thành công");
-        } else {
-            System.out.println(" Thêm chi tiết hóa đơn thất bại");
+        if (!chiTietHoaDonDAO.themChiTietHoaDon(chiTiet)) {
+            throw new RuntimeException("Thêm chi tiết hóa đơn thất bại");
         }
     }
 
@@ -232,10 +246,8 @@ public class HoaDonService {
         if (!maMonPattern.matcher(maMon).matches()) {
             throw new IllegalArgumentException("Mã món phải có dạng MAxxx (ví dụ: MA001)");
         }
-        if (chiTietHoaDonDAO.xoaChiTietHoaDon(maHD, maMon)) {
-            System.out.println(" Xóa chi tiết hóa đơn thành công");
-        } else {
-            System.out.println(" Xóa chi tiết hóa đơn thất bại");
+        if (!chiTietHoaDonDAO.xoaChiTietHoaDon(maHD, maMon)) {
+            throw new RuntimeException("Xóa chi tiết hóa đơn thất bại");
         }
     }
 
@@ -244,7 +256,6 @@ public class HoaDonService {
      */
     public void thanhToanHoaDon(String maHD) {
         capNhatTrangThaiHoaDon(maHD, TrangThaiHoaDon.DA_THANH_TOAN);
-        System.out.println(" Hóa đơn đã được thanh toán");
     }
 
     /**

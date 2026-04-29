@@ -31,6 +31,7 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                 customUI();
                 loadDataToComboBoxes();
                 loadDataToTable();
+                fillTxtMaKhuyenMai();
         }
 
         private void customUI() {
@@ -228,7 +229,8 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                         dbNgayKetThuc.setDate(LocalDate.now());
                 }
         }
-
+        
+      
         private void syncCapNhatButtonState() {
             btnCapNhat.setEnabled(tableKhuyenMai.getSelectedRow() >= 0);
             btnXoa.setEnabled(tableKhuyenMai.getSelectedRow() >= 0);

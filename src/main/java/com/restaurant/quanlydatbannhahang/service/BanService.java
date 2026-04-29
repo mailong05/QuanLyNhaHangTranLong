@@ -40,10 +40,8 @@ public class BanService {
      */
     public void themBan(Ban ban) {
         validateBan(ban);
-        if (banDAO.themBan(ban)) {
-            System.out.println(" Thêm bàn thành công");
-        } else {
-            System.out.println(" Thêm bàn thất bại");
+        if (!banDAO.themBan(ban)) {
+            throw new RuntimeException("Thêm bàn thất bại");
         }
     }
 
@@ -59,7 +57,7 @@ public class BanService {
         }
         Ban ban = banDAO.getBanTheoMa(maBan);
         if (ban == null) {
-            System.out.println(" Không tìm thấy bàn với mã: " + maBan);
+            throw new RuntimeException("Không tìm thấy bàn với mã: " + maBan);
         }
         return ban;
     }
@@ -100,10 +98,8 @@ public class BanService {
      */
     public void capNhatBan(Ban ban) {
         validateBan(ban);
-        if (banDAO.capNhatBan(ban)) {
-            System.out.println(" Cập nhật bàn thành công");
-        } else {
-            System.out.println(" Cập nhật bàn thất bại");
+        if (!banDAO.capNhatBan(ban)) {
+            throw new RuntimeException("Cập nhật bàn thất bại");
         }
     }
 
@@ -117,10 +113,8 @@ public class BanService {
         if (!maBanPattern.matcher(maBan).matches()) {
             throw new IllegalArgumentException("Mã bàn phải có dạng Bxxx (ví dụ: B001)");
         }
-        if (banDAO.xoaBan(maBan)) {
-            System.out.println(" Xóa bàn thành công");
-        } else {
-            System.out.println(" Xóa bàn thất bại");
+        if (!banDAO.xoaBan(maBan)) {
+            throw new RuntimeException("Xóa bàn thất bại");
         }
     }
 

@@ -36,6 +36,7 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseLis
         customUI();
         loadDataToComboBoxes();
         loadDataToTable();
+        fillMaKH();
     }
 
     private void customUI() {
@@ -240,17 +241,22 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseLis
         txtDiemTichLuy.setText("0");
         cbLoaiThanhVien.setSelectedItem("ĐỒNG");
         cbFilterLoaiThanhVien.setSelectedIndex(0);
-        String lastID = idQueryHelper.getLastID("KhachHang", "maKH");
-        String maKHNew = (lastID == null || lastID.isEmpty()) ? idGeneratorHelper.toString()
-                : idGeneratorHelper.generateNextIDFromFullID(lastID);
-        txtMaKhachHang.setText(maKHNew);
+        fillMaKH();
         loadDataToComboBoxes();
         loadDataToTable();
         tableKhachHang.clearSelection();
         syncCapNhatButtonState();
     }
 
-    private void resetPlaceholder(JTextField textField, String placeholder) {
+    private void fillMaKH() {
+		// TODO Auto-generated method stub
+    	 String lastID = idQueryHelper.getLastID("KhachHang", "maKH");
+         String maKHNew = (lastID == null || lastID.isEmpty()) ? idGeneratorHelper.toString()
+                 : idGeneratorHelper.generateNextIDFromFullID(lastID);
+         txtMaKhachHang.setText(maKHNew);
+	}
+
+	private void resetPlaceholder(JTextField textField, String placeholder) {
         Color placeholderColor = new Color(153, 153, 153);
         textField.setText(placeholder);
         textField.setForeground(placeholderColor);

@@ -1,6 +1,7 @@
 package com.restaurant.quanlydatbannhahang.dao;
 
 import com.restaurant.quanlydatbannhahang.connectDB.DatabaseConnection;
+import com.restaurant.quanlydatbannhahang.entity.Ban;
 import com.restaurant.quanlydatbannhahang.entity.HoaDon;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiHoaDon;
 import com.restaurant.quanlydatbannhahang.util.IDQueryHelper;
@@ -54,9 +55,26 @@ public class HoaDonDAO {
             String phuongThucTTStr = rs.getString("phuongThucTT");
             String trangThaiStr = rs.getString("trangThaiThanhToan");
 
+            com.restaurant.quanlydatbannhahang.entity.PhuongThucTT phuongThucTT = null;
+            if (phuongThucTTStr != null) {
+                phuongThucTT = com.restaurant.quanlydatbannhahang.entity.PhuongThucTT.fromDisplayName(phuongThucTTStr);
+                if (phuongThucTT == null) {
+                    try {
+                        phuongThucTT = com.restaurant.quanlydatbannhahang.entity.PhuongThucTT.valueOf(phuongThucTTStr);
+                    } catch (IllegalArgumentException ignored) {
+                        phuongThucTT = null;
+                    }
+                }
+            }
+
+            Ban ban = banDAO.getBanTheoMa(maBan);
+            if (ban == null) {
+                ban = new Ban(maBan, 0, "", null, null);
+            }
+
             HoaDon hoaDon = new HoaDon(
                     maHD,
-                    banDAO.getBanTheoMa(maBan),
+                    ban,
                     nhanVienDAO.getNhanVienTheoMa(maNV),
                     khuyenMaiDAO.getKhuyenMaiTheoMa(maKM),
                     thueDAO.getThueTheoMa(maThue),
@@ -70,9 +88,7 @@ public class HoaDonDAO {
                     tongTienGoc,
                     tienGiamGia,
                     tongThanhToan,
-                    phuongThucTTStr != null
-                            ? com.restaurant.quanlydatbannhahang.entity.PhuongThucTT.valueOf(phuongThucTTStr)
-                            : null,
+                    phuongThucTT,
                     TrangThaiHoaDon.valueOf(trangThaiStr));
 
             return hoaDon;
@@ -308,11 +324,19 @@ public class HoaDonDAO {
 
     public List<HoaDon> getHoaDonTheoMaBan(String maBan) {
         Connection connection = DatabaseConnection.getConnection();
-        String sql = "select * from HoaDon where maBan = ?";
+        boolean isGroup = maBan != null && maBan.contains(",");
+        String sql = isGroup
+                ? "select * from HoaDon where maBan = ?"
+                : "select * from HoaDon where maBan = ? or maBan like ? or maBan like ? or maBan like ?";
         ArrayList<HoaDon> dsHoaDon = new ArrayList<>();
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
             pstm.setString(1, maBan);
+            if (!isGroup) {
+                pstm.setString(2, maBan + ",%");
+                pstm.setString(3, "%," + maBan + ",%");
+                pstm.setString(4, "%," + maBan);
+            }
             ResultSet rs = pstm.executeQuery();
             while (rs.next()) {
                 HoaDon hd = buildHoaDonFromResultSet(rs);

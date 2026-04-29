@@ -392,8 +392,8 @@
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" attributes="0">
                                           <Component id="lblMaNhanVien" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace pref="76" max="32767" attributes="0"/>
-                                          <Component id="txtMaNhanVien" min="-2" pref="210" max="-2" attributes="0"/>
+                                          <EmptySpace pref="74" max="32767" attributes="0"/>
+                                          <Component id="txtTenNhanVien" min="-2" pref="210" max="-2" attributes="0"/>
                                       </Group>
                                       <Group type="102" alignment="1" attributes="0">
                                           <Group type="103" groupAlignment="0" attributes="0">
@@ -423,7 +423,7 @@
                                       <Component id="lblMaHoaDon" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="txtMaHoaDon" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="lblMaNhanVien" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="txtMaNhanVien" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="txtTenNhanVien" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="3" attributes="0">
@@ -466,7 +466,7 @@
                         </Component>
                         <Component class="javax.swing.JLabel" name="lblMaNhanVien">
                           <Properties>
-                            <Property name="text" type="java.lang.String" value="M&#xe3; nh&#xe2;n vi&#xea;n:"/>
+                            <Property name="text" type="java.lang.String" value="T&#xea;n nh&#xe2;n vi&#xea;n:"/>
                           </Properties>
                         </Component>
                         <Component class="javax.swing.JLabel" name="lblMaBan">
@@ -479,13 +479,10 @@
                             <Property name="editable" type="boolean" value="false"/>
                           </Properties>
                         </Component>
-                        <Component class="javax.swing.JTextField" name="txtMaNhanVien">
+                        <Component class="javax.swing.JTextField" name="txtTenNhanVien">
                           <Properties>
                             <Property name="editable" type="boolean" value="false"/>
                           </Properties>
-                          <Events>
-                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtMaNhanVienActionPerformed"/>
-                          </Events>
                         </Component>
                         <Component class="javax.swing.JLabel" name="lblTenKhachHang">
                           <Properties>

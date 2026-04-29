@@ -63,7 +63,7 @@ public class KhuyenMaiService {
         }
         KhuyenMai km = khuyenMaiDAO.getKhuyenMaiTheoMa(maKM);
         if (km == null) {
-            System.out.println(" Không tìm thấy khuyến mại với mã: " + maKM);
+            throw new RuntimeException("Không tìm thấy khuyến mãi với mã: " + maKM);
         }
         return km;
     }
@@ -87,10 +87,8 @@ public class KhuyenMaiService {
      */
     public void themKhuyenMai(KhuyenMai khuyenMai) {
         validateKhuyenMai(khuyenMai);
-        if (khuyenMaiDAO.themKhuyenMai(khuyenMai)) {
-            System.out.println(" Thêm khuyến mại thành công");
-        } else {
-            System.out.println(" Thêm khuyến mại thất bại");
+        if (!khuyenMaiDAO.themKhuyenMai(khuyenMai)) {
+            throw new RuntimeException("Thêm khuyến mãi thất bại");
         }
     }
 
@@ -99,10 +97,8 @@ public class KhuyenMaiService {
      */
     public void capNhatKhuyenMai(KhuyenMai khuyenMai) {
         validateKhuyenMai(khuyenMai);
-        if (khuyenMaiDAO.capNhatKhuyenMai(khuyenMai)) {
-            System.out.println(" Cập nhật khuyến mại thành công");
-        } else {
-            System.out.println(" Cập nhật khuyến mại thất bại");
+        if (!khuyenMaiDAO.capNhatKhuyenMai(khuyenMai)) {
+            throw new RuntimeException("Cập nhật khuyến mãi thất bại");
         }
     }
 
@@ -116,10 +112,8 @@ public class KhuyenMaiService {
         if (!maKMPattern.matcher(maKM).matches()) {
             throw new IllegalArgumentException("Mã khuyến mại phải có dạng KMxxx (ví dụ: KM001)");
         }
-        if (khuyenMaiDAO.xoaKhuyenMai(maKM)) {
-            System.out.println(" Xóa khuyến mại thành công");
-        } else {
-            System.out.println(" Xóa khuyến mại thất bại");
+        if (!khuyenMaiDAO.xoaKhuyenMai(maKM)) {
+            throw new RuntimeException("Xóa khuyến mãi thất bại");
         }
     }
 
@@ -148,7 +142,6 @@ public class KhuyenMaiService {
      */
     public void kichHoat(String maKM) {
         capNhatTrangThaiKhuyenMai(maKM, TrangThaiKhuyenMai.CON_AP_DUNG);
-        System.out.println(" Khuyến mại đã được kích hoạt");
     }
 
     /**
@@ -156,7 +149,6 @@ public class KhuyenMaiService {
      */
     public void dung(String maKM) {
         capNhatTrangThaiKhuyenMai(maKM, TrangThaiKhuyenMai.NGUNG_AP_DUNG);
-        System.out.println(" Khuyến mại đã được dừng");
     }
 
     /**
