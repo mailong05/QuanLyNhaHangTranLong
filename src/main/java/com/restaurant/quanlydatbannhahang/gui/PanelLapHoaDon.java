@@ -565,7 +565,8 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         int diemHienCo = selectedKhachHang.getDiemTichLuy();
 
         if (diemHienCo < diemCanTru) {
-            JOptionPane.showMessageDialog(this, "Điểm tích lũy không đủ để sử dụng. Cần " + diemCanTru + " điểm, hiện có " + diemHienCo + " điểm.");
+            JOptionPane.showMessageDialog(this,
+                    "Điểm tích lũy không đủ để sử dụng. Cần " + diemCanTru + " điểm, hiện có " + diemHienCo + " điểm.");
             return;
         }
 
@@ -610,7 +611,8 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
     private void performAutoSaveOnHide() {
         String context = HoaDonDraftSession.getCurrentMaBanContext();
 
-        /* * ĐIỀU KIỆN QUAN TRỌNG:
+        /*
+         * * ĐIỀU KIỆN QUAN TRỌNG:
          * 1. Context phải tồn tại (Nếu thanh toán xong, context đã bị set về null).
          * 2. Bảng hóa đơn phải có món ăn.
          */
@@ -621,7 +623,8 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
                 thucHienLuuHoaDon(TrangThaiHoaDon.CHUA_THANH_TOAN);
                 System.out.println("Hệ thống: Tự động lưu hóa đơn nháp cho bàn " + context);
             } catch (Exception ex) {
-                // In lỗi ra console để debug, không dùng Dialog ở đây tránh gây treo UI khi chuyển trang
+                // In lỗi ra console để debug, không dùng Dialog ở đây tránh gây treo UI khi
+                // chuyển trang
                 ex.printStackTrace();
             }
         }
@@ -1105,40 +1108,56 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         }
         JOptionPane.showMessageDialog(this, "Hóa đơn đã được lưu PDF tại: " + saveFile.getAbsolutePath());
 
-        // Sau khi in PDF thành công, lưu hóa đơn vào DB với trạng thái DA_THANH_TOAN
+        // ========== CLEANUP SEQUENCE SAU KHI IN HÓA ĐƠN THÀNH CÔNG ==========
+        // Thứ tự MUST FOLLOW: 1. In PDF -> 2. Lưu hóa đơn -> 3. Cập nhật trạng thái bàn
+        // -> 4. Cộng điểm -> 5. Cleanup session
         try {
-            String currentMaBanContext = HoaDonDraftSession.getCurrentMaBanContext();
+            // Lưu các dữ liệu quan trọng TRƯỚC khi xóa session
+            String currentMaBan = txtMaBan.getText().trim();
+            String currentMaPhieuDat = HoaDonDraftSession.getCurrentMaPhieuDatContext();
+            
+            // Chuẩn hóa mã bàn để khớp chính xác với Key trong Session
+            String normalizedMaBan = HoaDonDraftSession.normalizeMaBanContext(currentMaBan);
 
+            // 1. Lưu hóa đơn vào DB với trạng thái ĐÃ THANH TOÁN
             thucHienLuuHoaDon(TrangThaiHoaDon.DA_THANH_TOAN);
-            capNhatTrangThaiBan(currentMaBanContext);
-            clearInvoiceDraftAndReservationContext();
-            refreshDraftData();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            throw new IOException("Lỗi khi lưu hóa đơn vào cơ sở dữ liệu: " + ex.getMessage(), ex);
-        }
-    }
 
-    private void clearInvoiceDraftAndReservationContext() {
-        String currentMaBanContext = HoaDonDraftSession.getCurrentMaBanContext();
-        String currentMaPhieuDat = HoaDonDraftSession.getCurrentMaPhieuDatContext();
+            // 2. Cập nhật trạng thái các bàn vật lý về TRỐNG[cite: 18, 19]
+            capNhatTrangThaiBan(currentMaBan);
 
-        if (currentMaPhieuDat != null && !currentMaPhieuDat.isBlank()) {
-            try {
-                capNhatTrangThaiPhieuDatBanTruoc(currentMaPhieuDat, TrangThaiPhieuDat.DA_SU_DUNG);
-            } catch (Exception ex) {
-                throw new RuntimeException(
-                        "Không thể cập nhật trạng thái phiếu đặt bàn sau khi thanh toán: " + ex.getMessage(), ex);
+            // 3. Cập nhật phiếu đặt trước (nếu có) thành ĐÃ SỬ DỤNG[cite: 18]
+            if (!currentMaPhieuDat.isEmpty()) {
+                phieuDatBanService.capNhatTrangThaiPhieu(currentMaPhieuDat, TrangThaiPhieuDat.DA_SU_DUNG);
             }
-        }
 
-        if (currentMaBanContext != null && !currentMaBanContext.isBlank()) {
-            HoaDonDraftSession.clear(currentMaBanContext);
-        }
+            // 4. Cộng điểm cho khách hàng (PHẢI SAU khi hóa đơn đã lưu DB)[cite: 18]
+            congDiemTichLuyChoKhachHang();
 
-        HoaDonDraftSession.setCurrentMaBanContext(null);
-        HoaDonDraftSession.clearCurrentMaPhieuDatContext();
-        HoaDonDraftSession.clearCurrentPhoneNumber();
+            // 5. CUỐI CÙNG: XÓA SẠCH DỮ LIỆU NHÁP CỦA BÀN NÀY TRONG BỘ NHỚ
+            if (!normalizedMaBan.isEmpty()) {
+                HoaDonDraftSession.clear(normalizedMaBan); // Xóa sạch Map của bàn vừa xong
+            }
+            
+            // Reset context hiện tại về rỗng để làm sạch giao diện[cite: 16]
+            HoaDonDraftSession.setCurrentMaBanContext("");
+            HoaDonDraftSession.clearCurrentMaPhieuDatContext();
+            HoaDonDraftSession.clearCurrentPhoneNumber();
+            
+            // Làm mới UI[cite: 18]
+            refreshDraftData();
+
+            // Chuyển sang panel đặt bàn[cite: 18]
+            java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
+            if (parentFrame instanceof MainForm) {
+                ((MainForm) parentFrame).openPanelDatBan();
+            }
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this,
+                    "Lỗi khi hoàn tất thanh toán: " + ex.getMessage(),
+                    "Lỗi", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        }
     }
 
     private void congDiemTichLuyChoKhachHang() {
@@ -1207,7 +1226,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException("Khong the cap nhat trang thai ban sau khi thanh toan: " + e.getMessage(), e);
             // Có thể hiển thị thông báo nếu cần thiết
         }
     }
@@ -1279,6 +1298,9 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
             hoaDonService.capNhatHoaDon(hoaDon);
         } else {
             hoaDonService.themHoaDon(hoaDon);
+        }
+        if (trangThai == TrangThaiHoaDon.DA_THANH_TOAN) {
+            hoaDonService.capNhatTrangThaiHoaDon(maHD, TrangThaiHoaDon.DA_THANH_TOAN);
         }
 
         // 6. Lưu Chi tiết hóa đơn (Sửa lỗi logic tìm MonAn theo mã)

@@ -184,7 +184,7 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
 
             // 🎯 SAU KHI SUCCESS, cập nhật UI tất cả bàn từ DB
             if (panelDatBan != null) {
-                panelDatBan.updateAllTableStatusFromPhieuData();
+                panelDatBan.updateAllTableStatusFromDatabase();
             }
 
             // Refresh data ở PanelQuanLyDatBanTruoc (update table phiếu đặt bàn)

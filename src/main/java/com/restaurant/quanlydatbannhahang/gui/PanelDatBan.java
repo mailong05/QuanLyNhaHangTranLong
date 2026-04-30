@@ -26,8 +26,10 @@ public class PanelDatBan extends javax.swing.JPanel {
     private PanelQuanLyDatBanTruoc panelQuanLyDatBanTruoc = null; // Reference để callback khi edit mode
     private PanelDatMon panelDatMon = null; // Reference để callback khi đổi bàn từ PanelDatMon
     private boolean editMode = false; // Để biết có phải ở chế độ chỉnh sửa bàn
+    private String flowOrigin = ""; // Để biết panel nào gọi ("DAT_MON" hoặc "QUAN_LY_DAT_TRUOC")
     private static final Color EDIT_MODE_SELECTED_COLOR = new Color(51, 153, 255);
     private BanService banService;
+
     public PanelDatBan() {
         selectedTables = new HashSet<>();
         tableCards = new HashMap<>();
@@ -123,6 +125,22 @@ public class PanelDatBan extends javax.swing.JPanel {
     }
 
     /**
+     * Setter để thiết lập flowOrigin (nơi gọi PanelDatBan)
+     * 
+     * @param origin "DAT_MON" hoặc "QUAN_LY_DAT_TRUOC"
+     */
+    public void setFlowOrigin(String origin) {
+        this.flowOrigin = (origin != null) ? origin : "";
+    }
+
+    /**
+     * Getter để lấy flowOrigin
+     */
+    public String getFlowOrigin() {
+        return this.flowOrigin;
+    }
+
+    /**
      * PUBLIC METHOD: Reload lại toàn bộ giao diện PanelDatBan để lấy dữ liệu mới
      * nhất từ DB
      * Gọi khi chuyển sang tab PanelDatBan để cập nhật trạng thái bàn
@@ -141,7 +159,7 @@ public class PanelDatBan extends javax.swing.JPanel {
             loadSoDoBanFromDatabase();
 
             // Cập nhật trạng thái tất cả bàn từ phiếu DB
-            updateAllTableStatusFromPhieuData();
+            updateAllTableStatusFromDatabase();
 
             // Trigger repaint
             this.revalidate();
@@ -161,85 +179,85 @@ public class PanelDatBan extends javax.swing.JPanel {
      * - Bàn trong phiếu DANG_CHO → DA_DAT (vàng)
      * - Bàn không trong phiếu nào → TRONG (white)
      */
-    public void updateAllTableStatusFromPhieuData() {
-        try {
-            // Build map: maBan → TrangThaiPhieuDat từ tất cả phiếu
-            Map<String, TrangThaiPhieuDat> banPhieuStatus = new HashMap<>();
-
-            ChiTietPhieuDatBanService ctpdbService = new ChiTietPhieuDatBanService();
-            java.util.List<ChiTietPhieuDatBan> allChiTiet = ctpdbService.getAll();
-
-            if (allChiTiet != null) {
-                for (ChiTietPhieuDatBan ctdb : allChiTiet) {
-                    String maBan = ctdb.getBan().getMaBan();
-                    TrangThaiPhieuDat trangThaiPhieu = ctdb.getPhieuDatBan().getTrangThai();
-
-                    // Lưu phiếu status cho bàn này (nếu có nhiều phiếu chứa bàn, lấy cái cuối)
-                    banPhieuStatus.put(maBan, trangThaiPhieu);
-                }
-            }
-
-            // Update UI cho tất cả bàn trong tableCards
-            for (String maBan : tableCards.keySet()) {
-                JPanel card = tableCards.get(maBan);
-                TrangThaiPhieuDat trangThaiPhieu = banPhieuStatus.get(maBan);
-
-                TrangThaiBan trangThaiBan;
-                if (trangThaiPhieu == null) {
-                    // Bàn không trong phiếu nào → lấy trạng thái từ DB BanAn
-                    try {
-                        Ban ban = banService.getBanTheoMa(maBan);
-                        trangThaiBan = ban.getTrangThai();
-                    } catch (Exception e) {
-                        trangThaiBan = TrangThaiBan.TRONG;
-                    }
-                } else if (trangThaiPhieu == TrangThaiPhieuDat.DA_HUY
-                        || trangThaiPhieu == TrangThaiPhieuDat.DA_SU_DUNG) {
-                    trangThaiBan = TrangThaiBan.TRONG;
-                } else if (trangThaiPhieu == TrangThaiPhieuDat.DANG_SU_DUNG) {
-                    trangThaiBan = TrangThaiBan.DANG_DUNG;
-                } else {
-                    // DANG_CHO
-                    trangThaiBan = TrangThaiBan.DA_DAT;
-                }
-
-                // Update card background
-                if (trangThaiBan == TrangThaiBan.TRONG) {
-                    card.setBackground(Color.WHITE);
-                } else if (trangThaiBan == TrangThaiBan.DANG_DUNG) {
-                    card.setBackground(new Color(0, 200, 100)); // Xanh
-                } else if (trangThaiBan == TrangThaiBan.DA_DAT) {
-                    card.setBackground(new Color(255, 200, 0)); // Vàng
-                }
-
-                // Update label status
-                JLabel lblStatus = tableLabelStatus.get(maBan);
-                if (lblStatus != null) {
-                    lblStatus.setText(trangThaiBan.getDisplayName());
-                }
-
-                // Update border
-                card.setBorder(BorderFactory.createCompoundBorder(
-                        BorderFactory.createLineBorder(new Color(200, 200, 200), 1, true),
-                        BorderFactory.createEmptyBorder(10, 10, 10, 10)));
-
-                // Store status
-                tableTrangThai.put(maBan, trangThaiBan);
-
-                card.revalidate();
-                card.repaint();
-            }
-
-            // Force repaint toàn bộ panel
-            panelSoDoBan.revalidate();
-            panelSoDoBan.repaint();
-            this.revalidate();
-            this.repaint();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    public void updateAllTableStatusFromPhieuData() {
+//        try {
+//            // Build map: maBan → TrangThaiPhieuDat từ tất cả phiếu
+//            Map<String, TrangThaiPhieuDat> banPhieuStatus = new HashMap<>();
+//
+//            ChiTietPhieuDatBanService ctpdbService = new ChiTietPhieuDatBanService();
+//            java.util.List<ChiTietPhieuDatBan> allChiTiet = ctpdbService.getAll();
+//
+//            if (allChiTiet != null) {
+//                for (ChiTietPhieuDatBan ctdb : allChiTiet) {
+//                    String maBan = ctdb.getBan().getMaBan();
+//                    TrangThaiPhieuDat trangThaiPhieu = ctdb.getPhieuDatBan().getTrangThai();
+//
+//                    // Lưu phiếu status cho bàn này (nếu có nhiều phiếu chứa bàn, lấy cái cuối)
+//                    banPhieuStatus.put(maBan, trangThaiPhieu);
+//                }
+//            }
+//
+//            // Update UI cho tất cả bàn trong tableCards
+//            for (String maBan : tableCards.keySet()) {
+//                JPanel card = tableCards.get(maBan);
+//                TrangThaiPhieuDat trangThaiPhieu = banPhieuStatus.get(maBan);
+//
+//                TrangThaiBan trangThaiBan;
+//                if (trangThaiPhieu == null) {
+//                    // Bàn không trong phiếu nào → lấy trạng thái từ DB BanAn
+//                    try {
+//                        Ban ban = banService.getBanTheoMa(maBan);
+//                        trangThaiBan = ban.getTrangThai();
+//                    } catch (Exception e) {
+//                        trangThaiBan = TrangThaiBan.TRONG;
+//                    }
+//                } else if (trangThaiPhieu == TrangThaiPhieuDat.DA_HUY
+//                        || trangThaiPhieu == TrangThaiPhieuDat.DA_SU_DUNG) {
+//                    trangThaiBan = TrangThaiBan.TRONG;
+//                } else if (trangThaiPhieu == TrangThaiPhieuDat.DANG_SU_DUNG) {
+//                    trangThaiBan = TrangThaiBan.DANG_DUNG;
+//                } else {
+//                    // DANG_CHO
+//                    trangThaiBan = TrangThaiBan.DA_DAT;
+//                }
+//
+//                // Update card background
+//                if (trangThaiBan == TrangThaiBan.TRONG) {
+//                    card.setBackground(Color.WHITE);
+//                } else if (trangThaiBan == TrangThaiBan.DANG_DUNG) {
+//                    card.setBackground(new Color(0, 200, 100)); // Xanh
+//                } else if (trangThaiBan == TrangThaiBan.DA_DAT) {
+//                    card.setBackground(new Color(255, 200, 0)); // Vàng
+//                }
+//
+//                // Update label status
+//                JLabel lblStatus = tableLabelStatus.get(maBan);
+//                if (lblStatus != null) {
+//                    lblStatus.setText(trangThaiBan.getDisplayName());
+//                }
+//
+//                // Update border
+//                card.setBorder(BorderFactory.createCompoundBorder(
+//                        BorderFactory.createLineBorder(new Color(200, 200, 200), 1, true),
+//                        BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+//
+//                // Store status
+//                tableTrangThai.put(maBan, trangThaiBan);
+//
+//                card.revalidate();
+//                card.repaint();
+//            }
+//
+//            // Force repaint toàn bộ panel
+//            panelSoDoBan.revalidate();
+//            panelSoDoBan.repaint();
+//            this.revalidate();
+//            this.repaint();
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     private void customUI() {
         // Placeholder cho txtTimKiem
@@ -616,6 +634,55 @@ public class PanelDatBan extends javax.swing.JPanel {
     public void forceRepaintUI() {
         repaintAllUI();
     }
+    
+    public void updateAllTableStatusFromDatabase() {
+        try {
+            // 1. Lấy danh sách trạng thái mới nhất trực tiếp từ bảng Ban (Single Source of Truth)
+            java.util.List<Ban> allBan = banService.getAllBan();
+            
+            // 2. Map lại dữ liệu để update UI
+            for (Ban ban : allBan) {
+                String maBan = ban.getMaBan();
+                JPanel card = tableCards.get(maBan);
+                if (card == null) continue;
+
+                TrangThaiBan trangThaiBan = ban.getTrangThai();
+
+                // 3. Cập nhật màu sắc dựa trên Enum trangThai của thực thể Ban
+                if (trangThaiBan == TrangThaiBan.TRONG) {
+                    card.setBackground(Color.WHITE);
+                } else if (trangThaiBan == TrangThaiBan.DANG_DUNG) {
+                    card.setBackground(new Color(0, 200, 100)); // Xanh lá
+                } else if (trangThaiBan == TrangThaiBan.DA_DAT) {
+                    card.setBackground(new Color(255, 200, 0)); // Vàng
+                }
+
+                // 4. Cập nhật label hiển thị tên trạng thái[cite: 19]
+                JLabel lblStatus = tableLabelStatus.get(maBan);
+                if (lblStatus != null) {
+                    lblStatus.setText(trangThaiBan.getDisplayName());
+                }
+
+                // 5. Giữ nguyên border và lưu trạng thái vào map tạm[cite: 19]
+                card.setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(new Color(200, 200, 200), 1, true),
+                        BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+
+                tableTrangThai.put(maBan, trangThaiBan);
+                card.revalidate();
+                card.repaint();
+            }
+
+            // 6. Làm mới toàn bộ sơ đồ bàn[cite: 19]
+            panelSoDoBan.revalidate();
+            panelSoDoBan.repaint();
+            this.revalidate();
+            this.repaint();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     private void onButtonDatBanClicked() {
         if (selectedTables.isEmpty()) {
@@ -623,6 +690,8 @@ public class PanelDatBan extends javax.swing.JPanel {
             return;
         }
 
+        
+        
         String selectedBanList = String.join(", ", selectedTables);
         String message = "Có xác nhận đặt bàn: " + selectedBanList + "?";
 
@@ -636,25 +705,31 @@ public class PanelDatBan extends javax.swing.JPanel {
             // ========== EDIT MODE: chuyển tab + cập nhật txtMaBan (không callback DB trực
             // tiếp) ==========
             if (editMode) {
-                if (panelDatMon != null) {
+                // Kiểm tra flowOrigin để routing đúng đích
+                if ((flowOrigin.equals("DAT_MON") || flowOrigin.isEmpty()) && panelDatMon != null) {
+                    // Flow từ PanelDatMon: cập nhật draft session + chuyển bàn
                     panelDatMon.updateMaBanContextForEdit(new HashSet<>(selectedTables));
 
+                    this.updateAllTableStatusFromDatabase();
+                    
                     java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
                     if (parentFrame instanceof MainForm) {
                         ((MainForm) parentFrame).goBackToPanelDatMon();
                     }
 
-                    refreshData();
-
+                    // KHÔNG gọi refreshData() ở đây - đã chuyển về PanelDatMon, để PanelDatMon tự
+                    // refresh
                     this.editMode = false;
+                    this.flowOrigin = "";
                     this.panelDatMon = null;
                     return;
                 }
 
-                if (panelQuanLyDatBanTruoc != null) {
-                    // Cập nhật txtMaBan với danh sách bàn đã chọn
+                if (flowOrigin.equals("QUAN_LY_DAT_TRUOC") && panelQuanLyDatBanTruoc != null) {
+                    // Flow từ PanelQuanLyDatBanTruoc: cập nhật txtMaBan để user confirm
                     panelQuanLyDatBanTruoc.updateMaBanForEdit(new HashSet<>(selectedTables));
 
+                    this.updateAllTableStatusFromDatabase();
                     // Reset UI cho tất cả bàn về trạng thái gốc
                     resetAllTablesUI();
                     repaintAllUI();
@@ -667,12 +742,46 @@ public class PanelDatBan extends javax.swing.JPanel {
 
                     // Reset edit mode flag
                     this.editMode = false;
+                    this.flowOrigin = "";
+                    return;
+                }
+
+                // Fallback nếu flowOrigin không rõ ràng, sử dụng logic cũ
+                if (panelDatMon != null) {
+                    panelDatMon.updateMaBanContextForEdit(new HashSet<>(selectedTables));
+                    
+                    java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
+                    if (parentFrame instanceof MainForm) {
+                        ((MainForm) parentFrame).goBackToPanelDatMon();
+                    }
+
+                    // KHÔNG gọi refreshData() ở đây - để PanelDatMon tự refresh
+                    this.editMode = false;
+                    this.flowOrigin = "";
+                    this.panelDatMon = null;
+                    return;
+                }
+
+                if (panelQuanLyDatBanTruoc != null) {
+                    panelQuanLyDatBanTruoc.updateMaBanForEdit(new HashSet<>(selectedTables));
+
+                    resetAllTablesUI();
+                    repaintAllUI();
+
+                    java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
+                    if (parentFrame instanceof MainForm) {
+                        ((MainForm) parentFrame).switchToQuanLyDatBanTruocTab();
+                    }
+
+                    this.editMode = false;
+                    this.flowOrigin = "";
                     return;
                 }
 
                 JOptionPane.showMessageDialog(this, "Không tìm thấy panel callback cho chế độ đổi bàn.",
                         "Lỗi", JOptionPane.ERROR_MESSAGE);
                 this.editMode = false;
+                this.flowOrigin = "";
                 return;
             }
 
@@ -681,6 +790,7 @@ public class PanelDatBan extends javax.swing.JPanel {
             LuaChonDatBanDialog dialog = new LuaChonDatBanDialog(parentFrame, true, selectedTables, this,
                     panelQuanLyDatBanTruoc);
             dialog.setVisible(true);
+            this.updateAllTableStatusFromDatabase();
 
             resetAllTablesUI();
             repaintAllUI();

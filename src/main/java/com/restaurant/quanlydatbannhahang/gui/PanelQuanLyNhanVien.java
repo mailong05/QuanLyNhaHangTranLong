@@ -53,6 +53,7 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                                 if (evt.getSource() != tableNhanVien && !isMouseOverTable(evt)) {
                                         tableNhanVien.clearSelection();
                                         clearFields();
+                                        fillTxtMaNhanVien();
                                         syncCapNhatButtonState();
                                 }
                         }

@@ -311,7 +311,7 @@ public class ComboBoxEnumLoader {
     }
     
     public static void loadPTTTToComboBox(JComboBox<String> comboBox) {
-        loadEnumToComboBox(comboBox, "Tiền mặt", PhuongThucTT.class);
+        loadEnumToComboBox(comboBox, "Phương thức thanh toán", PhuongThucTT.class);
     }
     
     public static PhuongThucTT getPTTTFromDisplay(String displayText) {

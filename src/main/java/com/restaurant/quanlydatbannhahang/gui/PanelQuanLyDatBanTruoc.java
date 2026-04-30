@@ -712,6 +712,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                                 // Thiết lập callback: khi user click "Đặt bàn" ở PanelDatBan sẽ gọi
                                 // finishEditBansFromPanelDatBan()
                                 panelDatBan.setPanelQuanLyDatBanTruoc(this);
+                                panelDatBan.setFlowOrigin("QUAN_LY_DAT_TRUOC");
 
                                 // Pre-populate bàn hiện tại và highlight
                                 panelDatBan.setSelectedTablesForEdit(oldBanSet);
@@ -825,11 +826,16 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
         private void updateChiTietPhieuDatBan(String maPDB, Set<String> oldBanSet, Set<String> newBanSet)
                         throws IllegalArgumentException {
                 // 1. Gọi service - nếu lỗi sẽ throw exception
-                ctpdbService.updateBanInPhieu(maPDB, oldBanSet, newBanSet);
+                try {
+                        ctpdbService.updateBanInPhieu(maPDB, oldBanSet, newBanSet);
+                } catch (Exception e) {
+                        // TODO: handle exception
+                        JOptionPane.showMessageDialog(this, e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+                }
 
                 // 2. Cập nhật UI bàn từ DB (sau khi thêm/xóa hoàn tất)
                 if (panelDatBan != null) {
-                        panelDatBan.updateAllTableStatusFromPhieuData();
+                        panelDatBan.updateAllTableStatusFromDatabase();
                 }
 
                 // 3. Hiển thị thông báo thành công
@@ -925,9 +931,11 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                                         if (!oldContext.isEmpty() && !newContext.isEmpty()
                                                         && !oldContext.equals(newContext)
                                                         && HoaDonDraftSession.hasDraft(oldContext)) {
+                                                updateChiTietPhieuDatBan(maPDB, oldBanSet, newBanSet);
                                                 HoaDonDraftSession.migrateContext(oldContext, newContext);
+                                        } else {
+                                                updateChiTietPhieuDatBan(maPDB, oldBanSet, newBanSet);
                                         }
-                                        updateChiTietPhieuDatBan(maPDB, oldBanSet, newBanSet);
                                 }
                         }
 
@@ -974,7 +982,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
 
                                 // Cập nhật UI bàn từ DB (bàn trong phiếu xóa sẽ thành TRONG)
                                 if (panelDatBan != null) {
-                                        panelDatBan.updateAllTableStatusFromPhieuData();
+                                        panelDatBan.updateAllTableStatusFromDatabase();
                                 }
 
                                 JOptionPane.showMessageDialog(this, "Xóa phiếu đặt bàn thành công", "Thành công",
@@ -1050,6 +1058,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                 String maPhieuDat = String.valueOf(tableBan.getModel().getValueAt(modelRow, 0));
                 String maBanContext = String.valueOf(tableBan.getModel().getValueAt(modelRow, 3));
                 String soDienThoai = String.valueOf(tableBan.getModel().getValueAt(modelRow, 1));
+                HoaDonDraftSession.setCurrentMaBanContext(maBanContext);
                 HoaDonDraftSession.setCurrentMaPhieuDatContext(maPhieuDat);
                 HoaDonDraftSession.setCurrentPhoneNumber(soDienThoai);
                 java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);

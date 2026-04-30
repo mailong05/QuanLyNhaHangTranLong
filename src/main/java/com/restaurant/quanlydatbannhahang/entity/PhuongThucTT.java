@@ -1,8 +1,8 @@
 package com.restaurant.quanlydatbannhahang.entity;
 
 public enum PhuongThucTT {
-    TIEN_MAT("Tiền mặt"),
     CHUYEN_KHOAN("Chuyển khoản"),
+    TIEN_MAT("Tiền mặt"),
     THE("Thẻ");
 
     private final String displayName;

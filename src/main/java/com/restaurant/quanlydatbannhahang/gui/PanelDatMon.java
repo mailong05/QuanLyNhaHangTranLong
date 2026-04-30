@@ -14,6 +14,7 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import com.restaurant.quanlydatbannhahang.entity.ChiTietPhieuDatBan;
 import com.restaurant.quanlydatbannhahang.entity.HoaDon;
 import com.restaurant.quanlydatbannhahang.entity.MonAn;
 import com.restaurant.quanlydatbannhahang.entity.PhieuDatBan;
@@ -22,6 +23,7 @@ import com.restaurant.quanlydatbannhahang.entity.TrangThaiHoaDon;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiPhieuDat;
 import com.restaurant.quanlydatbannhahang.session.HoaDonDraftSession;
 import com.restaurant.quanlydatbannhahang.service.BanService;
+import com.restaurant.quanlydatbannhahang.service.ChiTietPhieuDatBanService;
 import com.restaurant.quanlydatbannhahang.service.HoaDonService;
 import com.restaurant.quanlydatbannhahang.service.MonAnService;
 import com.restaurant.quanlydatbannhahang.service.PhieuDatBanService;
@@ -34,6 +36,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -58,7 +61,9 @@ public class PanelDatMon extends javax.swing.JPanel {
     private String datMonContext = "";
     private Set<String> maBanContextSet = new LinkedHashSet<>();
     private static boolean isChanged = false;
-
+    private ChiTietPhieuDatBanService ctpdbService;
+    private BanService banService;
+    
     /**
      * Creates new form PanelDatMon
      */
@@ -66,6 +71,8 @@ public class PanelDatMon extends javax.swing.JPanel {
         initComponents();
         monAnService = new MonAnService();
         hoaDonService = new HoaDonService();
+        ctpdbService = new ChiTietPhieuDatBanService();
+        banService = new BanService();
         customUI();
         loadDataToComboBoxes();
         loadDataToTable();
@@ -134,14 +141,18 @@ public class PanelDatMon extends javax.swing.JPanel {
     public void setDatMonContext(String maBanContext) {
         String normalized = HoaDonDraftSession.normalizeMaBanContext(maBanContext);
         String resolvedContext = HoaDonDraftSession.resolveMaBanContext(normalized);
-        boolean changed = !Objects.equals(this.datMonContext, resolvedContext);
+//        boolean changed = !Objects.equals(this.datMonContext, resolvedContext);
 
         this.datMonContext = resolvedContext;
         this.maBanContextSet = HoaDonDraftSession.parseMaBanContextToSet(resolvedContext);
         HoaDonDraftSession.setCurrentMaBanContext(resolvedContext);
 
-        if (changed) {
-            loadDraftFromSession();
+//        if (changed) {
+//            loadDraftFromSession();
+//        }
+        loadDraftFromSession();
+        if (!HoaDonDraftSession.getCurrentMaPhieuDatContext().isBlank()) {
+            capNhatTrangThaiSauKhiLuu();
         }
     }
 
@@ -453,31 +464,47 @@ public class PanelDatMon extends javax.swing.JPanel {
     }
 
     public void updateMaBanContextForEdit(Set<String> newSelectedTables) {
-        if (newSelectedTables == null || newSelectedTables.isEmpty()) {
-            return;
-        }
+        if (newSelectedTables == null || newSelectedTables.isEmpty()) return;
 
-        Set<String> oldBanSet = getMaBanSetFromContext();
-        String oldContext = datMonContext;
-        String newContext = HoaDonDraftSession.normalizeMaBanContext(String.join(",", newSelectedTables));
-        if (newContext.isEmpty() || newContext.equals(oldContext)) {
-            return;
-        }
+        Set<String> oldBanSet = new HashSet<>(this.maBanContextSet); // Danh sách bàn cũ
+        String oldContext = this.datMonContext;
+        String newContext = HoaDonDraftSession.normalizeMaBanContext(
+                newSelectedTables.stream().collect(Collectors.joining(","))
+        );
 
-        saveDraftToSession();
-        HoaDonDraftSession.migrateContext(oldContext, newContext);
+        if (newContext.equals(oldContext)) return;
 
-        List<HoaDon> hoaDons = hoaDonService.getHoaDonTheoMaBan(oldContext);
-        for (HoaDon hoaDon : hoaDons) {
-            if (hoaDon.getTrangThaiThanhToan() == TrangThaiHoaDon.CHUA_THANH_TOAN) {
-                hoaDonService.capNhatBanChoHoaDonDraft(hoaDon.getMaHD(), newContext);
+        try {
+            saveDraftToSession(); // Lưu món vào RAM[cite: 17]
+
+            // 1. Đồng bộ Database: Chuyển hóa đơn sang mã bàn mới[cite: 17]
+            hoaDonService.chuyenBanChoHoaDonDraft(oldContext, newContext);
+
+            // 2. Nếu là flow đặt trước, cập nhật thêm bảng Chi tiết phiếu (để giữ lịch sử)[cite: 20]
+            String maPhieuDat = HoaDonDraftSession.getCurrentMaPhieuDatContext();
+            if (maPhieuDat != null && !maPhieuDat.isBlank()) {
+                ctpdbService.updateBanInPhieu(maPhieuDat, oldBanSet, newSelectedTables);
             }
+
+            // 3. Cập nhật trạng thái vật lý TRONG BẢNG BAN (Single Source of Truth)
+            // Giải phóng bàn cũ
+            for (String maBan : oldBanSet) {
+                banService.capNhatTrangThaiBan(maBan, TrangThaiBan.TRONG);
+            }
+            // Chiếm dụng bàn mới
+            for (String maBan : newSelectedTables) {
+                banService.capNhatTrangThaiBan(maBan, TrangThaiBan.DANG_DUNG);
+            }
+
+            // 4. Di trú Session RAM[cite: 16]
+            HoaDonDraftSession.migrateContext(oldContext, newContext);
+            
+            // 5. Cập nhật context hiện tại của Panel[cite: 17]
+            setDatMonContext(newContext);
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Lỗi đổi bàn: " + e.getMessage());
         }
-
-        capNhatTrangThaiBanSauKhiDoiBan(oldBanSet, newSelectedTables);
-
-        JOptionPane.showMessageDialog(this, "Đã cập nhật bàn phục vụ: " + newContext, "Thành công",
-                JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void capNhatTrangThaiBanSauKhiDoiBan(Set<String> oldBanSet, Set<String> newBanSet) {

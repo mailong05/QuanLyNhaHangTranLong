@@ -19,6 +19,7 @@ public final class HoaDonDraftSession {
     private static final Map<String, String> maKHByMaBan = new LinkedHashMap<>();
     private static final Map<String, String> maKMByMaBan = new LinkedHashMap<>();
     private static final Map<String, Integer> diemDungByMaBan = new LinkedHashMap<>();
+    private static final Map<String, String> maPhieuDatByMaBan = new LinkedHashMap<>();
     private static String currentMaBanContext = "";
     private static String currentPhoneNumber = "";
     private static String currentMaPhieuDatContext = "";
@@ -96,6 +97,9 @@ public final class HoaDonDraftSession {
 
     public static void setCurrentMaBanContext(String maBanContext) {
         currentMaBanContext = normalizeMaBanContext(maBanContext);
+        if (!currentMaBanContext.isEmpty() && maPhieuDatByMaBan.containsKey(currentMaBanContext)) {
+            currentMaPhieuDatContext = maPhieuDatByMaBan.get(currentMaBanContext);
+        }
     }
 
     public static String getCurrentPhoneNumber() {
@@ -116,9 +120,19 @@ public final class HoaDonDraftSession {
 
     public static void setCurrentMaPhieuDatContext(String maPhieuDat) {
         currentMaPhieuDatContext = maPhieuDat == null ? "" : maPhieuDat.trim();
+        if (!currentMaBanContext.isEmpty()) {
+            if (currentMaPhieuDatContext.isEmpty()) {
+                maPhieuDatByMaBan.remove(currentMaBanContext);
+            } else {
+                maPhieuDatByMaBan.put(currentMaBanContext, currentMaPhieuDatContext);
+            }
+        }
     }
 
     public static void clearCurrentMaPhieuDatContext() {
+        if (!currentMaBanContext.isEmpty()) {
+            maPhieuDatByMaBan.remove(currentMaBanContext);
+        }
         currentMaPhieuDatContext = "";
     }
 
@@ -165,34 +179,45 @@ public final class HoaDonDraftSession {
         }
         for (String maBan : maBanToRemove) {
             contextByMaBan.remove(maBan);
-            maKHByMaBan.remove(maBan);
-            maKMByMaBan.remove(maBan);
-            diemDungByMaBan.remove(maBan);
         }
+        maKHByMaBan.remove(normalized);
+        maKMByMaBan.remove(normalized);
+        diemDungByMaBan.remove(normalized);
+        maPhieuDatByMaBan.remove(normalized);
     }
 
+    /**
+     * Di chuyển toàn bộ dữ liệu draft từ context cũ sang context mới.
+     * Includes: danh sách món, maKH, maKM, diemDung, và currentMaBanContext.
+     *
+     * Note: currentMaPhieuDatContext NOT migrated vì nó là global state,
+     * giữ nguyên để track PhieuDatBan đang được sử dụng (bàn có thay đổi nhưng
+     * phiếu không).
+     *
+     * Đảm bảo sau migration: clear(oldMaBanContext) được gọi để tránh rác dữ liệu.
+     */
     public static void migrateContext(String oldMaBanContext, String newMaBanContext) {
         String oldNormalized = normalizeMaBanContext(oldMaBanContext);
         String newNormalized = normalizeMaBanContext(newMaBanContext);
+
         if (oldNormalized.isEmpty() || newNormalized.isEmpty() || oldNormalized.equals(newNormalized)) {
             return;
         }
 
+        // 1. Di chuyển món ăn[cite: 7]
         List<DraftMonItem> oldItems = getMonItems(oldNormalized);
         setMonItems(newNormalized, oldItems);
+
+        // 2. Di chuyển Metadata hóa đơn[cite: 7]
         String maKH = getMaKH(oldNormalized);
         String maKM = getMaKM(oldNormalized);
         int diemDung = getDiemDung(oldNormalized);
         setInvoiceMetadata(newNormalized,
-                maKH != null && !maKH.isBlank() ? maKH : null,
-                maKM != null && !maKM.isBlank() ? maKM : null,
+                (maKH != null && !maKH.isBlank()) ? maKH : null,
+                (maKM != null && !maKM.isBlank()) ? maKM : null,
                 diemDung);
 
-        boolean activeSession = normalizeMaBanContext(currentMaBanContext).equals(oldNormalized);
-        if (activeSession) {
-            setCurrentMaBanContext(newNormalized);
-        }
-
+        // 3. Xóa dữ liệu tại context cũ để tránh rác[cite: 7]
         clear(oldNormalized);
     }
 
@@ -239,6 +264,7 @@ public final class HoaDonDraftSession {
         maKHByMaBan.clear();
         maKMByMaBan.clear();
         diemDungByMaBan.clear();
+        maPhieuDatByMaBan.clear();
         currentMaBanContext = "";
         currentPhoneNumber = "";
         currentMaPhieuDatContext = "";

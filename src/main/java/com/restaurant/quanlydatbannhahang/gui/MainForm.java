@@ -11,6 +11,8 @@ import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Set;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -288,13 +290,6 @@ public class MainForm extends javax.swing.JFrame {
         // (panelDatMon sẽ được giữ lại để quay lại)
         showPanel(panelLapHoaDon);
         lblTenTrang.setText("LẬP HÓA ĐƠN");
-    }
-
-    public void goBackToPanelDatMon() {
-        if (panelDatMon != null) {
-            showPanel(panelDatMon);
-            lblTenTrang.setText("ĐẶT MÓN");
-        }
     }
 
     public void goBackToPreviousPanel() {
@@ -1317,14 +1312,28 @@ public class MainForm extends javax.swing.JFrame {
      * Chuẩn bị flow đổi bàn từ PanelDatMon: pre-select các bàn cũ, bật edit mode,
      * rồi chuyển sang PanelDatBan.
      */
-    public void startEditBanFromDatMon(java.util.Set<String> oldBanSet, PanelDatMon sourcePanel) {
-        if (panelDatBan == null) {
-            panelDatBan = new PanelDatBan();
-        }
+    // Thêm vào MainForm.java
+    public void startEditBanFromDatMon(Set<String> oldTables, PanelDatMon sourcePanel) {
+        // 1. Chuyển sang PanelDatBan (giả sử instance là pnlDatBan)
+        showPanel(panelDatBan);
 
+        // 2. Kích hoạt chế độ Edit và truyền dữ liệu
+        panelDatBan.setFlowOrigin("DAT_MON");
         panelDatBan.setPanelDatMon(sourcePanel);
-        panelDatBan.setSelectedTablesForEdit(oldBanSet);
-        switchToPanelDatBan();
+        panelDatBan.setSelectedTablesForEdit(oldTables);
+    }
+
+    public void goBackToPanelDatMon() {
+        // Quay lại instance PanelDatMon hiện tại[cite: 15]
+        showPanel(panelDatMon);
+
+        // Refresh PanelDatBan table status after edit mode returns
+        // to reflect any table changes made during editing
+        if (panelDatBan != null) {
+            panelDatBan.updateAllTableStatusFromDatabase();
+            panelDatBan.revalidate();
+            panelDatBan.repaint();
+        }
     }
 
     /**

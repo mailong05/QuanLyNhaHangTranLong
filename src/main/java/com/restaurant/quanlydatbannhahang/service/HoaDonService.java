@@ -156,6 +156,10 @@ public class HoaDonService {
     }
 
     public void chuyenMaBanChoHoaDonDraft(String oldMaBan, String newMaBan) {
+        chuyenBanChoHoaDonDraft(oldMaBan, newMaBan);
+    }
+
+    public void chuyenBanChoHoaDonDraft(String oldMaBan, String newMaBan) {
         if (oldMaBan == null || oldMaBan.isBlank()) {
             throw new IllegalArgumentException("Mã bàn cũ không được để trống");
         }
@@ -169,24 +173,23 @@ public class HoaDonService {
             throw new IllegalArgumentException("Mã bàn mới phải có dạng Bxxx hoặc Bxxx,Byyy");
         }
 
-        List<HoaDon> hoaDons = hoaDonDAO.getHoaDonTheoMaBan(oldMaBan);
-        if (hoaDons == null || hoaDons.isEmpty()) {
-            throw new RuntimeException("Không tìm thấy hóa đơn chưa thanh toán cho bàn: " + oldMaBan);
-        }
+            // 1. Tìm hóa đơn chưa thanh toán của cụm bàn cũ
+            List<HoaDon> dsHoaDon = hoaDonDAO.getHoaDonTheoMaBan(oldMaBan);
+            HoaDon hDraft = dsHoaDon.stream()
+                .filter(h -> h.getTrangThaiThanhToan() == TrangThaiHoaDon.CHUA_THANH_TOAN)
+                .findFirst().orElse(null);
 
-        boolean updated = false;
-        for (HoaDon hoaDon : hoaDons) {
-            if (hoaDon != null && hoaDon.getTrangThaiThanhToan() == TrangThaiHoaDon.CHUA_THANH_TOAN) {
-                hoaDon.setBan(new Ban(newMaBan, 0, "", null, null));
-                hoaDonDAO.capNhatHoaDon(hoaDon);
-                updated = true;
-                break;
+            // 2. Nếu tìm thấy, cập nhật mã bàn mới và lưu xuống DB[cite: 1, 10]
+            if (hDraft != null) {
+                // Tạo đối tượng bàn ảo với mã context mới (vì DB lưu String)
+                hDraft.setBan(new Ban(newMaBan, 0, "", null, null));
+                if (!hoaDonDAO.capNhatHoaDon(hDraft)) {
+                    throw new RuntimeException("Lỗi cập nhật mã bàn mới trong Database.");
+                }
             }
-        }
+        
 
-        if (!updated) {
-            throw new RuntimeException("Không tìm thấy hóa đơn chưa thanh toán cho bàn: " + oldMaBan);
-        }
+      
     }
 
     /**
@@ -319,4 +322,6 @@ public class HoaDonService {
     public String getLastHoaDonID() {
         return hoaDonDAO.getLastHoaDonID();
     }
+
+
 }

@@ -56,6 +56,8 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                                 if (evt.getSource() != tableKhuyenMai && !isMouseOverTable(evt)) {
                                         tableKhuyenMai.clearSelection();
                                         clearFields();
+                                        fillTxtMaKhuyenMai();
+                                        syncCapNhatButtonState();
                                 }
                         }
                 });
@@ -577,6 +579,11 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
 
         btnXoa.setText("Xóa");
         btnXoa.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnXoa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnXoaActionPerformed(evt);
+            }
+        });
         pnlRightButtons.add(btnXoa);
 
         btnThem.setText("Thêm");
@@ -592,6 +599,30 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
 
         add(pnlButton, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
+        // TODO add your handling code here:
+    	 String maKM = txtMaKhuyenMai.getText().trim();
+         if (maKM.isEmpty()) {
+                 JOptionPane.showMessageDialog(this, "Vui lòng chọn khuyến mãi cần xóa.");
+                 return;
+         }
+
+         int choice = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa khuyến mãi này không?",
+                         "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
+         if (choice != JOptionPane.YES_OPTION) {
+                 return;
+         }
+
+         try {
+                 KhuyenMaiService service = new KhuyenMaiService();
+                 service.xoaKhuyenMai(maKM);
+                 JOptionPane.showMessageDialog(this, "Xóa khuyến mãi thành công.");
+                 refreshData();
+         } catch (Exception ex) {
+                 JOptionPane.showMessageDialog(this, "Xóa khuyến mãi thất bại: " + ex.getMessage());
+         }
+    }//GEN-LAST:event_btnXoaActionPerformed
 
         private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaTrangActionPerformed
                 // TODO add your handling code here:
@@ -692,28 +723,7 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                 }
         }// GEN-LAST:event_btnThemActionPerformed
 
-        private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {
-                String maKM = txtMaKhuyenMai.getText().trim();
-                if (maKM.isEmpty()) {
-                        JOptionPane.showMessageDialog(this, "Vui lòng chọn khuyến mãi cần xóa.");
-                        return;
-                }
-
-                int choice = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa khuyến mãi này không?",
-                                "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
-                if (choice != JOptionPane.YES_OPTION) {
-                        return;
-                }
-
-                try {
-                        KhuyenMaiService service = new KhuyenMaiService();
-                        service.xoaKhuyenMai(maKM);
-                        JOptionPane.showMessageDialog(this, "Xóa khuyến mãi thành công.");
-                        refreshData();
-                } catch (Exception ex) {
-                        JOptionPane.showMessageDialog(this, "Xóa khuyến mãi thất bại: " + ex.getMessage());
-                }
-        }
+        
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCapNhat;
