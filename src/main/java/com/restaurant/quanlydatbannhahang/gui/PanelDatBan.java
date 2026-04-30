@@ -27,12 +27,13 @@ public class PanelDatBan extends javax.swing.JPanel {
     private PanelDatMon panelDatMon = null; // Reference để callback khi đổi bàn từ PanelDatMon
     private boolean editMode = false; // Để biết có phải ở chế độ chỉnh sửa bàn
     private static final Color EDIT_MODE_SELECTED_COLOR = new Color(51, 153, 255);
-
+    private BanService banService;
     public PanelDatBan() {
         selectedTables = new HashSet<>();
         tableCards = new HashMap<>();
         tableTrangThai = new HashMap<>();
         tableLabelStatus = new HashMap<>();
+        banService = new BanService();
         initComponents();
         customUI();
         setUpDatBanButton();
@@ -185,8 +186,13 @@ public class PanelDatBan extends javax.swing.JPanel {
 
                 TrangThaiBan trangThaiBan;
                 if (trangThaiPhieu == null) {
-                    // Bàn không trong phiếu nào → TRONG
-                    trangThaiBan = TrangThaiBan.TRONG;
+                    // Bàn không trong phiếu nào → lấy trạng thái từ DB BanAn
+                    try {
+                        Ban ban = banService.getBanTheoMa(maBan);
+                        trangThaiBan = ban.getTrangThai();
+                    } catch (Exception e) {
+                        trangThaiBan = TrangThaiBan.TRONG;
+                    }
                 } else if (trangThaiPhieu == TrangThaiPhieuDat.DA_HUY
                         || trangThaiPhieu == TrangThaiPhieuDat.DA_SU_DUNG) {
                     trangThaiBan = TrangThaiBan.TRONG;

@@ -564,15 +564,20 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         int diemCanTru = (int) Math.ceil(tongThanhToan / VND_PER_DIEM);
         int diemHienCo = selectedKhachHang.getDiemTichLuy();
 
+        if (diemHienCo < diemCanTru) {
+            JOptionPane.showMessageDialog(this, "Điểm tích lũy không đủ để sử dụng. Cần " + diemCanTru + " điểm, hiện có " + diemHienCo + " điểm.");
+            return;
+        }
+
         // Trừ điểm trong DB
         boolean success = khachHangService.suDungDiemTichLuy(selectedKhachHang.getMaKH(), diemCanTru);
         if (!success) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Không thể sử dụng điểm tích lũy.");
+            JOptionPane.showMessageDialog(this, "Không thể sử dụng điểm tích lũy.");
             return;
         }
 
         // Cập nhật UI
-        selectedKhachHang.setDiemTichLuy(Math.max(0, diemHienCo - diemCanTru));
+        selectedKhachHang.setDiemTichLuy(diemHienCo - diemCanTru);
         diemDaApDung = diemCanTru;
         updateTongTienSummary();
 
@@ -584,7 +589,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
             }
         }
 
-        javax.swing.JOptionPane.showMessageDialog(this, "Đã trừ " + diemCanTru + " điểm tích lũy khỏi khách hàng.");
+        JOptionPane.showMessageDialog(this, "Đã trừ " + diemCanTru + " điểm tích lũy khỏi khách hàng.");
     }// GEN-LAST:event_btnDungDiemActionPerformed
 
     private void cbKhuyenMaiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbKhuyenMaiActionPerformed
@@ -1150,7 +1155,12 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
             }
         }
 
-        int diemTang = (int) (tongThanhToanLuuTam / VND_PER_DIEM);
+        // Lấy tổng thanh toán từ hoá đơn đã lưu
+        HoaDon hoaDon = hoaDonService.findHoaDonTheoMa(txtMaHoaDon.getText().trim());
+        if (hoaDon == null) {
+            return;
+        }
+        int diemTang = (int) (hoaDon.getTongThanhToan() / VND_PER_DIEM);
         if (diemTang <= 0) {
             return;
         }
