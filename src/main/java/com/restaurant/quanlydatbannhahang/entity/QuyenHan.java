@@ -13,4 +13,13 @@ public enum QuyenHan {
     public String getDisplayName() {
         return displayName;
     }
+
+    public static QuyenHan fromDisplayName(String text) {
+        for (QuyenHan b : QuyenHan.values()) {
+            if (b.displayName.equalsIgnoreCase(text)) {
+                return b;
+            }
+        }
+        return null;
+    }
 }

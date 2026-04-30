@@ -13,4 +13,13 @@ public enum TrangThaiThue {
     public String getDisplayName() {
         return displayName;
     }
+
+    public static TrangThaiThue fromDisplayName(String text) {
+        for (TrangThaiThue b : TrangThaiThue.values()) {
+            if (b.displayName.equalsIgnoreCase(text)) {
+                return b;
+            }
+        }
+        return null;
+    }
 }

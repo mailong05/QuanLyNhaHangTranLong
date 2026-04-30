@@ -34,7 +34,6 @@ public class NhanVienDAO {
 			ChucVu chucVu = ChucVu.valueOf(chucVuStr);
 
 			TrangThaiNhanVien trangThai = TrangThaiNhanVien.valueOf(rs.getString("trangThai"));
-					
 
 			return new NhanVien(
 					rs.getString("maNV"),
@@ -98,7 +97,7 @@ public class NhanVienDAO {
 			pstm.setString(4, nhanVien.getChucVu().name());
 			pstm.setDate(5, java.sql.Date.valueOf(nhanVien.getNgayVaoLam()));
 			pstm.setDouble(6, nhanVien.getLuongCoBan());
-			pstm.setBoolean(7, nhanVien.getTrangThai() == TrangThaiNhanVien.DANG_LAM_VIEC);
+			pstm.setString(7, nhanVien.getTrangThai().name());
 			return pstm.executeUpdate() > 0;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -117,7 +116,7 @@ public class NhanVienDAO {
 			pstm.setString(3, nhanVien.getChucVu().name());
 			pstm.setDate(4, java.sql.Date.valueOf(nhanVien.getNgayVaoLam()));
 			pstm.setDouble(5, nhanVien.getLuongCoBan());
-			pstm.setBoolean(6, nhanVien.getTrangThai() == TrangThaiNhanVien.DANG_LAM_VIEC);
+			pstm.setString(6, nhanVien.getTrangThai().name());
 			pstm.setString(7, nhanVien.getMaNV());
 			return pstm.executeUpdate() > 0;
 		} catch (Exception e) {

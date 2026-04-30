@@ -14,4 +14,13 @@ public enum TrangThaiBan {
     public String getDisplayName() {
         return displayName;
     }
+
+    public static TrangThaiBan fromDisplayName(String text) {
+        for (TrangThaiBan b : TrangThaiBan.values()) {
+            if (b.displayName.equalsIgnoreCase(text)) {
+                return b;
+            }
+        }
+        return null;
+    }
 }

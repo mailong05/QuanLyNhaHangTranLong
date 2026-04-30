@@ -15,4 +15,13 @@ public enum ChucVu {
     public String getDisplayName() {
         return displayName;
     }
+
+    public static ChucVu fromDisplayName(String text) {
+        for (ChucVu b : ChucVu.values()) {
+            if (b.displayName.equalsIgnoreCase(text)) {
+                return b;
+            }
+        }
+        return null;
+    }
 }

@@ -5,8 +5,7 @@ public enum LoaiMonAn {
     MON_CHINH("Món chính"),
     HAI_SAN("Hải sản"),
     DO_UONG("Đồ uống"),
-    TRANG_MIENG("Tráng miệng")
-    ;
+    TRANG_MIENG("Tráng miệng");
 
     private final String displayName;
 
@@ -16,5 +15,14 @@ public enum LoaiMonAn {
 
     public String getDisplayName() {
         return displayName;
+    }
+
+    public static LoaiMonAn fromDisplayName(String text) {
+        for (LoaiMonAn b : LoaiMonAn.values()) {
+            if (b.displayName.equalsIgnoreCase(text)) {
+                return b;
+            }
+        }
+        return null;
     }
 }

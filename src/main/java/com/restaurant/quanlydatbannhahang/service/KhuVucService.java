@@ -4,12 +4,40 @@ import com.restaurant.quanlydatbannhahang.dao.KhuVucDAO;
 import com.restaurant.quanlydatbannhahang.entity.KhuVuc;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class KhuVucService {
     private KhuVucDAO khuVucDAO;
 
+    private static final String MAKV_PATTERN = "^KV\\d{3}$";
+    private static final String TENKV_PATTERN = "^[\\p{Lu}][\\p{Ll}]*(\\s[\\p{Lu}][\\p{Ll}]*)*$";
+
+    private static final Pattern maKVPattern = Pattern.compile(MAKV_PATTERN);
+    private static final Pattern tenKVPattern = Pattern.compile(TENKV_PATTERN);
+
     public KhuVucService() {
         this.khuVucDAO = new KhuVucDAO();
+    }
+
+    /**
+     * Validate đối tượng KhuVuc
+     */
+    public void validateKhuVuc(KhuVuc khuVuc) {
+        if (khuVuc == null) {
+            throw new IllegalArgumentException("Đối tượng khu vực không được để trống");
+        }
+        if (khuVuc.getMaKhuVuc() == null || khuVuc.getMaKhuVuc().isBlank()) {
+            throw new IllegalArgumentException("Mã khu vực không được để trống");
+        }
+        if (!maKVPattern.matcher(khuVuc.getMaKhuVuc()).matches()) {
+            throw new IllegalArgumentException("Mã khu vực phải có dạng KVxxx (ví dụ: KV001)");
+        }
+        if (khuVuc.getTenKhuVuc() == null || khuVuc.getTenKhuVuc().isBlank()) {
+            throw new IllegalArgumentException("Tên khu vực không được để trống");
+        }
+        if (!tenKVPattern.matcher(khuVuc.getTenKhuVuc()).matches()) {
+            throw new IllegalArgumentException("Tên khu vực phải viết hoa chữ cái đầu mỗi từ");
+        }
     }
 
     /**
@@ -37,15 +65,7 @@ public class KhuVucService {
      * Thêm khu vực mới
      */
     public void themKhuVuc(KhuVuc khuVuc) {
-        if (khuVuc == null) {
-            throw new IllegalArgumentException("Khu vực không được để trống");
-        }
-        if (khuVuc.getMaKhuVuc() == null || khuVuc.getMaKhuVuc().trim().isEmpty()) {
-            throw new IllegalArgumentException("Mã khu vực không được để trống");
-        }
-        if (khuVuc.getTenKhuVuc() == null || khuVuc.getTenKhuVuc().trim().isEmpty()) {
-            throw new IllegalArgumentException("Tên khu vực không được để trống");
-        }
+        validateKhuVuc(khuVuc);
         if (!khuVucDAO.themKhuVuc(khuVuc)) {
             throw new RuntimeException("Thêm khu vực thất bại");
         }
@@ -55,9 +75,7 @@ public class KhuVucService {
      * Cập nhật khu vực
      */
     public void capNhatKhuVuc(KhuVuc khuVuc) {
-        if (khuVuc == null) {
-            throw new IllegalArgumentException("Khu vực không được để trống");
-        }
+        validateKhuVuc(khuVuc);
         if (!khuVucDAO.capNhatKhuVuc(khuVuc)) {
             throw new RuntimeException("Cập nhật khu vực thất bại");
         }

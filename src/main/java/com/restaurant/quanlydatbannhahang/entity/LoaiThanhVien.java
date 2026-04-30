@@ -17,4 +17,13 @@ public enum LoaiThanhVien {
 		return displayName;
 	}
 
+	public static LoaiThanhVien fromDisplayName(String text) {
+		for (LoaiThanhVien b : LoaiThanhVien.values()) {
+			if (b.displayName.equalsIgnoreCase(text)) {
+				return b;
+			}
+		}
+		return null;
+	}
+
 }

@@ -16,12 +16,12 @@ public enum TrangThaiPhieuDat {
         return displayName;
     }
 
-    public static TrangThaiPhieuDat fromDisplayName(String displayName) {
-        for (TrangThaiPhieuDat status : values()) {
-            if (status.displayName.equals(displayName)) {
-                return status;
+    public static TrangThaiPhieuDat fromDisplayName(String text) {
+        for (TrangThaiPhieuDat b : TrangThaiPhieuDat.values()) {
+            if (b.displayName.equalsIgnoreCase(text)) {
+                return b;
             }
         }
-        return DANG_CHO;
+        return null;
     }
 }
