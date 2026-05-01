@@ -1,6 +1,9 @@
 package com.restaurant.quanlydatbannhahang.gui;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -103,10 +106,10 @@ public class PanelDanhSachNhanVien extends javax.swing.JPanel {
     private void loadDataToComboBoxes() {
         try {
             // Save listeners
-            java.awt.event.ActionListener[] chucVuListeners = cbFilterChucVu.getActionListeners();
+            ActionListener[] chucVuListeners = cbFilterChucVu.getActionListeners();
 
             // Remove listeners
-            for (java.awt.event.ActionListener listener : chucVuListeners) {
+            for (ActionListener listener : chucVuListeners) {
                 cbFilterChucVu.removeActionListener(listener);
             }
 
@@ -119,7 +122,7 @@ public class PanelDanhSachNhanVien extends javax.swing.JPanel {
             }
 
             // Re-add listeners
-            for (java.awt.event.ActionListener listener : chucVuListeners) {
+            for ( ActionListener listener : chucVuListeners) {
                 cbFilterChucVu.addActionListener(listener);
             }
 
@@ -189,24 +192,24 @@ public class PanelDanhSachNhanVien extends javax.swing.JPanel {
         pnlThongTinNhanVien.setBackground(new java.awt.Color(255, 251, 233));
 
         txtTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        txtTimKiem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        txtTimKiem.addActionListener(new  ActionListener() {
+            public void actionPerformed( ActionEvent evt) {
                 txtTimKiemActionPerformed(evt);
             }
         });
 
         btnTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnTimKiem.setText("Tìm kiếm");
-        btnTimKiem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnTimKiem.addActionListener(new  ActionListener() {
+            public void actionPerformed( ActionEvent evt) {
                 btnTimKiemActionPerformed(evt);
             }
         });
 
         cbFilterChucVu.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {}));
         cbFilterChucVu.setPreferredSize(new java.awt.Dimension(72, 35));
-        cbFilterChucVu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        cbFilterChucVu.addActionListener(new  ActionListener() {
+            public void actionPerformed( ActionEvent evt) {
                 cbFilterChucVuActionPerformed(evt);
             }
         });
@@ -284,8 +287,8 @@ public class PanelDanhSachNhanVien extends javax.swing.JPanel {
 
         btnXoaTrang.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnXoaTrang.setText("Xóa trắng");
-        btnXoaTrang.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnXoaTrang.addActionListener(new  ActionListener() {
+            public void actionPerformed( ActionEvent evt) {
                 btnXoaTrangActionPerformed(evt);
             }
         });
@@ -294,20 +297,20 @@ public class PanelDanhSachNhanVien extends javax.swing.JPanel {
         add(pnlButton, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaTrangActionPerformed
+    private void btnXoaTrangActionPerformed( ActionEvent evt) {// GEN-FIRST:event_btnXoaTrangActionPerformed
         // TODO add your handling code here:
         refreshData();
     }// GEN-LAST:event_btnXoaTrangActionPerformed
 
-    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTimKiemActionPerformed
+    private void btnTimKiemActionPerformed( ActionEvent evt) {// GEN-FIRST:event_btnTimKiemActionPerformed
         searchByText();
     }// GEN-LAST:event_btnTimKiemActionPerformed
 
-    private void cbFilterChucVuActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterChucVuActionPerformed
+    private void cbFilterChucVuActionPerformed( ActionEvent evt) {// GEN-FIRST:event_cbFilterChucVuActionPerformed
         filterTable();
     }// GEN-LAST:event_cbFilterChucVuActionPerformed
 
-    private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtTimKiemActionPerformed
+    private void txtTimKiemActionPerformed( ActionEvent evt) {// GEN-FIRST:event_txtTimKiemActionPerformed
         searchByText();
     }// GEN-LAST:event_txtTimKiemActionPerformed
 
