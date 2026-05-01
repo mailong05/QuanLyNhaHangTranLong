@@ -35,6 +35,7 @@ public class PhieuDatBanDAO {
             String maPhieuDat = rs.getString("maPhieuDat");
             String maKH = rs.getString("maKH");
             String maNV = rs.getString("maNV");
+            LocalDateTime ngayLapPhieu = rs.getTimestamp("ngayLapPhieu").toLocalDateTime();
             LocalDateTime thoiGianDen = rs.getTimestamp("thoiGianDen").toLocalDateTime();
             int soLuongNguoi = rs.getInt("soLuongNguoi");
             String ghiChu = rs.getString("ghiChu");
@@ -46,6 +47,7 @@ public class PhieuDatBanDAO {
                 phieu.setKhachHang(khachHangDAO.getKhachHangTheoMa(maKH));
             }
             phieu.setNhanVien(nhanVienDAO.getNhanVienTheoMa(maNV));
+            phieu.setNgayLapPhieu(ngayLapPhieu);
             phieu.setThoiGianDen(thoiGianDen);
             phieu.setSoLuongNguoi(soLuongNguoi);
             phieu.setGhiChu(ghiChu);
@@ -60,7 +62,7 @@ public class PhieuDatBanDAO {
 
     public boolean themPhieuDatBan(PhieuDatBan phieu) {
         Connection connection = DatabaseConnection.getConnection();
-        String sql = "insert into PhieuDatBan (maPhieuDat, maKH, maNV, thoiGianDen, soLuongNguoi, ghiChu, trangThai) values (?,?,?,?,?,?,?)";
+        String sql = "insert into PhieuDatBan (maPhieuDat, maKH, maNV, ngayLapPhieu, thoiGianDen, soLuongNguoi, ghiChu, trangThai) values (?,?,?,?,?,?,?,?)";
         try {
             // Kiểm tra nhân viên tồn tại
             if (phieu.getNhanVien() == null || phieu.getNhanVien().getMaNV() == null) {
@@ -76,10 +78,12 @@ public class PhieuDatBanDAO {
                 pstm.setString(2, phieu.getKhachHang().getMaKH());
             }
             pstm.setString(3, phieu.getNhanVien().getMaNV());
-            pstm.setTimestamp(4, java.sql.Timestamp.valueOf(phieu.getThoiGianDen()));
-            pstm.setInt(5, phieu.getSoLuongNguoi());
-            pstm.setString(6, phieu.getGhiChu());
-            pstm.setString(7, phieu.getTrangThai().name());
+            pstm.setTimestamp(4, java.sql.Timestamp
+                    .valueOf(phieu.getNgayLapPhieu() != null ? phieu.getNgayLapPhieu() : LocalDateTime.now()));
+            pstm.setTimestamp(5, java.sql.Timestamp.valueOf(phieu.getThoiGianDen()));
+            pstm.setInt(6, phieu.getSoLuongNguoi());
+            pstm.setString(7, phieu.getGhiChu());
+            pstm.setString(8, phieu.getTrangThai().name());
             return pstm.executeUpdate() > 0;
         } catch (Exception e) {
             System.err.println("Lỗi khi insert PhieuDatBan - Mã: " + (phieu != null ? phieu.getMaPhieuDat() : "null"));
@@ -125,6 +129,25 @@ public class PhieuDatBanDAO {
             e.printStackTrace();
         }
         return dsPhieu;
+    }
+
+    public List<PhieuDatBan> getHoatDongGanDay() {
+        List<PhieuDatBan> list = new ArrayList<>();
+        Connection con = DatabaseConnection.getConnection();
+        String sql = "SELECT * FROM PhieuDatBan " +
+                "WHERE CAST(thoiGianDen AS DATE) = CAST(GETDATE() AS DATE) " +
+                "ORDER BY thoiGianDen DESC";
+        try {
+            PreparedStatement pstm = con.prepareStatement(sql);
+            ResultSet rs = pstm.executeQuery();
+            while(rs.next()) {
+            	PhieuDatBan pdb = buildPhieuDatBanFromResultSet(rs);
+            	list.add(pdb);
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        return list;
     }
 
     public List<PhieuDatBan> getPhieuDatBanTheoNgay(LocalDate ngay) {
@@ -279,10 +302,9 @@ public class PhieuDatBanDAO {
         return dsPhieu;
     }
 
-	public boolean capNhatKhachHangChoPhieu(String maPhieu, String maKH) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    public boolean capNhatKhachHangChoPhieu(String maPhieu, String maKH) {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
-	
 }

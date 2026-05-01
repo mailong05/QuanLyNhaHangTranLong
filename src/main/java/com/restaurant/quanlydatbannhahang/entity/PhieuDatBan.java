@@ -7,6 +7,7 @@ public class PhieuDatBan {
     private KhachHang khachHang;
     private NhanVien nhanVien;
     private Ban ban;
+    private LocalDateTime ngayLapPhieu;
     private LocalDateTime thoiGianDen;
     private int soLuongNguoi;
     private String ghiChu;
@@ -14,15 +15,17 @@ public class PhieuDatBan {
 
     // Constructor không tham số
     public PhieuDatBan() {
+        this.ngayLapPhieu = LocalDateTime.now();
     }
 
     // Constructor đầy đủ
-    public PhieuDatBan(String maPhieuDat, KhachHang khachHang, NhanVien nhanVien, Ban ban, LocalDateTime thoiGianDen,
-            int soLuongNguoi, String ghiChu, TrangThaiPhieuDat trangThai) {
+    public PhieuDatBan(String maPhieuDat, KhachHang khachHang, NhanVien nhanVien, Ban ban, LocalDateTime ngayLapPhieu,
+            LocalDateTime thoiGianDen, int soLuongNguoi, String ghiChu, TrangThaiPhieuDat trangThai) {
         this.maPhieuDat = maPhieuDat;
         this.khachHang = khachHang;
         this.nhanVien = nhanVien;
         this.ban = ban;
+        this.ngayLapPhieu = ngayLapPhieu != null ? ngayLapPhieu : LocalDateTime.now();
         this.thoiGianDen = thoiGianDen;
         this.soLuongNguoi = soLuongNguoi;
         this.ghiChu = ghiChu;
@@ -60,6 +63,14 @@ public class PhieuDatBan {
 
     public void setBan(Ban ban) {
         this.ban = ban;
+    }
+
+    public LocalDateTime getNgayLapPhieu() {
+        return ngayLapPhieu;
+    }
+
+    public void setNgayLapPhieu(LocalDateTime ngayLapPhieu) {
+        this.ngayLapPhieu = ngayLapPhieu;
     }
 
     public LocalDateTime getThoiGianDen() {
@@ -102,8 +113,6 @@ public class PhieuDatBan {
         }
         return false;
     }
-
-   
 
     public boolean huyPhieu() {
         if (trangThai != TrangThaiPhieuDat.DA_HUY) {

@@ -254,8 +254,7 @@ public class PhieuDatBanService {
 }
 
 	public List<PhieuDatBan> getDanhSachHoatDongGanDay() {
-		// TODO Auto-generated method stub
-		return null;
+	 return	phieuDatBanDAO.getHoatDongGanDay();
 	}
 
 	

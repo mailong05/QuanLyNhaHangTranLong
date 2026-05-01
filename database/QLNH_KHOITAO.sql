@@ -117,6 +117,7 @@ CREATE TABLE PhieuDatBan (
     maPhieuDat VARCHAR(20) PRIMARY KEY,
     maKH VARCHAR(20),
     maNV VARCHAR(20) NOT NULL,
+    ngayLapPhieu DATETIME DEFAULT GETDATE(),
     thoiGianDen DATETIME NOT NULL,
     soLuongNguoi INT,
     ghiChu NVARCHAR(255),

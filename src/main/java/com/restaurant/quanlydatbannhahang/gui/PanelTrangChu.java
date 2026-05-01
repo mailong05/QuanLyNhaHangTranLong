@@ -1,13 +1,18 @@
 package com.restaurant.quanlydatbannhahang.gui;
 
 import java.awt.*;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 
+import com.restaurant.quanlydatbannhahang.entity.NhanVien;
 import com.restaurant.quanlydatbannhahang.entity.PhieuDatBan;
 import com.restaurant.quanlydatbannhahang.service.BanService;
+import com.restaurant.quanlydatbannhahang.service.ChiTietPhieuDatBanService;
 import com.restaurant.quanlydatbannhahang.service.HoaDonService;
 import com.restaurant.quanlydatbannhahang.service.PhieuDatBanService;
 
@@ -24,11 +29,23 @@ public class PanelTrangChu extends javax.swing.JPanel {
         phieuDatBanService = new PhieuDatBanService();
         hoaDonService = new HoaDonService();
         customUI();
-//        loadDataToTable();
+       
+        loadDataToTable();
         loadDataToCard();
+        this.addHierarchyListener(e -> {
+            if ((e.getChangeFlags() & java.awt.event.HierarchyEvent.SHOWING_CHANGED) != 0) {
+                if (this.isShowing()) {
+                    System.out.println("DEBUG: Trang chủ đang hiện, tự động refresh dữ liệu...");
+                    refreshData(); 
+                }
+            }
+        });
     }
 
-    
+    private String formatCurrency(double value) {
+        DecimalFormat df = new DecimalFormat("#,##0.00");
+        return df.format(value);
+    }
 
 	private void loadDataToCard() {
         try {
@@ -36,9 +53,10 @@ public class PanelTrangChu extends javax.swing.JPanel {
             int countBanDangSuDung = (int) banService.getBanDangSuDung().size();
             int countBanDatTruoc = (int) phieuDatBanService.getAllPhieuDatBan().size();
             double doanhThuHomNay = hoaDonService.tinhDoanhThuHomNay();
+            
             lblCountBanSuDung.setText(String.valueOf(countBanDangSuDung));
             lblCountBanDatTruoc.setText(String.valueOf(countBanDatTruoc));
-            lblSumDoanhThu.setText(String.valueOf(doanhThuHomNay));
+            lblSumDoanhThu.setText(String.valueOf(formatCurrency(doanhThuHomNay))+ " VND");
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Lỗi khi load dữ liệu Trang chủ: " + e.getMessage(), "Lỗi",
@@ -47,11 +65,56 @@ public class PanelTrangChu extends javax.swing.JPanel {
     }
 
     public void refreshData() {
-//    	loadDataToTable();
+    	loadDataToTable();
     	loadDataToCard();
     }
 
-    private void customUI() {
+    private void loadDataToTable() {
+		// TODO Auto-generated method stub
+		try {
+			ArrayList<PhieuDatBan> dsPDB = (ArrayList<PhieuDatBan>) phieuDatBanService.getDanhSachHoatDongGanDay();
+            DefaultTableModel model = (DefaultTableModel)  tblHoatDong.getModel();
+            model.setRowCount(0);
+            ChiTietPhieuDatBanService ctpdbService = new ChiTietPhieuDatBanService();
+            
+            for (PhieuDatBan p : dsPDB) {
+            	String dsMaBan = ctpdbService.getDanhSachBanByMaPhieuDat(p.getMaPhieuDat());
+            	String tenKH = "", sdt ="";
+            	if(p.getKhachHang() != null) {
+            		 tenKH =p.getKhachHang().getHoTen();
+            		 sdt =p.getKhachHang().getSdt();
+            	}
+            	
+            	
+                model.addRow(new Object[] {
+                                 p.getMaPhieuDat(),
+                                 
+                                 dsMaBan,
+                                 tenKH,
+                                 sdt,
+                                 p.getNgayLapPhieu(),
+                                 p.getThoiGianDen(),
+                                 p.getSoLuongNguoi(),
+                                 p.getTrangThai().getDisplayName()
+                
+                });
+            }
+            centerTableColumns(tblHoatDong);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+	}
+    
+    private void centerTableColumns(JTable table) {
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        for (int i = 0; i < table.getColumnCount(); i++) {
+            table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+    }
+    
+
+	private void customUI() {
         // 1. Bo góc các Card thống kê
         applyCardStyle(cardBanSuDung, 30);
         applyCardStyle(cardBanDatTruoc, 30);
@@ -127,7 +190,7 @@ public class PanelTrangChu extends javax.swing.JPanel {
 
     // Không sửa phần dưới, giữ nguyên code tự sinh của design
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         pnlThongKe = new javax.swing.JPanel();
@@ -170,22 +233,23 @@ public class PanelTrangChu extends javax.swing.JPanel {
         javax.swing.GroupLayout cardBanSuDungLayout = new javax.swing.GroupLayout(cardBanSuDung);
         cardBanSuDung.setLayout(cardBanSuDungLayout);
         cardBanSuDungLayout.setHorizontalGroup(
-                cardBanSuDungLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(cardBanSuDungLayout.createSequentialGroup()
-                                .addGap(24, 24, 24)
-                                .addGroup(cardBanSuDungLayout
-                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel1)
-                                        .addComponent(lblCountBanSuDung))
-                                .addContainerGap(140, Short.MAX_VALUE)));
+            cardBanSuDungLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(cardBanSuDungLayout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addGroup(cardBanSuDungLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
+                    .addComponent(lblCountBanSuDung))
+                .addContainerGap(140, Short.MAX_VALUE))
+        );
         cardBanSuDungLayout.setVerticalGroup(
-                cardBanSuDungLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(cardBanSuDungLayout.createSequentialGroup()
-                                .addGap(23, 23, 23)
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lblCountBanSuDung)
-                                .addContainerGap(28, Short.MAX_VALUE)));
+            cardBanSuDungLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(cardBanSuDungLayout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblCountBanSuDung)
+                .addContainerGap(28, Short.MAX_VALUE))
+        );
 
         pnlThongKe.add(cardBanSuDung);
 
@@ -203,22 +267,23 @@ public class PanelTrangChu extends javax.swing.JPanel {
         javax.swing.GroupLayout cardBanDatTruocLayout = new javax.swing.GroupLayout(cardBanDatTruoc);
         cardBanDatTruoc.setLayout(cardBanDatTruocLayout);
         cardBanDatTruocLayout.setHorizontalGroup(
-                cardBanDatTruocLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(cardBanDatTruocLayout.createSequentialGroup()
-                                .addGap(25, 25, 25)
-                                .addGroup(cardBanDatTruocLayout
-                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(lblCountBanDatTruoc)
-                                        .addComponent(jLabel2))
-                                .addContainerGap(178, Short.MAX_VALUE)));
+            cardBanDatTruocLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(cardBanDatTruocLayout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addGroup(cardBanDatTruocLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblCountBanDatTruoc)
+                    .addComponent(jLabel2))
+                .addContainerGap(178, Short.MAX_VALUE))
+        );
         cardBanDatTruocLayout.setVerticalGroup(
-                cardBanDatTruocLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(cardBanDatTruocLayout.createSequentialGroup()
-                                .addGap(22, 22, 22)
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lblCountBanDatTruoc)
-                                .addContainerGap(29, Short.MAX_VALUE)));
+            cardBanDatTruocLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(cardBanDatTruocLayout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblCountBanDatTruoc)
+                .addContainerGap(29, Short.MAX_VALUE))
+        );
 
         pnlThongKe.add(cardBanDatTruoc);
 
@@ -236,22 +301,23 @@ public class PanelTrangChu extends javax.swing.JPanel {
         javax.swing.GroupLayout cardDoanhThuLayout = new javax.swing.GroupLayout(cardDoanhThu);
         cardDoanhThu.setLayout(cardDoanhThuLayout);
         cardDoanhThuLayout.setHorizontalGroup(
-                cardDoanhThuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(cardDoanhThuLayout.createSequentialGroup()
-                                .addGap(26, 26, 26)
-                                .addGroup(cardDoanhThuLayout
-                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel3)
-                                        .addComponent(lblSumDoanhThu))
-                                .addContainerGap(127, Short.MAX_VALUE)));
+            cardDoanhThuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(cardDoanhThuLayout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addGroup(cardDoanhThuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
+                    .addComponent(lblSumDoanhThu))
+                .addContainerGap(127, Short.MAX_VALUE))
+        );
         cardDoanhThuLayout.setVerticalGroup(
-                cardDoanhThuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(cardDoanhThuLayout.createSequentialGroup()
-                                .addGap(21, 21, 21)
-                                .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lblSumDoanhThu)
-                                .addContainerGap(30, Short.MAX_VALUE)));
+            cardDoanhThuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(cardDoanhThuLayout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblSumDoanhThu)
+                .addContainerGap(30, Short.MAX_VALUE))
+        );
 
         pnlThongKe.add(cardDoanhThu);
 
@@ -273,26 +339,26 @@ public class PanelTrangChu extends javax.swing.JPanel {
         scrTableHoatDong.setBorder(null);
 
         tblHoatDong.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][] {
+            new Object [][] {
 
-                },
-                new String[] {
-                        "Mã phiếu đặt", "Mã bàn", "Tên khách hàng", "Số điện thoại", "Giờ đến", "Số người", "Trạng thái"
-                }) {
-            Class<?>[] types = new Class<?>[] {
-                    java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class,
-                    java.lang.Object.class, java.lang.Integer.class, java.lang.String.class
+            },
+            new String [] {
+                "Mã phiếu đặt", "Mã bàn", "Tên khách hàng", "Số điện thoại", "Ngày lập phiếu", "Giờ đến", "Số người", "Trạng thái"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class, java.lang.Integer.class, java.lang.String.class
             };
-            boolean[] canEdit = new boolean[] {
-                    false, false, false, false, false, false, false
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, true, false, false, false
             };
 
-            public Class<?> getColumnClass(int columnIndex) {
-                return types[columnIndex];
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
             }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit[columnIndex];
+                return canEdit [columnIndex];
             }
         });
         tblHoatDong.setRowHeight(35);

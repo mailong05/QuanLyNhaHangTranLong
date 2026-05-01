@@ -1,5 +1,6 @@
 package com.restaurant.quanlydatbannhahang.service;
 
+import com.restaurant.quanlydatbannhahang.connectDB.DatabaseConnection;
 import com.restaurant.quanlydatbannhahang.dao.ChiTietPhieuDatBanDAO;
 import com.restaurant.quanlydatbannhahang.entity.ChiTietPhieuDatBan;
 import com.restaurant.quanlydatbannhahang.entity.Ban;
@@ -9,6 +10,10 @@ import com.restaurant.quanlydatbannhahang.entity.TrangThaiBan;
 import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -197,5 +202,22 @@ public class ChiTietPhieuDatBanService {
         for (String maBan : banCanXoa) {
             xoaChiTietPhieuDatBan(maPDB, maBan);
         }
+    }
+
+    /**
+     * Lấy danh sách mã bàn liên kết với phiếu đặt dưới dạng chuỗi (VD: "B001, B002")
+     */
+    public String getDanhSachBanByMaPhieuDat(String maPhieuDat) {
+        if (maPhieuDat == null || maPhieuDat.isBlank()) {
+            return "";
+        }
+
+        List<String> dsMaBan = chiTietPhieuDatBanDAO.getMaBansByPhieu(maPhieuDat);
+
+        if (dsMaBan == null || dsMaBan.isEmpty()) {
+            return "";
+        }
+
+        return String.join(", ", dsMaBan);
     }
 }

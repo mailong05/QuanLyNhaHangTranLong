@@ -126,13 +126,13 @@ INSERT INTO BanAn (maBan, soGhe, viTri, maKhuVuc, trangThai) VALUES
 ('B008', 2, N'Gầm cầu thang', 'KV001', N'DA_DAT');
 
 -- 2.9. PHIẾU ĐẶT BÀN
-INSERT INTO PhieuDatBan (maPhieuDat, maKH, maNV, thoiGianDen, soLuongNguoi, ghiChu, trangThai) VALUES 
-('PD001', 'KH001', 'NV003', '2026-04-04 19:00:00', 4, N'Sinh nhật', N'DANG_SU_DUNG'),
-('PD002', 'KH002', 'NV002', '2026-04-05 18:30:00', 10, N'Tiệc công ty', N'DANG_CHO'),
-('PD003', 'KH004', 'NV003', '2026-04-10 20:00:00', 2, N'Kỷ niệm ngày cưới', N'DANG_CHO'),
-('PD004', 'KH005', 'NV002', '2026-04-12 11:30:00', 6, N'Ăn trưa gia đình', N'DANG_CHO'),
-('PD005', 'KH001', 'NV003', '2026-04-04 11:00:00', 2, N'Thực đơn nhanh', N'DANG_SU_DUNG'),
-('PD006', 'KH004', 'NV005', '2026-04-04 19:30:00', 2, N'Khách hàng dùng ngay', N'DANG_SU_DUNG');
+INSERT INTO PhieuDatBan (maPhieuDat, maKH, maNV, ngayLapPhieu, thoiGianDen, soLuongNguoi, ghiChu, trangThai) VALUES 
+('PD001', 'KH001', 'NV003', '2026-04-04 18:00:00', '2026-04-04 19:00:00', 4, N'Sinh nhật', N'DANG_SU_DUNG'),
+('PD002', 'KH002', 'NV002', '2026-04-04 10:30:00', '2026-04-05 18:30:00', 10, N'Tiệc công ty', N'DANG_CHO'),
+('PD003', 'KH004', 'NV003', '2026-04-04 15:00:00', '2026-04-10 20:00:00', 2, N'Kỷ niệm ngày cưới', N'DANG_CHO'),
+('PD004', 'KH005', 'NV002', '2026-04-04 09:30:00', '2026-04-12 11:30:00', 6, N'Ăn trưa gia đình', N'DANG_CHO'),
+('PD005', 'KH001', 'NV003', '2026-04-04 10:45:00', '2026-04-04 11:00:00', 2, N'Thực đơn nhanh', N'DANG_SU_DUNG'),
+('PD006', 'KH004', 'NV005', '2026-04-04 19:15:00', '2026-04-04 19:30:00', 2, N'Khách hàng dùng ngay', N'DANG_SU_DUNG');
 
 -- 2.10. CHI TIẾT PHIẾU ĐẶT BÀN
 INSERT INTO ChiTietPhieuDatBan (maPhieuDat, maBan, ghiChu) VALUES 

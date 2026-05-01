@@ -62,6 +62,25 @@ public class ChiTietPhieuDatBanDAO {
         return list;
     }
 
+    public List<String> getMaBansByPhieu(String maPhieuDat) {
+        List<String> list = new ArrayList<>();
+        String sql = "SELECT maBan FROM ChiTietPhieuDatBan WHERE maPhieuDat = ?";
+        
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstm = conn.prepareStatement(sql)) {
+            
+            pstm.setString(1, maPhieuDat);
+            ResultSet rs = pstm.executeQuery();
+            
+            while (rs.next()) {
+                list.add(rs.getString("maBan"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+    
     /**
      * Cập nhật chi tiết phiếu đặt bàn
      */

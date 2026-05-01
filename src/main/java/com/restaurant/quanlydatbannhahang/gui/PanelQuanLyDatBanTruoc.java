@@ -174,19 +174,21 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                         if (p.getTrangThai() == TrangThaiPhieuDat.DA_HUY
                                         || p.getTrangThai() == TrangThaiPhieuDat.DA_SU_DUNG)
                                 continue;
+                        String ngayLap = p.getNgayLapPhieu().format(formatter);
                         String thoiGian = p.getThoiGianDen().format(formatter);
                         String listMaBan = ctpdbService.getChiTietByMaPhieuDat(p.getMaPhieuDat())
                                         .stream()
                                         .map(ct -> ct.getBan().getMaBan())
                                         .collect(Collectors.joining(", "));
 
-                        String sdtKH = (p.getKhachHang() != null)? p.getKhachHang().getSdt():"";
+                        String sdtKH = (p.getKhachHang() != null) ? p.getKhachHang().getSdt() : "";
                         model.addRow(new Object[] {
                                         p.getMaPhieuDat(),
-                                       sdtKH,
+                                        sdtKH,
                                         p.getNhanVien().getMaNV(),
                                         listMaBan,
                                         p.getSoLuongNguoi(),
+                                        ngayLap,
                                         thoiGian,
                                         p.getTrangThai().getDisplayName()
                         });
@@ -197,6 +199,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                 renderer.setHorizontalAlignment(JLabel.LEFT);
 
                 tableBan.getColumnModel().getColumn(4).setCellRenderer(renderer);
+                centerTableColumns(tableBan);
 
                 // ========== THÊM MOUSE LISTENER VÀO TABLE ==========
         }
@@ -587,15 +590,15 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                                 },
                                 new String[] {
                                                 "Mã phiếu đặt", "Số điện thoại", "Mã nhân viên", "Mã bàn", "Số người",
-                                                "Thời gian đến", "Trạng thái"
+                                                "Ngày lập phiếu", "Thời gian đến", "Trạng thái"
                                 }) {
                         Class[] types = new Class[] {
                                         java.lang.String.class, java.lang.String.class, java.lang.String.class,
                                         java.lang.String.class, java.lang.Integer.class, java.lang.Object.class,
-                                        java.lang.String.class
+                                        java.lang.Object.class, java.lang.String.class
                         };
                         boolean[] canEdit = new boolean[] {
-                                        false, false, false, false, false, false, false
+                                        false, false, false, false, false, false, false, false
                         };
 
                         public Class getColumnClass(int columnIndex) {
@@ -680,6 +683,14 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                 String maPDBNew = (lastID == null || lastID.isEmpty()) ? idGeneratorHelper.toString()
                                 : idGeneratorHelper.generateNextIDFromFullID(lastID);
                 txtMaPhieuDat.setText(maPDBNew);
+        }
+
+        private void centerTableColumns(JTable table) {
+                DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+                centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+                for (int i = 0; i < table.getColumnCount(); i++) {
+                        table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+                }
         }
 
         private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaTrangActionPerformed
