@@ -467,8 +467,8 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
     }
 
     public void refreshData() {
-        txtTimKiem.setText("");
         cbFilterLoaiMonAn.setSelectedIndex(0);
+        resetPlaceholder(txtTimKiem, "Nhập tên món ăn");
         loadDataToComboBoxes();
         loadDataToTable();
     }

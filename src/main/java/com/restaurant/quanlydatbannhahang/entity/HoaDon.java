@@ -3,9 +3,11 @@ package com.restaurant.quanlydatbannhahang.entity;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import com.restaurant.quanlydatbannhahang.entity.PhieuDatBan;
+
 public class HoaDon {
     private String maHD;
-    private Ban ban;
+    private PhieuDatBan phieuDatBan;
     private NhanVien nhanVien;
     private KhuyenMai khuyenMai;
     private Thue thue;
@@ -27,12 +29,12 @@ public class HoaDon {
     }
 
     // Constructor đầy đủ tham số
-    public HoaDon(String maHD, Ban ban, NhanVien nhanVien, KhuyenMai khuyenMai, Thue thue,
+    public HoaDon(String maHD, PhieuDatBan phieuDatBan, NhanVien nhanVien, KhuyenMai khuyenMai, Thue thue,
             LocalDate ngayTao, LocalTime gioVao, LocalTime gioRa,
             double tongTienGoc, double tienGiamGia, double tongThanhToan,
             PhuongThucTT phuongThucTT, TrangThaiHoaDon trangThaiThanhToan) {
         this.maHD = maHD;
-        this.ban = ban;
+        this.phieuDatBan = phieuDatBan;
         this.nhanVien = nhanVien;
         this.khuyenMai = khuyenMai;
         this.thue = thue;
@@ -50,12 +52,12 @@ public class HoaDon {
         this.trangThaiThanhToan = trangThaiThanhToan;
     }
 
-    public HoaDon(String maHD, Ban ban, NhanVien nhanVien, KhuyenMai khuyenMai, Thue thue,
+    public HoaDon(String maHD, PhieuDatBan phieuDatBan, NhanVien nhanVien, KhuyenMai khuyenMai, Thue thue,
             double thueSuat, double tienThue, double tyLePhiDV, double tienPhiDV,
             LocalDate ngayTao, LocalTime gioVao, LocalTime gioRa,
             double tongTienGoc, double tienGiamGia, double tongThanhToan,
             PhuongThucTT phuongThucTT, TrangThaiHoaDon trangThaiThanhToan) {
-        this(maHD, ban, nhanVien, khuyenMai, thue,
+        this(maHD, phieuDatBan, nhanVien, khuyenMai, thue,
                 ngayTao, gioVao, gioRa,
                 tongTienGoc, tienGiamGia, tongThanhToan,
                 phuongThucTT, trangThaiThanhToan);
@@ -70,16 +72,16 @@ public class HoaDon {
         return maHD;
     }
 
-    public Ban getBan() {
-        return ban;
+    public PhieuDatBan getPhieuDatBan() {
+        return phieuDatBan;
     }
 
     public void setMaHD(String maHD) {
-		this.maHD = maHD;
-	}
+        this.maHD = maHD;
+    }
 
-	public void setBan(Ban ban) {
-        this.ban = ban;
+    public void setPhieuDatBan(PhieuDatBan phieuDatBan) {
+        this.phieuDatBan = phieuDatBan;
     }
 
     public NhanVien getNhanVien() {
@@ -256,7 +258,7 @@ public class HoaDon {
     public String toString() {
         return "HoaDon{" +
                 "maHD='" + maHD + '\'' +
-                ", ban=" + (ban != null ? ban.getMaBan() : "null") +
+                ", phieuDatBan=" + (phieuDatBan != null ? phieuDatBan.getMaPhieuDat() : "null") +
                 ", nhanVien=" + (nhanVien != null ? nhanVien.getMaNV() : "null") +
                 ", ngayTao=" + ngayTao +
                 ", gioVao=" + gioVao +

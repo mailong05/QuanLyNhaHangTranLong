@@ -130,21 +130,25 @@ INSERT INTO PhieuDatBan (maPhieuDat, maKH, maNV, thoiGianDen, soLuongNguoi, ghiC
 ('PD001', 'KH001', 'NV003', '2026-04-04 19:00:00', 4, N'Sinh nhật', N'DANG_SU_DUNG'),
 ('PD002', 'KH002', 'NV002', '2026-04-05 18:30:00', 10, N'Tiệc công ty', N'DANG_CHO'),
 ('PD003', 'KH004', 'NV003', '2026-04-10 20:00:00', 2, N'Kỷ niệm ngày cưới', N'DANG_CHO'),
-('PD004', 'KH005', 'NV002', '2026-04-12 11:30:00', 6, N'Ăn trưa gia đình', N'DANG_CHO');
+('PD004', 'KH005', 'NV002', '2026-04-12 11:30:00', 6, N'Ăn trưa gia đình', N'DANG_CHO'),
+('PD005', 'KH001', 'NV003', '2026-04-04 11:00:00', 2, N'Thực đơn nhanh', N'DANG_SU_DUNG'),
+('PD006', 'KH004', 'NV005', '2026-04-04 19:30:00', 2, N'Khách hàng dùng ngay', N'DANG_SU_DUNG');
 
 -- 2.10. CHI TIẾT PHIẾU ĐẶT BÀN
 INSERT INTO ChiTietPhieuDatBan (maPhieuDat, maBan, ghiChu) VALUES 
 ('PD001', 'B001', N'Trang trí nến'),
 ('PD002', 'B003', N'Phòng máy lạnh'),
 ('PD003', 'B008', N'Góc riêng tư'),
-('PD004', 'B005', N'Gần khu vui chơi');
+('PD004', 'B005', N'Gần khu vui chơi'),
+('PD005', 'B002', N''),
+('PD006', 'B006', N'');
 
 -- 2.11. BẢNG HÓA ĐƠN
-INSERT INTO HoaDon (maHD, maBan, maNV, maKM, maThue, thueSuat, tienThue, tyLePhiDV, tienPhiDV, ngayTao, gioVao, gioRa, tongTienGoc, tienGiamGia, tongThanhToan, trangThaiThanhToan, phuongThucTT) VALUES 
-('HD001', 'B002', 'NV002', NULL, 'TH001', 0, 0, 0, 0, '2026-04-04', '11:00:00', '12:30:00', 0, 0, 0, N'DA_THANH_TOAN', N'TIEN_MAT'),
-('HD002', 'B001', 'NV002', 'KM002', 'TH002', 0, 0, 0, 0, '2026-04-04', '18:00:00', NULL, 0, 100000, 0, N'CHUA_THANH_TOAN', NULL),
-('HD003', 'B006', 'NV005', 'KM004', 'TH003', 0, 0, 0, 0, '2026-04-04', '19:30:00', '21:00:00', 0, 30000, 0, N'DA_THANH_TOAN', N'THE'),
-('HD004', 'B002', 'NV005', NULL, 'TH002', 0, 0, 0, 0, '2026-04-04', '14:00:00', '15:00:00', 0, 0, 0, N'DA_HUY', NULL);
+INSERT INTO HoaDon (maHD, maPhieuDat, maNV, maKM, maThue, thueSuat, tienThue, tyLePhiDV, tienPhiDV, ngayTao, gioVao, gioRa, tongTienGoc, tienGiamGia, tongThanhToan, trangThaiThanhToan, phuongThucTT) VALUES 
+('HD001', 'PD005', 'NV002', NULL, 'TH001', 0, 0, 0, 0, '2026-04-04', '11:00:00', '12:30:00', 0, 0, 0, N'DA_THANH_TOAN', N'TIEN_MAT'),
+('HD002', 'PD001', 'NV002', 'KM002', 'TH002', 0, 0, 0, 0, '2026-04-04', '18:00:00', NULL, 0, 100000, 0, N'CHUA_THANH_TOAN', NULL),
+('HD003', 'PD006', 'NV005', 'KM004', 'TH003', 0, 0, 0, 0, '2026-04-04', '19:30:00', '21:00:00', 0, 30000, 0, N'DA_THANH_TOAN', N'THE'),
+('HD004', 'PD004', 'NV005', NULL, 'TH002', 0, 0, 0, 0, '2026-04-04', '14:00:00', '15:00:00', 0, 0, 0, N'DA_HUY', NULL);
 
 -- 2.12. CHI TIẾT HÓA ĐƠN
 INSERT INTO ChiTietHoaDon (maHD, maMon, soLuong, donGiaLuuTru, ghiChu) VALUES 

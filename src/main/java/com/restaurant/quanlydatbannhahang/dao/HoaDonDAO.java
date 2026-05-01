@@ -1,10 +1,11 @@
 package com.restaurant.quanlydatbannhahang.dao;
 
 import com.restaurant.quanlydatbannhahang.connectDB.DatabaseConnection;
-import com.restaurant.quanlydatbannhahang.entity.Ban;
 import com.restaurant.quanlydatbannhahang.entity.HoaDon;
+import com.restaurant.quanlydatbannhahang.entity.PhieuDatBan;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiHoaDon;
 import com.restaurant.quanlydatbannhahang.util.IDQueryHelper;
+import com.restaurant.quanlydatbannhahang.dao.PhieuDatBanDAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,13 +15,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HoaDonDAO {
-    private BanDAO banDAO;
+    private PhieuDatBanDAO phieuDatBanDAO;
     private NhanVienDAO nhanVienDAO;
     private KhuyenMaiDAO khuyenMaiDAO;
     private ThueDAO thueDAO;
 
     public HoaDonDAO() {
-        this.banDAO = new BanDAO();
+        this.phieuDatBanDAO = new PhieuDatBanDAO();
         this.nhanVienDAO = new NhanVienDAO();
         this.khuyenMaiDAO = new KhuyenMaiDAO();
         this.thueDAO = new ThueDAO();
@@ -38,7 +39,7 @@ public class HoaDonDAO {
     private HoaDon buildHoaDonFromResultSet(ResultSet rs) {
         try {
             String maHD = rs.getString("maHD");
-            String maBan = rs.getString("maBan");
+            String maPhieuDat = rs.getString("maPhieuDat");
             String maNV = rs.getString("maNV");
             String maKM = rs.getString("maKM");
             String maThue = rs.getString("maThue");
@@ -67,14 +68,15 @@ public class HoaDonDAO {
                 }
             }
 
-            Ban ban = banDAO.getBanTheoMa(maBan);
-            if (ban == null) {
-                ban = new Ban(maBan, 0, "", null, null);
+            PhieuDatBan phieuDatBan = phieuDatBanDAO.getPhieuDatBanTheoMa(maPhieuDat);
+            if (phieuDatBan == null) {
+                phieuDatBan = new PhieuDatBan();
+                phieuDatBan.setMaPhieuDat(maPhieuDat);
             }
 
             HoaDon hoaDon = new HoaDon(
                     maHD,
-                    ban,
+                    phieuDatBan,
                     nhanVienDAO.getNhanVienTheoMa(maNV),
                     khuyenMaiDAO.getKhuyenMaiTheoMa(maKM),
                     thueDAO.getThueTheoMa(maThue),
@@ -100,11 +102,11 @@ public class HoaDonDAO {
 
     public boolean themHoaDon(HoaDon hd) {
         Connection connection = DatabaseConnection.getConnection();
-        String sql = "insert into HoaDon (maHD, maBan, maNV, maKM, maThue, thueSuat, tienThue, tyLePhiDV, tienPhiDV, ngayTao, gioVao, gioRa, tongTienGoc, tienGiamGia, tongThanhToan, phuongThucTT, trangThaiThanhToan) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "insert into HoaDon (maHD, maPhieuDat, maNV, maKM, maThue, thueSuat, tienThue, tyLePhiDV, tienPhiDV, ngayTao, gioVao, gioRa, tongTienGoc, tienGiamGia, tongThanhToan, phuongThucTT, trangThaiThanhToan) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
             pstm.setString(1, hd.getMaHD());
-            pstm.setString(2, hd.getBan().getMaBan());
+            pstm.setString(2, hd.getPhieuDatBan().getMaPhieuDat());
             pstm.setString(3, hd.getNhanVien().getMaNV());
             pstm.setString(4, hd.getKhuyenMai() != null ? hd.getKhuyenMai().getMaKM() : null);
             pstm.setString(5, hd.getThue().getMaThue());
@@ -231,10 +233,10 @@ public class HoaDonDAO {
 
     public boolean capNhatHoaDon(HoaDon hd) {
         Connection connection = DatabaseConnection.getConnection();
-        String sql = "update HoaDon set maBan = ?, maNV = ?, maKM = ?, maThue = ?, thueSuat = ?, tienThue = ?, tyLePhiDV = ?, tienPhiDV = ?, ngayTao = ?, gioVao = ?, gioRa = ?, tongTienGoc = ?, tienGiamGia = ?, tongThanhToan = ?, phuongThucTT = ?, trangThaiThanhToan = ? where maHD = ?";
+        String sql = "update HoaDon set maPhieuDat = ?, maNV = ?, maKM = ?, maThue = ?, thueSuat = ?, tienThue = ?, tyLePhiDV = ?, tienPhiDV = ?, ngayTao = ?, gioVao = ?, gioRa = ?, tongTienGoc = ?, tienGiamGia = ?, tongThanhToan = ?, phuongThucTT = ?, trangThaiThanhToan = ? where maHD = ?";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
-            pstm.setString(1, hd.getBan().getMaBan());
+            pstm.setString(1, hd.getPhieuDatBan().getMaPhieuDat());
             pstm.setString(2, hd.getNhanVien().getMaNV());
             pstm.setString(3, hd.getKhuyenMai() != null ? hd.getKhuyenMai().getMaKM() : null);
             pstm.setString(4, hd.getThue().getMaThue());
@@ -324,18 +326,26 @@ public class HoaDonDAO {
 
     public List<HoaDon> getHoaDonTheoMaBan(String maBan) {
         Connection connection = DatabaseConnection.getConnection();
-        boolean isGroup = maBan != null && maBan.contains(",");
-        String sql = isGroup
-                ? "select * from HoaDon where maBan = ?"
-                : "select * from HoaDon where maBan = ? or maBan like ? or maBan like ? or maBan like ?";
+        String normalized = maBan != null ? maBan.trim() : "";
+        if (normalized.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        String[] parts = normalized.split(",");
+        StringBuilder sqlBuilder = new StringBuilder(
+                "select distinct h.* from HoaDon h inner join ChiTietPhieuDatBan c on h.maPhieuDat = c.maPhieuDat where ");
+        for (int i = 0; i < parts.length; i++) {
+            if (i > 0) {
+                sqlBuilder.append(" or ");
+            }
+            sqlBuilder.append("c.maBan = ?");
+        }
+
         ArrayList<HoaDon> dsHoaDon = new ArrayList<>();
         try {
-            PreparedStatement pstm = connection.prepareStatement(sql);
-            pstm.setString(1, maBan);
-            if (!isGroup) {
-                pstm.setString(2, maBan + ",%");
-                pstm.setString(3, "%," + maBan + ",%");
-                pstm.setString(4, "%," + maBan);
+            PreparedStatement pstm = connection.prepareStatement(sqlBuilder.toString());
+            for (int i = 0; i < parts.length; i++) {
+                pstm.setString(i + 1, parts[i].trim());
             }
             ResultSet rs = pstm.executeQuery();
             while (rs.next()) {

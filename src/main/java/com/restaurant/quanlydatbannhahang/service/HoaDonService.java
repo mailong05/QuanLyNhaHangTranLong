@@ -2,9 +2,9 @@ package com.restaurant.quanlydatbannhahang.service;
 
 import com.restaurant.quanlydatbannhahang.dao.HoaDonDAO;
 import com.restaurant.quanlydatbannhahang.dao.ChiTietHoaDonDAO;
-import com.restaurant.quanlydatbannhahang.entity.Ban;
 import com.restaurant.quanlydatbannhahang.entity.HoaDon;
 import com.restaurant.quanlydatbannhahang.entity.ChiTietHoaDon;
+import com.restaurant.quanlydatbannhahang.entity.PhieuDatBan;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiHoaDon;
 
 import java.util.List;
@@ -15,10 +15,12 @@ public class HoaDonService {
     private ChiTietHoaDonDAO chiTietHoaDonDAO;
 
     private static final String MAHD_PATTERN = "^HD\\d{3}$";
+    private static final String MAPHIEUDAT_PATTERN = "^PD\\d{3}$";
     private static final String MABAN_PATTERN = "^B\\d{3}(?:,B\\d{3})*$";
     private static final String MAMON_PATTERN = "^MA\\d{3}$";
 
     private static final Pattern maHDPattern = Pattern.compile(MAHD_PATTERN);
+    private static final Pattern maPhieuDatPattern = Pattern.compile(MAPHIEUDAT_PATTERN);
     private static final Pattern maBanPattern = Pattern.compile(MABAN_PATTERN);
     private static final Pattern maMonPattern = Pattern.compile(MAMON_PATTERN);
 
@@ -40,11 +42,12 @@ public class HoaDonService {
         if (!maHDPattern.matcher(hoaDon.getMaHD()).matches()) {
             throw new IllegalArgumentException("Mã hóa đơn phải có dạng HDxxx (ví dụ: HD001)");
         }
-        if (hoaDon.getBan().getMaBan() == null || hoaDon.getBan().getMaBan().isBlank()) {
-            throw new IllegalArgumentException("Mã bàn không được để trống");
+        if (hoaDon.getPhieuDatBan() == null || hoaDon.getPhieuDatBan().getMaPhieuDat() == null
+                || hoaDon.getPhieuDatBan().getMaPhieuDat().isBlank()) {
+            throw new IllegalArgumentException("Mã phiếu đặt bàn không được để trống");
         }
-        if (!maBanPattern.matcher(hoaDon.getBan().getMaBan()).matches()) {
-            throw new IllegalArgumentException("Mã bàn phải có dạng Bxxx hoặc Bxxx,Byyy (ví dụ: B001 hoặc B001,B002)");
+        if (!maPhieuDatPattern.matcher(hoaDon.getPhieuDatBan().getMaPhieuDat()).matches()) {
+            throw new IllegalArgumentException("Mã phiếu đặt bàn phải có dạng PDxxx (ví dụ: PD001)");
         }
         if (hoaDon.getTrangThaiThanhToan() == null) {
             throw new IllegalArgumentException("Trạng thái thanh toán không được để trống");
@@ -134,25 +137,8 @@ public class HoaDonService {
     }
 
     public void capNhatBanChoHoaDonDraft(String maHD, String maBanMoi) {
-        if (maHD == null || maHD.isBlank()) {
-            throw new IllegalArgumentException("Mã hóa đơn không được để trống");
-        }
-        if (!maHDPattern.matcher(maHD).matches()) {
-            throw new IllegalArgumentException("Mã hóa đơn phải có dạng HDxxx (ví dụ: HD001)");
-        }
-        if (maBanMoi == null || maBanMoi.isBlank()) {
-            throw new IllegalArgumentException("Mã bàn mới không được để trống");
-        }
-        if (!maBanPattern.matcher(maBanMoi).matches()) {
-            throw new IllegalArgumentException("Mã bàn phải có dạng Bxxx hoặc Bxxx,Byyy (ví dụ: B001 hoặc B001,B002)");
-        }
-
-        HoaDon hoaDon = getHoaDonTheoMa(maHD);
-        if (hoaDon == null) {
-            throw new RuntimeException("Không tìm thấy hóa đơn với mã: " + maHD);
-        }
-        hoaDon.setBan(new Ban(maBanMoi, 0, "", null, null));
-        capNhatHoaDon(hoaDon);
+        throw new UnsupportedOperationException(
+                "Cập nhật bàn cho hóa đơn không còn trực tiếp lưu trong HoaDon. Vui lòng cập nhật thông qua PhieuDatBan hoặc ChiTietPhieuDatBan.");
     }
 
     public void chuyenMaBanChoHoaDonDraft(String oldMaBan, String newMaBan) {
@@ -173,23 +159,21 @@ public class HoaDonService {
             throw new IllegalArgumentException("Mã bàn mới phải có dạng Bxxx hoặc Bxxx,Byyy");
         }
 
-            // 1. Tìm hóa đơn chưa thanh toán của cụm bàn cũ
-            List<HoaDon> dsHoaDon = hoaDonDAO.getHoaDonTheoMaBan(oldMaBan);
-            HoaDon hDraft = dsHoaDon.stream()
+        // Tại thời điểm hiện tại, hóa đơn đã liên kết với PhieuDatBan.
+        // Nếu cần thay đổi bàn trong quá trình chỉnh sửa, việc này phải được cập nhật
+        // qua
+        // ChiTietPhieuDatBan và PhieuDatBanService. Ở đây chỉ kiểm tra tồn tại draft để
+        // tránh lỗi.
+        List<HoaDon> dsHoaDon = hoaDonDAO.getHoaDonTheoMaBan(oldMaBan);
+        HoaDon hDraft = dsHoaDon.stream()
                 .filter(h -> h.getTrangThaiThanhToan() == TrangThaiHoaDon.CHUA_THANH_TOAN)
                 .findFirst().orElse(null);
 
-            // 2. Nếu tìm thấy, cập nhật mã bàn mới và lưu xuống DB[cite: 1, 10]
-            if (hDraft != null) {
-                // Tạo đối tượng bàn ảo với mã context mới (vì DB lưu String)
-                hDraft.setBan(new Ban(newMaBan, 0, "", null, null));
-                if (!hoaDonDAO.capNhatHoaDon(hDraft)) {
-                    throw new RuntimeException("Lỗi cập nhật mã bàn mới trong Database.");
-                }
-            }
-        
+        if (hDraft != null) {
+            // Không cập nhật trực tiếp trường bàn trong HoaDon vì mối quan hệ mới qua
+            // PhieuDatBan
+        }
 
-      
     }
 
     /**
@@ -322,6 +306,5 @@ public class HoaDonService {
     public String getLastHoaDonID() {
         return hoaDonDAO.getLastHoaDonID();
     }
-
 
 }

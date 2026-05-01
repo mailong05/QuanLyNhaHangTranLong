@@ -12,7 +12,6 @@ import javax.swing.JOptionPane;
 
 import com.restaurant.quanlydatbannhahang.service.PhieuDatBanService;
 import com.restaurant.quanlydatbannhahang.util.IDGeneratorHelper;
-import com.restaurant.quanlydatbannhahang.service.DatBanTruocService;
 
 public class DatBanTruocDialog extends javax.swing.JDialog {
 
@@ -179,7 +178,7 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
             LocalDateTime thoiGianDen = dtpThoiGianDen.getDateTimeStrict();
             String ghiChu = txtGhiChu.getText().trim();
 
-            String maPhieuDat = pdbService.taoPhieuDatBanMoi(maPDB, tenKhachHang, soDienThoai, soLuongNguoi,
+            String maPhieuDat = pdbService.themPhieuDatBan(maPDB, tenKhachHang, soDienThoai, soLuongNguoi,
                     thoiGianDen, ghiChu, selectedTables); // ← Truyền selectedTables
 
             // 🎯 SAU KHI SUCCESS, cập nhật UI tất cả bàn từ DB

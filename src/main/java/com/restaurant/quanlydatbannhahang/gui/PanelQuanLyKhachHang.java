@@ -637,12 +637,13 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseLis
             int diemTichLuy = diemText.isEmpty() ? 0 : Integer.parseInt(diemText);
             KhachHang khachHang = new KhachHang(maKH, hoTen, sdt, diemTichLuy, loaiThanhVien);
             KhachHangService service = new KhachHangService();
-            if (service.capNhatKhachHang(khachHang)) {
-                JOptionPane.showMessageDialog(this, "Cập nhật khách hàng thành công.");
-                refreshData();
-            } else {
-                JOptionPane.showMessageDialog(this, "Cập nhật khách hàng thất bại.");
-            }
+            try {
+            	service.capNhatKhachHang(khachHang);
+				JOptionPane.showMessageDialog(this, "Cập nhật thành công khách hàng có mã "+ khachHang.getMaKH(),"Thông báo", JOptionPane.INFORMATION_MESSAGE);
+			} catch (Exception e) {
+				// TODO: handle exception
+				JOptionPane.showMessageDialog(this, "Lỗi cập nhật: "+ e.getMessage(),"Lỗi", JOptionPane.ERROR_MESSAGE);
+			}
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Điểm tích lũy không hợp lệ.");
         }

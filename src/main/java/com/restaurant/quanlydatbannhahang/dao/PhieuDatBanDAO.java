@@ -42,7 +42,9 @@ public class PhieuDatBanDAO {
 
             PhieuDatBan phieu = new PhieuDatBan();
             phieu.setMaPhieuDat(maPhieuDat);
-            phieu.setKhachHang(khachHangDAO.getKhachHangTheoMa(maKH));
+            if (maKH != null && !maKH.isBlank()) {
+                phieu.setKhachHang(khachHangDAO.getKhachHangTheoMa(maKH));
+            }
             phieu.setNhanVien(nhanVienDAO.getNhanVienTheoMa(maNV));
             phieu.setThoiGianDen(thoiGianDen);
             phieu.setSoLuongNguoi(soLuongNguoi);
@@ -60,12 +62,6 @@ public class PhieuDatBanDAO {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "insert into PhieuDatBan (maPhieuDat, maKH, maNV, thoiGianDen, soLuongNguoi, ghiChu, trangThai) values (?,?,?,?,?,?,?)";
         try {
-            // Kiểm tra khách hàng tồn tại
-            if (phieu.getKhachHang() == null || phieu.getKhachHang().getMaKH() == null) {
-                System.err.println("Lỗi: Mã khách hàng không được NULL");
-                return false;
-            }
-
             // Kiểm tra nhân viên tồn tại
             if (phieu.getNhanVien() == null || phieu.getNhanVien().getMaNV() == null) {
                 System.err.println("Lỗi: Mã nhân viên không được NULL");
@@ -74,7 +70,11 @@ public class PhieuDatBanDAO {
 
             PreparedStatement pstm = connection.prepareStatement(sql);
             pstm.setString(1, phieu.getMaPhieuDat());
-            pstm.setString(2, phieu.getKhachHang().getMaKH());
+            if (phieu.getKhachHang() == null || phieu.getKhachHang().getMaKH() == null) {
+                pstm.setNull(2, java.sql.Types.VARCHAR);
+            } else {
+                pstm.setString(2, phieu.getKhachHang().getMaKH());
+            }
             pstm.setString(3, phieu.getNhanVien().getMaNV());
             pstm.setTimestamp(4, java.sql.Timestamp.valueOf(phieu.getThoiGianDen()));
             pstm.setInt(5, phieu.getSoLuongNguoi());
@@ -217,7 +217,8 @@ public class PhieuDatBanDAO {
         String sql = "update PhieuDatBan set maKH = ?, maNV = ?, thoiGianDen = ?, soLuongNguoi = ?, ghiChu = ?, trangThai = ? where maPhieuDat = ?";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
-            pstm.setString(1, phieu.getKhachHang().getMaKH());
+            String maKH = (phieu.getKhachHang().getMaKH() != null) ? phieu.getKhachHang().getMaKH() : "";
+            pstm.setString(1, maKH);
             pstm.setString(2, phieu.getNhanVien().getMaNV());
             pstm.setTimestamp(3, java.sql.Timestamp.valueOf(phieu.getThoiGianDen()));
             pstm.setInt(4, phieu.getSoLuongNguoi());
@@ -231,12 +232,12 @@ public class PhieuDatBanDAO {
         return false;
     }
 
-    public boolean capNhatTrangThaiPhieu(String maPhieuDat, String trangThai) {
+    public boolean capNhatTrangThaiPhieu(String maPhieuDat, TrangThaiPhieuDat trangThai) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "update PhieuDatBan set trangThai = ? where maPhieuDat = ?";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
-            pstm.setString(1, trangThai);
+            pstm.setString(1, trangThai.name());
             pstm.setString(2, maPhieuDat);
             return pstm.executeUpdate() > 0;
         } catch (Exception e) {
@@ -277,4 +278,11 @@ public class PhieuDatBanDAO {
         }
         return dsPhieu;
     }
+
+	public boolean capNhatKhachHangChoPhieu(String maPhieu, String maKH) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	
 }

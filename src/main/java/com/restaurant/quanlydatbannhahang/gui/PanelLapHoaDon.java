@@ -29,6 +29,7 @@ import com.restaurant.quanlydatbannhahang.service.MonAnService;
 import com.restaurant.quanlydatbannhahang.service.NhanVienService;
 import com.restaurant.quanlydatbannhahang.service.PhieuDatBanService;
 import com.restaurant.quanlydatbannhahang.service.ThueService;
+import com.restaurant.quanlydatbannhahang.service.ChiTietPhieuDatBanService;
 import com.restaurant.quanlydatbannhahang.util.ComboBoxEnumLoader;
 import com.restaurant.quanlydatbannhahang.util.IDGeneratorHelper;
 import java.awt.Frame;
@@ -330,6 +331,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
 
         cbPTTT.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {}));
         ComboBoxEnumLoader.loadPTTTToComboBox(cbPTTT);
+        cbPTTT.setSelectedIndex(1);
         jLabel4.setText("Phương thức thanh toán:");
 
         javax.swing.GroupLayout panelThongTinHoaDonLayout = new javax.swing.GroupLayout(panelThongTinHoaDon);
@@ -541,7 +543,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
 
     private void btnDungDiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnDungDiemActionPerformed
         if (selectedKhachHang == null) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Vui lòng chọn khách hàng trước khi dùng điểm.");
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn khách hàng trước khi dùng điểm.");
             return;
         }
 
@@ -564,11 +566,13 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         int diemCanTru = (int) Math.ceil(tongThanhToan / VND_PER_DIEM);
         int diemHienCo = selectedKhachHang.getDiemTichLuy();
 
-        if (diemHienCo < diemCanTru) {
-            JOptionPane.showMessageDialog(this,
-                    "Điểm tích lũy không đủ để sử dụng. Cần " + diemCanTru + " điểm, hiện có " + diemHienCo + " điểm.");
+        if(diemHienCo == 0) {
+        	JOptionPane.showMessageDialog(this,
+                    "Điểm tích lũy không đủ để sử dụng");
             return;
         }
+        
+        int diemConLai = Math.max(diemHienCo-diemCanTru, 0);
 
         // Trừ điểm trong DB
         boolean success = khachHangService.suDungDiemTichLuy(selectedKhachHang.getMaKH(), diemCanTru);
@@ -576,10 +580,13 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Không thể sử dụng điểm tích lũy.");
             return;
         }
+        else {
+        	JOptionPane.showMessageDialog(this, "Đã áp dụng điểm tích lũy cho hóa đơn.");
+        }
 
         // Cập nhật UI
-        selectedKhachHang.setDiemTichLuy(diemHienCo - diemCanTru);
-        diemDaApDung = diemCanTru;
+        selectedKhachHang.setDiemTichLuy(diemConLai);
+        diemDaApDung = (diemHienCo > diemCanTru) ? diemCanTru : diemHienCo;
         updateTongTienSummary();
 
         int row = tableThongTinKhachHang.getSelectedRow();
@@ -590,7 +597,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
             }
         }
 
-        JOptionPane.showMessageDialog(this, "Đã trừ " + diemCanTru + " điểm tích lũy khỏi khách hàng.");
+        JOptionPane.showMessageDialog(this, "Đã trừ " + diemDaApDung + " điểm tích lũy khỏi khách hàng.");
     }// GEN-LAST:event_btnDungDiemActionPerformed
 
     private void cbKhuyenMaiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbKhuyenMaiActionPerformed
@@ -651,7 +658,6 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
 
         try {
             generatePdfInvoice();
-            congDiemTichLuyChoKhachHang();
             // Chuyển sang panel đặt bàn
             Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
             if (parentFrame instanceof MainForm) {
@@ -747,6 +753,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         loadHoaDonDraft();
         loadKhuyenMaiToComboBox();
         selectedKhachHang = null;
+        cbPTTT.setSelectedIndex(1);
         populateCustomerInfoFromReservation();
         updateTongTienSummary();
     }
@@ -1115,7 +1122,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
             // Lưu các dữ liệu quan trọng TRƯỚC khi xóa session
             String currentMaBan = txtMaBan.getText().trim();
             String currentMaPhieuDat = HoaDonDraftSession.getCurrentMaPhieuDatContext();
-            
+
             // Chuẩn hóa mã bàn để khớp chính xác với Key trong Session
             String normalizedMaBan = HoaDonDraftSession.normalizeMaBanContext(currentMaBan);
 
@@ -1124,6 +1131,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
 
             // 2. Cập nhật trạng thái các bàn vật lý về TRỐNG[cite: 18, 19]
             capNhatTrangThaiBan(currentMaBan);
+            
 
             // 3. Cập nhật phiếu đặt trước (nếu có) thành ĐÃ SỬ DỤNG[cite: 18]
             if (!currentMaPhieuDat.isEmpty()) {
@@ -1137,12 +1145,12 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
             if (!normalizedMaBan.isEmpty()) {
                 HoaDonDraftSession.clear(normalizedMaBan); // Xóa sạch Map của bàn vừa xong
             }
-            
+
             // Reset context hiện tại về rỗng để làm sạch giao diện[cite: 16]
             HoaDonDraftSession.setCurrentMaBanContext("");
             HoaDonDraftSession.clearCurrentMaPhieuDatContext();
             HoaDonDraftSession.clearCurrentPhoneNumber();
-            
+
             // Làm mới UI[cite: 18]
             refreshDraftData();
 
@@ -1238,11 +1246,10 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         if (maBan == null || maBan.isBlank()) {
             throw new IllegalArgumentException("Vui lòng chọn bàn trước khi lưu hóa đơn.");
         }
-        String primaryMaBan = maBan.split(",")[0].trim();
-        if (primaryMaBan.isEmpty()) {
+        String normalizedMaBan = HoaDonDraftSession.normalizeMaBanContext(maBan);
+        if (normalizedMaBan.isEmpty()) {
             throw new IllegalArgumentException("Mã bàn không hợp lệ.");
         }
-        Ban ban = banService.getBanTheoMa(primaryMaBan);
         NhanVien nhanVien = SessionManager.getCurrentNhanVien();
         KhuyenMai khuyenMai = getSelectedKhuyenMai();
         Thue thueVAT = thueService.getThueTheoMa(MA_THUE_VAT_MAC_DINH);
@@ -1261,10 +1268,13 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         double tienThueVAT = apDungThue(MA_THUE_VAT_MAC_DINH, coSoTinhVAT);
         double tongThanhToan = coSoTinhVAT + tienThueVAT;
 
-        // 4. Khởi tạo đối tượng HoaDon
+       
+
+        PhieuDatBan phieuDatBan = phieuDatBanService.getPhieuDatBanTheoMa(HoaDonDraftSession.getCurrentMaPhieuDatContext());
+        
         HoaDon hoaDon = new HoaDon();
         hoaDon.setMaHD(maHD);
-        hoaDon.setBan(ban);
+        hoaDon.setPhieuDatBan(phieuDatBan);
         hoaDon.setNhanVien(nhanVien);
         hoaDon.setKhuyenMai(khuyenMai);
         hoaDon.setThue(thueVAT);

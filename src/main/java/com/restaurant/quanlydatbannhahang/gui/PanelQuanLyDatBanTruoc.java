@@ -180,9 +180,10 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                                         .map(ct -> ct.getBan().getMaBan())
                                         .collect(Collectors.joining(", "));
 
+                        String sdtKH = (p.getKhachHang() != null)? p.getKhachHang().getSdt():"";
                         model.addRow(new Object[] {
                                         p.getMaPhieuDat(),
-                                        p.getKhachHang().getSdt(),
+                                       sdtKH,
                                         p.getNhanVien().getMaNV(),
                                         listMaBan,
                                         p.getSoLuongNguoi(),
@@ -685,7 +686,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                 // TODO add your handling code here:
                 refreshData();
                 cbFilterTrangThai.setSelectedIndex(0);
-                txtTimKiem.setText("");
+                setupPlaceholder(txtTimKiem, "Nhập mã đặt bàn hoặc SĐT khách");
         }// GEN-LAST:event_btnXoaTrangActionPerformed
 
         private void btnDoiBanActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnChonBanActionPerformed

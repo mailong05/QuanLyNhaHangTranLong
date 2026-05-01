@@ -115,7 +115,7 @@ CREATE TABLE BanAn (
 -- =========================================================
 CREATE TABLE PhieuDatBan (
     maPhieuDat VARCHAR(20) PRIMARY KEY,
-    maKH VARCHAR(20) NOT NULL,
+    maKH VARCHAR(20),
     maNV VARCHAR(20) NOT NULL,
     thoiGianDen DATETIME NOT NULL,
     soLuongNguoi INT,
@@ -140,7 +140,7 @@ CREATE TABLE ChiTietPhieuDatBan (
 -- =========================================================
 CREATE TABLE HoaDon (
     maHD VARCHAR(20) PRIMARY KEY,
-    maBan VARCHAR(20) NOT NULL,
+    maPhieuDat VARCHAR(20) NOT NULL, -- "Cầu nối" duy nhất đến Bàn và Khách
     maNV VARCHAR(20) NOT NULL,
     maKM VARCHAR(20),
     maThue VARCHAR(20) NOT NULL,
@@ -158,10 +158,14 @@ CREATE TABLE HoaDon (
         CHECK (phuongThucTT IN (N'TIEN_MAT', N'CHUYEN_KHOAN', N'THE')),
     trangThaiThanhToan NVARCHAR(50) NOT NULL
         CHECK (trangThaiThanhToan IN (N'CHUA_THANH_TOAN', N'DA_THANH_TOAN', N'DA_HUY')),
-    CONSTRAINT FK_HD_BanAn FOREIGN KEY (maBan) REFERENCES BanAn(maBan) ON DELETE CASCADE,
-    CONSTRAINT FK_HD_NhanVien FOREIGN KEY (maNV) REFERENCES NhanVien(maNV) ON DELETE CASCADE,
-    CONSTRAINT FK_HD_KhuyenMai FOREIGN KEY (maKM) REFERENCES KhuyenMai(maKM) ON DELETE CASCADE,
-    CONSTRAINT FK_HD_Thue FOREIGN KEY (maThue) REFERENCES Thue(maThue) ON DELETE CASCADE
+    
+    -- CASCADE ở đây để khi xóa Phiếu thì Hóa đơn nháp mất theo
+    CONSTRAINT FK_HD_PhieuDatBan FOREIGN KEY (maPhieuDat) REFERENCES PhieuDatBan(maPhieuDat) ON DELETE CASCADE,
+    
+    -- Dùng NO ACTION ở đây để tránh lỗi Msg 1785 (Vẫn xóa được NV nếu không có HD liên quan)
+    CONSTRAINT FK_HD_NhanVien FOREIGN KEY (maNV) REFERENCES NhanVien(maNV) ON DELETE NO ACTION,
+    CONSTRAINT FK_HD_KhuyenMai FOREIGN KEY (maKM) REFERENCES KhuyenMai(maKM) ON DELETE NO ACTION,
+    CONSTRAINT FK_HD_Thue FOREIGN KEY (maThue) REFERENCES Thue(maThue) ON DELETE NO ACTION
 );
 
 -- =========================================================
