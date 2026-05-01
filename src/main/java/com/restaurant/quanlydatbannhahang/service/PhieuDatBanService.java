@@ -1,6 +1,7 @@
 package com.restaurant.quanlydatbannhahang.service;
 
 import com.restaurant.quanlydatbannhahang.dao.PhieuDatBanDAO;
+import com.restaurant.quanlydatbannhahang.connectDB.DatabaseConnection;
 import com.restaurant.quanlydatbannhahang.dao.ChiTietPhieuDatBanDAO;
 import com.restaurant.quanlydatbannhahang.entity.PhieuDatBan;
 import com.restaurant.quanlydatbannhahang.entity.ChiTietPhieuDatBan;
@@ -13,6 +14,9 @@ import com.restaurant.quanlydatbannhahang.entity.Ban;
 import com.restaurant.quanlydatbannhahang.util.IDGeneratorHelper;
 import com.restaurant.quanlydatbannhahang.util.IDQueryHelper;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -248,4 +252,11 @@ public class PhieuDatBanService {
             throw new IllegalStateException("Không thể bắt đầu sử dụng. Phiếu phải ở trạng thái Đang chờ");
         }
 }
+
+	public List<PhieuDatBan> getDanhSachHoatDongGanDay() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
 }

@@ -1,25 +1,44 @@
 package com.restaurant.quanlydatbannhahang.gui;
 
 import java.awt.*;
+import java.util.List;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 
+import com.restaurant.quanlydatbannhahang.entity.PhieuDatBan;
 import com.restaurant.quanlydatbannhahang.service.BanService;
+import com.restaurant.quanlydatbannhahang.service.HoaDonService;
+import com.restaurant.quanlydatbannhahang.service.PhieuDatBanService;
 
 import javax.swing.border.EmptyBorder;
 
 public class PanelTrangChu extends javax.swing.JPanel {
 
+	private BanService banService;
+	private PhieuDatBanService phieuDatBanService;
+	private HoaDonService hoaDonService;
     public PanelTrangChu() {
         initComponents();
+        banService = new BanService();
+        phieuDatBanService = new PhieuDatBanService();
+        hoaDonService = new HoaDonService();
         customUI();
+//        loadDataToTable();
+        loadDataToCard();
     }
 
-    private void loadDuLieu() {
+    
+
+	private void loadDataToCard() {
         try {
-            BanService banService = new BanService();
+            
             int countBanDangSuDung = (int) banService.getBanDangSuDung().size();
-            lblCountBanDatTruoc.setText(String.valueOf(countBanDangSuDung));
+            int countBanDatTruoc = (int) phieuDatBanService.getAllPhieuDatBan().size();
+            double doanhThuHomNay = hoaDonService.tinhDoanhThuHomNay();
+            lblCountBanSuDung.setText(String.valueOf(countBanDangSuDung));
+            lblCountBanDatTruoc.setText(String.valueOf(countBanDatTruoc));
+            lblSumDoanhThu.setText(String.valueOf(doanhThuHomNay));
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Lỗi khi load dữ liệu Trang chủ: " + e.getMessage(), "Lỗi",
@@ -28,7 +47,8 @@ public class PanelTrangChu extends javax.swing.JPanel {
     }
 
     public void refreshData() {
-        loadDuLieu();
+//    	loadDataToTable();
+    	loadDataToCard();
     }
 
     private void customUI() {

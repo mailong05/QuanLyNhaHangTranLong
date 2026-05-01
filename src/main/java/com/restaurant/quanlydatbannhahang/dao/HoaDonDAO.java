@@ -260,6 +260,23 @@ public class HoaDonDAO {
         return false;
     }
 
+    public double getTongDoanhThuTheoNgay(LocalDate ngay) {
+        String sql = "SELECT SUM(tongThanhToan) FROM HoaDon " +
+                     "WHERE CAST(ngayTao AS DATE) = ? AND trangThaiThanhToan = N'DA_THANH_TOAN'";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstm = conn.prepareStatement(sql)) {
+            
+            pstm.setDate(1, java.sql.Date.valueOf(ngay));
+            ResultSet rs = pstm.executeQuery();
+            if (rs.next()) {
+                return rs.getDouble(1); // Trả về tổng con số SQL đã tính xong
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+    
     public boolean xoaHoaDon(String maHD) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "delete from HoaDon where maHD = ?";

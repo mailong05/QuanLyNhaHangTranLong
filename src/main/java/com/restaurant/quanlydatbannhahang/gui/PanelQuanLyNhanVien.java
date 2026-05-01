@@ -70,7 +70,46 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                                 syncCapNhatButtonState();
                         }
                 });
+                
+                
+             // Renderer cho cột Lương (cột thứ 5 - index 5)
+                tableNhanVien.getColumnModel().getColumn(5).setCellRenderer(new DefaultTableCellRenderer() {
+                    @Override
+                    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                        if (value instanceof Number) {
+                            value = formatCurrency(((Number) value).doubleValue());
+                        }
+                        // Giữ nguyên căn giữa như các cột khác
+                        setHorizontalAlignment(JLabel.CENTER);
+                        return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                    }
+                });
 
+                
+                txtLuongCoBan.addFocusListener(new java.awt.event.FocusAdapter() {
+                    @Override
+                    public void focusGained(java.awt.event.FocusEvent evt) {
+                        // Khi click vào để nhập: xóa bỏ dấu phẩy để người dùng nhập số thuần
+                        String currentText = txtLuongCoBan.getText();
+                        if (!currentText.isEmpty()) {
+                            txtLuongCoBan.setText(currentText.replaceAll("[^\\d.]", ""));
+                        }
+                    }
+
+                    @Override
+                    public void focusLost(java.awt.event.FocusEvent evt) {
+                        // Khi click ra ngoài: tự động format lại thành tiền tệ
+                        String text = txtLuongCoBan.getText();
+                        if (!text.isEmpty()) {
+                            try {
+                                double value = Double.parseDouble(text.replaceAll("[^\\d.]", ""));
+                                txtLuongCoBan.setText(formatCurrency(value));
+                            } catch (NumberFormatException e) {
+                                // Nếu nhập sai thì xóa hoặc để trống
+                            }
+                        }
+                    }
+                });
                 syncCapNhatButtonState();
         }
 
@@ -256,10 +295,24 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
 
 
         private String formatCurrency(double value) {
-                DecimalFormat df = new DecimalFormat("#,##0.00");
-                return df.format(value);
+            // Sử dụng Locale Vietnam để đảm bảo định dạng chuẩn hoặc dùng format cố định
+            DecimalFormat df = new DecimalFormat("#,##0.00");
+            return df.format(value);
         }
 
+        // Thêm hàm bổ trợ để parse ngược từ String về Double một cách an toàn
+        private double parseCurrency(String text) {
+            if (text == null || text.isEmpty()) return 0;
+            // Loại bỏ tất cả ký tự không phải số và dấu chấm thập phân
+            String cleanString = text.replaceAll("[^\\d.]", "");
+            try {
+                return Double.parseDouble(cleanString);
+            } catch (NumberFormatException e) {
+                return 0;
+            }
+        }
+        
+        
         private boolean isMouseOverTable(java.awt.event.MouseEvent evt) {
                 java.awt.Point p = evt.getPoint();
                 java.awt.Point tablePoint = SwingUtilities.convertPoint(this, p, tableNhanVien);
@@ -634,7 +687,7 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                         String maNV = txtMaNhanVien.getText().trim();
                         String hoTen = txtHoTen.getText().trim();
                         String sdt = txtSoDienThoai.getText().trim();
-                        String luongText = txtLuongCoBan.getText().trim().replace(",", "");
+                        double luongCoBan = parseCurrency(txtLuongCoBan.getText().trim());
                         String chucVuDisplay = (String) cbChucVu.getSelectedItem();
                         String trangThaiDisplay = (String) cbTrangThai.getSelectedItem();
 
@@ -643,13 +696,13 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                                         .getTrangThaiNhanVienFromDisplay(trangThaiDisplay);
                         LocalDate ngayVaoLam = dpNgayVaoLam != null ? dpNgayVaoLam.getDate() : LocalDate.now();
 
-                        if (maNV.isEmpty() || hoTen.isEmpty() || sdt.isEmpty() || luongText.isEmpty() || chucVu == null
+                        if (maNV.isEmpty() || hoTen.isEmpty() || sdt.isEmpty() || luongCoBan <= 0 || chucVu == null
                                         || trangThai == null || ngayVaoLam == null) {
                                 JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin nhân viên.");
                                 return;
                         }
 
-                        double luongCoBan = Double.parseDouble(luongText);
+                        
                         NhanVien nhanVien = new NhanVien(maNV, hoTen, sdt, chucVu, ngayVaoLam, luongCoBan, trangThai);
                         NhanVienService service = new NhanVienService();
                         service.capNhatNhanVien(nhanVien);

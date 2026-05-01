@@ -32,6 +32,10 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 
 public class PanelThongKe extends javax.swing.JPanel {
 
+    private static final int TOP_TABLE_IMAGE_SIZE = 48;
+    private static final int TOP_TABLE_IMAGE_ROW_HEIGHT = 84;
+    private static final int TOP_TABLE_IMAGE_VERTICAL_PADDING = 4;
+
     private HoaDonService hoaDonService;
     private ChiTietHoaDonService chiTietHoaDonService;
 
@@ -45,42 +49,18 @@ public class PanelThongKe extends javax.swing.JPanel {
     }
 
     private void setupImageRenderer() {
-        // Custom renderer cho tất cả các cột với background color
-        DefaultTableCellRenderer customRenderer = new DefaultTableCellRenderer() {
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-                    boolean hasFocus, int row, int column) {
-                // Đặt nền cho tất cả cells
-                setOpaque(true);
-                setBackground(new Color(255, 251, 235));
-                setForeground(Color.BLACK);
+        ImageRenderer imageRenderer = new ImageRenderer();
+        tableTopMonAn.getColumnModel().getColumn(1).setCellRenderer(imageRenderer);
+        tableTopMonAn.getColumnModel().getColumn(1).setPreferredWidth(100);
+        tableTopMonAn.setRowHeight(TOP_TABLE_IMAGE_ROW_HEIGHT);
 
-                // Xử lý hình ảnh ở cột 1
-                if (column == 1 && value instanceof ImageIcon) {
-                    JLabel label = new JLabel((ImageIcon) value);
-                    label.setHorizontalAlignment(JLabel.CENTER);
-                    label.setVerticalAlignment(JLabel.CENTER);
-                    label.setOpaque(true);
-                    label.setBackground(new Color(255, 251, 235));
-                    return label;
-                }
-
-                // Các cột khác
-                Component comp = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                if (comp instanceof JLabel) {
-                    JLabel label = (JLabel) comp;
-                    label.setHorizontalAlignment(JLabel.CENTER);
-                }
-                return comp;
-            }
-        };
-
-        // Áp dụng renderer cho tất cả các cột
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
         for (int i = 0; i < tableTopMonAn.getColumnCount(); i++) {
-            tableTopMonAn.getColumnModel().getColumn(i).setCellRenderer(customRenderer);
+            if (i != 1) {
+                tableTopMonAn.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+            }
         }
-
-        tableTopMonAn.getColumnModel().getColumn(1).setPreferredWidth(60);
     }
 
     private static class TopMonAnItem {
@@ -96,6 +76,24 @@ public class PanelThongKe extends javax.swing.JPanel {
             this.imagePath = monAn.getUrlHinhAnh();
             this.donGia = monAn.getDonGia();
             this.soLuong = soLuong;
+        }
+    }
+
+    private static class ImageRenderer extends DefaultTableCellRenderer {
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                boolean hasFocus, int row, int column) {
+            if (value instanceof ImageIcon) {
+                JLabel label = new JLabel((ImageIcon) value);
+                label.setHorizontalAlignment(JLabel.CENTER);
+                label.setVerticalAlignment(JLabel.CENTER);
+                label.setOpaque(true);
+                label.setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
+                label.setBorder(BorderFactory.createEmptyBorder(TOP_TABLE_IMAGE_VERTICAL_PADDING, 0,
+                        TOP_TABLE_IMAGE_VERTICAL_PADDING, 0));
+                return label;
+            }
+            return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
         }
     }
 
@@ -150,7 +148,7 @@ public class PanelThongKe extends javax.swing.JPanel {
                 }
                 model.addRow(new Object[] {
                         top,
-                        ImageUtil.loadImageIcon(item.imagePath, 48),
+                        ImageUtil.loadImageIcon(item.imagePath, TOP_TABLE_IMAGE_SIZE),
                         item.tenMon,
                         item.donGia,
                         item.soLuong

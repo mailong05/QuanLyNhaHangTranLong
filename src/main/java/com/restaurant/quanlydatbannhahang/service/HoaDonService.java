@@ -7,6 +7,7 @@ import com.restaurant.quanlydatbannhahang.entity.ChiTietHoaDon;
 import com.restaurant.quanlydatbannhahang.entity.PhieuDatBan;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiHoaDon;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -79,6 +80,11 @@ public class HoaDonService {
             throw new IllegalArgumentException("Mã hóa đơn phải có dạng HDxxx (ví dụ: HD001)");
         }
         return hoaDonDAO.getHoaDonTheoMa(maHD);
+    }
+    
+    
+    public double tinhDoanhThuHomNay() {
+        return hoaDonDAO.getTongDoanhThuTheoNgay(LocalDate.now());
     }
 
     /**
