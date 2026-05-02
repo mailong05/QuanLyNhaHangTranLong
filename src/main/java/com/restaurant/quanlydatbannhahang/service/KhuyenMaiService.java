@@ -13,7 +13,8 @@ public class KhuyenMaiService {
 
     private static final String MAKM_PATTERN = "^KM\\d{3}$";
     private static final Pattern maKMPattern = Pattern.compile(MAKM_PATTERN);
-
+    
+    
     public KhuyenMaiService() {
         this.khuyenMaiDAO = new KhuyenMaiDAO();
     }

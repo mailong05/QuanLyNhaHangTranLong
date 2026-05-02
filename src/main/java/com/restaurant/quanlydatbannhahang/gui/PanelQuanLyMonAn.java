@@ -304,7 +304,7 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
         allMonAn = null;
         imagePreloadStarted = false;
         selectedImagePath = null;
-        lblHinhAnh.setIcon(null);
+        lblIconMonAn.setIcon(null);
         resetPlaceholder(txtTimKiem, "Nhập tên món ăn");
         cbFilterLoaiMonAn.setSelectedIndex(0);
         loadDataToComboBoxes();
@@ -394,6 +394,7 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
         cbTrangThai = new javax.swing.JComboBox<>();
         cbFilterLoaiMonAn = new javax.swing.JComboBox<>();
         cbFilterTrangThai = new javax.swing.JComboBox<>();
+        lblIconMonAn = new javax.swing.JLabel();
         scrTableMonAn = new javax.swing.JScrollPane();
         tableMonAn = new javax.swing.JTable();
         pnlButton = new javax.swing.JPanel();
@@ -549,7 +550,7 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlThongTinKhuyenMaiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlThongTinKhuyenMaiLayout.createSequentialGroup()
-                        .addComponent(txtTimKiem)
+                        .addComponent(txtTimKiem, javax.swing.GroupLayout.DEFAULT_SIZE, 291, Short.MAX_VALUE)
                         .addGap(24, 24, 24)
                         .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())
@@ -558,7 +559,9 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
                             .addComponent(cbTrangThai, 0, 110, Short.MAX_VALUE)
                             .addComponent(btnChonFileAnh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cbLoaiMonAn, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(0, 334, Short.MAX_VALUE))))
+                        .addGap(4, 4, 4)
+                        .addComponent(lblIconMonAn, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         pnlThongTinKhuyenMaiLayout.setVerticalGroup(
             pnlThongTinKhuyenMaiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -576,7 +579,8 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(pnlThongTinKhuyenMaiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblHinhAnh)
-                            .addComponent(btnChonFileAnh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(btnChonFileAnh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblIconMonAn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(pnlThongTinKhuyenMaiLayout.createSequentialGroup()
                         .addGroup(pnlThongTinKhuyenMaiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblMaMon, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -869,8 +873,8 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
             File selectedFile = fileChooser.getSelectedFile();
             selectedImagePath = selectedFile.getAbsolutePath();
             ImageIcon icon = new ImageIcon(selectedImagePath);
-            Image img = icon.getImage().getScaledInstance(150, 100, Image.SCALE_SMOOTH);
-            lblHinhAnh.setIcon(new ImageIcon(img));
+            Image img = icon.getImage().getScaledInstance(lblIconMonAn.getWidth(), lblIconMonAn.getHeight(), Image.SCALE_SMOOTH);
+            lblIconMonAn.setIcon(new ImageIcon(img));
             JOptionPane.showMessageDialog(this, "Chọn ảnh thành công: " + selectedFile.getName());
         }
     }// GEN-LAST:event_btnChonFileAnhActionPerformed
@@ -879,10 +883,7 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
         // TODO add your handling code here:
     }// GEN-LAST:event_cbDonViTinhActionPerformed
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jComboBox1ActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_jComboBox1ActionPerformed
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCapNhat;
     private javax.swing.JButton btnChonFileAnh;
@@ -900,6 +901,7 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
     private javax.swing.JLabel lblDonGia;
     private javax.swing.JLabel lblDonViTinh;
     private javax.swing.JLabel lblHinhAnh;
+    private javax.swing.JLabel lblIconMonAn;
     private javax.swing.JLabel lblLoaiMon;
     private javax.swing.JLabel lblMaMon;
     private javax.swing.JLabel lblTenMon;

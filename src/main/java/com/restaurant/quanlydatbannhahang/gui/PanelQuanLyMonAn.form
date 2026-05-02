@@ -108,7 +108,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="txtTimKiem" max="32767" attributes="0"/>
+                              <Component id="txtTimKiem" pref="291" max="32767" attributes="0"/>
                               <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
                               <Component id="btnTimKiem" min="-2" pref="123" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
@@ -119,7 +119,9 @@
                                   <Component id="btnChonFileAnh" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="cbLoaiMonAn" alignment="0" max="32767" attributes="0"/>
                               </Group>
-                              <EmptySpace min="0" pref="334" max="32767" attributes="0"/>
+                              <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+                              <Component id="lblIconMonAn" min="-2" pref="45" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -144,6 +146,7 @@
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="lblHinhAnh" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="btnChonFileAnh" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblIconMonAn" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
@@ -404,6 +407,8 @@
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
               </AuxValues>
+            </Component>
+            <Component class="javax.swing.JLabel" name="lblIconMonAn">
             </Component>
           </SubComponents>
         </Container>
