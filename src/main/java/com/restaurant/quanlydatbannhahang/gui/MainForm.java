@@ -1377,8 +1377,21 @@ public class MainForm extends javax.swing.JFrame {
         // ========== SETUP UI (FlatLaf) TRƯỚC TIÊN ==========
         UIConfiguration.setupUI();
 
+        // ========== HIỂN THỊ LOADING SCREEN ĐỂ PRELOAD DỮ LIỆU ==========
+        LoadingScreen loadingScreen = new LoadingScreen();
+        loadingScreen.setVisible(true);
+
         // ========== SAU ĐÓ MỚI KHỞI TẠO MAINFORM ==========
         java.awt.EventQueue.invokeLater(() -> {
+            // Đợi loading screen hoàn thành
+            while (loadingScreen.isVisible()) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
             new MainForm().setVisible(true);
         });
     }

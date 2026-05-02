@@ -1,10 +1,19 @@
 package com.restaurant.quanlydatbannhahang.gui;
 
+import com.restaurant.quanlydatbannhahang.service.MonAnService;
+import com.restaurant.quanlydatbannhahang.entity.MonAn;
+import com.restaurant.quanlydatbannhahang.util.ImageUtil;
+
+import javax.swing.*;
+import java.util.List;
+import java.util.ArrayList;
+
 public class LoadingScreen extends javax.swing.JFrame {
 
         public LoadingScreen() {
                 initComponents();
                 lblSystemName.setFont(new java.awt.Font("Segoe UI", 0, 14));
+                preloadData();
         }
 
         // <editor-fold
@@ -57,6 +66,88 @@ public class LoadingScreen extends javax.swing.JFrame {
                 pack();
                 setLocationRelativeTo(null);
         }// </editor-fold>//GEN-END:initComponents
+
+        private void preloadData() {
+                SwingWorker<Void, String> worker = new SwingWorker<Void, String>() {
+                        @Override
+                        protected Void doInBackground() throws Exception {
+                                try {
+                                        publish("Đang tải dữ liệu món ăn...");
+                                        setProgress(10);
+
+                                        // Load danh sách món ăn
+                                        MonAnService monAnService = new MonAnService();
+                                        List<MonAn> allMonAn = monAnService.getAllMonAn();
+
+                                        if (allMonAn != null && !allMonAn.isEmpty()) {
+                                                publish("Đang tải hình ảnh món ăn...");
+                                                setProgress(30);
+
+                                                List<String> imagePaths = new ArrayList<>();
+                                                for (MonAn monAn : allMonAn) {
+                                                        if (monAn != null && monAn.getUrlHinhAnh() != null
+                                                                        && !monAn.getUrlHinhAnh().trim().isEmpty()) {
+                                                                imagePaths.add(monAn.getUrlHinhAnh());
+                                                        }
+                                                }
+
+                                                // Preload tất cả hình ảnh
+                                                int totalImages = imagePaths.size();
+                                                if (totalImages > 0) {
+                                                        for (int i = 0; i < totalImages; i++) {
+                                                                String imagePath = imagePaths.get(i);
+                                                                ImageUtil.loadImageIcon(imagePath, 72); // Size cho
+                                                                                                        // table
+
+                                                                // Cập nhật progress
+                                                                int progress = 30
+                                                                                + (int) ((i + 1) * 60.0 / totalImages);
+                                                                setProgress(progress);
+                                                                publish("Đã tải " + (i + 1) + "/" + totalImages
+                                                                                + " hình ảnh...");
+                                                        }
+                                                }
+                                        }
+
+                                        setProgress(90);
+                                        publish("Hoàn thành!");
+                                        Thread.sleep(500); // Delay nhỏ để user thấy hoàn thành
+                                        setProgress(100);
+
+                                } catch (Exception e) {
+                                        e.printStackTrace();
+                                        publish("Lỗi khi tải dữ liệu: " + e.getMessage());
+                                }
+
+                                return null;
+                        }
+
+                        @Override
+                        protected void process(List<String> chunks) {
+                                for (String status : chunks) {
+                                        lblStatus.setText(status);
+                                }
+                        }
+
+                        @Override
+                        protected void done() {
+                                // Đóng loading screen sau khi hoàn thành
+                                SwingUtilities.invokeLater(() -> {
+                                        dispose();
+                                });
+                        }
+                };
+
+                worker.addPropertyChangeListener(evt -> {
+                        if ("progress".equals(evt.getPropertyName())) {
+                                int progress = (Integer) evt.getNewValue();
+                                prgLoading.setValue(progress);
+                                lblPercentage.setText(progress + "%");
+                        }
+                });
+
+                worker.execute();
+        }
 
         // Variables declaration - do not modify//GEN-BEGIN:variables
         private javax.swing.JLabel lblBackground;
