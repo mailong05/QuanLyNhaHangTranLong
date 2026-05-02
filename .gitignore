@@ -1,7 +1,9 @@
-<<<<<<< HEAD
+# === Java Compiled files ===
+*.class
 /target/
 /bin/
-=======
+build/
+
 # === Maven ===
 target/
 *.jar
@@ -14,11 +16,9 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
-build/
 
 # === Eclipse ===
 .metadata/
-bin/
 .settings/
 .classpath
 .project
@@ -32,4 +32,3 @@ bin/
 nb-configuration.xml
 .DS_Store
 Thumbs.db
->>>>>>> ban-cap-nhat-moi
