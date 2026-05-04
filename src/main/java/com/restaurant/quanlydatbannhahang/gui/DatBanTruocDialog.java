@@ -51,7 +51,7 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel2 = new javax.swing.JPanel();
@@ -70,6 +70,8 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
         txtGhiChu = new javax.swing.JTextArea();
         txtTenKhachHang = new javax.swing.JTextField();
         lblTenKhachHang = new javax.swing.JLabel();
+        lblTienDatCoc = new javax.swing.JLabel();
+        txtTienDatCoc = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -87,10 +89,6 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
         lblMaPhieuDat.setText("Mã phiếu đặt:");
         jPanel2.add(lblMaPhieuDat, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 40, -1, 20));
 
-        String lastMaPDB = pdbService.getLastPhieuDatBanID();
-        String newMaPDB = (lastMaPDB == null || lastMaPDB.isEmpty()) ? helper.generateDefaultID(lastMaPDB)
-                : helper.generateNextIDFromFullID(lastMaPDB);
-        txtMaPhieuDat.setText(newMaPDB);
         txtMaPhieuDat.setEditable(false);
         txtMaPhieuDat.setBackground(new java.awt.Color(255, 255, 255));
         txtMaPhieuDat.setFocusable(false);
@@ -115,7 +113,7 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
         lblThoiGianDen.setForeground(new java.awt.Color(0, 0, 0));
         lblThoiGianDen.setText("Thời gian đến:");
         jPanel2.add(lblThoiGianDen, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 160, -1, -1));
-        jPanel2.add(dtpThoiGianDen, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 160, -1, -1));
+        jPanel2.add(dtpThoiGianDen, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 160, 230, -1));
 
         lblSoLuongNguoi.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblSoLuongNguoi.setForeground(new java.awt.Color(0, 0, 0));
@@ -125,7 +123,7 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
         lblGhiChu.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblGhiChu.setForeground(new java.awt.Color(0, 0, 0));
         lblGhiChu.setText("Ghi chú:");
-        jPanel2.add(lblGhiChu, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 240, -1, -1));
+        jPanel2.add(lblGhiChu, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 270, -1, -1));
 
         btnDatBan.setText("Đặt bàn");
         btnDatBan.setBackground(new java.awt.Color(204, 204, 204));
@@ -144,7 +142,7 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
         txtGhiChu.setBackground(new java.awt.Color(255, 255, 255));
         jScrollPane1.setViewportView(txtGhiChu);
 
-        jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 250, -1, -1));
+        jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 280, -1, -1));
 
         txtTenKhachHang.setBackground(new java.awt.Color(255, 255, 255));
         txtTenKhachHang.setForeground(new java.awt.Color(0, 0, 0));
@@ -159,6 +157,12 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
         lblTenKhachHang.setForeground(new java.awt.Color(0, 0, 0));
         lblTenKhachHang.setText("Tên khách hàng:");
         jPanel2.add(lblTenKhachHang, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 80, -1, -1));
+
+        lblTienDatCoc.setText("Tiền đặt cọc: ");
+        lblTienDatCoc.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblTienDatCoc.setForeground(new java.awt.Color(0, 0, 0));
+        jPanel2.add(lblTienDatCoc, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 240, -1, -1));
+        jPanel2.add(txtTienDatCoc, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 240, 230, -1));
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 480, 430));
 
@@ -261,10 +265,12 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
     private javax.swing.JLabel lblSoLuongNguoi;
     private javax.swing.JLabel lblTenKhachHang;
     private javax.swing.JLabel lblThoiGianDen;
+    private javax.swing.JLabel lblTienDatCoc;
     private javax.swing.JSpinner spSoLuong;
     private javax.swing.JTextArea txtGhiChu;
     private javax.swing.JTextField txtMaPhieuDat;
     private javax.swing.JTextField txtSoDienThoai;
     private javax.swing.JTextField txtTenKhachHang;
+    private javax.swing.JTextField txtTienDatCoc;
     // End of variables declaration//GEN-END:variables
 }
