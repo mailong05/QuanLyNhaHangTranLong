@@ -151,7 +151,7 @@ public class PanelQuanLyThue extends javax.swing.JPanel implements MouseListener
 
     private void fillTxtMaThue() {
         String lastID = IDQueryHelper.getLastID("Thue", "maThue");
-        String maThueNew = (lastID == null || lastID.isEmpty()) ? IDGeneratorHelper.generateDefaultID("THUE")
+        String maThueNew = (lastID == null || lastID.isEmpty()) ? IDGeneratorHelper.generateDefaultID("TH")
                 : IDGeneratorHelper.generateNextIDFromFullID(lastID);
         txtMaThue.setText(maThueNew);
     }

@@ -18,12 +18,10 @@ import java.util.List;
 
 public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListener {
 
-    private IDGeneratorHelper idGeneratorHelper;
-    private IDQueryHelper idQueryHelper;
+
 
     public PanelQuanLyKhuVuc() {
-        idGeneratorHelper = new IDGeneratorHelper();
-        idQueryHelper = new IDQueryHelper();
+
         initComponents();
         customUI();
         loadDataToTable();
@@ -33,9 +31,9 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
 
     private void fillMaKhuVuc(JTextField txtMaKhuVuc) {
         // TODO Auto-generated method stub
-        String lastID = idQueryHelper.getLastID("KhuVuc", "maKhuVuc");
-        String maPDBNew = (lastID == null || lastID.isEmpty()) ? idGeneratorHelper.toString()
-                : idGeneratorHelper.generateNextIDFromFullID(lastID);
+        String lastID = IDQueryHelper.getLastID("KhuVuc", "maKhuVuc");
+        String maPDBNew = (lastID == null || lastID.isEmpty()) ? IDGeneratorHelper.generateDefaultID("KV")
+                : IDGeneratorHelper.generateNextIDFromFullID(lastID);
         txtMaKhuVuc.setText(maPDBNew);
     }
 

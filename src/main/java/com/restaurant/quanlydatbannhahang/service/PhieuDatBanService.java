@@ -53,7 +53,7 @@ public class PhieuDatBanService {
         // 1. Tạo đối tượng phiếu đặt mới
         String lastID = phieuDatBanDAO.getLastPhieuDatBanID();
         String maPhieuMoi = IDGeneratorHelper.generateNextIDFromFullID(lastID);
-        
+
         PhieuDatBan phieu = new PhieuDatBan();
         phieu.setMaPhieuDat(maPhieuMoi);
         phieu.setKhachHang(null); // ĐỂ NULL: Khách dùng ngay chưa có thông tin
@@ -82,7 +82,7 @@ public class PhieuDatBanService {
     }
 
     /**
-     * Logic validate linh hoạt: 
+     * Logic validate linh hoạt:
      * - Nếu DANG_CHO (Đặt trước): Bắt buộc có KhachHang.
      * - Nếu DANG_SU_DUNG (Dùng ngay): KhachHang có thể NULL.
      */
@@ -91,12 +91,13 @@ public class PhieuDatBanService {
             throw new IllegalArgumentException("Dữ liệu phiếu đặt không được để trống");
         }
 
-        // Chỉ validate khách hàng nếu trạng thái là ĐẶT TRƯỚC hoặc nếu đối tượng khách đã được gán
+        // Chỉ validate khách hàng nếu trạng thái là ĐẶT TRƯỚC hoặc nếu đối tượng khách
+        // đã được gán
         if (phieu.getTrangThai() == TrangThaiPhieuDat.DANG_CHO) {
             if (phieu.getKhachHang() == null) {
                 throw new IllegalArgumentException("Luồng đặt trước yêu cầu thông tin khách hàng");
             }
-            
+
             String hoTen = phieu.getKhachHang().getHoTen();
             String sdt = phieu.getKhachHang().getSdt();
 
@@ -114,6 +115,10 @@ public class PhieuDatBanService {
                 throw new IllegalArgumentException("Số điện thoại phải đủ 10 số và bắt đầu bằng số 0");
             }
             
+            if(phieu.getTienDatCoc() < 0) {
+                throw new IllegalArgumentException("Tiền đặt cọc phải >= 0");
+            }
+
             if (phieu.getThoiGianDen() == null || phieu.getThoiGianDen().isBefore(LocalDateTime.now())) {
                 throw new IllegalArgumentException("Thời gian đến phải ở tương lai");
             }
@@ -126,13 +131,14 @@ public class PhieuDatBanService {
     }
 
     /**
-     * Cập nhật mã khách hàng (Khi nhân viên tìm thấy khách qua SĐT tại quầy thanh toán)
+     * Cập nhật mã khách hàng (Khi nhân viên tìm thấy khách qua SĐT tại quầy thanh
+     * toán)
      */
     public void capNhatKhachHangChoPhieu(String maPhieu, String maKH) {
         if (maPhieu == null || maPhieu.isBlank()) {
             throw new IllegalArgumentException("Mã phiếu không được để trống");
         }
-        
+
         boolean success = phieuDatBanDAO.capNhatKhachHangChoPhieu(maPhieu, maKH);
         if (!success) {
             throw new RuntimeException("Cập nhật khách hàng vào phiếu thất bại");
@@ -166,96 +172,99 @@ public class PhieuDatBanService {
             throw new RuntimeException("Thêm phiếu đặt bàn thất bại");
         }
     }
-    
+
     public String getLastPhieuDatBanID() {
         return phieuDatBanDAO.getLastPhieuDatBanID();
     }
 
-	public String themPhieuDatBan(String maPDB, String tenKhachHang, String soDienThoai, int soLuongNguoi,
-			LocalDateTime thoiGianDen, String ghiChu, Set<String> selectedTables) {
-		// TODO Auto-generated method stub
-		KhachHangService khService = new KhachHangService();
-	    KhachHang kh = khService.getKhachHangTheoSDT(soDienThoai);
-	    
-	    if (kh == null) {
-	        // Nếu khách chưa tồn tại, tạo mới khách hàng với thông tin cơ bản
-	       String lastID = IDQueryHelper.getLastID("KhachHang", "maKH");
-	       String newID = IDGeneratorHelper.generateNextIDFromFullID(lastID);
-	        kh = new KhachHang(newID, tenKhachHang, soDienThoai, 0, LoaiThanhVien.DONG);
-	        khService.themKhachHang(kh);
-	    }
+    public String themPhieuDatBan(String maPDB, String tenKhachHang, String soDienThoai, int soLuongNguoi,
+            LocalDateTime thoiGianDen, String ghiChu, Set<String> selectedTables) {
+        // TODO Auto-generated method stub
+        KhachHangService khService = new KhachHangService();
+        KhachHang kh = khService.getKhachHangTheoSDT(soDienThoai);
 
-	    // 2. Khởi tạo đối tượng PhieuDatBan
-	    PhieuDatBan phieu = new PhieuDatBan();
-	    phieu.setMaPhieuDat(maPDB);
-	    phieu.setKhachHang(kh); // Gán thực thể khách hàng vào phiếu
-	    phieu.setNhanVien(SessionManager.getCurrentNhanVien()); // Lấy NV đang đăng nhập
-	    phieu.setThoiGianDen(thoiGianDen);
-	    phieu.setSoLuongNguoi(soLuongNguoi);
-	    phieu.setGhiChu(ghiChu);
-	    phieu.setTrangThai(TrangThaiPhieuDat.DANG_CHO); // Trạng thái đặt trước
+        if (kh == null) {
+            // Nếu khách chưa tồn tại, tạo mới khách hàng với thông tin cơ bản
+            String lastID = IDQueryHelper.getLastID("KhachHang", "maKH");
+            String newID = IDGeneratorHelper.generateNextIDFromFullID(lastID);
+            kh = new KhachHang(newID, tenKhachHang, soDienThoai, 0, LoaiThanhVien.DONG);
+            khService.themKhachHang(kh);
+        }
 
-	    // 3. Validate dữ liệu phiếu trước khi lưu
-	    validatePhieuDatBan(phieu);
+        // 2. Khởi tạo đối tượng PhieuDatBan
+        PhieuDatBan phieu = new PhieuDatBan();
+        phieu.setMaPhieuDat(maPDB);
+        phieu.setKhachHang(kh); // Gán thực thể khách hàng vào phiếu
+        phieu.setNhanVien(SessionManager.getCurrentNhanVien()); // Lấy NV đang đăng nhập
+        phieu.setThoiGianDen(thoiGianDen);
+        phieu.setSoLuongNguoi(soLuongNguoi);
+        phieu.setGhiChu(ghiChu);
+        phieu.setTrangThai(TrangThaiPhieuDat.DANG_CHO); // Trạng thái đặt trước
 
-	    // 4. Lưu phiếu vào Database thông qua DAO
-	    boolean checkPDB = phieuDatBanDAO.themPhieuDatBan(phieu);
-	    if (!checkPDB) {
-	        throw new RuntimeException("Lỗi: Không thể lưu phiếu đặt bàn vào hệ thống.");
-	    }
+        // Tính tiền đặt cọc: 100.000 VNĐ/bàn
+        double tienDatCoc = 100000.0 * selectedTables.size();
+        phieu.setTienDatCoc(tienDatCoc);
 
-	    // 5. Lưu chi tiết phiếu (liên kết bàn) và cập nhật trạng thái bàn vật lý
-	    for (String maBan : selectedTables) {
-	        // A. Thêm dòng vào ChiTietPhieuDatBan
-	        ChiTietPhieuDatBan ct = new ChiTietPhieuDatBan();
-	        ct.setPhieuDatBan(phieu);
-	        ct.setBan(banService.getBanTheoMa(maBan));
-	        ct.setGhiChu("");
-	        chiTietPhieuDatBanDAO.themChiTietPhieuDatBan(ct);
+        // 3. Validate dữ liệu phiếu trước khi lưu
+        validatePhieuDatBan(phieu);
 
-	        // B. Cập nhật trạng thái bàn thành DA_DAT (Màu vàng)
-	        banService.capNhatTrangThaiBan(maBan, TrangThaiBan.DA_DAT);
-	    }
+        // 4. Lưu phiếu vào Database thông qua DAO
+        boolean checkPDB = phieuDatBanDAO.themPhieuDatBan(phieu);
+        if (!checkPDB) {
+            throw new RuntimeException("Lỗi: Không thể lưu phiếu đặt bàn vào hệ thống.");
+        }
 
-	    return "Đặt bàn thành công cho khách hàng " + tenKhachHang;
-	}
-	
-	public void capNhatTrangThaiPhieu(String maPDB, TrangThaiPhieuDat trangThai) {
-		phieuDatBanDAO.capNhatTrangThaiPhieu(maPDB, trangThai);
-	}
+        // 5. Lưu chi tiết phiếu (liên kết bàn) và cập nhật trạng thái bàn vật lý
+        for (String maBan : selectedTables) {
+            // A. Thêm dòng vào ChiTietPhieuDatBan
+            ChiTietPhieuDatBan ct = new ChiTietPhieuDatBan();
+            ct.setPhieuDatBan(phieu);
+            ct.setBan(banService.getBanTheoMa(maBan));
+            ct.setGhiChu("");
+            chiTietPhieuDatBanDAO.themChiTietPhieuDatBan(ct);
 
-	public void capNhatPhieuDatBan(PhieuDatBan phieu) {
-		// TODO Auto-generated method stub
-		validatePhieuDatBan(phieu);
-		phieuDatBanDAO.capNhatPhieuDatBan(phieu);	
-	}
+            // B. Cập nhật trạng thái bàn thành DA_DAT (Màu vàng)
+            banService.capNhatTrangThaiBan(maBan, TrangThaiBan.DA_DAT);
+        }
 
-	public void xoaPhieuDatBan(String maPDB) {
-		// TODO Auto-generated method stub
-		if(maPDB == null || maPDB.isBlank()) {
-			throw new IllegalArgumentException("Không thể xóa với mã phiếu đặt bàn trống");
-		}
-		phieuDatBanDAO.xoaPhieuDatBan(maPDB);
-	}
+        return "Đặt bàn thành công cho khách hàng " + tenKhachHang;
+    }
 
-	public ArrayList<PhieuDatBan> getAllPhieuDatBan() {
-		// TODO Auto-generated method stub
-		return (ArrayList<PhieuDatBan>) phieuDatBanDAO.getAllPhieuDatBan();
-		
-	}
+    public void capNhatTrangThaiPhieu(String maPDB, TrangThaiPhieuDat trangThai) {
+        phieuDatBanDAO.capNhatTrangThaiPhieu(maPDB, trangThai);
+    }
 
-	public void batDauSuDung(String maPhieu) {
+    public void capNhatPhieuDatBan(PhieuDatBan phieu) {
+        // TODO Auto-generated method stub
+        validatePhieuDatBan(phieu);
+        phieuDatBanDAO.capNhatPhieuDatBan(phieu);
+    }
+
+    public void xoaPhieuDatBan(String maPDB) {
+        // TODO Auto-generated method stub
+        if (maPDB == null || maPDB.isBlank()) {
+            throw new IllegalArgumentException("Không thể xóa với mã phiếu đặt bàn trống");
+        }
+        phieuDatBanDAO.xoaPhieuDatBan(maPDB);
+    }
+
+    public ArrayList<PhieuDatBan> getAllPhieuDatBan() {
+        // TODO Auto-generated method stub
+        return (ArrayList<PhieuDatBan>) phieuDatBanDAO.getAllPhieuDatBan();
+
+    }
+
+    public void batDauSuDung(String maPhieu) {
         PhieuDatBan phieu = getPhieuDatBanTheoMa(maPhieu);
         if (phieu != null && phieu.getTrangThai() == TrangThaiPhieuDat.DANG_CHO) {
             capNhatTrangThaiPhieu(maPhieu, TrangThaiPhieuDat.DANG_SU_DUNG);
         } else {
             throw new IllegalStateException("Không thể bắt đầu sử dụng. Phiếu phải ở trạng thái Đang chờ");
         }
-}
+    }
 
-	public List<PhieuDatBan> getDanhSachHoatDongGanDay() {
-	 return	phieuDatBanDAO.getHoatDongGanDay();
-	}
+    public List<PhieuDatBan> getDanhSachHoatDongGanDay() {
+        return phieuDatBanDAO.getHoatDongGanDay();
+    }
 
-	
 }

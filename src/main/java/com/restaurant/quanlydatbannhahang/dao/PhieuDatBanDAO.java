@@ -40,6 +40,7 @@ public class PhieuDatBanDAO {
             int soLuongNguoi = rs.getInt("soLuongNguoi");
             String ghiChu = rs.getString("ghiChu");
             String trangThaiStr = rs.getString("trangThai");
+            double tienDatCoc = rs.getDouble("tienDatCoc");
 
             PhieuDatBan phieu = new PhieuDatBan();
             phieu.setMaPhieuDat(maPhieuDat);
@@ -52,6 +53,7 @@ public class PhieuDatBanDAO {
             phieu.setSoLuongNguoi(soLuongNguoi);
             phieu.setGhiChu(ghiChu);
             phieu.setTrangThai(TrangThaiPhieuDat.valueOf(trangThaiStr));
+            phieu.setTienDatCoc(tienDatCoc);
 
             return phieu;
         } catch (Exception e) {
@@ -62,7 +64,7 @@ public class PhieuDatBanDAO {
 
     public boolean themPhieuDatBan(PhieuDatBan phieu) {
         Connection connection = DatabaseConnection.getConnection();
-        String sql = "insert into PhieuDatBan (maPhieuDat, maKH, maNV, ngayLapPhieu, thoiGianDen, soLuongNguoi, ghiChu, trangThai) values (?,?,?,?,?,?,?,?)";
+        String sql = "insert into PhieuDatBan (maPhieuDat, maKH, maNV, ngayLapPhieu, thoiGianDen, soLuongNguoi, ghiChu, trangThai, tienDatCoc) values (?,?,?,?,?,?,?,?,?)";
         try {
             // Kiểm tra nhân viên tồn tại
             if (phieu.getNhanVien() == null || phieu.getNhanVien().getMaNV() == null) {
@@ -84,6 +86,7 @@ public class PhieuDatBanDAO {
             pstm.setInt(6, phieu.getSoLuongNguoi());
             pstm.setString(7, phieu.getGhiChu());
             pstm.setString(8, phieu.getTrangThai().name());
+            pstm.setDouble(9, phieu.getTienDatCoc());
             return pstm.executeUpdate() > 0;
         } catch (Exception e) {
             System.err.println("Lỗi khi insert PhieuDatBan - Mã: " + (phieu != null ? phieu.getMaPhieuDat() : "null"));
@@ -140,9 +143,9 @@ public class PhieuDatBanDAO {
         try {
             PreparedStatement pstm = con.prepareStatement(sql);
             ResultSet rs = pstm.executeQuery();
-            while(rs.next()) {
-            	PhieuDatBan pdb = buildPhieuDatBanFromResultSet(rs);
-            	list.add(pdb);
+            while (rs.next()) {
+                PhieuDatBan pdb = buildPhieuDatBanFromResultSet(rs);
+                list.add(pdb);
             }
         } catch (Exception e) {
             // TODO: handle exception

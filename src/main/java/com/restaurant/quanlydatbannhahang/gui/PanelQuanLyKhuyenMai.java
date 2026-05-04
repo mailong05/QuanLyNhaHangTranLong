@@ -21,12 +21,10 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
 
         private ActionListener cbFilterTrangThaiListener;
 
-        private IDGeneratorHelper idGeneratorHelper;
-        private IDQueryHelper idQueryHelper;
+
 
         public PanelQuanLyKhuyenMai() {
-                idGeneratorHelper = new IDGeneratorHelper();
-                idQueryHelper = new IDQueryHelper();
+
                 initComponents();
                 customUI();
                 loadDataToComboBoxes();
@@ -251,9 +249,9 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
         }
 
         private void fillTxtMaKhuyenMai() {
-                String lastID = idQueryHelper.getLastID("KhuyenMai", "maKM");
-                String maKMNew = (lastID == null || lastID.isEmpty()) ? idGeneratorHelper.generateDefaultID("KM")
-                                : idGeneratorHelper.generateNextIDFromFullID(lastID);
+                String lastID = IDQueryHelper.getLastID("KhuyenMai", "maKM");
+                String maKMNew = (lastID == null || lastID.isEmpty()) ? IDGeneratorHelper.generateDefaultID("KM")
+                                : IDGeneratorHelper.generateNextIDFromFullID(lastID);
                 txtMaKhuyenMai.setText(maKMNew);
         }
 

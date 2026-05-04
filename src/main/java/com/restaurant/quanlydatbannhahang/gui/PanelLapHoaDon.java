@@ -476,6 +476,11 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         lblThue1.setText("Thuế VAT: ");
         jPanel3.add(lblThue1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 610, -1, 30));
 
+        lblTienDatCocDaTru = new javax.swing.JLabel();
+        lblTienDatCocDaTru.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lblTienDatCocDaTru.setText("Tiền đặt cọc đã trừ: ");
+        jPanel3.add(lblTienDatCocDaTru, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 625, -1, 30));
+
         jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 770, 680));
 
         panelTrungTam.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(368, 0, 780, 680));
@@ -566,22 +571,21 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         int diemCanTru = (int) Math.ceil(tongThanhToan / VND_PER_DIEM);
         int diemHienCo = selectedKhachHang.getDiemTichLuy();
 
-        if(diemHienCo == 0) {
-        	JOptionPane.showMessageDialog(this,
+        if (diemHienCo == 0) {
+            JOptionPane.showMessageDialog(this,
                     "Điểm tích lũy không đủ để sử dụng");
             return;
         }
-        
-        int diemConLai = Math.max(diemHienCo-diemCanTru, 0);
+
+        int diemConLai = Math.max(diemHienCo - diemCanTru, 0);
 
         // Trừ điểm trong DB
         boolean success = khachHangService.suDungDiemTichLuy(selectedKhachHang.getMaKH(), diemCanTru);
         if (!success) {
             JOptionPane.showMessageDialog(this, "Không thể sử dụng điểm tích lũy.");
             return;
-        }
-        else {
-        	JOptionPane.showMessageDialog(this, "Đã áp dụng điểm tích lũy cho hóa đơn.");
+        } else {
+            JOptionPane.showMessageDialog(this, "Đã áp dụng điểm tích lũy cho hóa đơn.");
         }
 
         // Cập nhật UI
@@ -1077,6 +1081,8 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
                 String rawGiamGia = lblTongTienGiamGia.getText()
                         .replace("Tổng tiền giảm giá (Tích lũy + Khuyến mãi): ", "").replace(" VND", "");
                 String rawThue = lblThue1.getText().replace("Thuế VAT: ", "").replace(" VND", "");
+                String rawTienDatCoc = lblTienDatCocDaTru.getText().replace("Tiền đặt cọc đã trừ: ", "").replace(" VND",
+                        "");
                 String rawFinal = lblTongThanhToan.getText().replace("Tổng tiền cần thanh toán: ", "").replace(" VND",
                         "");
 
@@ -1088,7 +1094,8 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
                         { "Tổng tiền món:", rawTongMon },
                         { "Phí dịch vụ:", rawPhiDV },
                         { "Giảm giá:", rawGiamGia },
-                        { "Thuế (VAT):", rawThue }
+                        { "Thuế (VAT):", rawThue },
+                        { "Tiền đặt cọc đã trừ:", rawTienDatCoc }
                 };
 
                 for (String[] line : summary) {
@@ -1131,7 +1138,6 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
 
             // 2. Cập nhật trạng thái các bàn vật lý về TRỐNG[cite: 18, 19]
             capNhatTrangThaiBan(currentMaBan);
-            
 
             // 3. Cập nhật phiếu đặt trước (nếu có) thành ĐÃ SỬ DỤNG[cite: 18]
             if (!currentMaPhieuDat.isEmpty()) {
@@ -1268,10 +1274,9 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         double tienThueVAT = apDungThue(MA_THUE_VAT_MAC_DINH, coSoTinhVAT);
         double tongThanhToan = coSoTinhVAT + tienThueVAT;
 
-       
+        PhieuDatBan phieuDatBan = phieuDatBanService
+                .getPhieuDatBanTheoMa(HoaDonDraftSession.getCurrentMaPhieuDatContext());
 
-        PhieuDatBan phieuDatBan = phieuDatBanService.getPhieuDatBanTheoMa(HoaDonDraftSession.getCurrentMaPhieuDatContext());
-        
         HoaDon hoaDon = new HoaDon();
         hoaDon.setMaHD(maHD);
         hoaDon.setPhieuDatBan(phieuDatBan);
@@ -1463,12 +1468,33 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         double coSoTinhVAT = Math.max(0, tongSauPhiDichVu - tongGiamGia);
         double tienThueVat = apDungThue(MA_THUE_VAT_MAC_DINH, coSoTinhVAT);
         double tongThanhToan = coSoTinhVAT + tienThueVat;
+
+        // Trừ tiền đặt cọc nếu có phiếu đặt bàn
+        double tienDatCocDaTru = 0;
+        String currentMaPhieuDat = HoaDonDraftSession.getCurrentMaPhieuDatContext();
+        if (currentMaPhieuDat != null && !currentMaPhieuDat.isBlank()) {
+            try {
+                PhieuDatBan phieu = phieuDatBanService.getPhieuDatBanTheoMa(currentMaPhieuDat);
+                if (phieu != null) {
+                    tienDatCocDaTru = phieu.getTienDatCoc();
+                    tongThanhToan = Math.max(0, tongThanhToan - tienDatCocDaTru); // Trừ tiền cọc
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
         tongThanhToanLuuTam = tongThanhToan;
 
         lblTongTien.setText("Tổng tiền: " + formatVnd(tongTien));
         lblPhiDichVu.setText("Phí dịch vụ: " + formatVnd(tienPhiDichVu));
         lblTongTienGiamGia.setText("Tổng tiền giảm giá (Tích lũy + Khuyến mãi): " + formatVnd(tongGiamGia));
         lblThue1.setText("Thuế VAT: " + formatVnd(tienThueVat));
+        if (tienDatCocDaTru > 0) {
+            lblTienDatCocDaTru.setText("Tiền đặt cọc đã trừ: " + formatVnd(tienDatCocDaTru));
+        } else {
+            lblTienDatCocDaTru.setText("Tiền đặt cọc đã trừ: 0");
+        }
         lblTongThanhToan.setText("Tổng tiền cần thanh toán: " + formatVnd(tongThanhToan));
     }
 
@@ -1549,6 +1575,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
     private javax.swing.JLabel lblTenKhachHang;
     private javax.swing.JLabel lblThue1;
     private javax.swing.JLabel lblTongThanhToan;
+    private javax.swing.JLabel lblTienDatCocDaTru;
     private javax.swing.JLabel lblTongTien;
     private javax.swing.JLabel lblTongTienGiamGia;
     private javax.swing.JPanel panelButton;

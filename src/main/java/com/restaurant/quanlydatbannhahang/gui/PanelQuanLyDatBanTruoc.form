@@ -106,6 +106,7 @@
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="lblThoiGianDen" alignment="0" min="-2" pref="102" max="-2" attributes="0"/>
                                   <Component id="lblGhiChu" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblTienDatCoc" min="-2" pref="88" max="-2" attributes="0"/>
                                   <Component id="lblSoLuong" min="-2" pref="88" max="-2" attributes="0"/>
                               </Group>
                           </Group>
@@ -121,16 +122,14 @@
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="btnTimKiem" min="-2" pref="134" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="102" attributes="0">
-                              <Component id="dtpThoiGianDen" min="-2" pref="244" max="-2" attributes="0"/>
-                              <EmptySpace pref="180" max="32767" attributes="0"/>
-                          </Group>
-                          <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="cbTrangThai" pref="127" max="32767" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                  <Component id="txtTienDatCoc" alignment="0" max="32767" attributes="0"/>
                                   <Component id="spSoNguoi" max="32767" attributes="0"/>
+                                  <Component id="cbTrangThai" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="dtpThoiGianDen" alignment="0" pref="244" max="32767" attributes="0"/>
                               </Group>
-                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                              <EmptySpace pref="180" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -167,15 +166,19 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="txtMaNhanVien" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="lblSoLuong" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="spSoNguoi" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
+                              <Component id="lblSoLuong" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Component id="lblMaNhanVien" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="lblMaBan" min="-2" max="-2" attributes="0"/>
-                          <Component id="txtMaBan" min="-2" pref="34" max="-2" attributes="0"/>
+                          <Component id="lblTienDatCoc" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="txtMaBan" alignment="3" min="-2" pref="34" max="-2" attributes="0"/>
+                              <Component id="txtTienDatCoc" alignment="3" min="-2" pref="34" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                       <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
@@ -289,9 +292,9 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnTimKiemActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JLabel" name="lblSoLuong">
+            <Component class="javax.swing.JLabel" name="lblTienDatCoc">
               <Properties>
-                <Property name="text" type="java.lang.String" value="S&#x1ed1; ng&#x1b0;&#x1edd;i:"/>
+                <Property name="text" type="java.lang.String" value="Ti&#x1ec1;n &#x111;&#x1eb7;t c&#x1ecd;c:"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="14" style="0"/>
                 </Property>
@@ -357,6 +360,16 @@
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
               </AuxValues>
             </Component>
+            <Component class="javax.swing.JLabel" name="lblSoLuong">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="S&#x1ed1; ng&#x1b0;&#x1edd;i:"/>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Segoe UI" size="14" style="0"/>
+                </Property>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JTextField" name="txtTienDatCoc">
+            </Component>
           </SubComponents>
         </Container>
       </SubComponents>
@@ -373,13 +386,15 @@
         <Component class="javax.swing.JTable" name="tableBan">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-              <Table columnCount="7" rowCount="0">
+              <Table columnCount="9" rowCount="0">
                 <Column editable="false" title="M&#xe3; phi&#x1ebf;u &#x111;&#x1eb7;t" type="java.lang.String"/>
                 <Column editable="false" title="S&#x1ed1; &#x111;i&#x1ec7;n tho&#x1ea1;i" type="java.lang.String"/>
                 <Column editable="false" title="M&#xe3; nh&#xe2;n vi&#xea;n" type="java.lang.String"/>
                 <Column editable="false" title="M&#xe3; b&#xe0;n" type="java.lang.String"/>
                 <Column editable="false" title="S&#x1ed1; ng&#x1b0;&#x1edd;i" type="java.lang.Integer"/>
+                <Column editable="true" title="Ng&#xe0;y l&#x1ead;p phi&#x1ebf;u" type="java.lang.Object"/>
                 <Column editable="false" title="Th&#x1edd;i gian &#x111;&#x1ebf;n" type="java.lang.Object"/>
+                <Column editable="true" title="Ti&#x1ec1;n &#x111;&#x1eb7;t c&#x1ecd;c" type="java.lang.String"/>
                 <Column editable="false" title="Tr&#x1ea1;ng th&#xe1;i" type="java.lang.String"/>
               </Table>
             </Property>

@@ -20,19 +20,14 @@ import java.util.List;
 
 public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseListener {
 
-    private ActionListener cbFilterLoaiThanhVienListener;
-    private ComboBoxEnumLoader cbEnumLoader;
-    private IDGeneratorHelper idGeneratorHelper;
-    private IDQueryHelper idQueryHelper;
+
 
     /**
      * Creates new form PanelKhachHang
      */
     public PanelQuanLyKhachHang() {
         initComponents();
-        idGeneratorHelper = new IDGeneratorHelper();
-        idQueryHelper = new IDQueryHelper();
-        cbEnumLoader = new ComboBoxEnumLoader();
+
         customUI();
         loadDataToComboBoxes();
         loadDataToTable();
@@ -105,11 +100,12 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseLis
             // Load LoaiThanhVien to both comboboxes
             cbFilterLoaiThanhVien.removeAllItems();
             cbFilterLoaiThanhVien.addItem("Loại thành viên");
-            cbEnumLoader.loadLoaiThanhVienToComboBox(cbFilterLoaiThanhVien);
+            ComboBoxEnumLoader.loadLoaiThanhVienToComboBox(cbFilterLoaiThanhVien);
 
             cbLoaiThanhVien.removeAllItems();
-            cbEnumLoader.loadLoaiThanhVienToComboBox(cbLoaiThanhVien);
+            ComboBoxEnumLoader.loadLoaiThanhVienToComboBox(cbLoaiThanhVien);
 
+            cbLoaiThanhVien.setSelectedIndex(4);
             // Re-add listeners
             for (ActionListener listener : loaiThanhVienListeners) {
                 cbFilterLoaiThanhVien.addActionListener(listener);
@@ -227,7 +223,6 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseLis
         txtHoTen.setText("");
         txtSoDienThoai.setText("");
         txtDiemTichLuy.setText("0");
-        cbLoaiThanhVien.setSelectedItem("ĐỒNG");
     }
 
     private void syncCapNhatButtonState() {
@@ -239,7 +234,7 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseLis
         clearFields();
         resetPlaceholder(txtTimKiem, "Nhập số điện thoại hoặc tên");
         txtDiemTichLuy.setText("0");
-        cbLoaiThanhVien.setSelectedItem("ĐỒNG");
+        cbLoaiThanhVien.setSelectedIndex(4);
         cbFilterLoaiThanhVien.setSelectedIndex(0);
         fillMaKH();
         loadDataToComboBoxes();
@@ -250,9 +245,9 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseLis
 
     private void fillMaKH() {
 		// TODO Auto-generated method stub
-    	 String lastID = idQueryHelper.getLastID("KhachHang", "maKH");
-         String maKHNew = (lastID == null || lastID.isEmpty()) ? idGeneratorHelper.toString()
-                 : idGeneratorHelper.generateNextIDFromFullID(lastID);
+    	 String lastID = IDQueryHelper.getLastID("KhachHang", "maKH");
+         String maKHNew = (lastID == null || lastID.isEmpty()) ? IDGeneratorHelper.generateDefaultID("KH")
+                 : IDGeneratorHelper.generateNextIDFromFullID(lastID);
          txtMaKhachHang.setText(maKHNew);
 	}
 
@@ -419,11 +414,11 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseLis
             }
         });
 
-        cbLoaiThanhVien.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
+        cbLoaiThanhVien.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {}));
         cbLoaiThanhVien.setPreferredSize(new java.awt.Dimension(72, 35));
-        cbLoaiThanhVien.setSelectedItem("ĐỒNG");
+        
 
-        cbFilterLoaiThanhVien.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbFilterLoaiThanhVien.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {}));
         cbFilterLoaiThanhVien.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbFilterLoaiThanhVienActionPerformed(evt);

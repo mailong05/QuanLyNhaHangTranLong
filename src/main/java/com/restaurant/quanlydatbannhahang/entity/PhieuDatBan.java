@@ -12,10 +12,12 @@ public class PhieuDatBan {
     private int soLuongNguoi;
     private String ghiChu;
     private TrangThaiPhieuDat trangThai;
+    private double tienDatCoc;
 
     // Constructor không tham số
     public PhieuDatBan() {
         this.ngayLapPhieu = LocalDateTime.now();
+        this.tienDatCoc = 0;
     }
 
     // Constructor đầy đủ
@@ -30,6 +32,23 @@ public class PhieuDatBan {
         this.soLuongNguoi = soLuongNguoi;
         this.ghiChu = ghiChu;
         this.trangThai = trangThai;
+        this.tienDatCoc = 0;
+    }
+
+    // Constructor với tienDatCoc
+    public PhieuDatBan(String maPhieuDat, KhachHang khachHang, NhanVien nhanVien, Ban ban, LocalDateTime ngayLapPhieu,
+            LocalDateTime thoiGianDen, int soLuongNguoi, String ghiChu, TrangThaiPhieuDat trangThai,
+            double tienDatCoc) {
+        this.maPhieuDat = maPhieuDat;
+        this.khachHang = khachHang;
+        this.nhanVien = nhanVien;
+        this.ban = ban;
+        this.ngayLapPhieu = ngayLapPhieu != null ? ngayLapPhieu : LocalDateTime.now();
+        this.thoiGianDen = thoiGianDen;
+        this.soLuongNguoi = soLuongNguoi;
+        this.ghiChu = ghiChu;
+        this.trangThai = trangThai;
+        this.tienDatCoc = tienDatCoc;
     }
 
     // Getter và Setter
@@ -103,6 +122,14 @@ public class PhieuDatBan {
 
     public void setTrangThai(TrangThaiPhieuDat trangThai) {
         this.trangThai = trangThai;
+    }
+
+    public double getTienDatCoc() {
+        return tienDatCoc;
+    }
+
+    public void setTienDatCoc(double tienDatCoc) {
+        this.tienDatCoc = tienDatCoc;
     }
 
     // Các phương thức cần thiết
