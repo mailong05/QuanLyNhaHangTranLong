@@ -243,7 +243,7 @@ public class PhieuDatBanDAO {
         String sql = "update PhieuDatBan set maKH = ?, maNV = ?, thoiGianDen = ?, soLuongNguoi = ?, ghiChu = ?, trangThai = ? where maPhieuDat = ?";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
-            String maKH = (phieu.getKhachHang() != null) ? phieu.getKhachHang().getMaKH() : "";
+            String maKH = (phieu.getKhachHang() != null) ? phieu.getKhachHang().getMaKH() : null;
             pstm.setString(1, maKH);
             pstm.setString(2, phieu.getNhanVien().getMaNV());
             pstm.setTimestamp(3, java.sql.Timestamp.valueOf(phieu.getThoiGianDen()));
