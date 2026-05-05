@@ -523,10 +523,13 @@ public class PanelDatMon extends javax.swing.JPanel {
     }
 
     private void capNhatTrangThaiSauKhiLuu() {
-        java.util.List<String> maBanList = getMaBanListFromContext();
+        List<String> maBanList = getMaBanListFromContext();
         if (maBanList.isEmpty()) {
+        	System.out.println("Mã bàn rỗng (method capNhatTrangThaiSauKhiLuu trong PanelDatMon)");
             return;
         }
+        
+        System.out.println("Hi");
 
         BanService banService = new BanService();
         String maPhieuDatContext = HoaDonDraftSession.getCurrentMaPhieuDatContext();
@@ -1018,17 +1021,7 @@ public class PanelDatMon extends javax.swing.JPanel {
         addSelectedMonToPhieuGoiMon();
     }// GEN-LAST:event_btnChonMonActionPerformed
 
-    private void btnLuuActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnLuuActionPerformed
-        try {
-            saveDraftToSession();
-            capNhatTrangThaiSauKhiLuu();
-            JOptionPane.showMessageDialog(this, "Đã lưu phiếu gọi món tạm thời.");
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Lỗi khi lưu phiếu gọi món: " + e.getMessage(), "Lỗi",
-                    JOptionPane.ERROR_MESSAGE);
-        }
-    }// GEN-LAST:event_btnLuuActionPerformed
-
+   
     private void btnThanhToanActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnThanhToanActionPerformed
         if (phieuGoiMonMap.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn ít nhất một món trước khi thanh toán.");

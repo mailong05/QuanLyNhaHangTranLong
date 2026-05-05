@@ -2,6 +2,7 @@ package com.restaurant.quanlydatbannhahang.service;
 
 import com.restaurant.quanlydatbannhahang.dao.BanDAO;
 import com.restaurant.quanlydatbannhahang.entity.Ban;
+import com.restaurant.quanlydatbannhahang.entity.ChiTietPhieuDatBan;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiBan;
 
 import java.util.List;
@@ -45,6 +46,8 @@ public class BanService {
         }
     }
 
+    
+    
     /**
      * Lấy bàn theo mã
      */
@@ -173,4 +176,10 @@ public class BanService {
     public void giaiphongBan(String maBan) {
         capNhatTrangThaiBan(maBan, TrangThaiBan.TRONG);
     }
+    
+    public void capNhatTrangThaiBanTrongChiTietPDB(List<ChiTietPhieuDatBan> list, TrangThaiBan trangThai) {
+		for(ChiTietPhieuDatBan ct: list) {
+			capNhatTrangThaiBan(ct.getBan().getMaBan(), trangThai);
+		}
+	}
 }

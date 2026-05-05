@@ -138,8 +138,8 @@ public class PhieuDatBanDAO {
         List<PhieuDatBan> list = new ArrayList<>();
         Connection con = DatabaseConnection.getConnection();
         String sql = "SELECT * FROM PhieuDatBan " +
-                "WHERE CAST(thoiGianDen AS DATE) = CAST(GETDATE() AS DATE) " +
-                "ORDER BY thoiGianDen DESC";
+                     "WHERE CAST(ngayLapPhieu AS DATE) = CAST(GETDATE() AS DATE) " +
+                     "ORDER BY ngayLapPhieu DESC";
         try {
             PreparedStatement pstm = con.prepareStatement(sql);
             ResultSet rs = pstm.executeQuery();
@@ -243,7 +243,7 @@ public class PhieuDatBanDAO {
         String sql = "update PhieuDatBan set maKH = ?, maNV = ?, thoiGianDen = ?, soLuongNguoi = ?, ghiChu = ?, trangThai = ? where maPhieuDat = ?";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
-            String maKH = (phieu.getKhachHang().getMaKH() != null) ? phieu.getKhachHang().getMaKH() : "";
+            String maKH = (phieu.getKhachHang() != null) ? phieu.getKhachHang().getMaKH() : "";
             pstm.setString(1, maKH);
             pstm.setString(2, phieu.getNhanVien().getMaNV());
             pstm.setTimestamp(3, java.sql.Timestamp.valueOf(phieu.getThoiGianDen()));
