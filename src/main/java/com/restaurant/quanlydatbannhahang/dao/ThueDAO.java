@@ -113,10 +113,11 @@ public class ThueDAO {
 
     public boolean xoaThue(String maThue) {
         Connection connection = DatabaseConnection.getConnection();
-        String sql = "delete from Thue where maThue = ?";
+        String sql = "update Thue set trangThai = ? where maThue = ?";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
-            pstm.setString(1, maThue);
+            pstm.setString(1, TrangThaiThue.NGUNG_AP_DUNG.name());
+            pstm.setString(2, maThue);
             return pstm.executeUpdate() > 0;
         } catch (Exception e) {
             e.printStackTrace();

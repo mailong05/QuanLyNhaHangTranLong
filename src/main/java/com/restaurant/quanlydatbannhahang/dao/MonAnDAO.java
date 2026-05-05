@@ -188,10 +188,11 @@ public class MonAnDAO {
 
     public boolean xoaMonAn(String maMon) {
         Connection connection = DatabaseConnection.getConnection();
-        String sql = "delete from MonAn where maMon = ?";
+        String sql = "update MonAn set trangThai = ? where maMon = ?";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
-            pstm.setString(1, maMon);
+            pstm.setString(1, TrangThaiMonAn.HET.name());
+            pstm.setString(2, maMon);
             return pstm.executeUpdate() > 0;
         } catch (Exception e) {
             e.printStackTrace();

@@ -127,10 +127,11 @@ public class NhanVienDAO {
 
 	public boolean xoaNhanVien(String maNV) {
 		Connection connection = DatabaseConnection.getConnection();
-		String sql = "DELETE FROM NhanVien WHERE maNV = ?";
+		String sql = "UPDATE NhanVien SET trangThai = ? WHERE maNV = ?";
 		try {
 			PreparedStatement pstm = connection.prepareStatement(sql);
-			pstm.setString(1, maNV);
+			pstm.setString(1, TrangThaiNhanVien.DA_NGHI_VIEC.name());
+			pstm.setString(2, maNV);
 			return pstm.executeUpdate() > 0;
 		} catch (Exception e) {
 			e.printStackTrace();

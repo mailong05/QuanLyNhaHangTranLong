@@ -177,6 +177,11 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
 
             if (monAnList != null && !monAnList.isEmpty()) {
                 for (MonAn monan : monAnList) {
+                    // Filter: Chỉ hiển thị những món ăn còn (Soft delete)
+                    if (monan.getTrangThai() != com.restaurant.quanlydatbannhahang.entity.TrangThaiMonAn.CON) {
+                        continue;
+                    }
+
                     // Apply Loai filter
                     if (selectedLoai != null && !selectedLoai.isEmpty() && !selectedLoai.equals("Loại món ăn")) {
                         if (monan.getTenLoai() == null || !monan.getTenLoai().getDisplayName().equals(selectedLoai)) {
@@ -213,18 +218,14 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
             model.setRowCount(0);
 
             for (MonAn monan : list) {
+                // Filter: Chỉ hiển thị những món ăn còn (Soft delete)
+                if (monan.getTrangThai() != com.restaurant.quanlydatbannhahang.entity.TrangThaiMonAn.CON) {
+                    continue;
+                }
+
                 // Apply Loai filter
                 if (selectedLoai != null && !selectedLoai.isEmpty() && !selectedLoai.equals("Loại món ăn")) {
                     if (monan.getTenLoai() == null || !monan.getTenLoai().getDisplayName().equals(selectedLoai)) {
-                        continue;
-                    }
-                }
-
-                // Apply TrangThai filter
-                if (selectedTrangThai != null && !selectedTrangThai.isEmpty()
-                        && !selectedTrangThai.equals("Trạng thái")) {
-                    if (monan.getTrangThai() == null
-                            || !monan.getTrangThai().getDisplayName().equals(selectedTrangThai)) {
                         continue;
                     }
                 }
@@ -833,22 +834,22 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
     private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaActionPerformed
         String maMon = txtMaMon.getText().trim();
         if (maMon.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn món ăn cần xóa.");
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn món ăn để đặt trạng thái hết.");
             return;
         }
 
-        int choice = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa món ăn này không?",
-                "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
+        int choice = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn đặt món ăn này thành hết không?",
+                "Xác nhận", JOptionPane.YES_NO_OPTION);
         if (choice != JOptionPane.YES_OPTION) {
             return;
         }
 
         try {
             monAnService.xoaMonAn(maMon);
-            JOptionPane.showMessageDialog(this, "Xóa món ăn thành công.");
+            JOptionPane.showMessageDialog(this, "Đã cập nhật trạng thái món ăn sang hết thành công.");
             refreshData();
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Xóa món ăn thất bại: " + ex.getMessage());
+            JOptionPane.showMessageDialog(this, "Cập nhật trạng thái món ăn thất bại: " + ex.getMessage());
         }
     }// GEN-LAST:event_btnXoaActionPerformed
 

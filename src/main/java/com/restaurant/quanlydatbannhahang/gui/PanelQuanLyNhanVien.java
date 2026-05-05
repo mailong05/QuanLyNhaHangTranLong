@@ -156,6 +156,11 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                         model.setRowCount(0);
 
                         for (NhanVien nv : list) {
+                                // Filter: Chỉ hiển thị nhân viên đang làm việc (Soft delete)
+                                if (nv.getTrangThai() != TrangThaiNhanVien.DANG_LAM_VIEC) {
+                                        continue;
+                                }
+
                                 // Apply ChucVu filter
                                 if (selectedChucVu != null && !selectedChucVu.equals("Chức vụ")) {
                                         if (nv.getChucVu() == null
@@ -193,6 +198,11 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                         model.setRowCount(0);
 
                         for (NhanVien nv : list) {
+                                // Filter: Chỉ hiển thị nhân viên đang làm việc (Soft delete)
+                                if (nv.getTrangThai() != TrangThaiNhanVien.DANG_LAM_VIEC) {
+                                        continue;
+                                }
+
                                 // Apply ChucVu filter
                                 if (selectedChucVu != null && !selectedChucVu.equals("Chức vụ")) {
                                         if (nv.getChucVu() == null
@@ -662,12 +672,21 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
         private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaActionPerformed
                 String maNV = txtMaNhanVien.getText().trim();
                 if (maNV.isEmpty()) {
-                        JOptionPane.showMessageDialog(this, "Vui lòng chọn nhân viên cần xóa.");
+                        JOptionPane.showMessageDialog(this, "Vui lòng chọn nhân viên để cho nghỉ việc.");
                         return;
                 }
 
-                int choice = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa nhân viên này không?",
-                                "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
+                // Kiểm tra không cho xóa chính mình
+                com.restaurant.quanlydatbannhahang.entity.NhanVien currentNhanVien = 
+                    com.restaurant.quanlydatbannhahang.session.SessionManager.getCurrentNhanVien();
+                if (currentNhanVien != null && currentNhanVien.getMaNV().equals(maNV)) {
+                        JOptionPane.showMessageDialog(this, "Bạn không thể tự cho chính mình nghỉ việc!",
+                                        "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+                        return;
+                }
+
+                int choice = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn cho nhân viên này nghỉ việc không?",
+                                "Xác nhận", JOptionPane.YES_NO_OPTION);
                 if (choice != JOptionPane.YES_OPTION) {
                         return;
                 }
@@ -675,10 +694,10 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                 try {
                         NhanVienService service = new NhanVienService();
                         service.xoaNhanVien(maNV);
-                        JOptionPane.showMessageDialog(this, "Xóa nhân viên thành công.");
+                        JOptionPane.showMessageDialog(this, "Đã cập nhật trạng thái nhân viên sang nghỉ việc thành công.");
                         refreshData();
                 } catch (Exception ex) {
-                        JOptionPane.showMessageDialog(this, "Xóa nhân viên thất bại: " + ex.getMessage());
+                        JOptionPane.showMessageDialog(this, "Cập nhật trạng thái nhân viên thất bại: " + ex.getMessage());
                 }
         }// GEN-LAST:event_btnXoaActionPerformed
 

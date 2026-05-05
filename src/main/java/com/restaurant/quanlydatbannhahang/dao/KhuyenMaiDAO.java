@@ -161,10 +161,11 @@ public class KhuyenMaiDAO {
 
     public boolean xoaKhuyenMai(String maKM) {
         Connection connection = DatabaseConnection.getConnection();
-        String sql = "delete from KhuyenMai where maKM = ?";
+        String sql = "update KhuyenMai set trangThai = ? where maKM = ?";
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
-            pstm.setString(1, maKM);
+            pstm.setString(1, TrangThaiKhuyenMai.NGUNG_AP_DUNG.name());
+            pstm.setString(2, maKM);
             return pstm.executeUpdate() > 0;
         } catch (Exception e) {
             e.printStackTrace();
