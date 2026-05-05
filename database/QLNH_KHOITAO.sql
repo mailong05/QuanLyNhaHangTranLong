@@ -25,7 +25,7 @@ CREATE TABLE KhuVuc (
 );
 
 -- =========================================================
--- 2. BẢNG KHUYẾN MÃI & THUẾ (Đã thêm trangThai theo Mermaid)
+-- 2. BẢNG KHUYẾN MÃI & THUẾ
 -- =========================================================
 CREATE TABLE KhuyenMai (
     maKM VARCHAR(20) PRIMARY KEY,
@@ -35,7 +35,7 @@ CREATE TABLE KhuyenMai (
     ngayKetThuc DATE NOT NULL,
     dieuKienToiThieu FLOAT DEFAULT 0,
     trangThai NVARCHAR(50) NOT NULL
-        CHECK (trangThai IN (N'CON_AP_DUNG', N'NGUNG_AP_DUNG')) -- Khớp Enum sơ đồ
+        CHECK (trangThai IN (N'CON_AP_DUNG', N'NGUNG_AP_DUNG'))
 );
 
 CREATE TABLE Thue (
@@ -43,7 +43,7 @@ CREATE TABLE Thue (
     tenThue NVARCHAR(100) NOT NULL,
     thueSuat FLOAT NOT NULL CHECK (thueSuat >= 0),
     trangThai NVARCHAR(50) NOT NULL
-        CHECK (trangThai IN (N'CON_AP_DUNG', N'NGUNG_AP_DUNG')) -- Khớp Enum sơ đồ
+        CHECK (trangThai IN (N'CON_AP_DUNG', N'NGUNG_AP_DUNG'))
 );
 
 -- =========================================================
@@ -55,7 +55,7 @@ CREATE TABLE KhachHang (
     sdt VARCHAR(15) NOT NULL,
     diemTichLuy INT DEFAULT 0 CHECK (diemTichLuy >= 0),
     loaiThanhVien NVARCHAR(50) NOT NULL
-        CHECK (loaiThanhVien IN (N'DONG', N'BAC', N'VANG', N'VIP')) -- Enum cho phân hạng thành viên
+        CHECK (loaiThanhVien IN (N'DONG', N'BAC', N'VANG', N'VIP'))
 );
 GO
 
@@ -79,11 +79,12 @@ CREATE TABLE TaiKhoan (
     password VARCHAR(255) NOT NULL,
     maNV VARCHAR(20) UNIQUE NOT NULL,
     quyenHan NVARCHAR(50) NOT NULL 
-        CHECK (quyenHan IN ('STAFF', 'MANAGER')), -- Enum mới theo yêu cầu
+        CHECK (quyenHan IN ('STAFF', 'MANAGER')),
     CONSTRAINT FK_TaiKhoan_NhanVien FOREIGN KEY (maNV) REFERENCES NhanVien(maNV) ON DELETE CASCADE
 );
+
 -- =========================================================
--- 5. BẢNG MÓN ĂN (Đã cập nhật tenLoai khớp Enum LoaiMonAn)
+-- 5. BẢNG MÓN ĂN
 -- =========================================================
 CREATE TABLE MonAn (
     maMon VARCHAR(20) PRIMARY KEY,
@@ -91,9 +92,9 @@ CREATE TABLE MonAn (
     donGia FLOAT NOT NULL,
     donViTinh NVARCHAR(50),
     tenLoai NVARCHAR(50) NOT NULL
-        CHECK (tenLoai IN (N'KHAI_VI', N'MON_CHINH', N'HAI_SAN', N'DO_UONG', N'TRANG_MIENG')), -- Khớp Enum sơ đồ
+        CHECK (tenLoai IN (N'KHAI_VI', N'MON_CHINH', N'HAI_SAN', N'DO_UONG', N'TRANG_MIENG')),
     trangThai NVARCHAR(50) NOT NULL
-        CHECK (trangThai IN (N'CON', N'HET')), -- Khớp Enum sơ đồ
+        CHECK (trangThai IN (N'CON', N'HET')),
     urlHinhAnh VARCHAR(255)
 );
 
@@ -107,7 +108,7 @@ CREATE TABLE BanAn (
     maKhuVuc VARCHAR(20),
     trangThai NVARCHAR(50) NOT NULL
         CHECK (trangThai IN (N'TRONG', N'DANG_DUNG', N'DA_DAT')),
-    CONSTRAINT FK_BanAn_KhuVuc FOREIGN KEY (maKhuVuc) REFERENCES KhuVuc(maKhuVuc) ON DELETE CASCADE
+    CONSTRAINT FK_BanAn_KhuVuc FOREIGN KEY (maKhuVuc) REFERENCES KhuVuc(maKhuVuc) ON DELETE NO ACTION
 );
 
 -- =========================================================
@@ -124,8 +125,8 @@ CREATE TABLE PhieuDatBan (
     trangThai NVARCHAR(50) NOT NULL
         CHECK (trangThai IN (N'DANG_CHO', N'DANG_SU_DUNG', N'DA_HUY', N'DA_SU_DUNG')),
     tienDatCoc FLOAT DEFAULT 0,
-    CONSTRAINT FK_PDB_KhachHang FOREIGN KEY (maKH) REFERENCES KhachHang(maKH) ON DELETE CASCADE,
-    CONSTRAINT FK_PDB_NhanVien FOREIGN KEY (maNV) REFERENCES NhanVien(maNV) ON DELETE CASCADE
+    CONSTRAINT FK_PDB_KhachHang FOREIGN KEY (maKH) REFERENCES KhachHang(maKH) ON DELETE NO ACTION,
+    CONSTRAINT FK_PDB_NhanVien FOREIGN KEY (maNV) REFERENCES NhanVien(maNV) ON DELETE NO ACTION
 );
 
 CREATE TABLE ChiTietPhieuDatBan (
@@ -134,7 +135,7 @@ CREATE TABLE ChiTietPhieuDatBan (
     ghiChu NVARCHAR(255),
     PRIMARY KEY (maPhieuDat, maBan),
     CONSTRAINT FK_CTPDB_PhieuDat FOREIGN KEY (maPhieuDat) REFERENCES PhieuDatBan(maPhieuDat) ON DELETE CASCADE,
-    CONSTRAINT FK_CTPDB_BanAn FOREIGN KEY (maBan) REFERENCES BanAn(maBan) ON DELETE CASCADE
+    CONSTRAINT FK_CTPDB_BanAn FOREIGN KEY (maBan) REFERENCES BanAn(maBan) ON DELETE NO ACTION
 );
 
 -- =========================================================
@@ -142,7 +143,7 @@ CREATE TABLE ChiTietPhieuDatBan (
 -- =========================================================
 CREATE TABLE HoaDon (
     maHD VARCHAR(20) PRIMARY KEY,
-    maPhieuDat VARCHAR(20) NOT NULL, -- "Cầu nối" duy nhất đến Bàn và Khách
+    maPhieuDat VARCHAR(20) NOT NULL,
     maNV VARCHAR(20) NOT NULL,
     maKM VARCHAR(20),
     maThue VARCHAR(20) NOT NULL,
@@ -161,10 +162,9 @@ CREATE TABLE HoaDon (
     trangThaiThanhToan NVARCHAR(50) NOT NULL
         CHECK (trangThaiThanhToan IN (N'CHUA_THANH_TOAN', N'DA_THANH_TOAN', N'DA_HUY')),
     
-    -- CASCADE ở đây để khi xóa Phiếu thì Hóa đơn nháp mất theo
-    CONSTRAINT FK_HD_PhieuDatBan FOREIGN KEY (maPhieuDat) REFERENCES PhieuDatBan(maPhieuDat) ON DELETE CASCADE,
+    -- Đã sửa: Không xóa hóa đơn khi xóa Phiếu đặt bàn để bảo vệ dữ liệu kế toán
+    CONSTRAINT FK_HD_PhieuDatBan FOREIGN KEY (maPhieuDat) REFERENCES PhieuDatBan(maPhieuDat) ON DELETE NO ACTION,
     
-    -- Dùng NO ACTION ở đây để tránh lỗi Msg 1785 (Vẫn xóa được NV nếu không có HD liên quan)
     CONSTRAINT FK_HD_NhanVien FOREIGN KEY (maNV) REFERENCES NhanVien(maNV) ON DELETE NO ACTION,
     CONSTRAINT FK_HD_KhuyenMai FOREIGN KEY (maKM) REFERENCES KhuyenMai(maKM) ON DELETE NO ACTION,
     CONSTRAINT FK_HD_Thue FOREIGN KEY (maThue) REFERENCES Thue(maThue) ON DELETE NO ACTION
@@ -182,6 +182,7 @@ CREATE TABLE ChiTietHoaDon (
     thanhTien AS (soLuong * donGiaLuuTru),
     PRIMARY KEY (maHD, maMon),
     CONSTRAINT FK_CTHD_HoaDon FOREIGN KEY (maHD) REFERENCES HoaDon(maHD) ON DELETE CASCADE,
-    CONSTRAINT FK_CTHD_MonAn FOREIGN KEY (maMon) REFERENCES MonAn(maMon) ON DELETE CASCADE
+    -- Đã sửa: Không cho phép xóa món ăn nếu đã có trong hóa đơn cũ
+    CONSTRAINT FK_CTHD_MonAn FOREIGN KEY (maMon) REFERENCES MonAn(maMon) ON DELETE NO ACTION
 );
 GO
