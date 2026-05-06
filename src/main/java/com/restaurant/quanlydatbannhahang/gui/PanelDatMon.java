@@ -13,13 +13,11 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 
-import com.restaurant.quanlydatbannhahang.entity.ChiTietPhieuDatBan;
-import com.restaurant.quanlydatbannhahang.entity.HoaDon;
 import com.restaurant.quanlydatbannhahang.entity.MonAn;
 import com.restaurant.quanlydatbannhahang.entity.PhieuDatBan;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiBan;
-import com.restaurant.quanlydatbannhahang.entity.TrangThaiHoaDon;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiPhieuDat;
 import com.restaurant.quanlydatbannhahang.session.HoaDonDraftSession;
 import com.restaurant.quanlydatbannhahang.service.BanService;
@@ -28,6 +26,7 @@ import com.restaurant.quanlydatbannhahang.service.HoaDonService;
 import com.restaurant.quanlydatbannhahang.service.MonAnService;
 import com.restaurant.quanlydatbannhahang.service.PhieuDatBanService;
 import com.restaurant.quanlydatbannhahang.util.ComboBoxEnumLoader;
+import com.restaurant.quanlydatbannhahang.util.CurrencyUtility;
 import com.restaurant.quanlydatbannhahang.util.ImageUtil;
 import java.text.DecimalFormat;
 import java.util.HashSet;
@@ -63,7 +62,7 @@ public class PanelDatMon extends javax.swing.JPanel {
     private static boolean isChanged = false;
     private ChiTietPhieuDatBanService ctpdbService;
     private BanService banService;
-    
+
     /**
      * Creates new form PanelDatMon
      */
@@ -128,6 +127,8 @@ public class PanelDatMon extends javax.swing.JPanel {
                 btnQuayLaiActionPerformed(evt);
             }
         });
+        
+        tableDanhSachMonAn.getColumnModel().getColumn(4).setCellRenderer(getCurrencyRenderer());
 
         initPhieuGoiMonTable();
         setupPhieuGoiMonInteractions();
@@ -141,15 +142,15 @@ public class PanelDatMon extends javax.swing.JPanel {
     public void setDatMonContext(String maBanContext) {
         String normalized = HoaDonDraftSession.normalizeMaBanContext(maBanContext);
         String resolvedContext = HoaDonDraftSession.resolveMaBanContext(normalized);
-//        boolean changed = !Objects.equals(this.datMonContext, resolvedContext);
+        // boolean changed = !Objects.equals(this.datMonContext, resolvedContext);
 
         this.datMonContext = resolvedContext;
         this.maBanContextSet = HoaDonDraftSession.parseMaBanContextToSet(resolvedContext);
         HoaDonDraftSession.setCurrentMaBanContext(resolvedContext);
 
-//        if (changed) {
-//            loadDraftFromSession();
-//        }
+        // if (changed) {
+        // loadDraftFromSession();
+        // }
         loadDraftFromSession();
         if (!HoaDonDraftSession.getCurrentMaPhieuDatContext().isBlank()) {
             capNhatTrangThaiSauKhiLuu();
@@ -184,6 +185,7 @@ public class PanelDatMon extends javax.swing.JPanel {
                 return canEdit[columnIndex];
             }
         });
+        centerTableColumnsForTablePhieuGoiMon(tablePhieuGoiMon);
 
         tablePhieuGoiMon.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tablePhieuGoiMon.getColumnModel().getColumn(PHIEU_COL_SO_LUONG)
@@ -391,7 +393,7 @@ public class PanelDatMon extends javax.swing.JPanel {
         String tenMon = String.valueOf(tableDanhSachMonAn.getValueAt(row, 2));
         Object donGiaObj = tableDanhSachMonAn.getValueAt(row, 4);
         double donGia = (donGiaObj instanceof Number) ? ((Number) donGiaObj).doubleValue()
-                : Double.parseDouble(String.valueOf(donGiaObj));
+                : com.restaurant.quanlydatbannhahang.util.CurrencyUtility.parseVND(String.valueOf(donGiaObj));
 
         OrderItem item = phieuGoiMonMap.get(maMon);
         if (item == null) {
@@ -437,9 +439,7 @@ public class PanelDatMon extends javax.swing.JPanel {
         for (OrderItem item : phieuGoiMonMap.values()) {
             tongTien += item.soLuong * item.donGia;
         }
-        DecimalFormat df = new DecimalFormat("#,##0.00");
-        lblTongTienTamTinh.setText(df.format(tongTien) + " VND");
-    }
+        lblTongTienTamTinh.setText(CurrencyUtility.formatVND(tongTien));    }
 
     private void saveDraftToSession() {
         if (datMonContext != null && !datMonContext.isEmpty()) {
@@ -464,15 +464,16 @@ public class PanelDatMon extends javax.swing.JPanel {
     }
 
     public void updateMaBanContextForEdit(Set<String> newSelectedTables) {
-        if (newSelectedTables == null || newSelectedTables.isEmpty()) return;
+        if (newSelectedTables == null || newSelectedTables.isEmpty())
+            return;
 
         Set<String> oldBanSet = new HashSet<>(this.maBanContextSet); // Danh sách bàn cũ
         String oldContext = this.datMonContext;
         String newContext = HoaDonDraftSession.normalizeMaBanContext(
-                newSelectedTables.stream().collect(Collectors.joining(","))
-        );
+                newSelectedTables.stream().collect(Collectors.joining(",")));
 
-        if (newContext.equals(oldContext)) return;
+        if (newContext.equals(oldContext))
+            return;
 
         try {
             saveDraftToSession(); // Lưu món vào RAM[cite: 17]
@@ -480,7 +481,8 @@ public class PanelDatMon extends javax.swing.JPanel {
             // 1. Đồng bộ Database: Chuyển hóa đơn sang mã bàn mới[cite: 17]
             hoaDonService.chuyenBanChoHoaDonDraft(oldContext, newContext);
 
-            // 2. Nếu là flow đặt trước, cập nhật thêm bảng Chi tiết phiếu (để giữ lịch sử)[cite: 20]
+            // 2. Nếu là flow đặt trước, cập nhật thêm bảng Chi tiết phiếu (để giữ lịch
+            // sử)[cite: 20]
             String maPhieuDat = HoaDonDraftSession.getCurrentMaPhieuDatContext();
             if (maPhieuDat != null && !maPhieuDat.isBlank()) {
                 ctpdbService.updateBanInPhieu(maPhieuDat, oldBanSet, newSelectedTables);
@@ -498,7 +500,7 @@ public class PanelDatMon extends javax.swing.JPanel {
 
             // 4. Di trú Session RAM[cite: 16]
             HoaDonDraftSession.migrateContext(oldContext, newContext);
-            
+
             // 5. Cập nhật context hiện tại của Panel[cite: 17]
             setDatMonContext(newContext);
 
@@ -525,10 +527,10 @@ public class PanelDatMon extends javax.swing.JPanel {
     private void capNhatTrangThaiSauKhiLuu() {
         List<String> maBanList = getMaBanListFromContext();
         if (maBanList.isEmpty()) {
-        	System.out.println("Mã bàn rỗng (method capNhatTrangThaiSauKhiLuu trong PanelDatMon)");
+            System.out.println("Mã bàn rỗng (method capNhatTrangThaiSauKhiLuu trong PanelDatMon)");
             return;
         }
-        
+
         System.out.println("Hi");
 
         BanService banService = new BanService();
@@ -582,14 +584,35 @@ public class PanelDatMon extends javax.swing.JPanel {
     private void applyPhieuGoiMonRenderers() {
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        
+        // Chỉ căn giữa các cột text/số thường
         tablePhieuGoiMon.getColumnModel().getColumn(PHIEU_COL_MA_MON).setCellRenderer(centerRenderer);
+        tablePhieuGoiMon.getColumnModel().getColumn(PHIEU_COL_TEN_MON).setCellRenderer(centerRenderer);
         tablePhieuGoiMon.getColumnModel().getColumn(PHIEU_COL_SO_LUONG).setCellRenderer(centerRenderer);
-        tablePhieuGoiMon.getColumnModel().getColumn(PHIEU_COL_DON_GIA).setCellRenderer(centerRenderer);
-        tablePhieuGoiMon.getColumnModel().getColumn(PHIEU_COL_THANH_TIEN).setCellRenderer(centerRenderer);
+        
+        // Dùng Renderer tiền tệ cho cột Đơn giá và Thành tiền
+        tablePhieuGoiMon.getColumnModel().getColumn(PHIEU_COL_DON_GIA).setCellRenderer(getCurrencyRenderer());
+        tablePhieuGoiMon.getColumnModel().getColumn(PHIEU_COL_THANH_TIEN).setCellRenderer(getCurrencyRenderer());
+        
         tablePhieuGoiMon.getColumnModel().getColumn(5).setCellRenderer(new ButtonRenderer());
     }
 
-    private void centerTableColumns(JTable table) {
+    private DefaultTableCellRenderer getCurrencyRenderer() {
+        return new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                    boolean hasFocus, int row, int column) {
+                if (value instanceof Number) {
+                    value = com.restaurant.quanlydatbannhahang.util.CurrencyUtility
+                            .formatVND(((Number) value).doubleValue());
+                }
+                setHorizontalAlignment(JLabel.CENTER);
+                return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            }
+        };
+    }
+
+	private void centerTableColumns(JTable table) {
         ImageRenderer imageRenderer = new ImageRenderer();
         table.getColumnModel().getColumn(0).setCellRenderer(imageRenderer);
         table.getColumnModel().getColumn(0).setPreferredWidth(100);
@@ -597,10 +620,28 @@ public class PanelDatMon extends javax.swing.JPanel {
 
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        // Chỉ căn giữa các cột từ 0 đến 4 và cột 6. Bỏ qua cột 5 (Lương) vì đã có Renderer riêng
         for (int i = 1; i < table.getColumnCount(); i++) {
-            table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+            if (i != 4) {
+                table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+            }
         }
     }
+    
+    private void centerTableColumnsForTablePhieuGoiMon(JTable table) {
+       
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        // Chỉ căn giữa các cột từ 0 đến 4 và cột 6. Bỏ qua cột 5 (Lương) vì đã có Renderer riêng
+        for (int i = 0; i < table.getColumnCount(); i++) {
+            if (i != 2 && i!= 3) {
+                table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+            }
+        }
+    }
+    
+    
+    
 
     private static class QuantitySpinnerEditor extends AbstractCellEditor implements javax.swing.table.TableCellEditor {
         private final JSpinner spinner;
@@ -673,6 +714,9 @@ public class PanelDatMon extends javax.swing.JPanel {
             }
             fireEditingStopped();
         }
+        
+        
+     
 
         @Override
         public Component getTableCellEditorComponent(JTable table, Object value,
@@ -751,7 +795,7 @@ public class PanelDatMon extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
@@ -790,46 +834,49 @@ public class PanelDatMon extends javax.swing.JPanel {
 
         jPanel5.setBackground(new java.awt.Color(255, 251, 233));
 
-        lblPhieuGoiMon.setText("Phiếu gọi món");
         lblPhieuGoiMon.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        lblPhieuGoiMon.setText("Phiếu gọi món");
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
-                jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel5Layout.createSequentialGroup()
-                                .addGap(14, 14, 14)
-                                .addComponent(lblPhieuGoiMon)
-                                .addContainerGap(384, Short.MAX_VALUE)));
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addComponent(lblPhieuGoiMon)
+                .addContainerGap(384, Short.MAX_VALUE))
+        );
         jPanel5Layout.setVerticalGroup(
-                jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel5Layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(lblPhieuGoiMon)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblPhieuGoiMon)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         jPanel2.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 1, 509, -1));
 
         tablePhieuGoiMon.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][] {
+            new Object [][] {
 
-                },
-                new String[] {
-                        "Tên món ăn", "Số lượng", "Đơn giá", "Thành tiền"
-                }) {
-            Class[] types = new Class[] {
-                    java.lang.String.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class
+            },
+            new String [] {
+                "Tên món ăn", "Số lượng", "Đơn giá", "Thành tiền", "Xóa"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class, java.lang.Object.class
             };
-            boolean[] canEdit = new boolean[] {
-                    false, false, false, false
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, true
             };
 
             public Class getColumnClass(int columnIndex) {
-                return types[columnIndex];
+                return types [columnIndex];
             }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit[columnIndex];
+                return canEdit [columnIndex];
             }
         });
         scrTablePhieuGoiMon.setViewportView(tablePhieuGoiMon);
@@ -856,11 +903,13 @@ public class PanelDatMon extends javax.swing.JPanel {
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
-                jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 510, Short.MAX_VALUE));
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 510, Short.MAX_VALUE)
+        );
         jPanel6Layout.setVerticalGroup(
-                jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 0, Short.MAX_VALUE));
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
 
         jPanel3.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 480, 510, 0));
 
@@ -868,8 +917,7 @@ public class PanelDatMon extends javax.swing.JPanel {
         jPanel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 0, 5));
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        cbFilterLoaiMonAn.setModel(
-                new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbFilterLoaiMonAn.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cbFilterLoaiMonAn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbFilterLoaiMonAnActionPerformed(evt);
@@ -898,26 +946,26 @@ public class PanelDatMon extends javax.swing.JPanel {
         scrDanhSachMonAn.setBackground(new java.awt.Color(255, 251, 233));
 
         tableDanhSachMonAn.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][] {
+            new Object [][] {
 
-                },
-                new String[] {
-                        "Hình ảnh", "Mã món ăn", "Tên món ăn", "Đơn vị tính", "Đơn giá"
-                }) {
-            Class[] types = new Class[] {
-                    java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.String.class,
-                    java.lang.Double.class
+            },
+            new String [] {
+                "Hình ảnh", "Mã món ăn", "Tên món ăn", "Đơn vị tính", "Đơn giá"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class
             };
-            boolean[] canEdit = new boolean[] {
-                    false, false, false, false, false
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
-                return types[columnIndex];
+                return types [columnIndex];
             }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit[columnIndex];
+                return canEdit [columnIndex];
             }
         });
         scrDanhSachMonAn.setViewportView(tableDanhSachMonAn);
@@ -936,7 +984,6 @@ public class PanelDatMon extends javax.swing.JPanel {
         btnChonMon.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnChonMonActionPerformed(evt);
-                isChanged = true;
             }
         });
         jPanel3.add(btnChonMon, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 550, 90, 30));
@@ -948,11 +995,13 @@ public class PanelDatMon extends javax.swing.JPanel {
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
-                jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 1110, Short.MAX_VALUE));
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1110, Short.MAX_VALUE)
+        );
         jPanel7Layout.setVerticalGroup(
-                jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 60, Short.MAX_VALUE));
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 60, Short.MAX_VALUE)
+        );
 
         jPanel1.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 520, 1110, 60));
 
@@ -1021,7 +1070,6 @@ public class PanelDatMon extends javax.swing.JPanel {
         addSelectedMonToPhieuGoiMon();
     }// GEN-LAST:event_btnChonMonActionPerformed
 
-   
     private void btnThanhToanActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnThanhToanActionPerformed
         if (phieuGoiMonMap.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn ít nhất một món trước khi thanh toán.");

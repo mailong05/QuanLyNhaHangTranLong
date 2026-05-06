@@ -8,16 +8,19 @@ import java.awt.event.MouseListener;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.NumberFormatter;
 import com.restaurant.quanlydatbannhahang.service.MonAnService;
 import com.restaurant.quanlydatbannhahang.entity.MonAn;
 import com.restaurant.quanlydatbannhahang.entity.LoaiMonAn;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiMonAn;
 import com.restaurant.quanlydatbannhahang.util.ComboBoxEntityLoader;
 import com.restaurant.quanlydatbannhahang.util.ComboBoxEnumLoader;
+import com.restaurant.quanlydatbannhahang.util.CurrencyUtility;
 import com.restaurant.quanlydatbannhahang.util.IDGeneratorHelper;
 import com.restaurant.quanlydatbannhahang.util.IDQueryHelper;
 import java.util.List;
 import java.util.ArrayList;
+import java.text.NumberFormat;
 import java.text.DecimalFormat;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
@@ -201,6 +204,20 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
                 }
             }
             centerTableColumns(tableMonAn);
+
+            // ========== FORMAT TIỀN TỆ CHO CỘT ĐƠN GIÁ ==========
+            DefaultTableCellRenderer currencyRenderer = new DefaultTableCellRenderer() {
+                @Override
+                protected void setValue(Object value) {
+                    if (value instanceof Double) {
+                        setText(com.restaurant.quanlydatbannhahang.util.CurrencyUtility.formatVND((Double) value));
+                    } else {
+                        super.setValue(value);
+                    }
+                }
+            };
+            currencyRenderer.setHorizontalAlignment(JLabel.RIGHT);
+            tableMonAn.getColumnModel().getColumn(3).setCellRenderer(currencyRenderer);
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Lỗi load dữ liệu: " + e.getMessage());
@@ -250,6 +267,20 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
                 });
             }
             centerTableColumns(tableMonAn);
+
+            // ========== FORMAT TIỀN TỆ CHO CỘT ĐƠN GIÁ ==========
+            DefaultTableCellRenderer currencyRenderer = new DefaultTableCellRenderer() {
+                @Override
+                protected void setValue(Object value) {
+                    if (value instanceof Double) {
+                        setText(com.restaurant.quanlydatbannhahang.util.CurrencyUtility.formatVND((Double) value));
+                    } else {
+                        super.setValue(value);
+                    }
+                }
+            };
+            currencyRenderer.setHorizontalAlignment(JLabel.RIGHT);
+            tableMonAn.getColumnModel().getColumn(3).setCellRenderer(currencyRenderer);
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Lỗi tìm kiếm dữ liệu: " + e.getMessage());
@@ -267,7 +298,7 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
 
             txtMaMon.setText(maMon);
             txtTenMon.setText(tenMon);
-            txtDonGia.setText(formatCurrency(donGia));
+            txtDonGia.setText(CurrencyUtility.formatVND(donGia));
             cbDonViTinh.setSelectedItem(donViTinh);
             cbLoaiMonAn.setSelectedItem(loaiMonDisplay);
             cbTrangThai.setSelectedItem(trangThaiDisplay);
@@ -326,11 +357,6 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
         loadDataToTable();
         tableMonAn.clearSelection();
         syncCapNhatButtonState();
-    }
-
-    private String formatCurrency(double value) {
-        DecimalFormat df = new DecimalFormat("#,##0.00");
-        return df.format(value);
     }
 
     private boolean isMouseOverTable(java.awt.event.MouseEvent evt) {
@@ -497,7 +523,7 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
         lblDonViTinh.setText("Đơn vị tính:");
 
         cbDonViTinh.setModel(
-                new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+                new javax.swing.DefaultComboBoxModel<>(new String[] {}));
         cbDonViTinh.setPreferredSize(new java.awt.Dimension(72, 35));
         cbDonViTinh.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -506,7 +532,7 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
         });
 
         cbLoaiMonAn.setModel(
-                new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+                new javax.swing.DefaultComboBoxModel<>(new String[] {}));
         cbLoaiMonAn.setPreferredSize(new java.awt.Dimension(72, 35));
 
         btnChonFileAnh.setText("Chọn ảnh");
@@ -873,21 +899,13 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
         try {
             String maMon = txtMaMon.getText().trim();
             String tenMon = txtTenMon.getText().trim();
-            String donGiaText = txtDonGia.getText().trim().replace(",", "");
+            String donGiaText = txtDonGia.getText().trim();
+            double donGia = com.restaurant.quanlydatbannhahang.util.CurrencyUtility.parseVND(donGiaText);
             String donViTinh = (String) cbDonViTinh.getSelectedItem();
-            String loaiDisplay = (String) cbLoaiMonAn.getSelectedItem();
-            String trangThaiDisplay = (String) cbTrangThai.getSelectedItem();
-
-            LoaiMonAn loaiMonAn = ComboBoxEnumLoader.getLoaiMonAnFromDisplay(loaiDisplay);
-            TrangThaiMonAn trangThai = ComboBoxEnumLoader.getTrangThaiMonAnFromDisplay(trangThaiDisplay);
-
-            if (maMon.isEmpty() || tenMon.isEmpty() || donGiaText.isEmpty() || donViTinh == null || loaiMonAn == null
-                    || trangThai == null) {
-                JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin món ăn.");
-                return;
-            }
-
-            double donGia = Double.parseDouble(donGiaText);
+            String loaiMonAnStr = (String) cbLoaiMonAn.getSelectedItem();
+            LoaiMonAn loaiMonAn = LoaiMonAn.fromDisplayName(loaiMonAnStr);
+            String trangThaiStr = (String) cbTrangThai.getSelectedItem();
+            TrangThaiMonAn trangThai = TrangThaiMonAn.fromDisplayName(trangThaiStr);
             String imagePath = selectedImagePath;
             if (imagePath == null || imagePath.trim().isEmpty()) {
                 MonAn oldMonAn = monAnService.getMonAnTheoMa(maMon);
@@ -909,21 +927,13 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
         try {
             String maMon = txtMaMon.getText().trim();
             String tenMon = txtTenMon.getText().trim();
-            String donGiaText = txtDonGia.getText().trim().replace(",", "");
+            String donGiaText = txtDonGia.getText().trim();
             String donViTinh = (String) cbDonViTinh.getSelectedItem();
-            String loaiDisplay = (String) cbLoaiMonAn.getSelectedItem();
-            String trangThaiDisplay = (String) cbTrangThai.getSelectedItem();
-
-            LoaiMonAn loaiMonAn = ComboBoxEnumLoader.getLoaiMonAnFromDisplay(loaiDisplay);
-            TrangThaiMonAn trangThai = ComboBoxEnumLoader.getTrangThaiMonAnFromDisplay(trangThaiDisplay);
-
-            if (maMon.isEmpty() || tenMon.isEmpty() || donGiaText.isEmpty() || donViTinh == null || loaiMonAn == null
-                    || trangThai == null) {
-                JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin món ăn.");
-                return;
-            }
-
-            double donGia = Double.parseDouble(donGiaText);
+            String loaiMonAnStr = (String) cbLoaiMonAn.getSelectedItem();
+            LoaiMonAn loaiMonAn = LoaiMonAn.fromDisplayName(loaiMonAnStr);
+            String trangThaiStr = (String) cbTrangThai.getSelectedItem();
+            TrangThaiMonAn trangThai = TrangThaiMonAn.fromDisplayName(trangThaiStr);
+            double donGia = com.restaurant.quanlydatbannhahang.util.CurrencyUtility.parseVND(donGiaText);
             MonAn monAn = new MonAn(maMon, tenMon, donGia, donViTinh, loaiMonAn, trangThai, selectedImagePath);
             monAnService.themMonAn(monAn);
             JOptionPane.showMessageDialog(this, "Thêm món ăn thành công.");
@@ -989,10 +999,10 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
     private javax.swing.JPanel pnlThongTinKhuyenMai;
     private javax.swing.JScrollPane scrTableMonAn;
     private javax.swing.JTable tableMonAn;
-    private javax.swing.JTextField txtDonGia;
     private javax.swing.JTextField txtMaMon;
     private javax.swing.JTextField txtTenMon;
     private javax.swing.JTextField txtTimKiem;
+    private javax.swing.JTextField txtDonGia;
 
     // End of variables declaration//GEN-END:variables
     @Override

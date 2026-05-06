@@ -44,11 +44,6 @@ public class PanelTrangChu extends javax.swing.JPanel {
         });
     }
 
-    private String formatCurrency(double value) {
-        DecimalFormat df = new DecimalFormat("#,##0.00");
-        return df.format(value);
-    }
-
     private void loadDataToCard() {
         try {
 
@@ -58,7 +53,7 @@ public class PanelTrangChu extends javax.swing.JPanel {
 
             lblCountBanSuDung.setText(String.valueOf(countBanDangSuDung));
             lblCountBanDatTruoc.setText(String.valueOf(countBanDatTruoc));
-            lblSumDoanhThu.setText(String.valueOf(formatCurrency(doanhThuHomNay)) + " VND");
+            lblSumDoanhThu.setText(com.restaurant.quanlydatbannhahang.util.CurrencyUtility.formatVND(doanhThuHomNay));
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Lỗi khi load dữ liệu Trang chủ: " + e.getMessage(), "Lỗi",
@@ -80,7 +75,7 @@ public class PanelTrangChu extends javax.swing.JPanel {
             ChiTietPhieuDatBanService ctpdbService = new ChiTietPhieuDatBanService();
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-            
+
             for (PhieuDatBan p : dsPDB) {
                 String dsMaBan = ctpdbService.getDanhSachBanByMaPhieuDat(p.getMaPhieuDat());
                 String tenKH = "", sdt = "";
@@ -104,6 +99,20 @@ public class PanelTrangChu extends javax.swing.JPanel {
                 });
             }
             centerTableColumns(tableHoatDong);
+
+            // ========== FORMAT TIỀN TỆ CHO CỘT TIỀN ĐẶT CỌC ==========
+            DefaultTableCellRenderer currencyRenderer = new DefaultTableCellRenderer() {
+                @Override
+                protected void setValue(Object value) {
+                    if (value instanceof Double) {
+                        setText(com.restaurant.quanlydatbannhahang.util.CurrencyUtility.formatVND((Double) value));
+                    } else {
+                        super.setValue(value);
+                    }
+                }
+            };
+            currencyRenderer.setHorizontalAlignment(JLabel.RIGHT);
+            tableHoatDong.getColumnModel().getColumn(7).setCellRenderer(currencyRenderer);
         } catch (Exception e) {
             e.printStackTrace();
         }

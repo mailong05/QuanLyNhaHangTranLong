@@ -180,7 +180,6 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
         // TODO add your handling code here:
     }// GEN-LAST:event_txtTenKhachHangActionPerformed
 
-    
     private void fillMaPhieuDat(JTextField txtMaKhuVuc) {
         // TODO Auto-generated method stub
         String lastID = IDQueryHelper.getLastID("PhieuDatBan", "maPhieuDat");
@@ -189,7 +188,6 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
         txtMaPhieuDat.setText(maPDBNew);
     }
 
-    
     private void btnDatBanActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnDatBanActionPerformed
         try {
             String maPDB = txtMaPhieuDat.getText().trim();
@@ -296,7 +294,7 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
         if (selectedTables != null && !selectedTables.isEmpty()) {
             double tienDatCoc = 100000.0 * selectedTables.size();
             // Format tiền thành dạng xxx.xxx.xxx VNĐ
-            txtTienDatCoc.setText(String.format("%,.0f", tienDatCoc));
+            txtTienDatCoc.setText(com.restaurant.quanlydatbannhahang.util.CurrencyUtility.formatVND(tienDatCoc));
             txtTienDatCoc.setEditable(false); // Prevent manual editing
         } else {
             txtTienDatCoc.setText("0");

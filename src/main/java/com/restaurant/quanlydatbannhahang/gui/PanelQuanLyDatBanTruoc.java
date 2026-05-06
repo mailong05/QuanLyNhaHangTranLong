@@ -19,6 +19,8 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
+import javax.swing.text.NumberFormatter;
+import java.text.NumberFormat;
 
 import com.restaurant.quanlydatbannhahang.service.ChiTietPhieuDatBanService;
 import com.restaurant.quanlydatbannhahang.service.PhieuDatBanService;
@@ -204,6 +206,21 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                 tableBan.getColumnModel().getColumn(4).setCellRenderer(renderer);
                 tableBan.getColumnModel().getColumn(8).setCellRenderer(renderer);
                 centerTableColumns(tableBan);
+
+                // ========== FORMAT TIỀN TỆ CHO CỘT TIỀN ĐẶT CỌC ==========
+                DefaultTableCellRenderer currencyRenderer = new DefaultTableCellRenderer() {
+                        @Override
+                        protected void setValue(Object value) {
+                                if (value instanceof Double) {
+                                        setText(com.restaurant.quanlydatbannhahang.util.CurrencyUtility
+                                                        .formatVND((Double) value));
+                                } else {
+                                        super.setValue(value);
+                                }
+                        }
+                };
+                currencyRenderer.setHorizontalAlignment(JLabel.RIGHT);
+                tableBan.getColumnModel().getColumn(7).setCellRenderer(currencyRenderer);
 
                 // ========== THÊM MOUSE LISTENER VÀO TABLE ==========
         }
@@ -928,7 +945,8 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                         TrangThaiPhieuDat trangThai = TrangThaiPhieuDat.fromDisplayName(trangThaiStr);
                         phieu.setTrangThai(trangThai);
 
-                        double tienDatCoc = Double.valueOf(txtTienDatCoc.getText().trim());
+                        double tienDatCoc = com.restaurant.quanlydatbannhahang.util.CurrencyUtility
+                                        .parseVND(txtTienDatCoc.getText().trim());
                         phieu.setTienDatCoc(tienDatCoc);
                         pdbService.capNhatPhieuDatBan(phieu);
 
@@ -1131,12 +1149,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                 dtpThoiGianDen.setDateTimeStrict(thoiGianDen);
                 spSoNguoi.setValue(soNguoi);
                 cbTrangThai.setSelectedItem(trangThai);
-                txtTienDatCoc.setText(formatCurrency(tienDatCoc));
-        }
-
-        private String formatCurrency(double value) {
-                DecimalFormat df = new DecimalFormat("#,##0.00");
-                return df.format(value);
+                txtTienDatCoc.setText(com.restaurant.quanlydatbannhahang.util.CurrencyUtility.formatVND(tienDatCoc));
         }
 
         private void txtMaBanActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtMaBanActionPerformed

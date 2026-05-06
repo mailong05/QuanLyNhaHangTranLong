@@ -7,6 +7,7 @@ import com.restaurant.quanlydatbannhahang.entity.TrangThaiHoaDon;
 import com.restaurant.quanlydatbannhahang.entity.NhanVien;
 import com.restaurant.quanlydatbannhahang.service.ChiTietHoaDonService;
 import com.restaurant.quanlydatbannhahang.service.HoaDonService;
+import com.restaurant.quanlydatbannhahang.util.CurrencyUtility;
 import com.restaurant.quanlydatbannhahang.util.ImageUtil;
 import com.restaurant.quanlydatbannhahang.session.SessionManager;
 
@@ -650,7 +651,7 @@ public class PanelThongKe extends javax.swing.JPanel {
                     Object donGia = model.getValueAt(i, 3);
                     Object soLuong = model.getValueAt(i, 4);
 
-                    double giaDbl = Double.parseDouble(donGia.toString());
+                    double giaDbl = CurrencyUtility.parseVND(String.valueOf(donGia));
                     int soLuongInt = Integer.parseInt(soLuong.toString());
                     double thanhTien = giaDbl * soLuongInt;
 

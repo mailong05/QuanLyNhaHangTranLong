@@ -208,6 +208,21 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
             }
         });
 
+        // Renderer cho cột Lương (Index 5)
+        tableMonAn.getColumnModel().getColumn(3).setCellRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                    boolean hasFocus, int row, int column) {
+                if (value != null && value instanceof Number) {
+                    value = com.restaurant.quanlydatbannhahang.util.CurrencyUtility
+                            .formatVND(((Number) value).doubleValue());
+                }
+                // Vừa format tiền, vừa căn GIỮA (hoặc PHẢI tùy ông chọn)
+                setHorizontalAlignment(JLabel.CENTER);
+                return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            }
+        });
+
         // Gắn sự kiện quay về Trang Chủ
         MainForm.attachGoHomeListener(btnTrangChu, this);
     }
@@ -352,11 +367,13 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
         table.getColumnModel().getColumn(0).setPreferredWidth(100);
         table.setRowHeight(TABLE_IMAGE_ROW_HEIGHT);
 
-        // Các column khác căn giữa
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        for (int i = 1; i < table.getColumnCount(); i++) {
-            table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        // Chỉ căn giữa các cột trừ cột ảnh và cột đơn giá vì đã có renderer riêng
+        for (int i = 0; i < table.getColumnCount(); i++) {
+            if (i != 0 && i != 3) {
+                table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+            }
         }
     }
 

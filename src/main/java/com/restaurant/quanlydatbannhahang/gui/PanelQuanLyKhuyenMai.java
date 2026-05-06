@@ -8,14 +8,18 @@ import java.awt.event.MouseListener;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.NumberFormatter;
+
 import com.restaurant.quanlydatbannhahang.service.KhuyenMaiService;
 import com.restaurant.quanlydatbannhahang.util.ComboBoxEnumLoader;
+import com.restaurant.quanlydatbannhahang.util.CurrencyUtility;
 import com.restaurant.quanlydatbannhahang.util.IDGeneratorHelper;
 import com.restaurant.quanlydatbannhahang.util.IDQueryHelper;
 import com.restaurant.quanlydatbannhahang.entity.KhuyenMai;
 import java.util.List;
 import java.time.LocalDate;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 
 public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseListener {
 
@@ -69,6 +73,24 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                                 syncCapNhatButtonState();
                         }
                 });
+
+                for (int i = 0; i < tableKhuyenMai.getColumnCount(); i++) {
+                        tableKhuyenMai.getColumnModel().getColumn(i).setCellRenderer(new DefaultTableCellRenderer() {
+                                @Override
+                                public Component getTableCellRendererComponent(JTable table, Object value,
+                                                boolean isSelected,
+                                                boolean hasFocus, int row, int column) {
+                                        if (value != null && value instanceof Number) {
+                                                value = com.restaurant.quanlydatbannhahang.util.CurrencyUtility
+                                                                .formatVND(((Number) value).doubleValue());
+                                        }
+                                        // Vừa format tiền, vừa căn GIỮA (hoặc PHẢI tùy ông chọn)
+                                        setHorizontalAlignment(JLabel.CENTER);
+                                        return super.getTableCellRendererComponent(table, value, isSelected, hasFocus,
+                                                        row, column);
+                                }
+                        });
+                }
 
                 // Gắn sự kiện quay về Trang Chủ
                 MainForm.attachGoHomeListener(btnTrangChu, this);
@@ -128,6 +150,22 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                                 });
                         }
                         centerTableColumns(tableKhuyenMai);
+
+                        // ========== FORMAT TIỀN TỆ CHO CỘT GIÁ TRỊ GIẢM ==========
+                        DefaultTableCellRenderer currencyRenderer = new DefaultTableCellRenderer() {
+                                @Override
+                                protected void setValue(Object value) {
+                                        if (value instanceof Double) {
+                                                setText(com.restaurant.quanlydatbannhahang.util.CurrencyUtility
+                                                                .formatVND((Double) value));
+                                        } else {
+                                                super.setValue(value);
+                                        }
+                                }
+                        };
+                        currencyRenderer.setHorizontalAlignment(JLabel.RIGHT);
+                        tableKhuyenMai.getColumnModel().getColumn(2).setCellRenderer(currencyRenderer);
+                        tableKhuyenMai.getColumnModel().getColumn(5).setCellRenderer(currencyRenderer);
                 } catch (Exception e) {
                         e.printStackTrace();
                         JOptionPane.showMessageDialog(this, "Lỗi load dữ liệu: " + e.getMessage());
@@ -164,14 +202,31 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                                 model.addRow(new Object[] {
                                                 km.getMaKM(),
                                                 km.getTenKM(),
+                                                km.getGiaTriGiam(),
                                                 km.getNgayBatDau(),
                                                 km.getNgayKetThuc(),
-                                                km.getGiaTriGiam(),
                                                 km.getDieuKienToiThieu(),
                                                 km.getTrangThai() != null ? km.getTrangThai().getDisplayName() : ""
                                 });
                         }
                         centerTableColumns(tableKhuyenMai);
+
+                        // ========== FORMAT TIỀN TỆ CHO CỘT GIÁ TRỊ GIẢM VÀ ĐIỀU KIỆN TỐI THIỂU
+                        // ==========
+                        DefaultTableCellRenderer currencyRenderer = new DefaultTableCellRenderer() {
+                                @Override
+                                protected void setValue(Object value) {
+                                        if (value instanceof Double) {
+                                                setText(com.restaurant.quanlydatbannhahang.util.CurrencyUtility
+                                                                .formatVND((Double) value));
+                                        } else {
+                                                super.setValue(value);
+                                        }
+                                }
+                        };
+                        currencyRenderer.setHorizontalAlignment(JLabel.RIGHT);
+                        tableKhuyenMai.getColumnModel().getColumn(2).setCellRenderer(currencyRenderer);
+                        tableKhuyenMai.getColumnModel().getColumn(5).setCellRenderer(currencyRenderer);
                 } catch (Exception e) {
                         e.printStackTrace();
                         JOptionPane.showMessageDialog(this, "Lỗi tìm kiếm dữ liệu: " + e.getMessage());
@@ -190,7 +245,9 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
 
                         txtMaKhuyenMai.setText(maKM);
                         txtTenKhuyenMai.setText(tenKM);
-                        txtGiaTriGiam.setText(formatCurrency(giaTriGiam));
+                        txtGiaTriGiam.setText(
+                                        CurrencyUtility.formatVND(giaTriGiam));
+                        
                         if (ngayBDObj instanceof LocalDate && dpNgayBatDau != null) {
                                 dpNgayBatDau.setDate((LocalDate) ngayBDObj);
                         }
@@ -198,7 +255,7 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                                 dbNgayKetThuc.setDate((LocalDate) ngayKTObj);
                         }
                         if (dieuKienObj != null) {
-                                txtDieuKienToiThieu.setText(dieuKienObj.toString());
+                                txtDieuKienToiThieu.setText(CurrencyUtility.formatVND(Double.valueOf(dieuKienObj.toString())));
                         } else {
                                 txtDieuKienToiThieu.setText("");
                         }
@@ -243,11 +300,6 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                 String maKMNew = (lastID == null || lastID.isEmpty()) ? IDGeneratorHelper.generateDefaultID("KM")
                                 : IDGeneratorHelper.generateNextIDFromFullID(lastID);
                 txtMaKhuyenMai.setText(maKMNew);
-        }
-
-        private String formatCurrency(double value) {
-                DecimalFormat df = new DecimalFormat("#,##0.00");
-                return df.format(value);
         }
 
         private boolean isMouseOverTable(java.awt.event.MouseEvent evt) {
@@ -744,8 +796,12 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
         private void centerTableColumns(JTable table) {
                 DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
                 centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+                // Chỉ căn giữa các cột từ 0 đến 4 và cột 6. Bỏ qua cột 5 (Lương) vì đã có
+                // Renderer riêng
                 for (int i = 0; i < table.getColumnCount(); i++) {
-                        table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+                        if (i != 2 && i != 5) {
+                                table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+                        }
                 }
         }
 
@@ -769,8 +825,8 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                 try {
                         String maKM = txtMaKhuyenMai.getText().trim();
                         String tenKM = txtTenKhuyenMai.getText().trim();
-                        String giaTriGiamText = txtGiaTriGiam.getText().trim().replace(",", "");
-                        String dieuKienText = txtDieuKienToiThieu.getText().trim().replace(",", "");
+                        String giaTriGiamText = txtGiaTriGiam.getText().trim();
+                        String dieuKienText = txtDieuKienToiThieu.getText().trim();
                         LocalDate ngayBatDau = dpNgayBatDau != null ? dpNgayBatDau.getDate() : null;
                         LocalDate ngayKetThuc = dbNgayKetThuc != null ? dbNgayKetThuc.getDate() : null;
                         String trangThaiDisplay = (String) cbTrangThai.getSelectedItem();
@@ -784,8 +840,10 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                                 return;
                         }
 
-                        double giaTriGiam = Double.parseDouble(giaTriGiamText);
-                        double dieuKienToiThieu = Double.parseDouble(dieuKienText);
+                        double giaTriGiam = com.restaurant.quanlydatbannhahang.util.CurrencyUtility
+                                        .parseVND(giaTriGiamText);
+                        double dieuKienToiThieu = com.restaurant.quanlydatbannhahang.util.CurrencyUtility
+                                        .parseVND(dieuKienText);
 
                         KhuyenMai km = new KhuyenMai(maKM, tenKM, giaTriGiam, ngayBatDau, ngayKetThuc,
                                         dieuKienToiThieu, trangThai);
@@ -804,8 +862,8 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                 try {
                         String maKM = txtMaKhuyenMai.getText().trim();
                         String tenKM = txtTenKhuyenMai.getText().trim();
-                        String giaTriGiamText = txtGiaTriGiam.getText().trim().replace(",", "");
-                        String dieuKienText = txtDieuKienToiThieu.getText().trim().replace(",", "");
+                        String giaTriGiamText = txtGiaTriGiam.getText().trim();
+                        String dieuKienText = txtDieuKienToiThieu.getText().trim();
                         LocalDate ngayBatDau = dpNgayBatDau != null ? dpNgayBatDau.getDate() : null;
                         LocalDate ngayKetThuc = dbNgayKetThuc != null ? dbNgayKetThuc.getDate() : null;
                         String trangThaiDisplay = (String) cbTrangThai.getSelectedItem();
@@ -819,8 +877,10 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                                 return;
                         }
 
-                        double giaTriGiam = Double.parseDouble(giaTriGiamText);
-                        double dieuKienToiThieu = Double.parseDouble(dieuKienText);
+                        double giaTriGiam = com.restaurant.quanlydatbannhahang.util.CurrencyUtility
+                                        .parseVND(giaTriGiamText);
+                        double dieuKienToiThieu = com.restaurant.quanlydatbannhahang.util.CurrencyUtility
+                                        .parseVND(dieuKienText);
 
                         KhuyenMai km = new KhuyenMai(maKM, tenKM, giaTriGiam, ngayBatDau, ngayKetThuc,
                                         dieuKienToiThieu, trangThai);
