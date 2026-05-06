@@ -24,6 +24,7 @@ import java.text.NumberFormat;
 
 import com.restaurant.quanlydatbannhahang.service.ChiTietPhieuDatBanService;
 import com.restaurant.quanlydatbannhahang.service.PhieuDatBanService;
+import com.restaurant.quanlydatbannhahang.util.CurrencyUtility;
 import com.restaurant.quanlydatbannhahang.util.IDGeneratorHelper;
 import com.restaurant.quanlydatbannhahang.util.IDQueryHelper;
 import com.restaurant.quanlydatbannhahang.service.BanService;
@@ -945,7 +946,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                         TrangThaiPhieuDat trangThai = TrangThaiPhieuDat.fromDisplayName(trangThaiStr);
                         phieu.setTrangThai(trangThai);
 
-                        double tienDatCoc = com.restaurant.quanlydatbannhahang.util.CurrencyUtility
+                        double tienDatCoc = CurrencyUtility
                                         .parseVND(txtTienDatCoc.getText().trim());
                         phieu.setTienDatCoc(tienDatCoc);
                         pdbService.capNhatPhieuDatBan(phieu);
@@ -1023,19 +1024,21 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                         }
 
                         int result = JOptionPane.showConfirmDialog(this,
-                                        "Bạn có chắc chắn muốn xóa phiếu đặt bàn " + maPDB + " không?",
+                                        "Bạn có chắc chắn muốn xóa mềm phiếu đặt bàn " + maPDB + " bằng cách chuyển thành trạng thái 'Đã hủy' không?",
                                         "Xác nhận xóa",
                                         JOptionPane.YES_NO_OPTION);
 
                         if (result == JOptionPane.YES_OPTION) {
-                                // QUAN TRỌNG: Lấy chi tiết phiếu TRƯỚC khi xóa
+//                                // QUAN TRỌNG: Lấy chi tiết phiếu TRƯỚC khi xóa
                                 List<ChiTietPhieuDatBan> chiTietList = ctpdbService.getChiTietByMaPhieuDat(maPDB);
-
-                                // Xóa tất cả chi tiết phiếu TRƯỚC (để tránh foreign key constraint)
-                                ctpdbService.xoaAllChiTietByMaPhieuDat(maPDB);
-
-                                // Sau đó xóa phiếu
-                                pdbService.xoaPhieuDatBan(maPDB);
+//
+//                                // Xóa tất cả chi tiết phiếu TRƯỚC (để tránh foreign key constraint)
+//                                ctpdbService.xoaAllChiTietByMaPhieuDat(maPDB);
+//
+//                                // Sau đó xóa phiếu
+//                                pdbService.xoaPhieuDatBan(maPDB);
+                        	
+                        		pdbService.capNhatTrangThaiPhieu(maPDB, TrangThaiPhieuDat.DA_HUY);
 
                                 // Cập nhật trạng thái các bàn trong phiếu đặt (dựa trên chi tiết đã lấy trước
                                 // đó)

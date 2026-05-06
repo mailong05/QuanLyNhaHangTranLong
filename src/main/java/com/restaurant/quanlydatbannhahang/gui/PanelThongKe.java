@@ -47,6 +47,7 @@ public class PanelThongKe extends javax.swing.JPanel {
         customUI();
         setupImageRenderer();
         loadStatistics();
+        cbThoiGianThongKe.setSelectedIndex(0);
     }
 
     private void setupImageRenderer() {
@@ -54,12 +55,16 @@ public class PanelThongKe extends javax.swing.JPanel {
         tableTopMonAn.getColumnModel().getColumn(1).setCellRenderer(imageRenderer);
         tableTopMonAn.getColumnModel().getColumn(1).setPreferredWidth(100);
         tableTopMonAn.setRowHeight(TOP_TABLE_IMAGE_ROW_HEIGHT);
-
+    }
+    
+    
+    private void centerTableColumns(JTable table) {
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        for (int i = 0; i < tableTopMonAn.getColumnCount(); i++) {
-            if (i != 1) {
-                tableTopMonAn.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        // Chỉ căn giữa các cột từ 0 đến 4 và cột 6. Bỏ qua cột 5 (Lương) vì đã có Renderer riêng
+        for (int i = 0; i < table.getColumnCount(); i++) {
+            if (i != 1 && i != 3) {
+                table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
             }
         }
     }
@@ -131,11 +136,10 @@ public class PanelThongKe extends javax.swing.JPanel {
             }
 
             double doanhThuTrungBinh = tongHoaDonDaThanhToan == 0 ? 0 : tongDoanhThu / tongHoaDonDaThanhToan;
-            DecimalFormat moneyFormat = new DecimalFormat("#,##0.00");
 
-            lblTongDoanhThu.setText(moneyFormat.format(tongDoanhThu) + " VND");
+            lblTongDoanhThu.setText(CurrencyUtility.formatVND(tongDoanhThu));
             lblTongSoHoaDon.setText(String.valueOf(tongHoaDonDaThanhToan));
-            lblDoanhThuTrungBinh.setText(moneyFormat.format(doanhThuTrungBinh) + " VND");
+            lblDoanhThuTrungBinh.setText(CurrencyUtility.formatVND(doanhThuTrungBinh));
 
             List<TopMonAnItem> topList = new ArrayList<>(topMonMap.values());
             topList.sort(Comparator.comparingInt((TopMonAnItem i) -> i.soLuong).reversed());
@@ -211,13 +215,23 @@ public class PanelThongKe extends javax.swing.JPanel {
                 return label;
             }
         });
+        
+     // Renderer cho cột Lương (Index 5)
+        tableTopMonAn.getColumnModel().getColumn(3).setCellRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                    boolean hasFocus, int row, int column) {
+                if (value != null && value instanceof Number) {
+                    value = com.restaurant.quanlydatbannhahang.util.CurrencyUtility
+                            .formatVND(((Number) value).doubleValue());
+                }
+                // Vừa format tiền, vừa căn GIỮA (hoặc PHẢI tùy ông chọn)
+                setHorizontalAlignment(JLabel.CENTER); 
+                return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            }
+        });
 
-        // Căn giữa toàn bộ các cột
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        for (int i = 0; i < tableTopMonAn.getColumnCount(); i++) {
-            tableTopMonAn.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
-        }
+        centerTableColumns(tableTopMonAn);
 
         // Tùy chỉnh nút bấm
         btnTrangChu.setFocusPainted(false);
@@ -467,11 +481,10 @@ public class PanelThongKe extends javax.swing.JPanel {
             }
 
             double doanhThuTrungBinh = tongHoaDon == 0 ? 0 : tongDoanhThu / tongHoaDon;
-            java.text.DecimalFormat moneyFormat = new java.text.DecimalFormat("#,##0.00");
 
-            lblTongDoanhThu.setText(moneyFormat.format(tongDoanhThu) + " VND");
+            lblTongDoanhThu.setText(CurrencyUtility.formatVND(tongDoanhThu));
             lblTongSoHoaDon.setText(String.valueOf(tongHoaDon));
-            lblDoanhThuTrungBinh.setText(moneyFormat.format(doanhThuTrungBinh) + " VND");
+            lblDoanhThuTrungBinh.setText(CurrencyUtility.formatVND(doanhThuTrungBinh));
 
             // Update table
             List<TopMonAnItem> topList = new java.util.ArrayList<>(topMonMap.values());

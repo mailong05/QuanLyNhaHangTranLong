@@ -96,7 +96,6 @@ public class PanelDatMon extends javax.swing.JPanel {
                     try {
                         saveDraftToSession(); // Lưu món vào Session
                         capNhatTrangThaiSauKhiLuu(); // Cập nhật trạng thái bàn xuống DB
-
                         // Thông báo nhẹ vào Console hoặc một Label trạng thái thay vì JOptionPane
                         JOptionPane.showMessageDialog(null, "Hệ thống: Đã tự động phiếu gọi món vào bộ nhớ tạm",
                                 "Thông báo", JOptionPane.INFORMATION_MESSAGE);
@@ -106,7 +105,7 @@ public class PanelDatMon extends javax.swing.JPanel {
                         JOptionPane.showMessageDialog(null, "Lỗi tự động lưu: " + e.getMessage());
                     }
                 }
-
+                
             }
         });
     }
@@ -531,7 +530,6 @@ public class PanelDatMon extends javax.swing.JPanel {
             return;
         }
 
-        System.out.println("Hi");
 
         BanService banService = new BanService();
         String maPhieuDatContext = HoaDonDraftSession.getCurrentMaPhieuDatContext();
@@ -1064,10 +1062,13 @@ public class PanelDatMon extends javax.swing.JPanel {
                     JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
+        
+        isChanged = true;
     }// GEN-LAST:event_btnDoiBanActionPerformed
 
     private void btnChonMonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnChonMonActionPerformed
         addSelectedMonToPhieuGoiMon();
+        isChanged = true;
     }// GEN-LAST:event_btnChonMonActionPerformed
 
     private void btnThanhToanActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnThanhToanActionPerformed

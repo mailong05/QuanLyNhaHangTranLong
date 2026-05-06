@@ -107,6 +107,22 @@ public class PanelLichSuHoaDon extends javax.swing.JPanel {
                 return label;
             }
         });
+        
+        for(int i = 7; i<=9; i++) {
+        	tableLichSuHoaDon.getColumnModel().getColumn(i).setCellRenderer(new DefaultTableCellRenderer() {
+                @Override
+                public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                        boolean hasFocus, int row, int column) {
+                    if (value != null && value instanceof Number) {
+                        value = com.restaurant.quanlydatbannhahang.util.CurrencyUtility
+                                .formatVND(((Number) value).doubleValue());
+                    }
+                    // Vừa format tiền, vừa căn GIỮA (hoặc PHẢI tùy ông chọn)
+                    setHorizontalAlignment(JLabel.CENTER); 
+                    return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                }
+            });
+        }
 
         centerTableColumns(tableLichSuHoaDon);
 
@@ -436,8 +452,11 @@ public class PanelLichSuHoaDon extends javax.swing.JPanel {
     private void centerTableColumns(JTable table) {
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        // Chỉ căn giữa các cột từ 0 đến 4 và cột 6. Bỏ qua cột 5 (Lương) vì đã có Renderer riêng
         for (int i = 0; i < table.getColumnCount(); i++) {
-            table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+            if (i != 7 && i!= 8 && i!= 9) {
+                table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+            }
         }
     }
 
