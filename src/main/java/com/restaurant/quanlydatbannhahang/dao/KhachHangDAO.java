@@ -16,11 +16,11 @@ public class KhachHangDAO {
     public KhachHangDAO() {
     }
 
-    /**
-     * Lấy mã khách hàng cuối cùng
-     * 
-     * @return Mã khách hàng cuối cùng (VD: KH025) hoặc null
-     */
+    
+
+
+
+
     public String getLastKhachHangID() {
         return IDQueryHelper.getLastID("KhachHang", "maKH");
     }

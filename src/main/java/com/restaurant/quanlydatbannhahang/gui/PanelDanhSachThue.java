@@ -26,7 +26,6 @@ public class PanelDanhSachThue extends javax.swing.JPanel {
     }
 
     private void customUI() {
-        // Placeholder cho txtTimKiem
         setupPlaceholder(txtTimKiem, "Nhập tên hoặc mã thuế");
 
         this.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -38,7 +37,6 @@ public class PanelDanhSachThue extends javax.swing.JPanel {
                 }
             }
         });
-        // Gắn sự kiện quay về Trang Chủ
         MainForm.attachGoHomeListener(btnTrangChu, this);
     }
 
@@ -51,14 +49,12 @@ public class PanelDanhSachThue extends javax.swing.JPanel {
         Color placeholderColor = new Color(153, 153, 153);
         Color textColor = new Color(0, 0, 0);
 
-        // Set text mac dinh va mau
         textField.setText(placeholder);
         textField.setForeground(placeholderColor);
 
         textField.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusGained(java.awt.event.FocusEvent evt) {
-                // Khi focus vao, neu la placeholder thi xoa
                 if (textField.getText().equals(placeholder)) {
                     textField.setText("");
                     textField.setForeground(textColor);
@@ -67,7 +63,6 @@ public class PanelDanhSachThue extends javax.swing.JPanel {
 
             @Override
             public void focusLost(java.awt.event.FocusEvent evt) {
-                // Khi focus out, neu trong thi hien thi placeholder
                 if (textField.getText().isEmpty()) {
                     textField.setText(placeholder);
                     textField.setForeground(placeholderColor);
@@ -78,19 +73,15 @@ public class PanelDanhSachThue extends javax.swing.JPanel {
 
     private void loadDataToComboBoxes() {
         try {
-            // Save listeners
             ActionListener[] trangThaiListeners = cbFilterTrangThai.getActionListeners();
 
-            // Remove listeners
             for (ActionListener listener : trangThaiListeners) {
                 cbFilterTrangThai.removeActionListener(listener);
             }
 
-            // Load TrangThai
 
             ComboBoxEnumLoader.loadTrangThaiThueToComboBox(cbFilterTrangThai);
 
-            // Re-add listeners
             for (ActionListener listener : trangThaiListeners) {
                 cbFilterTrangThai.addActionListener(listener);
             }

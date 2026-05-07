@@ -19,9 +19,9 @@ public class KhuVucService {
         this.khuVucDAO = new KhuVucDAO();
     }
 
-    /**
-     * Validate đối tượng KhuVuc
-     */
+    
+
+
     public void validateKhuVuc(KhuVuc khuVuc) {
         if (khuVuc == null) {
             throw new IllegalArgumentException("Đối tượng khu vực không được để trống");
@@ -40,9 +40,9 @@ public class KhuVucService {
         }
     }
 
-    /**
-     * Lấy khu vực theo mã
-     */
+    
+
+
     public KhuVuc getKhuVucTheoMa(String maKhuVuc) {
         if (maKhuVuc == null || maKhuVuc.trim().isEmpty()) {
             throw new IllegalArgumentException("Mã khu vực không được để trống");
@@ -54,16 +54,16 @@ public class KhuVucService {
         return khuVuc;
     }
 
-    /**
-     * Lấy tất cả khu vực
-     */
+    
+
+
     public List<KhuVuc> getAllKhuVuc() {
         return khuVucDAO.getAllKhuVuc();
     }
 
-    /**
-     * Thêm khu vực mới
-     */
+    
+
+
     public void themKhuVuc(KhuVuc khuVuc) {
         validateKhuVuc(khuVuc);
         if (!khuVucDAO.themKhuVuc(khuVuc)) {
@@ -71,9 +71,9 @@ public class KhuVucService {
         }
     }
 
-    /**
-     * Cập nhật khu vực
-     */
+    
+
+
     public void capNhatKhuVuc(KhuVuc khuVuc) {
         validateKhuVuc(khuVuc);
         if (!khuVucDAO.capNhatKhuVuc(khuVuc)) {
@@ -81,9 +81,9 @@ public class KhuVucService {
         }
     }
 
-    /**
-     * Xóa khu vực
-     */
+    
+
+
     public void xoaKhuVuc(String maKhuVuc) {
         if (maKhuVuc == null || maKhuVuc.trim().isEmpty()) {
             throw new IllegalArgumentException("Mã khu vực không được để trống");
@@ -93,9 +93,9 @@ public class KhuVucService {
         }
     }
 
-    /**
-     * Kiểm tra khu vực tồn tại
-     */
+    
+
+
     public boolean existKhuVuc(String maKhuVuc) {
         if (maKhuVuc == null || maKhuVuc.trim().isEmpty()) {
             return false;
@@ -103,19 +103,19 @@ public class KhuVucService {
         return khuVucDAO.getKhuVucTheoMa(maKhuVuc) != null;
     }
 
-    /**
-     * Tính tổng số khu vực
-     */
+    
+
+
     public int getTotalKhuVuc() {
         List<KhuVuc> list = getAllKhuVuc();
         return list != null ? list.size() : 0;
     }
 
-    /**
-     * Lấy mã khu vực cuối cùng để sinh mã tiếp theo
-     * 
-     * @return Mã khu vực cuối cùng (VD: KV000) hoặc null nếu bảng rỗng
-     */
+    
+
+
+
+
     public String getLastKhuVucID() {
         return khuVucDAO.getLastKhuVucID();
     }

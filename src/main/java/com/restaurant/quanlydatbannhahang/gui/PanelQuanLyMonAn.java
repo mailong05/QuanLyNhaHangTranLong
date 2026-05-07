@@ -52,12 +52,10 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
     }
 
     private void customUI() {
-        // Placeholder cho txtTimKiem
         setupPlaceholder(txtTimKiem, "Nhập tên món ăn");
         fillTxtMaMon();
         MainForm.attachGoHomeListener(btnTrangChu, this);
 
-        // ========== DESELECT WHEN CLICK OUTSIDE TABLE ==========
         this.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mousePressed(java.awt.event.MouseEvent evt) {
@@ -68,7 +66,6 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
             }
         });
 
-        // Register mouse listener để populate fields khi click vào row
         tableMonAn.addMouseListener(this);
         tableMonAn.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
@@ -85,16 +82,13 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
 
     private void loadDataToComboBoxes() {
         try {
-            // Load data from service first
             if (allMonAn == null || allMonAn.isEmpty()) {
                 allMonAn = monAnService.getAllMonAn();
             }
 
-            // Load LoaiMonAn enum
             ActionListener[] loaiMonAnListener = cbFilterLoaiMonAn.getActionListeners();
             ActionListener[] donViTinhListener = cbFilterTrangThai.getActionListeners();
 
-            // Remove listeners
             for (ActionListener listener : loaiMonAnListener) {
                 cbFilterLoaiMonAn.removeActionListener(listener);
             }
@@ -159,7 +153,6 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
             }
         }
 
-        // Warm-up một phần ảnh đầu tiên để màn hình đầu mở mượt hơn.
         ImageUtil.preloadFirstN(imagePaths, TABLE_IMAGE_SIZE, 20);
         ImageUtil.preloadImagesAsync(imagePaths, TABLE_IMAGE_SIZE);
         imagePreloadStarted = true;
@@ -177,12 +170,10 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
 
             if (monAnList != null && !monAnList.isEmpty()) {
                 for (MonAn monan : monAnList) {
-                    // Filter: Chỉ hiển thị những món ăn còn (Soft delete)
                     if (monan.getTrangThai() != com.restaurant.quanlydatbannhahang.entity.TrangThaiMonAn.CON) {
                         continue;
                     }
 
-                    // Apply Loai filter
                     if (selectedLoai != null && !selectedLoai.isEmpty() && !selectedLoai.equals("Loại món ăn")) {
                         if (monan.getTenLoai() == null || !monan.getTenLoai().getDisplayName().equals(selectedLoai)) {
                             continue;
@@ -202,7 +193,6 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
             }
             centerTableColumns(tableMonAn);
 
-            // ========== FORMAT TIỀN TỆ CHO CỘT ĐƠN GIÁ ==========
             DefaultTableCellRenderer currencyRenderer = new DefaultTableCellRenderer() {
                 @Override
                 protected void setValue(Object value) {
@@ -232,19 +222,16 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
             model.setRowCount(0);
 
             for (MonAn monan : list) {
-                // Filter: Chỉ hiển thị những món ăn còn (Soft delete)
                 if (monan.getTrangThai() != com.restaurant.quanlydatbannhahang.entity.TrangThaiMonAn.CON) {
                     continue;
                 }
 
-                // Apply Loai filter
                 if (selectedLoai != null && !selectedLoai.isEmpty() && !selectedLoai.equals("Loại món ăn")) {
                     if (monan.getTenLoai() == null || !monan.getTenLoai().getDisplayName().equals(selectedLoai)) {
                         continue;
                     }
                 }
 
-                // Apply search text filter
                 if (!searchText.isEmpty()) {
                     String maMon = monan.getMaMon() != null ? monan.getMaMon().toLowerCase() : "";
                     String tenMon = monan.getTenMon() != null ? monan.getTenMon().toLowerCase() : "";
@@ -265,7 +252,6 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
             }
             centerTableColumns(tableMonAn);
 
-            // ========== FORMAT TIỀN TỆ CHO CỘT ĐƠN GIÁ ==========
             DefaultTableCellRenderer currencyRenderer = new DefaultTableCellRenderer() {
                 @Override
                 protected void setValue(Object value) {
@@ -300,10 +286,9 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
             cbLoaiMonAn.setSelectedItem(loaiMonDisplay);
             cbTrangThai.setSelectedItem(trangThaiDisplay);
 
-            // Load hình ảnh lên lblIconMonAn
             MonAn monAn = monAnService.getMonAnTheoMa(maMon);
             if (monAn != null && monAn.getUrlHinhAnh() != null && !monAn.getUrlHinhAnh().trim().isEmpty()) {
-                ImageIcon icon = ImageUtil.loadImageIcon(monAn.getUrlHinhAnh(), 100); // Size lớn hơn cho preview
+                ImageIcon icon = ImageUtil.loadImageIcon(monAn.getUrlHinhAnh(), 100);
                 if (icon != null) {
                     Image img = icon.getImage().getScaledInstance(lblIconMonAn.getWidth(), lblIconMonAn.getHeight(),
                             Image.SCALE_SMOOTH);
@@ -371,14 +356,12 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
         Color placeholderColor = new Color(153, 153, 153);
         Color textColor = new Color(0, 0, 0);
 
-        // Set text mac dinh va mau
         textField.setText(placeholder);
         textField.setForeground(placeholderColor);
 
         textField.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusGained(java.awt.event.FocusEvent evt) {
-                // Khi focus vao, neu la placeholder thi xoa
                 if (textField.getText().equals(placeholder)) {
                     textField.setText("");
                     textField.setForeground(textColor);
@@ -387,7 +370,6 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
 
             @Override
             public void focusLost(java.awt.event.FocusEvent evt) {
-                // Khi focus out, neu trong thi hien thi placeholder
                 if (textField.getText().isEmpty()) {
                     textField.setText(placeholder);
                     textField.setForeground(placeholderColor);

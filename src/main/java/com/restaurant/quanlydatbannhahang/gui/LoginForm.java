@@ -11,19 +11,16 @@ public class LoginForm extends javax.swing.JFrame {
 
     public LoginForm() {
         initComponents();
-        this.setLocationRelativeTo(null); // Căn giữa màn hình
+        this.setLocationRelativeTo(null);
 
-        // Thiết lập Placeholder mặc định
         txtUsername.setText("Username");
         txtPassword.setText("Password");
         txtPassword.setEchoChar((char) 0);
         txtUsername.setForeground(new Color(102, 102, 102));
         txtPassword.setForeground(new Color(102, 102, 102));
 
-        // Đẩy focus ra khỏi các ô input lúc mới mở
         jLabel6.requestFocusInWindow();
 
-        // Xử lý Placeholder cho ô Username
         txtUsername.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -42,7 +39,6 @@ public class LoginForm extends javax.swing.JFrame {
             }
         });
 
-        // Placeholder cho ô Password
         txtPassword.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -65,11 +61,9 @@ public class LoginForm extends javax.swing.JFrame {
             }
         });
 
-        // Tắt viền xanh cho các nút
         btnLogin.setFocusPainted(false);
         btnCancel.setFocusPainted(false);
 
-        // Ẩn icon mắt mở lúc đầu (mặc định là ẩn mật khẩu)
         lblIconEye.setVisible(false);
         lblIconHide.setVisible(true);
     }

@@ -13,7 +13,6 @@ public class ForgetPasswordForm extends javax.swing.JFrame {
     public ForgetPasswordForm() {
         initComponents();
 
-        // khử viền xanh khi click nút
         btnContinue.setFocusPainted(false);
         btnCancel.setFocusPainted(false);
     }

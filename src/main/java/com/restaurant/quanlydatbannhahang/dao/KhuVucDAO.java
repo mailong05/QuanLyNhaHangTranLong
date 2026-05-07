@@ -14,11 +14,11 @@ public class KhuVucDAO {
     public KhuVucDAO() {
     }
 
-    /**
-     * Lấy mã khu vực cuối cùng
-     * 
-     * @return Mã khu vực cuối cùng (VD: KV005) hoặc null
-     */
+    
+
+
+
+
     public String getLastKhuVucID() {
         return IDQueryHelper.getLastID("KhuVuc", "maKhuVuc");
     }

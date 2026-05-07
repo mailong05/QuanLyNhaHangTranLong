@@ -30,29 +30,22 @@ public class PanelDanhSachKhachHang extends javax.swing.JPanel {
     }
 
     private void customUI() {
-        // Placeholder cho txtTimKiem
         setupPlaceholder(txtTimKiem, "Nhập số điện thoại hoặc tên");
 
-        // 1. Màu nền chủ đạo
         setBackground(new Color(255, 251, 233));
 
-        // 2. Tùy chỉnh hiệu ứng cho các nút bấm
         JButton[] buttons = { btnTrangChu, btnTimKiem };
         for (JButton btn : buttons) {
             btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         }
 
-        // 3. Tùy chỉnh ScrollPane và Viền bảng
         scrTableKhachHang.setBorder(BorderFactory.createLineBorder(new Color(200, 190, 170), 1));
         scrTableKhachHang.setViewportBorder(null);
 
-        // 4. Tùy chỉnh Table (Bảng Khách Hàng)
         tableKhachHang.setRowHeight(35);
 
-        // Căn giữa nội dung các cột
         centerTableColumns(tableKhachHang);
 
-        // 5. Bo góc cho Panel chứa thông tin nhập liệu
         applyCardStyle(pnlThongTinKhachHang, 20);
 
         this.addMouseListener(new java.awt.event.MouseAdapter() {

@@ -1,6 +1,6 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
+ * Click nbfs:
+ * Click nbfs:
  */
 package com.restaurant.quanlydatbannhahang.gui;
 
@@ -105,7 +105,6 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
             @Override
             public void hierarchyChanged(java.awt.event.HierarchyEvent e) {
                 if ((e.getChangeFlags() & java.awt.event.HierarchyEvent.SHOWING_CHANGED) != 0) {
-                    // Khi Panel bị ẩn đi (chuyển trang)
                     if (!isShowing()) {
                         performAutoSaveOnHide();
                     }

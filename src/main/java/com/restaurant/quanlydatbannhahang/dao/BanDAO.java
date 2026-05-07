@@ -17,12 +17,12 @@ public class BanDAO {
     public BanDAO() {
     }
 
-    /**
-     * Lấy mã bàn cuối cùng trong database
-     * Dùng để sinh mã bàn tiếp theo
-     * 
-     * @return Mã bàn cuối cùng (VD: B005) hoặc null nếu bảng rỗng
-     */
+    
+
+
+
+
+
     public String getLastBanID() {
         return IDQueryHelper.getLastID("Ban", "maBan");
     }
@@ -35,10 +35,10 @@ public class BanDAO {
             String maKhuVuc = rs.getString("maKhuVuc");
             String trangThaiStr = rs.getString("trangThai");
 
-            // Tạo KhuVuc
+            
             KhuVuc khuVuc = new KhuVuc(maKhuVuc, "");
 
-            // Tạo TrangThaiBan enum
+            
             TrangThaiBan trangThai = TrangThaiBan.valueOf(trangThaiStr);
 
             return new Ban(maBan, soGhe, viTri, khuVuc, trangThai);
@@ -211,13 +211,13 @@ public class BanDAO {
         return false;
     }
 
-    /**
-     * Cập nhật trạng thái bàn (overload nhận TrangThaiBan enum)
-     * 
-     * @param maBan     Mã bàn
-     * @param trangThai TrangThaiBan enum
-     * @return true nếu cập nhật thành công
-     */
+    
+
+
+
+
+
+
     public boolean capNhatTrangThaiBan(String maBan,TrangThaiBan trangThai) {
         return capNhatTrangThaiBan(maBan, trangThai.name());
     }

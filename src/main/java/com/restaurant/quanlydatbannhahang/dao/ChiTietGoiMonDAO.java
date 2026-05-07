@@ -133,7 +133,7 @@ public class ChiTietGoiMonDAO {
     }
 
     public boolean capNhatTrangThaiChiTietGoiMon(String maPhieu, String maMon, String trangThai) {
-        // This method might need a trangThai column if required; skipping for now
+        
         return true;
     }
 

@@ -29,12 +29,10 @@ public class PanelQuanLyThue extends javax.swing.JPanel implements MouseListener
     }
 
     private void customUI() {
-        // Placeholder cho txtTimKiem
         setupPlaceholder(txtTimKiem, "Nhập tên hoặc mã thuế");
         fillTxtMaThue();
         MainForm.attachGoHomeListener(btnTrangChu, this);
 
-        // ========== DESELECT WHEN CLICK OUTSIDE TABLE ==========
         this.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mousePressed(java.awt.event.MouseEvent evt) {
@@ -45,7 +43,6 @@ public class PanelQuanLyThue extends javax.swing.JPanel implements MouseListener
             }
         });
 
-        // Register mouse listener để populate fields khi click vào row
         tableThue.addMouseListener(this);
         tableThue.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
@@ -90,14 +87,12 @@ public class PanelQuanLyThue extends javax.swing.JPanel implements MouseListener
         Color placeholderColor = new Color(153, 153, 153);
         Color textColor = new Color(0, 0, 0);
 
-        // Set text mac dinh va mau
         textField.setText(placeholder);
         textField.setForeground(placeholderColor);
 
         textField.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusGained(java.awt.event.FocusEvent evt) {
-                // Khi focus vao, neu la placeholder thi xoa
                 if (textField.getText().equals(placeholder)) {
                     textField.setText("");
                     textField.setForeground(textColor);
@@ -106,7 +101,6 @@ public class PanelQuanLyThue extends javax.swing.JPanel implements MouseListener
 
             @Override
             public void focusLost(java.awt.event.FocusEvent evt) {
-                // Khi focus out, neu trong thi hien thi placeholder
                 if (textField.getText().isEmpty()) {
                     textField.setText(placeholder);
                     textField.setForeground(placeholderColor);
@@ -123,19 +117,15 @@ public class PanelQuanLyThue extends javax.swing.JPanel implements MouseListener
 
     private void loadDataToComboBoxes() {
         try {
-            // Save listeners
             ActionListener[] trangThaiListeners = cbFilterTrangThai.getActionListeners();
 
-            // Remove listeners
             for (ActionListener listener : trangThaiListeners) {
                 cbFilterTrangThai.removeActionListener(listener);
             }
 
-            // Load TrangThai
             cbEnumLoader.loadTrangThaiThueToComboBox(cbFilterTrangThai);
             cbEnumLoader.loadTrangThaiThueToComboBox(cbTrangThai);
 
-            // Re-add listeners
             for (ActionListener listener : trangThaiListeners) {
                 cbFilterTrangThai.addActionListener(listener);
             }
@@ -166,7 +156,6 @@ public class PanelQuanLyThue extends javax.swing.JPanel implements MouseListener
             model.setRowCount(0);
 
             for (Thue thue : list) {
-                // Filter: Chỉ hiển thị thuế còn áp dụng (Soft delete)
                 if (thue.getTrangThai() != com.restaurant.quanlydatbannhahang.entity.TrangThaiThue.CON_AP_DUNG) {
                     continue;
                 }
@@ -196,12 +185,10 @@ public class PanelQuanLyThue extends javax.swing.JPanel implements MouseListener
             model.setRowCount(0);
 
             for (Thue thue : list) {
-                // Filter: Chỉ hiển thị thuế còn áp dụng (Soft delete)
                 if (thue.getTrangThai() != com.restaurant.quanlydatbannhahang.entity.TrangThaiThue.CON_AP_DUNG) {
                     continue;
                 }
 
-                // Apply search text filter
                 if (!searchText.isEmpty()) {
                     String maThue = thue.getMaThue() != null ? thue.getMaThue().toLowerCase() : "";
                     String tenThue = thue.getTenThue() != null ? thue.getTenThue().toLowerCase() : "";

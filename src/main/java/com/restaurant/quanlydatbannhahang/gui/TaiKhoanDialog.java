@@ -11,7 +11,6 @@ import com.restaurant.quanlydatbannhahang.util.ComboBoxEnumLoader;
 import java.time.LocalDate;
 import javax.swing.JOptionPane;
 
-// UIConfiguration để setup FlatLaf L&F
 
 public class TaiKhoanDialog extends javax.swing.JDialog {
 

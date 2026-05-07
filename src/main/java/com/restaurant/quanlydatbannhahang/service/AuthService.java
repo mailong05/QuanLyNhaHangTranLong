@@ -9,7 +9,7 @@ import com.restaurant.quanlydatbannhahang.entity.TaiKhoan;
 
 public class AuthService {
 
-    // Regex patterns
+    
     private static final String REGEX_USERNAME = "^[a-z_]{3,20}$";
     private static final String REGEX_PASSWORD = "^\\d{6,}$";
     private static final String REGEX_PHONE = "^0[0-9]{9}$";
@@ -20,14 +20,14 @@ public class AuthService {
         this.taiKhoanDAO = new TaiKhoanDAO();
     }
 
-    /**
-     * Validate username
-     * - Chỉ chứa chữ cái thường (a-z) và dấu gạch dưới (_)
-     * - Độ dài: 3-20 ký tự
-     * 
-     * @param username Tên đăng nhập cần kiểm tra
-     * @return ValidationResult với success và message
-     */
+    
+
+
+
+
+
+
+
     public static ValidationResult validateUsername(String username) {
         if (isEmpty(username)) {
             return new ValidationResult(false, "Tên đăng nhập không được để trống");
@@ -57,13 +57,13 @@ public class AuthService {
         return new ValidationResult(true, "Tên đăng nhập hợp lệ");
     }
 
-    /**
-     * Validate password
-     * - Độ dài: ít nhất 6 ký tự
-     * 
-     * @param password Mật khẩu cần kiểm tra
-     * @return ValidationResult với success và message
-     */
+    
+
+
+
+
+
+
     public static ValidationResult validatePassword(String password) {
         if (isEmpty(password)) {
             return new ValidationResult(false, "Mật khẩu không được để trống");
@@ -84,13 +84,13 @@ public class AuthService {
         return new ValidationResult(true, "Mật khẩu hợp lệ");
     }
 
-    /**
-     * Validate phone number
-     * - Định dạng: 0XXXXXXXXX (0 ở đầu + 9 chữ số)
-     * 
-     * @param phoneNumber Số điện thoại cần kiểm tra
-     * @return ValidationResult với success và message
-     */
+    
+
+
+
+
+
+
     public static ValidationResult validatePhoneNumber(String phoneNumber) {
         if (isEmpty(phoneNumber)) {
             return new ValidationResult(false, "Số điện thoại không được để trống");
@@ -115,13 +115,13 @@ public class AuthService {
         return new ValidationResult(true, "Số điện thoại hợp lệ");
     }
 
-    /**
-     * Validate confirm password (kiểm tra 2 mật khẩu có giống nhau không)
-     * 
-     * @param password        Mật khẩu lần 1
-     * @param confirmPassword Mật khẩu lần 2
-     * @return ValidationResult với success và message
-     */
+    
+
+
+
+
+
+
     public static ValidationResult validateConfirmPassword(String password, String confirmPassword) {
         if (isEmpty(confirmPassword)) {
             return new ValidationResult(false, "Xác nhận mật khẩu không được để trống");
@@ -134,19 +134,19 @@ public class AuthService {
         return new ValidationResult(true, "Xác nhận mật khẩu hợp lệ");
     }
 
-    /**
-     * Kiểm tra chuỗi có rỗng không (null hoặc empty)
-     */
+    
+
+
     public static boolean isEmpty(String str) {
         return str == null || str.trim().isEmpty();
     }
 
-    /**
-     * Mã hóa mật khẩu sử dụng SHA-256
-     * 
-     * @param password Mật khẩu plaintext
-     * @return Mật khẩu đã mã hóa (Base64 encoded)
-     */
+    
+
+
+
+
+
     public static String hashPassword(String password) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
@@ -157,37 +157,37 @@ public class AuthService {
         }
     }
 
-    /**
-     * Kiểm tra mật khẩu plaintext có khớp với mật khẩu đã mã hóa không
-     * 
-     * @param plainPassword  Mật khẩu plaintext
-     * @param hashedPassword Mật khẩu đã mã hóa
-     * @return true nếu khớp, false nếu không
-     */
+    
+
+
+
+
+
+
     public static boolean verifyPassword(String plainPassword, String hashedPassword) {
         String hash = hashPassword(plainPassword);
         return hash.equals(hashedPassword);
     }
 
-    /**
-     * Login - Kiểm tra username và password
-     * Trước tiên validate dữ liệu, rồi kiểm tra database
-     */
+    
+
+
+
     public TaiKhoan login(String username, String password) {
-        // Validate username
+        
         ValidationResult userValidation = validateUsername(username);
         if (!userValidation.success) {
             return null;
         }
 
-        // Validate password
+        
         ValidationResult passValidation = validatePassword(password);
         if (!passValidation.success) {
             return null;
         }
 
-        // Kiểm tra database
-        // ✅ Gửi password plaintext (vì DB hiện tại chứa plaintext, không phải hash)
+        
+        
         TaiKhoan taiKhoan = taiKhoanDAO.findByUsernameAndPassword(username, password);
 
         if (taiKhoan == null) {
@@ -197,25 +197,25 @@ public class AuthService {
         return taiKhoan;
     }
 
-    /**
-     * Kiểm tra tài khoản tồn tại
-     */
+    
+
+
     public boolean checkUsernameExists(String username) {
         return taiKhoanDAO.existUsername(username);
     }
 
-    /**
-     * Lấy thông tin tài khoản theo username
-     */
+    
+
+
     public TaiKhoan getTaiKhoanByUsername(String username) {
         return taiKhoanDAO.findByUsername(username);
     }
 
-    /**
-     * ValidationResult - Lớp chứa kết quả validation
-     * - success: true/false
-     * - message: thông báo chi tiết
-     */
+    
+
+
+
+
     public static class ValidationResult {
         public boolean success;
         public String message;

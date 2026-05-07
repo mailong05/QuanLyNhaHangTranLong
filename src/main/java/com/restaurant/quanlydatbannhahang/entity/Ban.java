@@ -7,11 +7,11 @@ public class Ban {
     private KhuVuc khuVuc;
     private TrangThaiBan trangThai;
 
-    // Constructor không tham số
+    
     public Ban() {
     }
 
-    // Constructor đầy đủ
+    
     public Ban(String maBan, int soGhe, String viTri, KhuVuc khuVuc, TrangThaiBan trangThai) {
         this.maBan = maBan;
         this.soGhe = soGhe;
@@ -20,7 +20,7 @@ public class Ban {
         this.trangThai = trangThai;
     }
 
-    // Getter và Setter
+    
     public String getMaBan() {
         return maBan;
     }
@@ -61,7 +61,7 @@ public class Ban {
         this.trangThai = trangThai;
     }
 
-    // Các phương thức cần thiết
+    
     public boolean kiemTraBanTrong() {
         return trangThai == TrangThaiBan.TRONG;
     }

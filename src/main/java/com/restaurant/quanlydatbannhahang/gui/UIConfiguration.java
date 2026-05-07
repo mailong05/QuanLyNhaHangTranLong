@@ -8,20 +8,18 @@ import com.formdev.flatlaf.FlatLightLaf;
  * nào
  */
 public class UIConfiguration {
-    private static boolean isSetup = false; // Đảm bảo setup chỉ 1 lần
+    private static boolean isSetup = false;
 
     /**
      * Setup FlatLaf - PHẢI gọi lần đầu tiên trong main()
      * Trước khi tạo bất kỳ GUI component nào
      */
     public static void setupUI() {
-        // Tránh setup nhiều lần
         if (isSetup) {
             return;
         }
 
         try {
-            // Setup FlatLight Look and Feel
             FlatLightLaf.setup();
             isSetup = true;
         } catch (Exception ex) {

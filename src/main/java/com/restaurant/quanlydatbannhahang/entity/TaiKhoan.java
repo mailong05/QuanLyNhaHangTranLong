@@ -6,11 +6,11 @@ public class TaiKhoan {
     private NhanVien nhanVien;
     private QuyenHan quyenHan;
 
-    // Constructor không tham số
+    
     public TaiKhoan() {
     }
 
-    // Constructor đầy đủ
+    
     public TaiKhoan(String username, String password, NhanVien nhanVien, QuyenHan quyenHan) {
         this.username = username;
         this.password = password;
@@ -18,7 +18,7 @@ public class TaiKhoan {
         this.quyenHan = quyenHan;
     }
 
-    // Getter và Setter
+    
     public String getUsername() {
         return username;
     }
@@ -51,7 +51,7 @@ public class TaiKhoan {
         this.quyenHan = quyenHan;
     }
 
-    // Các phương thức cần thiết
+    
     public boolean kiemTraDangNhap() {
         return username != null && !username.isEmpty() && password != null && !password.isEmpty();
     }
@@ -65,7 +65,7 @@ public class TaiKhoan {
     }
 
     public boolean resetMatKhau() {
-        this.password = "123456"; // Mật khẩu mặc định
+        this.password = "123456"; 
         return true;
     }
 

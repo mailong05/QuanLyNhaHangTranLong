@@ -27,11 +27,11 @@ public class HoaDonDAO {
         this.thueDAO = new ThueDAO();
     }
 
-    /**
-     * Lấy mã hóa đơn cuối cùng
-     * 
-     * @return Mã hóa đơn cuối cùng (VD: HD050) hoặc null
-     */
+    
+
+
+
+
     public String getLastHoaDonID() {
         return IDQueryHelper.getLastID("HoaDon", "maHD");
     }
@@ -226,8 +226,8 @@ public class HoaDonDAO {
     }
 
     public List<HoaDon> getHoaDonTheoKhachHang(String maKH) {
-        // This would require joining with PhieuDatBan or other related tables
-        // For now, returning empty list
+        
+        
         return new ArrayList<>();
     }
 
@@ -269,7 +269,7 @@ public class HoaDonDAO {
             pstm.setDate(1, java.sql.Date.valueOf(ngay));
             ResultSet rs = pstm.executeQuery();
             if (rs.next()) {
-                return rs.getDouble(1); // Trả về tổng con số SQL đã tính xong
+                return rs.getDouble(1); 
             }
         } catch (Exception e) {
             e.printStackTrace();

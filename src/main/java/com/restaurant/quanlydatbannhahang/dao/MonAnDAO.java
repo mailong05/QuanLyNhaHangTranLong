@@ -16,11 +16,11 @@ public class MonAnDAO {
     public MonAnDAO() {
     }
 
-    /**
-     * Lấy mã món ăn cuối cùng
-     * 
-     * @return Mã món ăn cuối cùng (VD: MA080) hoặc null
-     */
+    
+
+
+
+
     public String getLastMonAnID() {
         return IDQueryHelper.getLastID("MonAn", "maMon");
     }

@@ -4,17 +4,17 @@ public class KhuVuc {
     private String maKhuVuc;
     private String tenKhuVuc;
 
-    // Constructor không tham số
+    
     public KhuVuc() {
     }
 
-    // Constructor đầy đủ
+    
     public KhuVuc(String maKhuVuc, String tenKhuVuc) {
         this.maKhuVuc = maKhuVuc;
         this.tenKhuVuc = tenKhuVuc;
     }
 
-    // Getter và Setter
+    
     public String getMaKhuVuc() {
         return maKhuVuc;
     }
@@ -31,13 +31,13 @@ public class KhuVuc {
         this.tenKhuVuc = tenKhuVuc;
     }
 
-    // Các phương thức cần thiết
+    
     public void themKhuVuc() {
-        // Logic thêm khu vực vào database
+        
     }
 
     public void capNhatKhuVuc() {
-        // Logic cập nhật khu vực trong database
+        
     }
 
     @Override

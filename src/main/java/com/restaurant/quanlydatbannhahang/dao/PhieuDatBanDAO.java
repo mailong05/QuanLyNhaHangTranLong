@@ -21,11 +21,11 @@ public class PhieuDatBanDAO {
         this.nhanVienDAO = new NhanVienDAO();
     }
 
-    /**
-     * Lấy mã phiếu đặt bàn cuối cùng
-     * 
-     * @return Mã phiếu đặt bàn cuối cùng (VD: PDB010) hoặc null
-     */
+    
+
+
+
+
     public String getLastPhieuDatBanID() {
         return IDQueryHelper.getLastID("PhieuDatBan", "maPhieuDat");
     }
@@ -66,7 +66,7 @@ public class PhieuDatBanDAO {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "insert into PhieuDatBan (maPhieuDat, maKH, maNV, ngayLapPhieu, thoiGianDen, soLuongNguoi, ghiChu, trangThai, tienDatCoc) values (?,?,?,?,?,?,?,?,?)";
         try {
-            // Kiểm tra nhân viên tồn tại
+            
             if (phieu.getNhanVien() == null || phieu.getNhanVien().getMaNV() == null) {
                 System.err.println("Lỗi: Mã nhân viên không được NULL");
                 return false;
@@ -148,7 +148,7 @@ public class PhieuDatBanDAO {
                 list.add(pdb);
             }
         } catch (Exception e) {
-            // TODO: handle exception
+            
         }
         return list;
     }
@@ -306,7 +306,7 @@ public class PhieuDatBanDAO {
     }
 
     public boolean capNhatKhachHangChoPhieu(String maPhieu, String maKH) {
-        // TODO Auto-generated method stub
+        
         return false;
     }
 

@@ -26,29 +26,25 @@ import com.restaurant.quanlydatbannhahang.util.ImageUtil;
 
 public class MainForm extends javax.swing.JFrame {
 
-    // 1. BIẾN ĐIỀU KHIỂN LOGIC & TRẠNG THÁI
     private String userRole;
     private TaiKhoan taiKhoan = null;
     private JPanel activePanel = null;
     private JLabel activeSubLabel = null;
-    private boolean isMenuClick = true; // Flag để track: click từ menu (true) hay từ button (false)
+    private boolean isMenuClick = true;
     private PanelTrangChu currentTrangChuPanel = null;
     private PanelQuanLyKhachHang panelQuanLyKhachHang;
 
-    // Lưu trữ các panel để bảo toàn trạng thái khi chuyển đổi
     private PanelDatBan panelDatBan = null;
     private PanelQuanLyDatBanTruoc panelQuanLyDatBanTruoc = null;
     private PanelDatMon panelDatMon = null;
     private PanelLapHoaDon panelLapHoaDon = null;
-    private JPanel lastVisitedPanel = null; // Theo dõi panel trước đó để quay lại
-    private JLabel lastVisitedSubLabel = null; // Lưu menu con để highlight lại
+    private JPanel lastVisitedPanel = null;
+    private JLabel lastVisitedSubLabel = null;
 
-    // 2. ĐỊNH NGHĨA MÀU SẮC & GIAO DIỆN CHUẨN
     private final Color COLOR_MENU_BG = new Color(142, 128, 106);
     private final Color COLOR_MENU_HOVER = new Color(165, 150, 125);
     private final Color COLOR_TEXT_NORMAL = new Color(255, 255, 255);
 
-    // 3. CÁC HÀM KHỞI TẠO (CONSTRUCTORS)
     public MainForm() {
         this("Quản lý");
         panelQuanLyKhachHang = new PanelQuanLyKhachHang();
@@ -74,13 +70,11 @@ public class MainForm extends javax.swing.JFrame {
                         ? taiKhoan.getNhanVien().getChucVu().getDisplayName()
                         : "Quản lý";
 
-        // Lưu thông tin tài khoản vào SessionManager để các module khác truy cập
         SessionManager.setCurrentTaiKhoan(taiKhoan);
 
         initAll();
     }
 
-    // 4. CÁC HÀM KHỞI TẠO HỆ THỐNG (INIT)
     private void initAll() {
         try {
             initComponents();
@@ -119,7 +113,6 @@ public class MainForm extends javax.swing.JFrame {
         lblTenTrang.setText("TRANG CHỦ");
         showTrangChuPanel();
 
-        // Khởi tạo sớm các panel quan trọng để setup callback chúng chính xác
         initializePanelsEarly();
 
         this.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -134,17 +127,14 @@ public class MainForm extends javax.swing.JFrame {
      * Khởi tạo sớm các panel để tránh lỗi null reference khi callback
      */
     private void initializePanelsEarly() {
-        // Tạo panelDatBan nếu chưa tồn tại
         if (panelDatBan == null) {
             panelDatBan = new PanelDatBan();
         }
 
-        // Tạo panelQuanLyDatBanTruoc nếu chưa tồn tại
         if (panelQuanLyDatBanTruoc == null) {
             panelQuanLyDatBanTruoc = new PanelQuanLyDatBanTruoc();
         }
 
-        // Setup bidirectional callback
         panelDatBan.setPanelQuanLyDatBanTruoc(panelQuanLyDatBanTruoc);
         panelQuanLyDatBanTruoc.setPanelDatBan(panelDatBan);
     }
@@ -205,7 +195,6 @@ public class MainForm extends javax.swing.JFrame {
         return true;
     }
 
-    // 5. LOGIC HỆ THỐNG
     private void phanQuyenGiaoDien() {
         String tenNhanVien = "Nhân viên";
         String chucVu = userRole;
@@ -264,28 +253,22 @@ public class MainForm extends javax.swing.JFrame {
     }
 
     public void openPanelDatMon(String maBanContext) {
-        // Nếu panelDatMon chưa được tạo, tạo mới
         if (panelDatMon == null) {
             panelDatMon = new PanelDatMon();
         }
         panelDatMon.setDatMonContext(maBanContext);
-        // Lưu panel hiện tại trước khi chuyển đi, để có thể quay lại
         lastVisitedPanel = panelQuanLyDatBanTruoc;
-        // Lưu menu con để highlight lại khi quay lại
         lastVisitedSubLabel = activeSubLabel;
         showPanel(panelDatMon);
         lblTenTrang.setText("ĐẶT MÓN");
     }
 
     public void openPanelLapHoaDon() {
-        // Nếu panelLapHoaDon chưa được tạo, tạo mới
         if (panelLapHoaDon == null) {
             panelLapHoaDon = new PanelLapHoaDon();
         }
         HoaDonDraftSession.setCurrentMaBanContext(panelDatMon != null ? panelDatMon.getDatMonContext() : null);
         panelLapHoaDon.refreshDraftData();
-        // Lưu panel hiện tại trước khi chuyển đi
-        // (panelDatMon sẽ được giữ lại để quay lại)
         showPanel(panelLapHoaDon);
         lblTenTrang.setText("LẬP HÓA ĐƠN");
     }
@@ -294,7 +277,6 @@ public class MainForm extends javax.swing.JFrame {
         if (lastVisitedPanel != null) {
             showPanel(lastVisitedPanel);
 
-            // Highlight submenu nếu có
             if (lastVisitedSubLabel != null) {
                 if (activeSubLabel != null) {
                     activeSubLabel.setForeground(Color.WHITE);
@@ -305,7 +287,6 @@ public class MainForm extends javax.swing.JFrame {
                 lastVisitedSubLabel.setFont(lastVisitedSubLabel.getFont().deriveFont(Font.BOLD));
             }
 
-            // Set title dựa trên panel
             if (lastVisitedPanel == panelTrangChu) {
                 lblTenTrang.setText("TRANG CHỦ");
             } else if (lastVisitedPanel == panelBan) {
@@ -328,12 +309,10 @@ public class MainForm extends javax.swing.JFrame {
                 lblTenTrang.setText("QUẢN LÝ BÀN ĐẶT TRƯỚC");
             }
         } else {
-            // Nếu không có panel trước đó, về trang chủ
             goToTrangChuFromPanel();
         }
     }
 
-    // ========== HELPER METHOD FOR PANELS ==========
     public static void attachGoHomeListener(javax.swing.JButton btn, JPanel panel) {
         btn.addActionListener(e -> {
             MainForm mainForm = (MainForm) SwingUtilities.getWindowAncestor(panel);
@@ -375,7 +354,6 @@ public class MainForm extends javax.swing.JFrame {
         panel.repaint();
     }
 
-    // 6. XỬ LÝ SỰ KIỆN MENU
     private void batSuKienMenu() {
         JPanel[] pagePanels = {
                 panelTrangChu, panelBan, panelKhuVuc, panelNhanVien,
@@ -467,9 +445,7 @@ public class MainForm extends javax.swing.JFrame {
             public void mouseClicked(MouseEvent e) {
                 if (JOptionPane.showConfirmDialog(null, "Xác nhận đăng xuất?", "Xác nhận",
                         JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                    // 1. Đóng cửa sổ chính hiện tại
                     dispose();
-                    // 2. Khởi tạo và hiển thị lại màn hình Đăng nhập
                     java.awt.EventQueue.invokeLater(() -> {
                         new LoginForm().setVisible(true);
                     });
@@ -492,13 +468,11 @@ public class MainForm extends javax.swing.JFrame {
         lbl.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                // 0. KIỂM TRA QUYỀN TRƯỚC
                 if (!canAccessLabel(lbl)) {
                     showNoAccessMessage();
                     return;
                 }
 
-                // 1. Cập nhật UI cho Label được chọn
                 if (activeSubLabel != null) {
                     activeSubLabel.setForeground(Color.WHITE);
                     activeSubLabel.setFont(activeSubLabel.getFont().deriveFont(Font.PLAIN));
@@ -507,17 +481,14 @@ public class MainForm extends javax.swing.JFrame {
                 lbl.setForeground(Color.YELLOW);
                 lbl.setFont(lbl.getFont().deriveFont(Font.BOLD));
 
-                // 2. LOGIC TÌM TÊN MENU CHA ĐỂ GHÉP TIÊU ĐỀ
                 String subText = lbl.getText().replace("+", "").trim();
                 String mainMenuText = "";
                 JPanel parentGroup = (JPanel) lbl.getParent();
 
                 for (int i = 0; i < groups.length; i++) {
                     if (groups[i] == parentGroup) {
-                        updateActivePanel(pages[i]); // Active menu cha
+                        updateActivePanel(pages[i]);
 
-                        // Duyệt các component trong menu cha để lấy text của Label chính (Bàn, Nhân
-                        // viên...)
                         for (java.awt.Component comp : pages[i].getComponents()) {
                             if (comp instanceof JLabel) {
                                 mainMenuText = ((JLabel) comp).getText().trim();
@@ -527,23 +498,18 @@ public class MainForm extends javax.swing.JFrame {
                         break;
                     }
                 }
-                // Thiết lập tiêu đề: CẬP NHẬT + BÀN -> CẬP NHẬT BÀN
                 lblTenTrang.setText((subText + " " + mainMenuText).toUpperCase());
 
-                // 3. LOGIC CHUYỂN PANEL (Giữ nguyên các instance của bạn)
                 if (lbl == subLapPhieuDatBan) {
-                    // Lưu instance PanelDatBan để reuse + setup callback với PanelQuanLyDatBanTruoc
                     if (panelDatBan == null) {
                         panelDatBan = new PanelDatBan();
                     }
 
-                    // Setup callback - nếu panelQuanLyDatBanTruoc đã được tạo
                     if (panelQuanLyDatBanTruoc != null) {
                         panelDatBan.setPanelQuanLyDatBanTruoc(panelQuanLyDatBanTruoc);
                         panelQuanLyDatBanTruoc.setPanelDatBan(panelDatBan);
                     }
 
-                    // Chỉ refresh nếu click từ menu, không refresh nếu click từ button
                     if (isMenuClick) {
                         panelDatBan.refreshData();
                     }
@@ -569,12 +535,10 @@ public class MainForm extends javax.swing.JFrame {
                 } else if (lbl == subDanhSachBan) {
                     showPanel(new PanelDanhSachBan());
                 } else if (lbl == subQuanLyDatBanTruoc) {
-                    // Lưu instance để reuse (không tạo mới)
                     if (panelQuanLyDatBanTruoc == null) {
                         panelQuanLyDatBanTruoc = new PanelQuanLyDatBanTruoc();
                     }
 
-                    // Setup callback - nếu panelDatBan đã được tạo
                     if (panelDatBan != null) {
                         panelDatBan.setPanelQuanLyDatBanTruoc(panelQuanLyDatBanTruoc);
                         panelQuanLyDatBanTruoc.setPanelDatBan(panelDatBan);
@@ -615,7 +579,6 @@ public class MainForm extends javax.swing.JFrame {
         });
     }
 
-    // từ đây trở xuống không sửa được
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated

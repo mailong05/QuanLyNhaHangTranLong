@@ -39,10 +39,8 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
         }
 
         private void customUI() {
-                // Placeholder cho txtTimKiem
                 setupPlaceholder(txtTimKiem, "Nhập tên hoặc mã nhân viên ");
 
-                // ========== DESELECT WHEN CLICK OUTSIDE TABLE ==========
                 this.addMouseListener(new java.awt.event.MouseAdapter() {
                         @Override
                         public void mousePressed(java.awt.event.MouseEvent evt) {
@@ -53,7 +51,6 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
                         }
                 });
 
-                // Register mouse listener để populate fields khi click vào row
                 tableTaiKhoan.addMouseListener(this);
                 tableTaiKhoan.getSelectionModel().addListSelectionListener(e -> {
                         if (!e.getValueIsAdjusting()) {
@@ -65,20 +62,15 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
                         }
                 });
 
-                // 1. Tùy chỉnh ScrollPane và Viền bảng
                 scrTableTaiKhoan.setBorder(BorderFactory.createLineBorder(new Color(200, 190, 170), 1));
                 scrTableTaiKhoan.setViewportBorder(null);
 
-                // 2. Tùy chỉnh Table (Bảng Tài Khoản)
                 tableTaiKhoan.setRowHeight(35);
 
-                // Căn giữa nội dung các cột trong bảng
                 centerTableColumns(tableTaiKhoan);
 
-                // Hiệu ứng chuột cho nút bấm
                 btnTimKiem.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-                // Gắn sự kiện quay về Trang Chủ
                 MainForm.attachGoHomeListener(btnTrangChu, this);
                 syncEditStateBySelection();
         }

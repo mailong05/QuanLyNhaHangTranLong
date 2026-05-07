@@ -17,9 +17,6 @@ public class ThueService {
         this.thueDAO = new ThueDAO();
     }
 
-    /**
-     * Validate đối tượng Thue
-     */
     public void validateThue(Thue thue) {
         if (thue == null) {
             throw new IllegalArgumentException("Đối tượng thuế không được để trống");
@@ -41,9 +38,7 @@ public class ThueService {
         }
     }
 
-    /**
-     * Lấy thuế theo mã
-     */
+
     public Thue getThueTheoMa(String maThue) {
         if (maThue == null || maThue.isBlank()) {
             throw new IllegalArgumentException("Mã thuế không được để trống");
@@ -58,23 +53,14 @@ public class ThueService {
         return thue;
     }
 
-    /**
-     * Lấy tất cả thuế
-     */
     public List<Thue> getAllThue() {
         return thueDAO.getAllThue();
     }
 
-    /**
-     * Lấy thuế đang hoạt động
-     */
     public List<Thue> getThueHoatDong() {
         return thueDAO.getThueTheoTrangThai(TrangThaiThue.CON_AP_DUNG);
     }
 
-    /**
-     * Thêm thuế mới
-     */
     public void themThue(Thue thue) {
         validateThue(thue);
         if (!thueDAO.themThue(thue)) {
@@ -82,9 +68,6 @@ public class ThueService {
         }
     }
 
-    /**
-     * Cập nhật thuế
-     */
     public void capNhatThue(Thue thue) {
         validateThue(thue);
         if (!thueDAO.capNhatThue(thue)) {
@@ -92,9 +75,8 @@ public class ThueService {
         }
     }
 
-    /**
-     * Xóa thuế
-     */
+
+
     public void xoaThue(String maThue) {
         if (maThue == null || maThue.isBlank()) {
             throw new IllegalArgumentException("Mã thuế không được để trống");
@@ -107,9 +89,9 @@ public class ThueService {
         }
     }
 
-    /**
-     * Cập nhật phần trăm thuế
-     */
+    
+
+
     public void capNhatThueSuat(String maThue, double thueSuatMoi) {
         if (maThue == null || maThue.isBlank()) {
             throw new IllegalArgumentException("Mã thuế không được để trống");
@@ -127,9 +109,9 @@ public class ThueService {
         }
     }
 
-    /**
-     * Cập nhật trạng thái thuế
-     */
+    
+
+
     public void capNhatTrangThaiThue(String maThue, TrangThaiThue trangThai) {
         if (maThue == null || maThue.isBlank()) {
             throw new IllegalArgumentException("Mã thuế không được để trống");
@@ -147,38 +129,38 @@ public class ThueService {
         }
     }
 
-    /**
-     * Kích hoạt thuế
-     */
+    
+
+
     public void kichHoat(String maThue) {
         capNhatTrangThaiThue(maThue, TrangThaiThue.CON_AP_DUNG);
     }
 
-    /**
-     * Vô hiệu hóa thuế
-     */
+    
+
+
     public void voHieuHoa(String maThue) {
         capNhatTrangThaiThue(maThue, TrangThaiThue.NGUNG_AP_DUNG);
     }
 
-    /**
-     * Kiểm tra thuế tồn tại
-     */
+    
+
+
     public boolean existThue(String maThue) {
         return getThueTheoMa(maThue) != null;
     }
 
-    /**
-     * Tính tổng số thuế
-     */
+    
+
+
     public int getTotalThue() {
         List<Thue> list = getAllThue();
         return list != null ? list.size() : 0;
     }
 
-    /**
-     * Tính tổng thuế cho một số tiền
-     */
+    
+
+
     public double tinhThue(String maThue, double soTien) {
         if (soTien < 0) {
             throw new IllegalArgumentException("Số tiền để tính thuế không được là số âm");

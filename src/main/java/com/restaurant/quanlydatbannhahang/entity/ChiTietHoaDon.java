@@ -7,11 +7,11 @@ public class ChiTietHoaDon {
     private double donGiaLuuTru;
     private String ghiChu;
 
-    // Constructor không tham số
+    
     public ChiTietHoaDon() {
     }
 
-    // Constructor đầy đủ
+    
     public ChiTietHoaDon(HoaDon hoaDon, MonAn monAn, int soLuong, double donGiaLuuTru, String ghiChu) {
         this.hoaDon = hoaDon;
         this.monAn = monAn;
@@ -20,7 +20,7 @@ public class ChiTietHoaDon {
         this.ghiChu = ghiChu;
     }
 
-    // Getter và Setter
+    
     public HoaDon getHoaDon() {
         return hoaDon;
     }
@@ -61,7 +61,7 @@ public class ChiTietHoaDon {
         this.ghiChu = ghiChu;
     }
 
-    // Các phương thức cần thiết
+    
     public double tinhThanhTien() {
         return soLuong * donGiaLuuTru;
     }

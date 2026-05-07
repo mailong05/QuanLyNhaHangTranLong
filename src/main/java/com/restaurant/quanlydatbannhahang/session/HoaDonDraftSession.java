@@ -9,9 +9,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * Luu du lieu tam thoi tu PanelDatMon sang PanelLapHoaDon.
- */
 public final class HoaDonDraftSession {
 
     private static final Map<String, List<DraftMonItem>> monItemsByMaBan = new LinkedHashMap<>();
@@ -186,16 +183,6 @@ public final class HoaDonDraftSession {
         maPhieuDatByMaBan.remove(normalized);
     }
 
-    /**
-     * Di chuyển toàn bộ dữ liệu draft từ context cũ sang context mới.
-     * Includes: danh sách món, maKH, maKM, diemDung, và currentMaBanContext.
-     *
-     * Note: currentMaPhieuDatContext NOT migrated vì nó là global state,
-     * giữ nguyên để track PhieuDatBan đang được sử dụng (bàn có thay đổi nhưng
-     * phiếu không).
-     *
-     * Đảm bảo sau migration: clear(oldMaBanContext) được gọi để tránh rác dữ liệu.
-     */
     public static void migrateContext(String oldMaBanContext, String newMaBanContext) {
         String oldNormalized = normalizeMaBanContext(oldMaBanContext);
         String newNormalized = normalizeMaBanContext(newMaBanContext);
@@ -204,11 +191,11 @@ public final class HoaDonDraftSession {
             return;
         }
 
-        // 1. Di chuyển món ăn[cite: 7]
+        
         List<DraftMonItem> oldItems = getMonItems(oldNormalized);
         setMonItems(newNormalized, oldItems);
 
-        // 2. Di chuyển Metadata hóa đơn[cite: 7]
+        
         String maKH = getMaKH(oldNormalized);
         String maKM = getMaKM(oldNormalized);
         int diemDung = getDiemDung(oldNormalized);
@@ -217,7 +204,7 @@ public final class HoaDonDraftSession {
                 (maKM != null && !maKM.isBlank()) ? maKM : null,
                 diemDung);
 
-        // 3. Xóa dữ liệu tại context cũ để tránh rác[cite: 7]
+        
         clear(oldNormalized);
     }
 

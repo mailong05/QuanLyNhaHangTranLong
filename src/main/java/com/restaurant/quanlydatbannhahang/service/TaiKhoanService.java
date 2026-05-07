@@ -10,23 +10,23 @@ import com.restaurant.quanlydatbannhahang.entity.QuyenHan;
 import com.restaurant.quanlydatbannhahang.entity.TaiKhoan;
 import com.restaurant.quanlydatbannhahang.service.AuthService.ValidationResult;
 
-/**
- * 
- * Khác AuthService chỉ handle authentication (login, validate)
- */
+
+
+
+
 public class TaiKhoanService {
 
     private static TaiKhoanDAO taiKhoanDAO = new TaiKhoanDAO();
     private NhanVienService nhanVienService = new NhanVienService();
-    /**
-     * Cập nhật mật khẩu cho tài khoản
-     * Có validate password + username inside
-     * 
-     * @param username        Username của tài khoản
-     * @param newPassword     Mật khẩu mới (plaintext - không hash)
-     * @param confirmPassword Xác nhận mật khẩu mới
-     * @return ValidationResult với success + message
-     */
+    
+
+
+
+
+
+
+
+
     public static ValidationResult updatePassword(String username, String newPassword, String confirmPassword) {
         ValidationResult validationPassword = AuthService.validatePassword(newPassword);
         if (!validationPassword.success) {
@@ -51,7 +51,7 @@ public class TaiKhoanService {
     }
 
     public List<TaiKhoan> getAllTaiKhoan() {
-        // TODO Auto-generated method stub
+        
         return taiKhoanDAO.getAllTaiKhoan();
     }
 

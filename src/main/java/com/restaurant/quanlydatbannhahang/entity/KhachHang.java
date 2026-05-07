@@ -7,11 +7,11 @@ public class KhachHang {
     private int diemTichLuy;
     private LoaiThanhVien loaiThanhVien;
 
-    // Constructor không tham số
+    
     public KhachHang() {
     }
 
-    // Constructor đầy đủ
+    
     public KhachHang(String maKH, String hoTen, String sdt, int diemTichLuy, LoaiThanhVien loaiThanhVien) {
         this.maKH = maKH;
         this.hoTen = hoTen;
@@ -20,7 +20,7 @@ public class KhachHang {
         this.loaiThanhVien = loaiThanhVien;
     }
 
-    // Getter và Setter
+    
     public String getMaKH() {
         return maKH;
     }
@@ -61,7 +61,7 @@ public class KhachHang {
         this.loaiThanhVien = loaiThanhVien;
     }
 
-    // Các phương thức cần thiết
+    
     public void tichDiem(double tongTien) {
         int diem = (int) (tongTien / 1000);
         this.diemTichLuy += diem;

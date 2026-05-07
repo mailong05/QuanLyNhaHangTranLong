@@ -61,7 +61,6 @@ public class PanelThongKe extends javax.swing.JPanel {
     private void centerTableColumns(JTable table) {
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        // Chỉ căn giữa các cột từ 0 đến 4 và cột 6. Bỏ qua cột 5 (Lương) vì đã có Renderer riêng
         for (int i = 0; i < table.getColumnCount(); i++) {
             if (i != 1 && i != 3) {
                 table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
@@ -166,41 +165,33 @@ public class PanelThongKe extends javax.swing.JPanel {
     }
 
     private void customUI() {
-        // 1. Bo góc các Card thống kê
         applyCardStyle(carTongDoanhThu, 30);
         applyCardStyle(cardTongHoaDon, 30);
         applyCardStyle(carDoanhThuTrungBinh, 30);
 
-        // 2. Thiết lập cho Panel chứa bảng
         pnlContainerTable.setBackground(new Color(254, 243, 198));
         applyCardStyle(pnlContainerTable, 40);
         pnlContainerTable.setBorder(new EmptyBorder(25, 25, 25, 25));
 
-        // Đảm bảo tiêu đề bảng
         lblTitleTable.setForeground(new Color(148, 134, 111));
         lblTitleTable.setFont(new Font("Segoe UI", Font.BOLD, 20));
 
-        // 3. Tùy chỉnh ScrollPane
         scrTableTopMonAn.setBorder(BorderFactory.createEmptyBorder());
         scrTableTopMonAn.setViewportBorder(null);
         scrTableTopMonAn.setOpaque(false);
         scrTableTopMonAn.getViewport().setOpaque(false);
 
-        // Sửa lỗi mất màu góc trên bên phải
         JPanel corner = new JPanel();
         corner.setBackground(new Color(255, 251, 235));
         scrTableTopMonAn.setCorner(JScrollPane.UPPER_RIGHT_CORNER, corner);
 
-        // 4. Tùy chỉnh Table
         tableTopMonAn.setShowGrid(false);
         tableTopMonAn.setIntercellSpacing(new Dimension(0, 0));
         tableTopMonAn.setRowHeight(45);
         tableTopMonAn.setBorder(BorderFactory.createEmptyBorder());
 
-        // Chiều cao Header
         tableTopMonAn.getTableHeader().setPreferredSize(new Dimension(tableTopMonAn.getTableHeader().getWidth(), 45));
 
-        // Custom Header Renderer
         tableTopMonAn.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
@@ -216,7 +207,6 @@ public class PanelThongKe extends javax.swing.JPanel {
             }
         });
         
-     // Renderer cho cột Lương (Index 5)
         tableTopMonAn.getColumnModel().getColumn(3).setCellRenderer(new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
@@ -225,7 +215,6 @@ public class PanelThongKe extends javax.swing.JPanel {
                     value = com.restaurant.quanlydatbannhahang.util.CurrencyUtility
                             .formatVND(((Number) value).doubleValue());
                 }
-                // Vừa format tiền, vừa căn GIỮA (hoặc PHẢI tùy ông chọn)
                 setHorizontalAlignment(JLabel.CENTER); 
                 return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
             }
@@ -233,7 +222,6 @@ public class PanelThongKe extends javax.swing.JPanel {
 
         centerTableColumns(tableTopMonAn);
 
-        // Tùy chỉnh nút bấm
         btnTrangChu.setFocusPainted(false);
         btnInThongKe.setFocusPainted(false);
     }
@@ -256,7 +244,6 @@ public class PanelThongKe extends javax.swing.JPanel {
         });
     }
 
-    // Không sửa từ đây xuống dưới
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
     // Code">//GEN-BEGIN:initComponents

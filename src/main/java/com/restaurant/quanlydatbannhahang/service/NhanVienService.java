@@ -23,9 +23,9 @@ public class NhanVienService {
         this.nhanVienDAO = new NhanVienDAO();
     }
 
-    /**
-     * Validate đối tượng NhanVien
-     */
+    
+
+
     public void validateNhanVien(NhanVien nhanVien) {
         if (nhanVien == null) {
             throw new IllegalArgumentException("Đối tượng nhân viên không được để trống");
@@ -63,9 +63,9 @@ public class NhanVienService {
         }
     }
 
-    /**
-     * Lấy nhân viên theo mã
-     */
+    
+
+
     public NhanVien getNhanVienTheoMa(String maNV) {
         if (maNV == null || maNV.isBlank()) {
             throw new IllegalArgumentException("Mã nhân viên không được để trống");
@@ -80,16 +80,16 @@ public class NhanVienService {
         return nhanVien;
     }
 
-    /**
-     * Lấy tất cả nhân viên
-     */
+    
+
+
     public List<NhanVien> getAllNhanVien() {
         return nhanVienDAO.getAllNhanVien();
     }
 
-    /**
-     * Thêm nhân viên mới
-     */
+    
+
+
     public void themNhanVien(NhanVien nhanVien) {
         validateNhanVien(nhanVien);
         if (!nhanVienDAO.themNhanVien(nhanVien)) {
@@ -97,9 +97,9 @@ public class NhanVienService {
         }
     }
 
-    /**
-     * Cập nhật nhân viên
-     */
+    
+
+
     public void capNhatNhanVien(NhanVien nhanVien) {
         validateNhanVien(nhanVien);
         if (!nhanVienDAO.capNhatNhanVien(nhanVien)) {
@@ -107,9 +107,9 @@ public class NhanVienService {
         }
     }
 
-    /**
-     * Xóa nhân viên
-     */
+    
+
+
     public void xoaNhanVien(String maNV) {
         if (maNV == null || maNV.isBlank()) {
             throw new IllegalArgumentException("Mã nhân viên không được để trống");
@@ -122,16 +122,16 @@ public class NhanVienService {
         }
     }
 
-    /**
-     * Lấy danh sách nhân viên đang làm việc
-     */
+    
+
+
     public List<NhanVien> getNhanVienDangLamViec() {
         return nhanVienDAO.getNhanVienDangLamViec();
     }
 
-    /**
-     * Cập nhật trạng thái nhân viên
-     */
+    
+
+
     public void capNhatTrangThaiNhanVien(String maNV, TrangThaiNhanVien trangThai) {
         if (maNV == null || maNV.isBlank()) {
             throw new IllegalArgumentException("Mã nhân viên không được để trống");
@@ -149,17 +149,17 @@ public class NhanVienService {
         }
     }
 
-    /**
-     * Kiểm tra nhân viên đang làm việc hay không
-     */
+    
+
+
     public boolean isNhanVienDangLamViec(String maNV) {
         NhanVien nhanVien = getNhanVienTheoMa(maNV);
         return nhanVien != null && nhanVien.getTrangThai() == TrangThaiNhanVien.DANG_LAM_VIEC;
     }
 
-    /**
-     * Kiểm tra nhân viên có thâm niên ít nhất số năm cho trước
-     */
+    
+
+
     public boolean isNhanVienCoThamNien(String maNV, int nam) {
         if (nam < 0) {
             throw new IllegalArgumentException("Số năm thâm niên phải lớn hơn hoặc bằng 0");
@@ -169,27 +169,27 @@ public class NhanVienService {
                 && nhanVien.getNgayVaoLam().isBefore(LocalDate.now().minusYears(nam));
     }
 
-    /**
-     * Tính tổng số nhân viên
-     */
+    
+
+
     public int getTotalNhanVien() {
         List<NhanVien> list = getAllNhanVien();
         return list != null ? list.size() : 0;
     }
 
-    /**
-     * Tính tổng số nhân viên đang làm việc
-     */
+    
+
+
     public int getTotalNhanVienDangLamViec() {
         List<NhanVien> list = getNhanVienDangLamViec();
         return list != null ? list.size() : 0;
     }
 
-    /**
-     * Lấy mã nhân viên cuối cùng để sinh mã tiếp theo
-     *
-     * @return Mã nhân viên cuối cùng (VD: NV000) hoặc null nếu bảng rỗng
-     */
+    
+
+
+
+
     public String getLastNhanVienID() {
         return nhanVienDAO.getLastNhanVienID();
     }

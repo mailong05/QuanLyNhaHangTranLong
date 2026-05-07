@@ -67,7 +67,6 @@ public class PanelTrangChu extends javax.swing.JPanel {
     }
 
     private void loadDataToTable() {
-        // TODO Auto-generated method stub
         try {
             ArrayList<PhieuDatBan> dsPDB = (ArrayList<PhieuDatBan>) phieuDatBanService.getDanhSachHoatDongGanDay();
             DefaultTableModel model = (DefaultTableModel) tblHoatDong.getModel();
@@ -100,7 +99,6 @@ public class PanelTrangChu extends javax.swing.JPanel {
             }
             centerTableColumns(tblHoatDong);
 
-            // ========== FORMAT TIỀN TỆ CHO CỘT TIỀN ĐẶT CỌC ==========
             DefaultTableCellRenderer currencyRenderer = new DefaultTableCellRenderer() {
                 @Override
                 protected void setValue(Object value) {
@@ -127,37 +125,30 @@ public class PanelTrangChu extends javax.swing.JPanel {
     }
 
     private void customUI() {
-        // 1. Bo góc các Card thống kê
         applyCardStyle(cardBanSuDung, 30);
         applyCardStyle(cardBanDatTruoc, 30);
         applyCardStyle(cardDoanhThu, 30);
 
-        // 2. Thiết lập cho jPanel1 (Panel chứa bảng)
         jPanel1.setBackground(new Color(254, 243, 198));
         applyCardStyle(jPanel1, 40);
         jPanel1.setBorder(new EmptyBorder(25, 25, 25, 25));
 
-        // 3. Tùy chỉnh ScrollPane - XÓA VIỀN VÀ SỬA LỖI GÓC PHẢI
-        scrtblHoatDong.setBorder(BorderFactory.createEmptyBorder()); // Xóa viền ngoài hoàn toàn
+        scrtblHoatDong.setBorder(BorderFactory.createEmptyBorder());
         scrtblHoatDong.setViewportBorder(null);
         scrtblHoatDong.setOpaque(false);
         scrtblHoatDong.getViewport().setOpaque(false);
 
-        // Sửa lỗi mất màu góc trên bên phải (khu vực giao giữa Header và ScrollBar)
         JPanel corner = new JPanel();
-        corner.setBackground(new Color(255, 251, 235)); // Màu trùng với Header
+        corner.setBackground(new Color(255, 251, 235));
         scrtblHoatDong.setCorner(JScrollPane.UPPER_RIGHT_CORNER, corner);
 
-        // 4. Tùy chỉnh Table
         tblHoatDong.setShowGrid(false);
         tblHoatDong.setIntercellSpacing(new Dimension(0, 0));
         tblHoatDong.setRowHeight(45);
-        tblHoatDong.setBorder(BorderFactory.createEmptyBorder()); // Đảm bảo bảng không tự vẽ viền
+        tblHoatDong.setBorder(BorderFactory.createEmptyBorder());
 
-        // Chiều cao Header
         tblHoatDong.getTableHeader().setPreferredSize(new Dimension(tblHoatDong.getTableHeader().getWidth(), 45));
 
-        // Custom Header Renderer
         tblHoatDong.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
@@ -168,13 +159,11 @@ public class PanelTrangChu extends javax.swing.JPanel {
                 label.setForeground(new Color(148, 134, 111));
                 label.setFont(new Font("Segoe UI", Font.BOLD, 14));
                 label.setHorizontalAlignment(JLabel.CENTER);
-                // Tạo đường kẻ mảnh phía dưới để phân cách Header và Body
                 label.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(230, 230, 230)));
                 return label;
             }
         });
 
-        // Căn giữa toàn bộ các cột
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
         for (int i = 0; i < tblHoatDong.getColumnCount(); i++) {
@@ -200,7 +189,6 @@ public class PanelTrangChu extends javax.swing.JPanel {
         });
     }
 
-    // Không sửa phần dưới, giữ nguyên code tự sinh của design
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents

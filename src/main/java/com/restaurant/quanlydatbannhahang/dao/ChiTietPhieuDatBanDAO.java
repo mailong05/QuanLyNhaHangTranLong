@@ -15,9 +15,9 @@ public class ChiTietPhieuDatBanDAO {
     public ChiTietPhieuDatBanDAO() {
     }
 
-    /**
-     * Thêm chi tiết phiếu đặt bàn
-     */
+    
+
+
     public boolean themChiTietPhieuDatBan(ChiTietPhieuDatBan chiTiet) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "INSERT INTO ChiTietPhieuDatBan (maPhieuDat, maBan, GhiChu) " +
@@ -36,9 +36,9 @@ public class ChiTietPhieuDatBanDAO {
         return false;
     }
 
-    /**
-     * Lấy chi tiết phiếu đặt bàn theo mã phiếu
-     */
+    
+
+
     public List<ChiTietPhieuDatBan> getChiTietByMaPhieuDat(String maPhieuDat) {
         Connection connection = DatabaseConnection.getConnection();
         List<ChiTietPhieuDatBan> list = new ArrayList<>();
@@ -48,7 +48,7 @@ public class ChiTietPhieuDatBanDAO {
             pstm.setString(1, maPhieuDat);
             try (ResultSet rs = pstm.executeQuery()) {
                 while (rs.next()) {
-                    // Tạo object từ ResultSet (cần liên kết với Ban và PhieuDatBan)
+                    
                     ChiTietPhieuDatBan chiTiet = buildChiTietFromResultSet(rs);
                     if (chiTiet != null) {
                         list.add(chiTiet);
@@ -81,9 +81,9 @@ public class ChiTietPhieuDatBanDAO {
         return list;
     }
     
-    /**
-     * Cập nhật chi tiết phiếu đặt bàn
-     */
+    
+
+
     public boolean capNhatChiTietPhieuDatBan(ChiTietPhieuDatBan chiTiet) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "UPDATE ChiTietPhieuDatBan SET GhiChu = ? " +
@@ -101,9 +101,9 @@ public class ChiTietPhieuDatBanDAO {
         return false;
     }
 
-    /**
-     * Xóa chi tiết phiếu đặt bàn
-     */
+    
+
+
     public boolean xoaChiTietPhieuDatBan(String maPhieuDat, String maBan) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "DELETE FROM ChiTietPhieuDatBan WHERE maPhieuDat = ? AND maBan = ?";
@@ -120,12 +120,12 @@ public class ChiTietPhieuDatBanDAO {
         return false;
     }
 
-    /**
-     * Build ChiTietPhieuDatBan object từ ResultSet
-     */
+    
+
+
     private ChiTietPhieuDatBan buildChiTietFromResultSet(ResultSet rs) {
         try {
-            // Cần load Ban và PhieuDatBan từ các bảng khác
+            
             BanDAO banDAO = new BanDAO();
             PhieuDatBanDAO phieuDAO = new PhieuDatBanDAO();
 
@@ -142,9 +142,9 @@ public class ChiTietPhieuDatBanDAO {
         return null;
     }
 
-    /**
-     * Xóa tất cả chi tiết của một phiếu đặt bàn
-     */
+    
+
+
     public boolean xoaAllChiTietByMaPhieuDat(String maPhieuDat) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "DELETE FROM ChiTietPhieuDatBan WHERE maPhieuDat = ?";

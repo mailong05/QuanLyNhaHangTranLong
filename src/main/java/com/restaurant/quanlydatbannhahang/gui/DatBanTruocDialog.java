@@ -1,6 +1,5 @@
 package com.restaurant.quanlydatbannhahang.gui;
 
-// UIConfiguration để setup FlatLaf L&F
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -19,16 +18,16 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
     private boolean datBanThanhCong = false;
     private IDGeneratorHelper helper;
     private PhieuDatBanService pdbService;
-    private Set<String> selectedTables; // ← Lưu các bàn đã chọn (không static)
-    private PanelDatBan panelDatBan; // ← Lưu reference PanelDatBan để update UI
-    private PanelQuanLyDatBanTruoc panelQuanLyDatBanTruoc; // ← Lưu reference để refresh data
+    private Set<String> selectedTables;
+    private PanelDatBan panelDatBan;
+    private PanelQuanLyDatBanTruoc panelQuanLyDatBanTruoc;
 
     public DatBanTruocDialog(java.awt.Frame parent, boolean modal, Set<String> selectedTables,
             PanelDatBan panelDatBan, PanelQuanLyDatBanTruoc panelQuanLyDatBanTruoc) {
         super(parent, modal);
-        this.selectedTables = selectedTables; // ← Nhận selectedTables từ LuaChonDatBanDialog
-        this.panelDatBan = panelDatBan; // ← Nhận PanelDatBan để update UI
-        this.panelQuanLyDatBanTruoc = panelQuanLyDatBanTruoc; // ← Nhận PanelQuanLyDatBanTruoc để refresh
+        this.selectedTables = selectedTables;
+        this.panelDatBan = panelDatBan;
+        this.panelQuanLyDatBanTruoc = panelQuanLyDatBanTruoc;
         helper = new IDGeneratorHelper();
         pdbService = new PhieuDatBanService();
         initComponents();
@@ -39,7 +38,6 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
         }
 
         fillMaPhieuDat(txtMaPhieuDat);
-        // Tự động set tiền cọc dựa vào số lượng bàn
         updateTienDatCoc();
     }
 

@@ -15,9 +15,9 @@ public class ChiTietHoaDonDAO {
     public ChiTietHoaDonDAO() {
     }
 
-    /**
-     * Thêm chi tiết hóa đơn
-     */
+    
+
+
     public boolean themChiTietHoaDon(ChiTietHoaDon chiTiet) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "INSERT INTO ChiTietHoaDon (maHD, maMon, soLuong, donGiaLuuTru, ghiChu) " +
@@ -37,9 +37,9 @@ public class ChiTietHoaDonDAO {
         return false;
     }
 
-    /**
-     * Lấy chi tiết hóa đơn theo mã hóa đơn
-     */
+    
+
+
     public List<ChiTietHoaDon> getChiTietByMaHD(String maHD) {
         Connection connection = DatabaseConnection.getConnection();
         List<ChiTietHoaDon> list = new ArrayList<>();
@@ -62,9 +62,9 @@ public class ChiTietHoaDonDAO {
         return list;
     }
 
-    /**
-     * Lấy chi tiết hóa đơn theo mã hóa đơn và mã món
-     */
+    
+
+
     public ChiTietHoaDon getChiTietByMaHDAndMaMon(String maHD, String maMon) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "SELECT * FROM ChiTietHoaDon WHERE maHD = ? AND maMon = ?";
@@ -84,9 +84,9 @@ public class ChiTietHoaDonDAO {
         return null;
     }
 
-    /**
-     * Cập nhật chi tiết hóa đơn
-     */
+    
+
+
     public boolean capNhatChiTietHoaDon(ChiTietHoaDon chiTiet) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "UPDATE ChiTietHoaDon SET soLuong = ?, donGiaLuuTru = ?, ghiChu = ? " +
@@ -106,9 +106,9 @@ public class ChiTietHoaDonDAO {
         return false;
     }
 
-    /**
-     * Xóa chi tiết hóa đơn
-     */
+    
+
+
     public boolean xoaChiTietHoaDon(String maHD, String maMon) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "DELETE FROM ChiTietHoaDon WHERE maHD = ? AND maMon = ?";
@@ -125,9 +125,9 @@ public class ChiTietHoaDonDAO {
         return false;
     }
 
-    /**
-     * Xóa tất cả chi tiết của một hóa đơn
-     */
+    
+
+
     public boolean xoaAllChiTietByMaHD(String maHD) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "DELETE FROM ChiTietHoaDon WHERE maHD = ?";
@@ -143,9 +143,9 @@ public class ChiTietHoaDonDAO {
         return false;
     }
 
-    /**
-     * Tính tổng tiền của hóa đơn
-     */
+    
+
+
     public double getTongTienHoaDon(String maHD) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "SELECT SUM(thanhTien) as tongTien FROM ChiTietHoaDon WHERE maHD = ?";
@@ -164,9 +164,9 @@ public class ChiTietHoaDonDAO {
         return 0;
     }
 
-    /**
-     * Kiểm tra hóa đơn có chi tiết không
-     */
+    
+
+
     public int countChiTietByMaHD(String maHD) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "SELECT COUNT(*) as soChiTiet FROM ChiTietHoaDon WHERE maHD = ?";
@@ -185,9 +185,9 @@ public class ChiTietHoaDonDAO {
         return 0;
     }
 
-    /**
-     * Build ChiTietHoaDon object từ ResultSet
-     */
+    
+
+
     private ChiTietHoaDon buildChiTietFromResultSet(ResultSet rs) {
         try {
             MonAnDAO monDAO = new MonAnDAO();

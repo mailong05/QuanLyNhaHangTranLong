@@ -18,9 +18,9 @@ public class BanService {
         this.banDAO = new BanDAO();
     }
 
-    /**
-     * Validate đối tượng Ban
-     */
+    
+
+
     public void validateBan(Ban ban) {
         if (ban == null) {
             throw new IllegalArgumentException("Đối tượng bàn không được để trống");
@@ -36,9 +36,9 @@ public class BanService {
         }
     }
 
-    /**
-     * Thêm bàn mới
-     */
+    
+
+
     public void themBan(Ban ban) {
         validateBan(ban);
         if (!banDAO.themBan(ban)) {
@@ -48,9 +48,9 @@ public class BanService {
 
     
     
-    /**
-     * Lấy bàn theo mã
-     */
+    
+
+
     public Ban getBanTheoMa(String maBan) {
         if (maBan == null || maBan.isBlank()) {
             throw new IllegalArgumentException("Mã bàn không được để trống");
@@ -65,16 +65,16 @@ public class BanService {
         return ban;
     }
 
-    /**
-     * Lấy tất cả bàn
-     */
+    
+
+
     public List<Ban> getAllBan() {
         return banDAO.getAllBan();
     }
 
-    /**
-     * Lấy bàn theo khu vực
-     */
+    
+
+
     public List<Ban> getBanTheoKhuVuc(String maKhuVuc) {
         if (maKhuVuc == null || maKhuVuc.isBlank()) {
             throw new IllegalArgumentException("Mã khu vực không được để trống");
@@ -82,23 +82,23 @@ public class BanService {
         return banDAO.getBanTheoKhuVuc(maKhuVuc);
     }
 
-    /**
-     * Lấy bàn trống
-     */
+    
+
+
     public List<Ban> getBanTrong() {
         return banDAO.getBanTrong();
     }
 
-    /**
-     * Lấy bàn đang sử dụng
-     */
+    
+
+
     public List<Ban> getBanDangSuDung() {
         return banDAO.getBanDangSuDung();
     }
 
-    /**
-     * Cập nhật thông tin bàn
-     */
+    
+
+
     public void capNhatBan(Ban ban) {
         validateBan(ban);
         if (!banDAO.capNhatBan(ban)) {
@@ -106,9 +106,9 @@ public class BanService {
         }
     }
 
-    /**
-     * Xóa bàn
-     */
+    
+
+
     public void xoaBan(String maBan) {
         if (maBan == null || maBan.isBlank()) {
             throw new IllegalArgumentException("Mã bàn không được để trống");
@@ -121,9 +121,9 @@ public class BanService {
         }
     }
 
-    /**
-     * Cập nhật trạng thái bàn
-     */
+    
+
+
     public void capNhatTrangThaiBan(String maBan, TrangThaiBan trangThai) {
         if (maBan == null || maBan.isBlank()) {
             throw new IllegalArgumentException("Mã bàn không được để trống");
@@ -141,17 +141,17 @@ public class BanService {
         }
     }
 
-    /**
-     * Kiểm tra bàn trống
-     */
+    
+
+
     public boolean isBanTrong(String maBan) {
         Ban ban = getBanTheoMa(maBan);
         return ban != null && ban.getTrangThai() == TrangThaiBan.TRONG;
     }
 
-    /**
-     * Đặt bàn (đổi trạng thái từ TRONG sang DA_DAT)
-     */
+    
+
+
     public void datBan(String maBan) {
         if (!isBanTrong(maBan)) {
             throw new IllegalArgumentException("Bàn này không còn trống");
@@ -159,9 +159,9 @@ public class BanService {
         capNhatTrangThaiBan(maBan, TrangThaiBan.DA_DAT);
     }
 
-    /**
-     * Sử dụng bàn (đổi trạng thái từ DA_DAT sang DANG_DUNG)
-     */
+    
+
+
     public void suDungBan(String maBan) {
         Ban ban = getBanTheoMa(maBan);
         if (ban == null || ban.getTrangThai() == TrangThaiBan.TRONG) {
@@ -170,9 +170,9 @@ public class BanService {
         capNhatTrangThaiBan(maBan, TrangThaiBan.DANG_DUNG);
     }
 
-    /**
-     * Giải phóng bàn (đổi trạng thái về TRONG)
-     */
+    
+
+
     public void giaiphongBan(String maBan) {
         capNhatTrangThaiBan(maBan, TrangThaiBan.TRONG);
     }

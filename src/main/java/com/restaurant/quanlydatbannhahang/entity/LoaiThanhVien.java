@@ -9,7 +9,7 @@ public enum LoaiThanhVien {
 	private final String displayName;
 
 	LoaiThanhVien(String displayName) {
-		// TODO Auto-generated constructor stub
+		
 		this.displayName = displayName;
 	}
 

@@ -11,11 +11,11 @@ public class NhanVien {
     private double luongCoBan;
     private TrangThaiNhanVien trangThai;
 
-    // Constructor không tham số
+    
     public NhanVien() {
     }
 
-    // Constructor đầy đủ
+    
     public NhanVien(String maNV, String hoTen, String sdt, ChucVu chucVu, LocalDate ngayVaoLam,
             double luongCoBan, TrangThaiNhanVien trangThai) {
         this.maNV = maNV;
@@ -27,7 +27,7 @@ public class NhanVien {
         this.trangThai = trangThai;
     }
 
-    // Getter và Setter
+    
     public String getMaNV() {
         return maNV;
     }
@@ -84,7 +84,7 @@ public class NhanVien {
         this.trangThai = trangThai;
     }
 
-    // Các phương thức cần thiết
+    
     public double tinhLuong() {
         if (trangThai == TrangThaiNhanVien.DANG_LAM_VIEC) {
             return luongCoBan;
@@ -101,7 +101,7 @@ public class NhanVien {
     }
 
     public double duocThuong() {
-        return luongCoBan * 0.1; // Tính 10% thưởng
+        return luongCoBan * 0.1; 
     }
 
     @Override

@@ -27,9 +27,9 @@ public class TaiKhoanDAO {
         nv_dao = new NhanVienDAO();
     }
 
-    /**
-     * Build TaiKhoan từ ResultSet
-     */
+    
+
+
     private TaiKhoan buildTaiKhoanFromResultSet(ResultSet rs) throws SQLException {
         NhanVien nhanVien = nv_dao.buildNhanVienFromResultSet(rs);
 
@@ -51,9 +51,9 @@ public class TaiKhoanDAO {
         return taiKhoan;
     }
 
-    /**
-     * Tìm tài khoản theo username và password
-     */
+    
+
+
     public TaiKhoan findByUsernameAndPassword(String username, String password) {
         Connection connection = DatabaseConnection.getConnection();
         String query = SELECT_TAIKHOAN_WITH_NHANVIEN + "WHERE tk.username = ? AND tk.password = ?";
@@ -74,9 +74,9 @@ public class TaiKhoanDAO {
         return null;
     }
 
-    /**
-     * Lấy tài khoản theo username
-     */
+    
+
+
     public TaiKhoan findByUsername(String username) {
         Connection connection = DatabaseConnection.getConnection();
         String query = SELECT_TAIKHOAN_WITH_NHANVIEN + "WHERE tk.username = ?";
@@ -96,9 +96,9 @@ public class TaiKhoanDAO {
         return null;
     }
 
-    /**
-     * Kiểm tra tài khoản tồn tại
-     */
+    
+
+
     public boolean existUsername(String username) {
         Connection connection = DatabaseConnection.getConnection();
         String query = "SELECT COUNT(*) FROM TaiKhoan WHERE username = ?";
@@ -127,7 +127,7 @@ public class TaiKhoanDAO {
             pstm.setString(2, username);
             return pstm.executeUpdate() > 0;
         } catch (Exception e) {
-            // TODO: handle exception
+            
             e.printStackTrace();
         }
         return false;
@@ -209,14 +209,14 @@ public class TaiKhoanDAO {
                 return tk.getPassword();
             }
         } catch (Exception e) {
-            // TODO: handle exception
+            
             e.printStackTrace();
         }
         return null;
     }
 
 	public TaiKhoan getTaiKhoanByMaNV(String maNV) {
-		// TODO Auto-generated method stub
+		
 		Connection con = DatabaseConnection.getConnection();
 		String sql = SELECT_TAIKHOAN_WITH_NHANVIEN + "where tk.maNV = ?";
 		try {
@@ -227,7 +227,7 @@ public class TaiKhoanDAO {
 				return buildTaiKhoanFromResultSet(rs);
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 			e.printStackTrace();
 		}
 		return null;

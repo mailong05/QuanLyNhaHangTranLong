@@ -6,11 +6,11 @@ public class Thue {
     private double thueSuat;
     private TrangThaiThue trangThai;
 
-    // Constructor không tham số
+    
     public Thue() {
     }
 
-    // Constructor đầy đủ
+    
     public Thue(String maThue, String tenThue, double thueSuat, TrangThaiThue trangThai) {
         this.maThue = maThue;
         this.tenThue = tenThue;
@@ -18,7 +18,7 @@ public class Thue {
         this.trangThai = trangThai;
     }
 
-    // Getter và Setter
+    
     public String getMaThue() {
         return maThue;
     }
@@ -51,7 +51,7 @@ public class Thue {
         this.trangThai = trangThai;
     }
 
-    // Các phương thức cần thiết
+    
     public boolean updateThueSuat(double suatMoi) {
         if (suatMoi >= 0 && suatMoi <= 100) {
             this.thueSuat = suatMoi;

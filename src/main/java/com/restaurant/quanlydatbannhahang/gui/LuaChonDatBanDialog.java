@@ -1,6 +1,5 @@
 package com.restaurant.quanlydatbannhahang.gui;
 
-// UIConfiguration để setup FlatLaf L&F
 
 import com.restaurant.quanlydatbannhahang.service.PhieuDatBanService;
 import com.restaurant.quanlydatbannhahang.session.HoaDonDraftSession;
@@ -9,23 +8,22 @@ import com.restaurant.quanlydatbannhahang.session.SessionManager;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-
 public class LuaChonDatBanDialog extends javax.swing.JDialog {
 
     /**
      * Creates new form TaiKhoanDialog
      */
-    private Set<String> selectedTables; // ← Lưu các bàn đã chọn (không static)
-    private PanelDatBan panelDatBan; // ← Lưu reference PanelDatBan để update UI
-    private PanelQuanLyDatBanTruoc panelQuanLyDatBanTruoc; // ← Lưu reference để refresh data
+    private Set<String> selectedTables;
+    private PanelDatBan panelDatBan;
+    private PanelQuanLyDatBanTruoc panelQuanLyDatBanTruoc;
     private PhieuDatBanService phieuDatBanService;
 
     public LuaChonDatBanDialog(java.awt.Frame parent, boolean modal, Set<String> selectedTables,
             PanelDatBan panelDatBan, PanelQuanLyDatBanTruoc panelQuanLyDatBanTruoc) {
         super(parent, modal);
-        this.selectedTables = selectedTables; // ← Nhận selectedTables từ PanelDatBan
-        this.panelDatBan = panelDatBan; // ← Nhận PanelDatBan để update UI
-        this.panelQuanLyDatBanTruoc = panelQuanLyDatBanTruoc; // ← Nhận PanelQuanLyDatBanTruoc
+        this.selectedTables = selectedTables;
+        this.panelDatBan = panelDatBan;
+        this.panelQuanLyDatBanTruoc = panelQuanLyDatBanTruoc;
         this.phieuDatBanService = new PhieuDatBanService();
         initComponents();
         this.setLocationRelativeTo(parent);
@@ -80,52 +78,36 @@ public class LuaChonDatBanDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnDatBanDungNgayActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnDatBanDungNgayActionPerformed
-       try {
-    	   HoaDonDraftSession.clearCurrentPhoneNumber();
-           HoaDonDraftSession.clearCurrentMaPhieuDatContext();
+        try {
+            HoaDonDraftSession.clearCurrentPhoneNumber();
+            HoaDonDraftSession.clearCurrentMaPhieuDatContext();
 
-           
-           Set<String> dsMaBan = selectedTables; // Lấy danh sách các bàn được chọn
-           String maNV = SessionManager.getCurrentNhanVien().getMaNV(); 
+            Set<String> dsMaBan = selectedTables; // Lấy danh sách các bàn được chọn
+            String maNV = SessionManager.getCurrentNhanVien().getMaNV();
 
-           // GỌI SERVICE: Tạo phiếu ngay lập tức khi khách ngồi vào bàn
-           // Method này đã bao gồm: Tạo PDB, thêm ChiTietPDB, đổi màu bàn sang DANG_DUNG
-           String maPhieuMoi = phieuDatBanService.taoPhieuDatDungNgay(dsMaBan, maNV);
+            // GỌI SERVICE: Tạo phiếu ngay lập tức khi khách ngồi vào bàn
+            // Method này đã bao gồm: Tạo PDB, thêm ChiTietPDB, đổi màu bàn sang DANG_DUNG
+            String maPhieuMoi = phieuDatBanService.taoPhieuDatDungNgay(dsMaBan, maNV);
 
-           // LƯU VÀO SESSION: Để các Panel khác (Đặt món, Lập hóa đơn) biết đang dùng phiếu nào
-           System.out.println("Tạo thành công PDB "+maPhieuMoi);
-           HoaDonDraftSession.setCurrentMaPhieuDatContext(maPhieuMoi);
-           HoaDonDraftSession.setCurrentMaBanContext(String.join(", ", dsMaBan));
+            // LƯU VÀO SESSION: Để các Panel khác (Đặt món, Lập hóa đơn) biết đang dùng
+            // phiếu nào
+            System.out.println("Tạo thành công PDB " + maPhieuMoi);
+            HoaDonDraftSession.setCurrentMaPhieuDatContext(maPhieuMoi);
+            HoaDonDraftSession.setCurrentMaBanContext(String.join(", ", dsMaBan));
 
-           
-//           
-//           if (selectedTables != null && !selectedTables.isEmpty()) {
-//               BanService banService = new BanService();
-//               for (String maBan : selectedTables) {
-//                   try {
-//                       banService.capNhatTrangThaiBan(maBan, TrangThaiBan.DANG_DUNG);
-//                       if (panelDatBan != null) {
-//                           panelDatBan.updateBanStatusUI(maBan, TrangThaiBan.DANG_DUNG);
-//                       }
-//                   } catch (Exception e) {
-//                       JOptionPane.showMessageDialog(this,
-//                               "Không thể cập nhật trạng thái bàn " + maBan + ": " + e.getMessage(), "Lỗi",
-//                               JOptionPane.ERROR_MESSAGE);
-//                   }
-//               }
-//           }
+            // }
 
-           this.dispose();
-           java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
-           if (parentFrame instanceof MainForm) {
-               String maBanContext = selectedTables == null ? ""
-                       : selectedTables.stream().sorted().collect(Collectors.joining(","));
-               ((MainForm) parentFrame).openPanelDatMon(maBanContext);
-           }
-	} catch (Exception e) {
-		// TODO: handle exception
-		e.printStackTrace();
-	}
+            this.dispose();
+            java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
+            if (parentFrame instanceof MainForm) {
+                String maBanContext = selectedTables == null ? ""
+                        : selectedTables.stream().sorted().collect(Collectors.joining(","));
+                ((MainForm) parentFrame).openPanelDatMon(maBanContext);
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
 
     }// GEN-LAST:event_btnDatBanDungNgayActionPerformed
 

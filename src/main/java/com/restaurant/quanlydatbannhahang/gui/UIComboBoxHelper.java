@@ -32,7 +32,6 @@ public class UIComboBoxHelper {
         comboBox.addItem(defaultLabel);
 
         try {
-            // Lấy method getDisplayName()
             Method getDisplayName = enumClass.getMethod("getDisplayName");
 
             for (E enumValue : enumClass.getEnumConstants()) {

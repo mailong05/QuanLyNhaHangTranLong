@@ -14,13 +14,13 @@ public class PhieuDatBan {
     private TrangThaiPhieuDat trangThai;
     private double tienDatCoc;
 
-    // Constructor không tham số
+    
     public PhieuDatBan() {
         this.ngayLapPhieu = LocalDateTime.now();
         this.tienDatCoc = 0;
     }
 
-    // Constructor đầy đủ
+    
     public PhieuDatBan(String maPhieuDat, KhachHang khachHang, NhanVien nhanVien, Ban ban, LocalDateTime ngayLapPhieu,
             LocalDateTime thoiGianDen, int soLuongNguoi, String ghiChu, TrangThaiPhieuDat trangThai) {
         this.maPhieuDat = maPhieuDat;
@@ -35,7 +35,7 @@ public class PhieuDatBan {
         this.tienDatCoc = 0;
     }
 
-    // Constructor với tienDatCoc
+    
     public PhieuDatBan(String maPhieuDat, KhachHang khachHang, NhanVien nhanVien, Ban ban, LocalDateTime ngayLapPhieu,
             LocalDateTime thoiGianDen, int soLuongNguoi, String ghiChu, TrangThaiPhieuDat trangThai,
             double tienDatCoc) {
@@ -51,7 +51,7 @@ public class PhieuDatBan {
         this.tienDatCoc = tienDatCoc;
     }
 
-    // Getter và Setter
+    
     public String getMaPhieuDat() {
         return maPhieuDat;
     }
@@ -132,7 +132,7 @@ public class PhieuDatBan {
         this.tienDatCoc = tienDatCoc;
     }
 
-    // Các phương thức cần thiết
+    
     public boolean taoPhieuDat() {
         if (khachHang != null && ban != null && ban.kiemTraBanTrong()) {
             this.trangThai = TrangThaiPhieuDat.DANG_CHO;

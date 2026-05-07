@@ -15,9 +15,9 @@ public class PhuongThucTTDAO {
     public PhuongThucTTDAO() {
     }
 
-    /**
-     * Lấy tất cả phương thức thanh toán
-     */
+    
+
+
     public List<PhuongThucTT> getAllPhuongThucTT() {
         Connection connection = DatabaseConnection.getConnection();
         List<PhuongThucTT> list = new ArrayList<>();
@@ -38,9 +38,9 @@ public class PhuongThucTTDAO {
         return list;
     }
 
-    /**
-     * Tìm phương thức thanh toán theo tên
-     */
+    
+
+
     public PhuongThucTT findByName(String name) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "SELECT * FROM PhuongThucTT WHERE tenPhuongThuc = ?";
@@ -59,9 +59,9 @@ public class PhuongThucTTDAO {
         return null;
     }
 
-    /**
-     * Kiểm tra phương thức thanh toán tồn tại
-     */
+    
+
+
     public boolean exists(String name) {
         return findByName(name) != null;
     }

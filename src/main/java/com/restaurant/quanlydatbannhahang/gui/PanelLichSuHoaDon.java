@@ -28,18 +28,14 @@ public class PanelLichSuHoaDon extends javax.swing.JPanel {
     }
 
     private void loadDataToComboBoxes() {
-        // TODO Auto-generated method stub
         try {
-            // Save listeners
             ActionListener[] trangThaiListeners = cbFilterTrangThai.getActionListeners();
 
-            // Remove listeners
 
             for (ActionListener listener : trangThaiListeners) {
                 cbFilterTrangThai.removeActionListener(listener);
             }
 
-            // Load TrangThaiBan
             cbFilterTrangThai.removeAllItems();
             cbFilterTrangThai.addItem("Trạng thái");
             for (TrangThaiHoaDon trangThai : TrangThaiHoaDon
@@ -47,7 +43,6 @@ public class PanelLichSuHoaDon extends javax.swing.JPanel {
                 cbFilterTrangThai.addItem(trangThai.getDisplayName());
             }
 
-            // Re-add listeners
 
             for (ActionListener listener : trangThaiListeners) {
                 cbFilterTrangThai.addActionListener(listener);
@@ -59,35 +54,28 @@ public class PanelLichSuHoaDon extends javax.swing.JPanel {
     }
 
     private void customUI() {
-        // Placeholder cho txtTimKiem
         setupPlaceholder(txtTimKiem, "Nhập mã hóa đơn");
 
-        // Load enum trạng thái hóa đơn lên ComboBox
         ComboBoxEnumLoader.loadTrangThaiHoaDonToComboBox(cbFilterTrangThai);
 
-        // 1. Tùy chỉnh thanh tìm kiếm và ComboBox
         cbFilterTrangThai.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnTimKiem.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnTimKiem.setFocusPainted(false);
 
-        // 2. Tùy chỉnh ScrollPane
         scrTableLichSuHoaDon.setBorder(BorderFactory.createLineBorder(new Color(200, 190, 170), 1));
         scrTableLichSuHoaDon.setOpaque(false);
         scrTableLichSuHoaDon.getViewport().setOpaque(false);
 
-        // Khử góc trắng ScrollBar
         JPanel corner = new JPanel();
         corner.setBackground(new Color(255, 251, 233));
         scrTableLichSuHoaDon.setCorner(JScrollPane.UPPER_RIGHT_CORNER, corner);
 
-        // 3. Tùy chỉnh Bảng (Table)
         tableLichSuHoaDon.setShowGrid(false);
         tableLichSuHoaDon.setIntercellSpacing(new Dimension(0, 0));
         tableLichSuHoaDon.setRowHeight(35);
         tableLichSuHoaDon.setSelectionBackground(new Color(245, 240, 220));
         tableLichSuHoaDon.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 
-        // Header Table
         tableLichSuHoaDon.getTableHeader()
                 .setPreferredSize(new Dimension(tableLichSuHoaDon.getTableHeader().getWidth(), 45));
         tableLichSuHoaDon.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
@@ -114,7 +102,6 @@ public class PanelLichSuHoaDon extends javax.swing.JPanel {
                         value = com.restaurant.quanlydatbannhahang.util.CurrencyUtility
                                 .formatVND(((Number) value).doubleValue());
                     }
-                    // Vừa format tiền, vừa căn GIỮA (hoặc PHẢI tùy ông chọn)
                     setHorizontalAlignment(JLabel.CENTER); 
                     return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
                 }
@@ -123,13 +110,11 @@ public class PanelLichSuHoaDon extends javax.swing.JPanel {
 
         centerTableColumns(tableLichSuHoaDon);
 
-        // Set giá trị mặc định cho DatePicker (ngày hôm nay)
         if (dpNgayTao != null) {
             dpNgayTao.setDate(LocalDate.now());
             dpNgayTao.addDateChangeListener(event -> loadFilteredData());
         }
 
-        // 4. Click ngoài bảng thì clear selection và refresh lại dữ liệu
         this.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mousePressed(java.awt.event.MouseEvent evt) {

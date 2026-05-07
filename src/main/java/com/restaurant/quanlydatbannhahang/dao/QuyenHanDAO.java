@@ -15,9 +15,9 @@ public class QuyenHanDAO {
     public QuyenHanDAO() {
     }
 
-    /**
-     * Lấy tất cả quyền hạn
-     */
+    
+
+
     public List<QuyenHan> getAllQuyenHan() {
         Connection connection = DatabaseConnection.getConnection();
         List<QuyenHan> list = new ArrayList<>();
@@ -38,9 +38,9 @@ public class QuyenHanDAO {
         return list;
     }
 
-    /**
-     * Tìm quyền hạn theo tên
-     */
+    
+
+
     public QuyenHan findByName(String name) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "SELECT * FROM QuyenHan WHERE tenQuyenHan = ?";
@@ -59,9 +59,9 @@ public class QuyenHanDAO {
         return null;
     }
 
-    /**
-     * Kiểm tra quyền hạn tồn tại
-     */
+    
+
+
     public boolean exists(String name) {
         return findByName(name) != null;
     }

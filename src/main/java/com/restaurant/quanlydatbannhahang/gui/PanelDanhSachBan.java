@@ -28,20 +28,16 @@ public class PanelDanhSachBan extends javax.swing.JPanel {
     }
 
     private void customUI() {
-        // Placeholder cho txtTimKiem
         setupPlaceholder(txtTimKiem, "Nhập mã bàn hoặc mã khu vực");
 
-        // Gan su kien quay ve Trang Chu
         MainForm.attachGoHomeListener(btnTrangChu, this);
     }
 
     private void loadDataToComboBoxes() {
         try {
-            // Save listeners
             java.awt.event.ActionListener[] khuVucListeners = cbFilterKhuVuc.getActionListeners();
             java.awt.event.ActionListener[] trangThaiListeners = cbFilterTrangThai.getActionListeners();
 
-            // Remove listeners
             for (java.awt.event.ActionListener listener : khuVucListeners) {
                 cbFilterKhuVuc.removeActionListener(listener);
             }
@@ -49,7 +45,6 @@ public class PanelDanhSachBan extends javax.swing.JPanel {
                 cbFilterTrangThai.removeActionListener(listener);
             }
 
-            // Load KhuVuc tu database
             cbFilterKhuVuc.removeAllItems();
             cbFilterKhuVuc.addItem("Khu vực");
             List<KhuVuc> dsKhuVuc = khuVucService.getAllKhuVuc();
@@ -57,7 +52,6 @@ public class PanelDanhSachBan extends javax.swing.JPanel {
                 cbFilterKhuVuc.addItem(kv.getMaKhuVuc());
             }
 
-            // Load TrangThaiBan tu enum
             cbFilterTrangThai.removeAllItems();
             cbFilterTrangThai.addItem("Trạng thái");
             for (com.restaurant.quanlydatbannhahang.entity.TrangThaiBan trangThai : com.restaurant.quanlydatbannhahang.entity.TrangThaiBan
@@ -65,7 +59,6 @@ public class PanelDanhSachBan extends javax.swing.JPanel {
                 cbFilterTrangThai.addItem(trangThai.getDisplayName());
             }
 
-            // Re-add listeners
             for (java.awt.event.ActionListener listener : khuVucListeners) {
                 cbFilterKhuVuc.addActionListener(listener);
             }
@@ -88,14 +81,12 @@ public class PanelDanhSachBan extends javax.swing.JPanel {
         Color placeholderColor = new Color(153, 153, 153);
         Color textColor = new Color(0, 0, 0);
 
-        // Set text mac dinh va mau
         textField.setText(placeholder);
         textField.setForeground(placeholderColor);
 
         textField.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusGained(java.awt.event.FocusEvent evt) {
-                // Khi focus vao, neu la placeholder thi xoa
                 if (textField.getText().equals(placeholder)) {
                     textField.setText("");
                     textField.setForeground(textColor);
@@ -104,7 +95,6 @@ public class PanelDanhSachBan extends javax.swing.JPanel {
 
             @Override
             public void focusLost(java.awt.event.FocusEvent evt) {
-                // Khi focus out, neu trong thi hien thi placeholder
                 if (textField.getText().isEmpty()) {
                     textField.setText(placeholder);
                     textField.setForeground(placeholderColor);
@@ -162,7 +152,6 @@ public class PanelDanhSachBan extends javax.swing.JPanel {
         }
     }
 
-    // Từ đây không chỉnh sửa bên dưới
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated

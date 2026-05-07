@@ -33,32 +33,24 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseLis
     }
 
     private void customUI() {
-        // 1. Màu nền chủ đạo
         setBackground(new Color(255, 251, 233));
 
-        // 2. Tùy chỉnh hiệu ứng cho các nút bấm
         JButton[] buttons = { btnTrangChu, btnThem, btnXoa, btnCapNhat, btnTimKiem };
         for (JButton btn : buttons) {
             btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         }
 
-        // 3. Placeholder cho txtTimKiem
         setupPlaceholder(txtTimKiem, "Nhập số điện thoại hoặc tên");
 
-        // 4. Tùy chỉnh ScrollPane và Viền bảng
         scrTableKhachHang.setBorder(BorderFactory.createLineBorder(new Color(200, 190, 170), 1));
         scrTableKhachHang.setViewportBorder(null);
 
-        // 5. Tùy chỉnh Table (Bảng Khách Hàng)
         tableKhachHang.setRowHeight(35);
 
-        // Căn giữa nội dung các cột
         centerTableColumns(tableKhachHang);
 
-        // 6. Bo góc cho Panel chứa thông tin nhập liệu
         applyCardStyle(pnlThongTinKhachHang, 20);
 
-        // 7. Gắn sự kiện quay về Trang Chủ
         MainForm.attachGoHomeListener(btnTrangChu, this);
 
         tableKhachHang.addMouseListener(this);
@@ -87,15 +79,12 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseLis
 
     private void loadDataToComboBoxes() {
         try {
-            // Save listeners
             ActionListener[] loaiThanhVienListeners = cbFilterLoaiThanhVien.getActionListeners();
 
-            // Remove listeners
             for (ActionListener listener : loaiThanhVienListeners) {
                 cbFilterLoaiThanhVien.removeActionListener(listener);
             }
 
-            // Load LoaiThanhVien to both comboboxes
             cbFilterLoaiThanhVien.removeAllItems();
             cbFilterLoaiThanhVien.addItem("Loại thành viên");
             ComboBoxEnumLoader.loadLoaiThanhVienToComboBox(cbFilterLoaiThanhVien);
@@ -104,7 +93,6 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseLis
             ComboBoxEnumLoader.loadLoaiThanhVienToComboBox(cbLoaiThanhVien);
 
             cbLoaiThanhVien.setSelectedIndex(4);
-            // Re-add listeners
             for (ActionListener listener : loaiThanhVienListeners) {
                 cbFilterLoaiThanhVien.addActionListener(listener);
             }
@@ -161,7 +149,6 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseLis
             model.setRowCount(0);
 
             for (KhachHang kh : list) {
-                // Apply LoaiThanhVien filter
                 if (selectedLoaiThanhVien != null && !selectedLoaiThanhVien.equals("Loại thành viên")) {
                     if (kh.getLoaiThanhVien() == null
                             || !kh.getLoaiThanhVien().getDisplayName().equals(selectedLoaiThanhVien)) {
@@ -169,7 +156,6 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseLis
                     }
                 }
 
-                // Apply search text filter
                 if (!searchText.isEmpty()) {
                     String maKH = kh.getMaKH() != null ? kh.getMaKH().toLowerCase() : "";
                     String hoTen = kh.getHoTen() != null ? kh.getHoTen().toLowerCase() : "";
@@ -242,7 +228,6 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseLis
     }
 
     private void fillMaKH() {
-		// TODO Auto-generated method stub
     	 String lastID = IDQueryHelper.getLastID("KhachHang", "maKH");
          String maKHNew = (lastID == null || lastID.isEmpty()) ? IDGeneratorHelper.generateDefaultID("KH")
                  : IDGeneratorHelper.generateNextIDFromFullID(lastID);
@@ -284,14 +269,12 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseLis
         Color placeholderColor = new Color(153, 153, 153);
         Color textColor = new Color(0, 0, 0);
 
-        // Set text mặc định và màu
         textField.setText(placeholder);
         textField.setForeground(placeholderColor);
 
         textField.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusGained(java.awt.event.FocusEvent evt) {
-                // Khi focus vào, nếu là placeholder thì xóa
                 if (textField.getText().equals(placeholder)) {
                     textField.setText("");
                     textField.setForeground(textColor);
@@ -300,7 +283,6 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseLis
 
             @Override
             public void focusLost(java.awt.event.FocusEvent evt) {
-                // Khi focus out, nếu trống thì hiển thị placeholder
                 if (textField.getText().isEmpty()) {
                     textField.setText(placeholder);
                     textField.setForeground(placeholderColor);

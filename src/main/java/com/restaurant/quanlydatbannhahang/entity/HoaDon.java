@@ -24,11 +24,11 @@ public class HoaDon {
     private PhuongThucTT phuongThucTT;
     private TrangThaiHoaDon trangThaiThanhToan;
 
-    // Constructor không tham số
+    
     public HoaDon() {
     }
 
-    // Constructor đầy đủ tham số
+    
     public HoaDon(String maHD, PhieuDatBan phieuDatBan, NhanVien nhanVien, KhuyenMai khuyenMai, Thue thue,
             LocalDate ngayTao, LocalTime gioVao, LocalTime gioRa,
             double tongTienGoc, double tienGiamGia, double tongThanhToan,
@@ -67,7 +67,7 @@ public class HoaDon {
         this.tienPhiDV = tienPhiDV;
     }
 
-    // Getter và Setter
+    
     public String getMaHD() {
         return maHD;
     }
@@ -204,7 +204,7 @@ public class HoaDon {
         this.trangThaiThanhToan = trangThaiThanhToan;
     }
 
-    // Các phương thức cần thiết
+    
     public double tinhTongThanhToan() {
         double thuePhaiTra = 0;
         if (thue != null) {
@@ -220,12 +220,12 @@ public class HoaDon {
     }
 
     public void inHoaDon() {
-        // Logic in hóa đơn
+        
         System.out.println("In hóa đơn: " + maHD);
     }
 
     public void luuDoanhThu() {
-        // Logic lưu doanh thu vào database
+        
         System.out.println("Lưu doanh thu cho hóa đơn: " + maHD);
     }
 

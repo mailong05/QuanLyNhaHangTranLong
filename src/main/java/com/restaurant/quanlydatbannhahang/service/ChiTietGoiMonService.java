@@ -12,9 +12,9 @@ public class ChiTietGoiMonService {
         this.chiTietGoiMonDAO = new ChiTietGoiMonDAO();
     }
 
-    /**
-     * Lấy chi tiết gọi món theo phiếu
-     */
+    
+
+
     public List<ChiTietGoiMon> getChiTietByMaPhieu(String maPhieu) {
         if (maPhieu == null || maPhieu.trim().isEmpty()) {
             throw new IllegalArgumentException("Mã phiếu không được để trống");
@@ -22,9 +22,9 @@ public class ChiTietGoiMonService {
         return chiTietGoiMonDAO.getChiTietGoiMonByPhieu(maPhieu);
     }
 
-    /**
-     * Lấy chi tiết gọi món theo phiếu và món
-     */
+    
+
+
     public ChiTietGoiMon getChiTietByMaPhieuAndMaMon(String maPhieu, String maMon) {
         if (maPhieu == null || maPhieu.trim().isEmpty()) {
             throw new IllegalArgumentException("Mã phiếu không được để trống");
@@ -35,9 +35,9 @@ public class ChiTietGoiMonService {
         return chiTietGoiMonDAO.getChiTietGoiMonTheoMa(maPhieu, maMon);
     }
 
-    /**
-     * Thêm chi tiết gọi món
-     */
+    
+
+
     public void themChiTietGoiMon(ChiTietGoiMon chiTiet) {
         if (chiTiet == null) {
             throw new IllegalArgumentException("Chi tiết gọi món không được để trống");
@@ -50,9 +50,9 @@ public class ChiTietGoiMonService {
         }
     }
 
-    /**
-     * Cập nhật chi tiết gọi món
-     */
+    
+
+
     public void capNhatChiTietGoiMon(ChiTietGoiMon chiTiet) {
         if (chiTiet == null) {
             throw new IllegalArgumentException("Chi tiết gọi món không được để trống");
@@ -62,9 +62,9 @@ public class ChiTietGoiMonService {
         }
     }
 
-    /**
-     * Xóa chi tiết gọi món
-     */
+    
+
+
     public void xoaChiTietGoiMon(String maPhieu, String maMon) {
         if (maPhieu == null || maPhieu.trim().isEmpty()) {
             throw new IllegalArgumentException("Mã phiếu không được để trống");
@@ -77,9 +77,9 @@ public class ChiTietGoiMonService {
         }
     }
 
-    /**
-     * Cập nhật số lượng
-     */
+    
+
+
     public void capNhatSoLuong(String maPhieu, String maMon, int soLuongMoi) {
         if (soLuongMoi <= 0) {
             throw new IllegalArgumentException("Số lượng phải lớn hơn 0");
@@ -91,32 +91,32 @@ public class ChiTietGoiMonService {
         }
     }
 
-    /**
-     * Cập nhật trạng thái chi tiết
-     */
+    
+
+
     public void capNhatTrangThai(String maPhieu, String maMon, String trangThai) {
         if (!chiTietGoiMonDAO.capNhatTrangThaiChiTietGoiMon(maPhieu, maMon, trangThai)) {
             throw new RuntimeException("Cập nhật trạng thái thất bại");
         }
     }
 
-    /**
-     * Đánh dấu hoàn thành
-     */
+    
+
+
     public void markDone(String maPhieu, String maMon) {
         capNhatTrangThai(maPhieu, maMon, "DA_XONG");
     }
 
-    /**
-     * Đánh dấu đang nấu
-     */
+    
+
+
     public void markCooking(String maPhieu, String maMon) {
         capNhatTrangThai(maPhieu, maMon, "DANG_NAU");
     }
 
-    /**
-     * Tính tổng tiền
-     */
+    
+
+
     public double getTongTienChiTiet(String maPhieu, String maMon) {
         ChiTietGoiMon chiTiet = getChiTietByMaPhieuAndMaMon(maPhieu, maMon);
         if (chiTiet != null) {
@@ -125,9 +125,9 @@ public class ChiTietGoiMonService {
         return 0;
     }
 
-    /**
-     * Tính tổng tiền phiếu gọi món
-     */
+    
+
+
     public double getTongTienPhieu(String maPhieu) {
         List<ChiTietGoiMon> list = getChiTietByMaPhieu(maPhieu);
         double tongTien = 0;
@@ -139,17 +139,17 @@ public class ChiTietGoiMonService {
         return tongTien;
     }
 
-    /**
-     * Đếm tổng số chi tiết trong phiếu
-     */
+    
+
+
     public int countChiTietInPhieu(String maPhieu) {
         List<ChiTietGoiMon> list = getChiTietByMaPhieu(maPhieu);
         return list != null ? list.size() : 0;
     }
 
-    /**
-     * Xóa tất cả chi tiết của phiếu
-     */
+    
+
+
     public void xoaAllChiTietByMaPhieu(String maPhieu) {
         if (maPhieu == null || maPhieu.trim().isEmpty()) {
             throw new IllegalArgumentException("Mã phiếu không được để trống");

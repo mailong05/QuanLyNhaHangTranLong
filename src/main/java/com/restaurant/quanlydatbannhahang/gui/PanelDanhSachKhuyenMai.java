@@ -21,7 +21,6 @@ public class PanelDanhSachKhuyenMai extends javax.swing.JPanel {
     }
 
     private void customUI() {
-        // Placeholder cho txtTimKiem
         setupPlaceholder(txtTimKiem, "Nhập tên hoặc mã khuyến mãi");
 
         this.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -43,7 +42,6 @@ public class PanelDanhSachKhuyenMai extends javax.swing.JPanel {
                         value = com.restaurant.quanlydatbannhahang.util.CurrencyUtility
                                 .formatVND(((Number) value).doubleValue());
                     }
-                    // Vừa format tiền, vừa căn GIỮA (hoặc PHẢI tùy ông chọn)
                     setHorizontalAlignment(JLabel.CENTER);
                     return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
                 }
@@ -60,14 +58,12 @@ public class PanelDanhSachKhuyenMai extends javax.swing.JPanel {
         Color placeholderColor = new Color(153, 153, 153);
         Color textColor = new Color(0, 0, 0);
 
-        // Set text mac dinh va mau
         textField.setText(placeholder);
         textField.setForeground(placeholderColor);
 
         textField.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusGained(java.awt.event.FocusEvent evt) {
-                // Khi focus vao, neu la placeholder thi xoa
                 if (textField.getText().equals(placeholder)) {
                     textField.setText("");
                     textField.setForeground(textColor);
@@ -76,7 +72,6 @@ public class PanelDanhSachKhuyenMai extends javax.swing.JPanel {
 
             @Override
             public void focusLost(java.awt.event.FocusEvent evt) {
-                // Khi focus out, neu trong thi hien thi placeholder
                 if (textField.getText().isEmpty()) {
                     textField.setText(placeholder);
                     textField.setForeground(placeholderColor);
@@ -99,15 +94,12 @@ public class PanelDanhSachKhuyenMai extends javax.swing.JPanel {
 
     private void loadDataToComboBoxes() {
         try {
-            // Save listeners
             java.awt.event.ActionListener[] trangThaiListeners = cbFilterTrangThai.getActionListeners();
 
-            // Remove listeners
             for (java.awt.event.ActionListener listener : trangThaiListeners) {
                 cbFilterTrangThai.removeActionListener(listener);
             }
 
-            // Load TrangThai
             cbFilterTrangThai.removeAllItems();
             cbFilterTrangThai.addItem("Trạng thái");
             for (com.restaurant.quanlydatbannhahang.entity.TrangThaiKhuyenMai trangThai : com.restaurant.quanlydatbannhahang.entity.TrangThaiKhuyenMai
@@ -115,7 +107,6 @@ public class PanelDanhSachKhuyenMai extends javax.swing.JPanel {
                 cbFilterTrangThai.addItem(trangThai.getDisplayName());
             }
 
-            // Re-add listeners
             for (java.awt.event.ActionListener listener : trangThaiListeners) {
                 cbFilterTrangThai.addActionListener(listener);
             }
@@ -152,8 +143,6 @@ public class PanelDanhSachKhuyenMai extends javax.swing.JPanel {
     private void centerTableColumns(JTable table) {
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        // Chỉ căn giữa các cột từ 0 đến 4 và cột 6. Bỏ qua cột 5 (Lương) vì đã có
-        // Renderer riêng
         for (int i = 0; i < table.getColumnCount(); i++) {
             if (i != 2 && i != 5) {
                 table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);

@@ -32,13 +32,10 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
         }
 
         private void customUI() {
-                // Placeholder cho txtTimKiem
                 setupPlaceholder(txtTimKiem, "Nhập tên hoặc mã khuyến mãi");
 
-                // Load enum trạng thái lên ComboBox
                 ComboBoxEnumLoader.loadTrangThaiKhuyenMaiToComboBox(cbFilterTrangThai);
 
-                // Set giá trị mặc định cho DatePicker (ngày hôm nay)
                 if (dpNgayBatDau != null) {
                         dpNgayBatDau.setDate(LocalDate.now());
                 }
@@ -46,7 +43,6 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                         dbNgayKetThuc.setDate(LocalDate.now());
                 }
 
-                // ========== DESELECT WHEN CLICK OUTSIDE TABLE ==========
                 this.addMouseListener(new java.awt.event.MouseAdapter() {
                         @Override
                         public void mousePressed(java.awt.event.MouseEvent evt) {
@@ -59,7 +55,6 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                         }
                 });
 
-                // Register mouse listener để populate fields khi click vào row
                 tableKhuyenMai.addMouseListener(this);
                 tableKhuyenMai.getSelectionModel().addListSelectionListener(e -> {
                         if (!e.getValueIsAdjusting()) {
@@ -81,7 +76,6 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                                                 value = com.restaurant.quanlydatbannhahang.util.CurrencyUtility
                                                                 .formatVND(((Number) value).doubleValue());
                                         }
-                                        // Vừa format tiền, vừa căn GIỮA (hoặc PHẢI tùy ông chọn)
                                         setHorizontalAlignment(JLabel.CENTER);
                                         return super.getTableCellRendererComponent(table, value, isSelected, hasFocus,
                                                         row, column);
@@ -89,25 +83,20 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                         });
                 }
 
-                // Gắn sự kiện quay về Trang Chủ
                 MainForm.attachGoHomeListener(btnTrangChu, this);
                 syncCapNhatButtonState();
         }
 
         private void loadDataToComboBoxes() {
                 try {
-                        // Save listeners
                         ActionListener[] trangThaiListeners = cbFilterTrangThai.getActionListeners();
 
-                        // Remove listeners
                         for (ActionListener listener : trangThaiListeners) {
                                 cbFilterTrangThai.removeActionListener(listener);
                         }
 
-                        // Load TrangThai - note: this reuses the existing combobox setup
                         ComboBoxEnumLoader.loadTrangThaiKhuyenMaiToComboBox(cbTrangThai);
 
-                        // Re-add listeners
                         for (ActionListener listener : trangThaiListeners) {
                                 cbFilterTrangThai.addActionListener(listener);
                         }
@@ -131,7 +120,6 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                         model.setRowCount(0);
 
                         for (KhuyenMai km : list) {
-                                // Filter: Chỉ hiển thị khuyến mãi còn áp dụng (Soft delete)
                                 if (km.getTrangThai() != com.restaurant.quanlydatbannhahang.entity.TrangThaiKhuyenMai.CON_AP_DUNG) {
                                         continue;
                                 }
@@ -148,7 +136,6 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                         }
                         centerTableColumns(tableKhuyenMai);
 
-                        // ========== FORMAT TIỀN TỆ CHO CỘT GIÁ TRỊ GIẢM ==========
                         DefaultTableCellRenderer currencyRenderer = new DefaultTableCellRenderer() {
                                 @Override
                                 protected void setValue(Object value) {
@@ -180,12 +167,10 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                         model.setRowCount(0);
 
                         for (KhuyenMai km : list) {
-                                // Filter: Chỉ hiển thị khuyến mãi còn áp dụng (Soft delete)
                                 if (km.getTrangThai() != com.restaurant.quanlydatbannhahang.entity.TrangThaiKhuyenMai.CON_AP_DUNG) {
                                         continue;
                                 }
 
-                                // Apply search text filter
                                 if (!searchText.isEmpty()) {
                                         String maKM = km.getMaKM() != null ? km.getMaKM().toLowerCase()
                                                         : "";
@@ -208,8 +193,6 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                         }
                         centerTableColumns(tableKhuyenMai);
 
-                        // ========== FORMAT TIỀN TỆ CHO CỘT GIÁ TRỊ GIẢM VÀ ĐIỀU KIỆN TỐI THIỂU
-                        // ==========
                         DefaultTableCellRenderer currencyRenderer = new DefaultTableCellRenderer() {
                                 @Override
                                 protected void setValue(Object value) {
@@ -314,14 +297,12 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                 Color placeholderColor = new Color(153, 153, 153);
                 Color textColor = new Color(0, 0, 0);
 
-                // Set text mac dinh va mau
                 textField.setText(placeholder);
                 textField.setForeground(placeholderColor);
 
                 textField.addFocusListener(new java.awt.event.FocusAdapter() {
                         @Override
                         public void focusGained(java.awt.event.FocusEvent evt) {
-                                // Khi focus vao, neu la placeholder thi xoa
                                 if (textField.getText().equals(placeholder)) {
                                         textField.setText("");
                                         textField.setForeground(textColor);
@@ -330,7 +311,6 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
 
                         @Override
                         public void focusLost(java.awt.event.FocusEvent evt) {
-                                // Khi focus out, neu trong thi hien thi placeholder
                                 if (textField.getText().isEmpty()) {
                                         textField.setText(placeholder);
                                         textField.setForeground(placeholderColor);

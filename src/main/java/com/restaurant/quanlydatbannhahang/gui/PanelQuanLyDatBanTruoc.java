@@ -41,7 +41,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
 
         private PhieuDatBanService pdbService;
         private ChiTietPhieuDatBanService ctpdbService;
-        private PanelDatBan panelDatBan; // ← Reference để update UI bàn
+        private PanelDatBan panelDatBan;
         private BanService banService;
 
         public PanelQuanLyDatBanTruoc() {
@@ -85,15 +85,12 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
         }
 
         private void customUI() {
-                // Placeholder cho txtTimKiem
                 setupPlaceholder(txtTimKiem, "Nhập mã đặt bàn hoặc SĐT khách");
 
-                // Set giá trị mặc định cho DateTimePicker (ngày giờ hiện tại)
                 if (dtpThoiGianDen != null) {
                         dtpThoiGianDen.setDateTimeStrict(LocalDateTime.now());
                 }
 
-                // Gắn sự kiện quay về Trang Chủ
                 MainForm.attachGoHomeListener(btnTrangChu, this);
 
                 tableBan.addMouseListener(this);
@@ -107,14 +104,12 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                         }
                 });
 
-                // ========== ENABLE BUTTON KHI CLICK RA NGOÀI TABLE ==========
                 this.addMouseListener(new java.awt.event.MouseAdapter() {
                         @Override
                         public void mousePressed(java.awt.event.MouseEvent evt) {
-                                // Nếu click không phải trên table thì enable button
                                 if (evt.getSource() != tableBan && !isMouseOverTable(evt)) {
                                         tableBan.clearSelection();
-                                        clearFields(); // Clear dữ liệu các field
+                                        clearFields();
                                         syncCapNhatButtonState();
                                         fillMaDatBan(txtMaPhieuDat);
                                 }
@@ -124,23 +119,18 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                 syncCapNhatButtonState();
         }
 
-        /**
-         * Tao placeholder cho TextField
-         * Khi focus vao, placeholder bien mat
-         * Khi focus out va trong, placeholder xuat hien lai
-         */
+       
         private void setupPlaceholder(JTextField textField, String placeholder) {
                 Color placeholderColor = new Color(153, 153, 153);
                 Color textColor = new Color(0, 0, 0);
 
-                // Set text mac dinh va mau
+              
                 textField.setText(placeholder);
                 textField.setForeground(placeholderColor);
 
                 textField.addFocusListener(new java.awt.event.FocusAdapter() {
                         @Override
                         public void focusGained(java.awt.event.FocusEvent evt) {
-                                // Khi focus vao, neu la placeholder thi xoa
                                 if (textField.getText().equals(placeholder)) {
                                         textField.setText("");
                                         textField.setForeground(textColor);
@@ -149,7 +139,6 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
 
                         @Override
                         public void focusLost(java.awt.event.FocusEvent evt) {
-                                // Khi focus out, neu trong thi hien thi placeholder
                                 if (textField.getText().isEmpty()) {
                                         textField.setText(placeholder);
                                         textField.setForeground(placeholderColor);
@@ -200,7 +189,6 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                         });
                 }
 
-                // ========== SET CELL ALIGNMENT (căn trái cho tất cả cột) ==========
                 DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
                 renderer.setHorizontalAlignment(JLabel.LEFT);
 
@@ -208,7 +196,6 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                 tableBan.getColumnModel().getColumn(8).setCellRenderer(renderer);
                 centerTableColumns(tableBan);
 
-                // ========== FORMAT TIỀN TỆ CHO CỘT TIỀN ĐẶT CỌC ==========
                 DefaultTableCellRenderer currencyRenderer = new DefaultTableCellRenderer() {
                         @Override
                         protected void setValue(Object value) {
@@ -223,7 +210,6 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                 currencyRenderer.setHorizontalAlignment(JLabel.RIGHT);
                 tableBan.getColumnModel().getColumn(7).setCellRenderer(currencyRenderer);
 
-                // ========== THÊM MOUSE LISTENER VÀO TABLE ==========
         }
 
         private boolean isMouseOverTable(java.awt.event.MouseEvent evt) {
@@ -238,7 +224,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                 txtMaBan.setText("");
                 spSoNguoi.setValue(0);
                 dtpThoiGianDen.setDateTimeStrict(LocalDateTime.now());
-                cbTrangThai.setSelectedIndex(0); // Reset ComboBoxEntityLoader
+                cbTrangThai.setSelectedIndex(0);
                 txtTienDatCoc.setText("0.0");
 
         }
@@ -254,13 +240,12 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                         btnDoiBan.setEnabled(false);
                 } else {
                         int modelRow = tableBan.convertRowIndexToModel(selectedRow);
-                        Object statusValue = tableBan.getModel().getValueAt(modelRow, 6);
+                        Object statusValue = tableBan.getModel().getValueAt(modelRow, 8);
                         String status = statusValue == null ? "" : statusValue.toString();
                         btnDoiBan.setEnabled(TrangThaiPhieuDat.DANG_CHO.getDisplayName().equals(status));
                 }
         }
 
-        // Từ đây không chỉnh sửa bên dưới
         @SuppressWarnings("unchecked")
         // <editor-fold defaultstate="collapsed" desc="Generated
         // <editor-fold defaultstate="collapsed" desc="Generated
@@ -1057,14 +1042,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                                         JOptionPane.YES_NO_OPTION);
 
                         if (result == JOptionPane.YES_OPTION) {
-                                // // QUAN TRỌNG: Lấy chi tiết phiếu TRƯỚC khi xóa
                                 List<ChiTietPhieuDatBan> chiTietList = ctpdbService.getChiTietByMaPhieuDat(maPDB);
-                                //
-                                // // Xóa tất cả chi tiết phiếu TRƯỚC (để tránh foreign key constraint)
-                                // ctpdbService.xoaAllChiTietByMaPhieuDat(maPDB);
-                                //
-                                // // Sau đó xóa phiếu
-                                // pdbService.xoaPhieuDatBan(maPDB);
 
                                 pdbService.capNhatTrangThaiPhieu(maPDB, TrangThaiPhieuDat.DA_HUY);
 

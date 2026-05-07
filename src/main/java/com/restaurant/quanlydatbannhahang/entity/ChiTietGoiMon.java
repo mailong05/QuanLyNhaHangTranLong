@@ -8,11 +8,11 @@ public class ChiTietGoiMon {
     private double thanhTien;
     private String ghiChu;
 
-    // Constructor không tham số
+    
     public ChiTietGoiMon() {
     }
 
-    // Constructor đầy đủ
+    
     public ChiTietGoiMon(String maPhieuGoi, MonAn monAn, int soLuong, double donGiaLuuTru,
             double thanhTien, String ghiChu) {
         this.maPhieuGoi = maPhieuGoi;
@@ -23,7 +23,7 @@ public class ChiTietGoiMon {
         this.ghiChu = ghiChu;
     }
 
-    // Getter và Setter
+    
     public String getMaPhieuGoi() {
         return maPhieuGoi;
     }
@@ -72,7 +72,7 @@ public class ChiTietGoiMon {
         this.ghiChu = ghiChu;
     }
 
-    // Các phương thức cần thiết
+    
     public double tinhThanhTien() {
         this.thanhTien = soLuong * donGiaLuuTru;
         return thanhTien;

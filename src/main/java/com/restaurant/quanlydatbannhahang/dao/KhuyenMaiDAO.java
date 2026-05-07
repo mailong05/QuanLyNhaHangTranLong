@@ -16,11 +16,11 @@ public class KhuyenMaiDAO {
     public KhuyenMaiDAO() {
     }
 
-    /**
-     * Lấy mã khuyến mãi cuối cùng
-     * 
-     * @return Mã khuyến mãi cuối cùng (VD: KM012) hoặc null
-     */
+    
+
+
+
+
     public String getLastKhuyenMaiID() {
         return IDQueryHelper.getLastID("KhuyenMai", "maKM");
     }

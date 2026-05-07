@@ -1,6 +1,5 @@
 package com.restaurant.quanlydatbannhahang.gui;
 
-// UIConfiguration để setup FlatLaf L&F
 import com.restaurant.quanlydatbannhahang.service.TaiKhoanService;
 import com.restaurant.quanlydatbannhahang.service.AuthService.ValidationResult;
 
@@ -9,14 +8,12 @@ import javax.swing.JOptionPane;
 
 public class PanelDatLaiMatKhau extends javax.swing.JFrame {
 
-    // ========== FIELD ==========
-    private String username; // Lưu username từ ForgetPasswordForm
+    private String username;
 
     public PanelDatLaiMatKhau(String username) {
         this.username = username;
         initComponents();
 
-        // khử viền xanh khi click nút
         btnContinue.setFocusPainted(false);
         btnCancel.setFocusPainted(false);
     }

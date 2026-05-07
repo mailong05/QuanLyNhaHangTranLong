@@ -30,7 +30,6 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
     }
 
     private void fillMaKhuVuc(JTextField txtMaKhuVuc) {
-        // TODO Auto-generated method stub
         String lastID = IDQueryHelper.getLastID("KhuVuc", "maKhuVuc");
         String maPDBNew = (lastID == null || lastID.isEmpty()) ? IDGeneratorHelper.generateDefaultID("KV")
                 : IDGeneratorHelper.generateNextIDFromFullID(lastID);
@@ -38,12 +37,10 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
     }
 
     private void customUI() {
-        // Placeholder cho txtTimKiem
         setupPlaceholder(txtTimKiem, "Nhập tên hoặc mã khu vực");
 
         MainForm.attachGoHomeListener(btnTrangChu, this);
 
-        // ========== DESELECT WHEN CLICK OUTSIDE TABLE ==========
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent evt) {
@@ -55,7 +52,6 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
             }
         });
 
-        // Register mouse listener để populate fields khi click vào row
         tableKhuVuc.addMouseListener(this);
         tableKhuVuc.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
@@ -79,14 +75,12 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
         Color placeholderColor = new Color(153, 153, 153);
         Color textColor = new Color(0, 0, 0);
 
-        // Set text mac dinh va mau
         textField.setText(placeholder);
         textField.setForeground(placeholderColor);
 
         textField.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusGained(java.awt.event.FocusEvent evt) {
-                // Khi focus vao, neu la placeholder thi xoa
                 if (textField.getText().equals(placeholder)) {
                     textField.setText("");
                     textField.setForeground(textColor);
@@ -95,7 +89,6 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
 
             @Override
             public void focusLost(java.awt.event.FocusEvent evt) {
-                // Khi focus out, neu trong thi hien thi placeholder
                 if (textField.getText().isEmpty()) {
                     textField.setText(placeholder);
                     textField.setForeground(placeholderColor);

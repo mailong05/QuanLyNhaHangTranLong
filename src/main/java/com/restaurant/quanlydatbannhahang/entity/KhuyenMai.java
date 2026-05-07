@@ -11,11 +11,11 @@ public class KhuyenMai {
     private double dieuKienToiThieu;
     private TrangThaiKhuyenMai trangThai;
 
-    // Constructor không tham số
+    
     public KhuyenMai() {
     }
 
-    // Constructor đầy đủ
+    
     public KhuyenMai(String maKM, String tenKM, double giaTriGiam,
             LocalDate ngayBatDau, LocalDate ngayKetThuc, double dieuKienToiThieu,
             TrangThaiKhuyenMai trangThai) {
@@ -28,7 +28,7 @@ public class KhuyenMai {
         this.trangThai = trangThai;
     }
 
-    // Getter và Setter
+    
     public String getMaKM() {
         return maKM;
     }
@@ -81,7 +81,7 @@ public class KhuyenMai {
         this.trangThai = trangThai;
     }
 
-    // Các phương thức cần thiết
+    
     public boolean kiemTraHieuLuc(LocalDate ngayHienTai) {
         if (trangThai != TrangThaiKhuyenMai.CON_AP_DUNG) {
             return false;

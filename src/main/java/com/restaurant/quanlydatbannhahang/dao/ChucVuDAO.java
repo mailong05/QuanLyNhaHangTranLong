@@ -15,9 +15,9 @@ public class ChucVuDAO {
     public ChucVuDAO() {
     }
 
-    /**
-     * Lấy tất cả các chức vụ
-     */
+    
+
+
     public List<ChucVu> getAllChucVu() {
         Connection connection = DatabaseConnection.getConnection();
         List<ChucVu> list = new ArrayList<>();
@@ -38,9 +38,9 @@ public class ChucVuDAO {
         return list;
     }
 
-    /**
-     * Tìm chức vụ theo tên
-     */
+    
+
+
     public ChucVu findByName(String name) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "SELECT * FROM ChucVu WHERE tenChucVu = ?";
@@ -59,9 +59,9 @@ public class ChucVuDAO {
         return null;
     }
 
-    /**
-     * Kiểm tra chức vụ tồn tại
-     */
+    
+
+
     public boolean exists(String name) {
         return findByName(name) != null;
     }

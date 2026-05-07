@@ -1,6 +1,6 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
+ * Click nbfs:
+ * Click nbfs:
  */
 package com.restaurant.quanlydatbannhahang.gui;
 
@@ -75,9 +75,7 @@ public class PanelDatMon extends javax.swing.JPanel {
         this.addHierarchyListener(new java.awt.event.HierarchyListener() {
             @Override
             public void hierarchyChanged(java.awt.event.HierarchyEvent e) {
-                // Kiểm tra xem trạng thái SHOWING có thay đổi không
                 if ((e.getChangeFlags() & java.awt.event.HierarchyEvent.SHOWING_CHANGED) != 0) {
-                    // Nếu hiện tại Panel KHÔNG còn hiển thị trên màn hình
                     if (!isShowing() && isChanged) {
                         autoSavePhieuGoiMonDraft();
                         isChanged = false;
@@ -91,7 +89,7 @@ public class PanelDatMon extends javax.swing.JPanel {
                 }
 
                 try {
-                    saveDraftToSession(); // Lưu món vào Session
+                    saveDraftToSession();
                     String maPhieuDatContext = HoaDonDraftSession.getCurrentMaPhieuDatContext();
                     if (datMonContext == null || datMonContext.isBlank()) {
                         System.out.println("DEBUG: Thiếu maBanContext, không thể tự động lưu đầy đủ.");
@@ -112,10 +110,8 @@ public class PanelDatMon extends javax.swing.JPanel {
     }
 
     private void customUI() {
-        // Placeholder cho txtTimKiem
         setupPlaceholder(txtTimKiem, "Nhập tên món ăn");
 
-        // Thêm action listeners cho các button
         btnThanhToan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnThanhToanActionPerformed(evt);
@@ -142,7 +138,6 @@ public class PanelDatMon extends javax.swing.JPanel {
     public void setDatMonContext(String maBanContext) {
         String normalized = HoaDonDraftSession.normalizeMaBanContext(maBanContext);
         String resolvedContext = HoaDonDraftSession.resolveMaBanContext(normalized);
-        // boolean changed = !Objects.equals(this.datMonContext, resolvedContext);
 
         this.datMonContext = resolvedContext;
         this.maBanContextSet = HoaDonDraftSession.parseMaBanContextToSet(resolvedContext);
@@ -259,7 +254,6 @@ public class PanelDatMon extends javax.swing.JPanel {
     }
 
     private void setupPhieuGoiMonInteractions() {
-        // Phim tat: '+' tang, '-' giam, Delete xoa mon
         InputMap im = tablePhieuGoiMon.getInputMap(JComponent.WHEN_FOCUSED);
         ActionMap am = tablePhieuGoiMon.getActionMap();
 
@@ -500,7 +494,7 @@ public class PanelDatMon extends javax.swing.JPanel {
         if (newSelectedTables == null || newSelectedTables.isEmpty())
             return;
 
-        Set<String> oldBanSet = new HashSet<>(this.maBanContextSet); // Danh sách bàn cũ
+        Set<String> oldBanSet = new HashSet<>(this.maBanContextSet);
         String oldContext = this.datMonContext;
         String newContext = HoaDonDraftSession.normalizeMaBanContext(
                 newSelectedTables.stream().collect(Collectors.joining(",")));
@@ -509,51 +503,28 @@ public class PanelDatMon extends javax.swing.JPanel {
             return;
 
         try {
-            saveDraftToSession(); // Lưu món vào RAM[cite: 17]
+            saveDraftToSession();
 
-            // 1. Đồng bộ Database: Chuyển hóa đơn sang mã bàn mới[cite: 17]
             hoaDonService.chuyenBanChoHoaDonDraft(oldContext, newContext);
 
-            // 2. Nếu là flow đặt trước, cập nhật thêm bảng Chi tiết phiếu (để giữ lịch
-            // sử)[cite: 20]
             String maPhieuDat = HoaDonDraftSession.getCurrentMaPhieuDatContext();
             if (maPhieuDat != null && !maPhieuDat.isBlank()) {
                 ctpdbService.updateBanInPhieu(maPhieuDat, oldBanSet, newSelectedTables);
             }
 
-            // 3. Cập nhật trạng thái vật lý TRONG BẢNG BAN (Single Source of Truth)
-            // Giải phóng bàn cũ
             for (String maBan : oldBanSet) {
                 banService.capNhatTrangThaiBan(maBan, TrangThaiBan.TRONG);
             }
-            // Chiếm dụng bàn mới
             for (String maBan : newSelectedTables) {
                 banService.capNhatTrangThaiBan(maBan, TrangThaiBan.DANG_DUNG);
             }
 
-            // 4. Di trú Session RAM[cite: 16]
             HoaDonDraftSession.migrateContext(oldContext, newContext);
 
-            // 5. Cập nhật context hiện tại của Panel[cite: 17]
             setDatMonContext(newContext);
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Lỗi đổi bàn: " + e.getMessage());
-        }
-    }
-
-    private void capNhatTrangThaiBanSauKhiDoiBan(Set<String> oldBanSet, Set<String> newBanSet) {
-        BanService banService = new BanService();
-
-        Set<String> banDaHuyChon = new HashSet<>(oldBanSet);
-        banDaHuyChon.removeAll(newBanSet);
-
-        for (String maBan : banDaHuyChon) {
-            banService.capNhatTrangThaiBan(maBan, TrangThaiBan.TRONG);
-        }
-
-        for (String maBan : newBanSet) {
-            banService.capNhatTrangThaiBan(maBan, TrangThaiBan.DANG_DUNG);
         }
     }
 
@@ -616,12 +587,10 @@ public class PanelDatMon extends javax.swing.JPanel {
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
 
-        // Chỉ căn giữa các cột text/số thường
         tablePhieuGoiMon.getColumnModel().getColumn(PHIEU_COL_MA_MON).setCellRenderer(centerRenderer);
         tablePhieuGoiMon.getColumnModel().getColumn(PHIEU_COL_TEN_MON).setCellRenderer(centerRenderer);
         tablePhieuGoiMon.getColumnModel().getColumn(PHIEU_COL_SO_LUONG).setCellRenderer(centerRenderer);
 
-        // Dùng Renderer tiền tệ cho cột Đơn giá và Thành tiền
         tablePhieuGoiMon.getColumnModel().getColumn(PHIEU_COL_DON_GIA).setCellRenderer(getCurrencyRenderer());
         tablePhieuGoiMon.getColumnModel().getColumn(PHIEU_COL_THANH_TIEN).setCellRenderer(getCurrencyRenderer());
 
@@ -651,8 +620,6 @@ public class PanelDatMon extends javax.swing.JPanel {
 
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        // Chỉ căn giữa các cột từ 0 đến 4 và cột 6. Bỏ qua cột 5 (Lương) vì đã có
-        // Renderer riêng
         for (int i = 1; i < table.getColumnCount(); i++) {
             if (i != 4) {
                 table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
@@ -664,8 +631,6 @@ public class PanelDatMon extends javax.swing.JPanel {
 
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        // Chỉ căn giữa các cột từ 0 đến 4 và cột 6. Bỏ qua cột 5 (Lương) vì đã có
-        // Renderer riêng
         for (int i = 0; i < table.getColumnCount(); i++) {
             if (i != 2 && i != 3) {
                 table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
@@ -785,14 +750,12 @@ public class PanelDatMon extends javax.swing.JPanel {
         Color placeholderColor = new Color(153, 153, 153);
         Color textColor = new Color(0, 0, 0);
 
-        // Set text mac dinh va mau
         textField.setText(placeholder);
         textField.setForeground(placeholderColor);
 
         textField.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusGained(java.awt.event.FocusEvent evt) {
-                // Khi focus vao, neu la placeholder thi xoa
                 if (textField.getText().equals(placeholder)) {
                     textField.setText("");
                     textField.setForeground(textColor);
@@ -801,7 +764,6 @@ public class PanelDatMon extends javax.swing.JPanel {
 
             @Override
             public void focusLost(java.awt.event.FocusEvent evt) {
-                // Khi focus out, neu trong thi hien thi placeholder
                 if (textField.getText().isEmpty()) {
                     textField.setText(placeholder);
                     textField.setForeground(placeholderColor);
@@ -1048,7 +1010,6 @@ public class PanelDatMon extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtTimKiemActionPerformed
-        // TODO add your handling code here:
         filterTable();
 
     }// GEN-LAST:event_txtTimKiemActionPerformed
@@ -1110,7 +1071,6 @@ public class PanelDatMon extends javax.swing.JPanel {
     }// GEN-LAST:event_btnThanhToanActionPerformed
 
     private void btnQuayLaiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnQuayLaiActionPerformed
-        // TODO add your handling code here:
         java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
         if (parentFrame instanceof MainForm) {
             ((MainForm) parentFrame).goBackToPreviousPanel();

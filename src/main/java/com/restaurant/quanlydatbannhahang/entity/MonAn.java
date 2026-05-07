@@ -9,11 +9,11 @@ public class MonAn {
     private TrangThaiMonAn trangThai;
     private String urlHinhAnh;
 
-    // Constructor không tham số
+    
     public MonAn() {
     }
 
-    // Constructor đầy đủ
+    
     public MonAn(String maMon, String tenMon, double donGia, String donViTinh,
             LoaiMonAn tenLoai, TrangThaiMonAn trangThai, String urlHinhAnh) {
         this.maMon = maMon;
@@ -25,7 +25,7 @@ public class MonAn {
         this.urlHinhAnh = urlHinhAnh;
     }
 
-    // Getter và Setter
+    
     public String getMaMon() {
         return maMon;
     }
@@ -82,7 +82,7 @@ public class MonAn {
         this.urlHinhAnh = urlHinhAnh;
     }
 
-    // Các phương thức cần thiết
+    
     public boolean kiemTraConHang() {
         return trangThai == TrangThaiMonAn.CON;
     }

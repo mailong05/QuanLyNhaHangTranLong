@@ -24,7 +24,6 @@ public class PanelDanhSachNhanVien extends javax.swing.JPanel {
     }
 
     private void customUI() {
-        // Placeholder cho txtTimKiem
         setupPlaceholder(txtTimKiem, "Nhập tên hoặc số điện thoại");
 
         this.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -51,7 +50,6 @@ public class PanelDanhSachNhanVien extends javax.swing.JPanel {
             }
     });
 
-        // Gắn sự kiện quay về Trang Chủ
         MainForm.attachGoHomeListener(btnTrangChu, this);
     }
 
@@ -64,14 +62,12 @@ public class PanelDanhSachNhanVien extends javax.swing.JPanel {
         Color placeholderColor = new Color(153, 153, 153);
         Color textColor = new Color(0, 0, 0);
 
-        // Set text mac dinh va mau
         textField.setText(placeholder);
         textField.setForeground(placeholderColor);
 
         textField.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusGained(java.awt.event.FocusEvent evt) {
-                // Khi focus vao, neu la placeholder thi xoa
                 if (textField.getText().equals(placeholder)) {
                     textField.setText("");
                     textField.setForeground(textColor);
@@ -80,7 +76,6 @@ public class PanelDanhSachNhanVien extends javax.swing.JPanel {
 
             @Override
             public void focusLost(java.awt.event.FocusEvent evt) {
-                // Khi focus out, neu trong thi hien thi placeholder
                 if (textField.getText().isEmpty()) {
                     textField.setText(placeholder);
                     textField.setForeground(placeholderColor);
@@ -104,15 +99,12 @@ public class PanelDanhSachNhanVien extends javax.swing.JPanel {
 
     private void loadDataToComboBoxes() {
         try {
-            // Save listeners
             ActionListener[] chucVuListeners = cbFilterChucVu.getActionListeners();
 
-            // Remove listeners
             for (ActionListener listener : chucVuListeners) {
                 cbFilterChucVu.removeActionListener(listener);
             }
 
-            // Load ChucVu tu enum
             cbFilterChucVu.removeAllItems();
             cbFilterChucVu.addItem("Chức vụ");
             for (com.restaurant.quanlydatbannhahang.entity.ChucVu chucVu : com.restaurant.quanlydatbannhahang.entity.ChucVu
@@ -120,7 +112,6 @@ public class PanelDanhSachNhanVien extends javax.swing.JPanel {
                 cbFilterChucVu.addItem(chucVu.getDisplayName());
             }
 
-            // Re-add listeners
             for ( ActionListener listener : chucVuListeners) {
                 cbFilterChucVu.addActionListener(listener);
             }
@@ -157,7 +148,6 @@ public class PanelDanhSachNhanVien extends javax.swing.JPanel {
     private void centerTableColumns(JTable table) {
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        // Chỉ căn giữa các cột từ 0 đến 4 và cột 6. Bỏ qua cột 5 (Lương) vì đã có Renderer riêng
         for (int i = 0; i < table.getColumnCount(); i++) {
             if (i != 5) {
                 table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);

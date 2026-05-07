@@ -10,8 +10,8 @@ public class KhachHangService {
     private KhachHangDAO khachHangDAO;
 
     private static final String PHONE_PATTERN = "^0[1-9]\\d{8}$";
-    // \p{Lu}: Bất kỳ chữ cái Unicode nào ở dạng VIẾT HOA
-    // \p{Ll}: Bất kỳ chữ cái Unicode nào ở dạng VIẾT THƯỜNG
+    
+    
     private static final String HOTEN_PATTERN = "^[\\p{Lu}][\\p{Ll}]*(\\s[\\p{Lu}][\\p{Ll}]*)*$";
     private static final String MAKH_PATTERN = "^KH\\d{3}$";
 
@@ -23,9 +23,9 @@ public class KhachHangService {
         this.khachHangDAO = new KhachHangDAO();
     }
 
-    /**
-     * Lấy khách hàng theo mã
-     */
+    
+
+
     public KhachHang getKhachHangTheoMa(String maKH) {
         if (maKH == null || maKH.isBlank()) {
             throw new IllegalArgumentException("Mã khách hàng không được để trống");
@@ -42,16 +42,16 @@ public class KhachHangService {
         return khachHang;
     }
 
-    /**
-     * Lấy tất cả khách hàng
-     */
+    
+
+
     public List<KhachHang> getAllKhachHang() {
         return khachHangDAO.getAllKhachHang();
     }
 
-    /**
-     * Thêm khách hàng mới
-     */
+    
+
+
     public boolean themKhachHang(KhachHang khachHang) {
         validateKhachHang(khachHang);
 
@@ -98,9 +98,9 @@ public class KhachHangService {
 
     }
 
-    /**
-     * Cập nhật khách hàng
-     */
+    
+
+
     public boolean capNhatKhachHang(KhachHang khachHang) {
         validateKhachHang(khachHang);
         boolean success = khachHangDAO.capNhatKhachHang(khachHang);
@@ -110,9 +110,9 @@ public class KhachHangService {
         return true;
     }
 
-    /**
-     * Xóa khách hàng
-     */
+    
+
+
     public boolean xoaKhachHang(String maKH) {
         if (maKH == null || maKH.isBlank()) {
             throw new IllegalArgumentException("Mã khách hàng không được để trống");
@@ -127,9 +127,9 @@ public class KhachHangService {
         return true;
     }
 
-    /**
-     * Lấy khách hàng theo số điện thoại
-     */
+    
+
+
     public KhachHang getKhachHangTheoSDT(String sdt) {
         if (sdt == null || sdt.trim().isBlank()) {
             throw new IllegalArgumentException("Số điện thoại không được để trống");
@@ -140,9 +140,9 @@ public class KhachHangService {
         return khachHangDAO.getKhachHangTheoSDT(sdt);
     }
 
-    /**
-     * Cập nhật điểm tích lũy
-     */
+    
+
+
     public void capNhatDiemTichLuy(String maKH, int diemThem) {
         KhachHang khachHang = getKhachHangTheoMa(maKH);
         if (khachHang != null) {
@@ -152,9 +152,9 @@ public class KhachHangService {
         }
     }
 
-    /**
-     * Sử dụng điểm tích lũy
-     */
+    
+
+
     public boolean suDungDiemTichLuy(String maKH, int diemSuDung) {
         KhachHang khachHang = getKhachHangTheoMa(maKH);
         if (khachHang != null) {
@@ -166,26 +166,26 @@ public class KhachHangService {
         return false;
     }
 
-    /**
-     * Tính tổng số khách hàng
-     */
+    
+
+
     public int getTotalKhachHang() {
         List<KhachHang> list = getAllKhachHang();
         return list != null ? list.size() : 0;
     }
 
-    /**
-     * Kiểm tra khách hàng tồn tại
-     */
+    
+
+
     public boolean existKhachHang(String maKH) {
         return getKhachHangTheoMa(maKH) != null;
     }
 
-    /**
-     * Lấy mã khách hàng cuối cùng để sinh mã tiếp theo
-     * 
-     * @return Mã khách hàng cuối cùng (VD: KH000) hoặc null nếu bảng rỗng
-     */
+    
+
+
+
+
     public String getLastKhachHangID() {
         return khachHangDAO.getLastKhachHangID();
     }

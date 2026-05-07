@@ -5,18 +5,18 @@ public class ChiTietPhieuDatBan {
     private Ban ban;
     private String ghiChu;
 
-    // Constructor không tham số
+    
     public ChiTietPhieuDatBan() {
     }
 
-    // Constructor đầy đủ
+    
     public ChiTietPhieuDatBan(PhieuDatBan phieuDatBan, Ban ban, String ghiChu) {
         this.phieuDatBan = phieuDatBan;
         this.ban = ban;
         this.ghiChu = ghiChu;
     }
 
-    // Getter và Setter
+    
     public PhieuDatBan getPhieuDatBan() {
         return phieuDatBan;
     }

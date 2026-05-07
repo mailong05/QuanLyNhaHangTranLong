@@ -15,19 +15,19 @@ public class NhanVienDAO {
 	public NhanVienDAO() {
 	}
 
-	/**
-	 * Lấy mã nhân viên cuối cùng
-	 * 
-	 * @return Mã nhân viên cuối cùng (VD: NV015) hoặc null
-	 */
+	
+
+
+
+
 	public String getLastNhanVienID() {
 		return IDQueryHelper.getLastID("NhanVien", "maNV");
 	}
 
-	/**
-	 * Build NhanVien from ResultSet - package-private so other DAOs can use
-	 * internally
-	 */
+	
+
+
+
 	NhanVien buildNhanVienFromResultSet(ResultSet rs) {
 		try {
 			String chucVuStr = rs.getString("chucVu");
@@ -44,7 +44,7 @@ public class NhanVienDAO {
 					rs.getDouble("luongCoBan"),
 					trangThai);
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 			e.printStackTrace();
 			return null;
 		}
