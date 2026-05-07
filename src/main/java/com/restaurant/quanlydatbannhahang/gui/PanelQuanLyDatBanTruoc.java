@@ -254,7 +254,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                         btnDoiBan.setEnabled(false);
                 } else {
                         int modelRow = tableBan.convertRowIndexToModel(selectedRow);
-                        Object statusValue = tableBan.getModel().getValueAt(modelRow, 6);
+                        Object statusValue = tableBan.getModel().getValueAt(modelRow, 8);
                         String status = statusValue == null ? "" : statusValue.toString();
                         btnDoiBan.setEnabled(TrangThaiPhieuDat.DANG_CHO.getDisplayName().equals(status));
                 }
