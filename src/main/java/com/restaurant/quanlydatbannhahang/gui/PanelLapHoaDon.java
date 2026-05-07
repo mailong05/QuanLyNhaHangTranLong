@@ -1073,15 +1073,11 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
                     content.showText(String.valueOf(model.getValueAt(i, 1))); // SL
 
                     content.newLineAtOffset(50, 0);
-                    double donGia = com.restaurant.quanlydatbannhahang.util.CurrencyUtility
-                            .parseVND(String.valueOf(model.getValueAt(i, 2)));
-                    content.showText(CurrencyUtility.formatVND(donGia)); // Đơn giá
-
+                    double donGia = (Double) model.getValueAt(i, 2); 
+                    content.showText(CurrencyUtility.formatVND(donGia));
                     content.newLineAtOffset(100, 0);
-                    double thanhTien = com.restaurant.quanlydatbannhahang.util.CurrencyUtility
-                            .parseVND(String.valueOf(model.getValueAt(i, 3)));
-                    content.showText(CurrencyUtility.formatVND(thanhTien)); // Thành tiền
-
+                    double thanhTien = (Double) model.getValueAt(i, 3);
+                    content.showText(CurrencyUtility.formatVND(thanhTien));
                     content.endText();
                     currentY -= 20;
                 }
@@ -1094,23 +1090,23 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
                 content.stroke();
 
                 // Lấy giá trị số từ label và format lại bằng CurrencyUtility
-                String rawTongMon = com.restaurant.quanlydatbannhahang.util.CurrencyUtility
-                        .formatVND(com.restaurant.quanlydatbannhahang.util.CurrencyUtility
-                                .parseVND(lblTongTien.getText()));
-                String rawPhiDV = com.restaurant.quanlydatbannhahang.util.CurrencyUtility
-                        .formatVND(com.restaurant.quanlydatbannhahang.util.CurrencyUtility
+                String rawTongMon = CurrencyUtility.formatVND(
+                	    CurrencyUtility.parseVND(lblTongTien.getText())
+                	);
+                String rawPhiDV = CurrencyUtility
+                        .formatVND(CurrencyUtility
                                 .parseVND(lblPhiDichVu.getText()));
-                String rawGiamGia = com.restaurant.quanlydatbannhahang.util.CurrencyUtility
-                        .formatVND(com.restaurant.quanlydatbannhahang.util.CurrencyUtility
+                String rawGiamGia = CurrencyUtility
+                        .formatVND(CurrencyUtility
                                 .parseVND(lblTongTienGiamGia.getText()));
-                String rawThue = com.restaurant.quanlydatbannhahang.util.CurrencyUtility
-                        .formatVND(com.restaurant.quanlydatbannhahang.util.CurrencyUtility
+                String rawThue = CurrencyUtility
+                        .formatVND(CurrencyUtility
                                 .parseVND(lblThue.getText()));
-                String rawTienDatCoc = com.restaurant.quanlydatbannhahang.util.CurrencyUtility
-                        .formatVND(com.restaurant.quanlydatbannhahang.util.CurrencyUtility
+                String rawTienDatCoc = CurrencyUtility
+                        .formatVND(CurrencyUtility
                                 .parseVND(lblTienDatCocDaTru.getText()));
-                String rawFinal = com.restaurant.quanlydatbannhahang.util.CurrencyUtility
-                        .formatVND(com.restaurant.quanlydatbannhahang.util.CurrencyUtility
+                String rawFinal = CurrencyUtility
+                        .formatVND(CurrencyUtility
                                 .parseVND(lblTongThanhToan.getText()));
 
                 content.setFont(fontUnicode, 11);
@@ -1379,7 +1375,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         for (int row = 0; row < model.getRowCount(); row++) {
             String tenMon = String.valueOf(model.getValueAt(row, 0));
             int soLuong = Integer.parseInt(String.valueOf(model.getValueAt(row, 1)));
-            double donGia = com.restaurant.quanlydatbannhahang.util.CurrencyUtility
+            double donGia = CurrencyUtility
                     .parseVND(String.valueOf(model.getValueAt(row, 2)));
 
             String maMon = findMaMonByTenMon(tenMon);
@@ -1517,20 +1513,20 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         }
 
         lblTongTien
-                .setText("Tổng tiền: " + com.restaurant.quanlydatbannhahang.util.CurrencyUtility.formatVND(tongTien));
+                .setText("Tổng tiền: " + CurrencyUtility.formatVND(tongTien));
         lblPhiDichVu.setText(
-                "Phí dịch vụ: " + com.restaurant.quanlydatbannhahang.util.CurrencyUtility.formatVND(tienPhiDichVu));
+                "Phí dịch vụ: " + CurrencyUtility.formatVND(tienPhiDichVu));
         lblTongTienGiamGia.setText("Tổng tiền giảm giá (Tích lũy + Khuyến mãi): "
-                + com.restaurant.quanlydatbannhahang.util.CurrencyUtility.formatVND(tongGiamGia));
-        lblThue.setText("Thuế VAT: " + com.restaurant.quanlydatbannhahang.util.CurrencyUtility.formatVND(tienThueVat));
+                + CurrencyUtility.formatVND(tongGiamGia));
+        lblThue.setText("Thuế VAT: " + CurrencyUtility.formatVND(tienThueVat));
         if (tienDatCocDaTru > 0) {
             lblTienDatCocDaTru.setText("Tiền đặt cọc đã trừ: "
-                    + com.restaurant.quanlydatbannhahang.util.CurrencyUtility.formatVND(tienDatCocDaTru));
+                    + CurrencyUtility.formatVND(tienDatCocDaTru));
         } else {
             lblTienDatCocDaTru.setText("Tiền đặt cọc đã trừ: 0");
         }
         lblTongThanhToan.setText("Tổng tiền cần thanh toán: "
-                + com.restaurant.quanlydatbannhahang.util.CurrencyUtility.formatVND(tongThanhToan));
+                + CurrencyUtility.formatVND(tongThanhToan));
     }
 
     /**
