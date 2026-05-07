@@ -1268,14 +1268,18 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
             return;
         }
 
-        if (HoaDonDraftSession.getCurrentMaPhieuDatContext() == null
-                || HoaDonDraftSession.getCurrentMaPhieuDatContext().isBlank()) {
-            System.out.println("DEBUG: Mã phiếu đặt context rỗng, bỏ qua lưu hóa đơn.");
+        String currentMaPhieuDatContext = HoaDonDraftSession.getCurrentMaPhieuDatContext();
+        if (currentMaPhieuDatContext == null || currentMaPhieuDatContext.isBlank()) {
+            System.out.println("DEBUG: Mã phiếu đặt context rỗng, chỉ lưu nháp vào RAM, không lưu vào Database.");
             return;
         }
 
-        PhieuDatBan phieuDatBan = phieuDatBanService
-                .getPhieuDatBanTheoMa(HoaDonDraftSession.getCurrentMaPhieuDatContext());
+        PhieuDatBan phieuDatBan = phieuDatBanService.getPhieuDatBanTheoMa(currentMaPhieuDatContext);
+        if (phieuDatBan == null) {
+            System.out.println("DEBUG: Không tìm thấy PhiếuDatBan với mã " + currentMaPhieuDatContext
+                    + ", chỉ lưu nháp vào RAM, không lưu vào Database.");
+            return;
+        }
 
         HoaDon hoaDon = new HoaDon();
         hoaDon.setMaHD(maHD);

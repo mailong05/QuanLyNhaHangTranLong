@@ -166,6 +166,20 @@ public class PhieuDatBanService {
         return phieuDatBanDAO.getPhieuDatBanTheoMa(maPhieu);
     }
 
+    public PhieuDatBan getActivePhieuDatByBan(String maBan) {
+        if (maBan == null || maBan.isBlank()) {
+            return null;
+        }
+        List<PhieuDatBan> dsPhieu = phieuDatBanDAO.getPhieuDatBanTheoBan(maBan);
+        for (PhieuDatBan phieu : dsPhieu) {
+            if (phieu != null && (phieu.getTrangThai() == TrangThaiPhieuDat.DANG_CHO
+                    || phieu.getTrangThai() == TrangThaiPhieuDat.DANG_SU_DUNG)) {
+                return phieu;
+            }
+        }
+        return null;
+    }
+
     public void themPhieuDatBan(PhieuDatBan phieuDatBan) {
         validatePhieuDatBan(phieuDatBan); // Gọi validate đã refactor
         if (!phieuDatBanDAO.themPhieuDatBan(phieuDatBan)) {

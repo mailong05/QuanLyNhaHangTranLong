@@ -83,29 +83,33 @@ public class PanelDatMon extends javax.swing.JPanel {
                     // Nếu hiện tại Panel KHÔNG còn hiển thị trên màn hình
                     if (!isShowing() && isChanged) {
                         autoSavePhieuGoiMonDraft();
-//                        capNhatTrangThaiSauKhiLuu();
                         isChanged = false;
                     }
                 }
             }
 
             private void autoSavePhieuGoiMonDraft() {
-                // TODO Auto-generated method stub
-                // Chỉ lưu nếu có món ăn và chưa được lưu (draftSaved == false)
-                if (!phieuGoiMonMap.isEmpty()) {
-                    try {
-                        saveDraftToSession(); // Lưu món vào Session
-                        capNhatTrangThaiSauKhiLuu(); // Cập nhật trạng thái bàn xuống DB
-                        // Thông báo nhẹ vào Console hoặc một Label trạng thái thay vì JOptionPane
-                        JOptionPane.showMessageDialog(null, "Hệ thống: Đã tự động phiếu gọi món vào bộ nhớ tạm",
-                                "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-
-                    } catch (Exception e) {
-                        // Với Auto-save, chỉ hiện Popup khi có LỖI THỰC SỰ xảy ra
-                        JOptionPane.showMessageDialog(null, "Lỗi tự động lưu: " + e.getMessage());
-                    }
+                if (phieuGoiMonMap.isEmpty()) {
+                    return;
                 }
-                
+
+                try {
+                    saveDraftToSession(); // Lưu món vào Session
+                    String maPhieuDatContext = HoaDonDraftSession.getCurrentMaPhieuDatContext();
+                    if (datMonContext == null || datMonContext.isBlank()) {
+                        System.out.println("DEBUG: Thiếu maBanContext, không thể tự động lưu đầy đủ.");
+                    } else if (maPhieuDatContext == null || maPhieuDatContext.isBlank()) {
+                        System.out.println("DEBUG: Thiếu maPhieuDat cho bàn " + datMonContext
+                                + ", chỉ lưu nháp vào bộ nhớ tạm, không lưu vào Database");
+                    } else {
+                        capNhatTrangThaiSauKhiLuu();
+                    }
+                    JOptionPane.showMessageDialog(null, "Hệ thống: Đã tự động lưu nháp vào bộ nhớ tạm",
+                            "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, "Lỗi tự động lưu: " + e.getMessage());
+                }
             }
         });
     }
@@ -146,13 +150,35 @@ public class PanelDatMon extends javax.swing.JPanel {
         this.datMonContext = resolvedContext;
         this.maBanContextSet = HoaDonDraftSession.parseMaBanContextToSet(resolvedContext);
         HoaDonDraftSession.setCurrentMaBanContext(resolvedContext);
+        syncCurrentMaPhieuDatContext();
 
-        // if (changed) {
-        // loadDraftFromSession();
-        // }
         loadDraftFromSession();
         if (!HoaDonDraftSession.getCurrentMaPhieuDatContext().isBlank()) {
             capNhatTrangThaiSauKhiLuu();
+        }
+    }
+
+    private void syncCurrentMaPhieuDatContext() {
+        if (datMonContext == null || datMonContext.isBlank()) {
+            return;
+        }
+        if (HoaDonDraftSession.getCurrentMaPhieuDatContext() != null
+                && !HoaDonDraftSession.getCurrentMaPhieuDatContext().isBlank()) {
+            return;
+        }
+
+        PhieuDatBanService phieuDatBanService = new PhieuDatBanService();
+        for (String maBan : getMaBanSetFromContext()) {
+            if (maBan == null || maBan.isBlank()) {
+                continue;
+            }
+            PhieuDatBan activePhieu = phieuDatBanService.getActivePhieuDatByBan(maBan);
+            if (activePhieu != null) {
+                HoaDonDraftSession.setCurrentMaPhieuDatContext(activePhieu.getMaPhieuDat());
+                System.out.println("DEBUG: Đồng bộ maPhieuDatContext từ DB cho bàn " + datMonContext + " => "
+                        + activePhieu.getMaPhieuDat());
+                break;
+            }
         }
     }
 
@@ -441,14 +467,24 @@ public class PanelDatMon extends javax.swing.JPanel {
         lblTongTienTamTinh.setText(CurrencyUtility.formatVND(tongTien));    }
 
     private void saveDraftToSession() {
-        if (datMonContext != null && !datMonContext.isEmpty()) {
-            List<HoaDonDraftSession.DraftMonItem> draftItems = new ArrayList<>();
-            for (OrderItem item : phieuGoiMonMap.values()) {
-                draftItems.add(new HoaDonDraftSession.DraftMonItem(item.maMon, item.tenMon, item.soLuong, item.donGia));
-            }
-            HoaDonDraftSession.setCurrentMaBanContext(datMonContext);
-            HoaDonDraftSession.setMonItems(datMonContext, draftItems);
+        if (datMonContext == null || datMonContext.isBlank()) {
+            System.out.println("DEBUG: Không thể lưu draft vì datMonContext rỗng.");
+            return;
         }
+
+        syncCurrentMaPhieuDatContext();
+        if (HoaDonDraftSession.getCurrentMaPhieuDatContext() == null
+                || HoaDonDraftSession.getCurrentMaPhieuDatContext().isBlank()) {
+            System.out.println("DEBUG: Thiếu maPhieuDatContext cho bàn " + datMonContext
+                    + ", chỉ lưu nháp vào bộ nhớ tạm.");
+        }
+
+        List<HoaDonDraftSession.DraftMonItem> draftItems = new ArrayList<>();
+        for (OrderItem item : phieuGoiMonMap.values()) {
+            draftItems.add(new HoaDonDraftSession.DraftMonItem(item.maMon, item.tenMon, item.soLuong, item.donGia));
+        }
+        HoaDonDraftSession.setCurrentMaBanContext(datMonContext);
+        HoaDonDraftSession.setMonItems(datMonContext, draftItems);
     }
 
     private Set<String> getMaBanSetFromContext() {
