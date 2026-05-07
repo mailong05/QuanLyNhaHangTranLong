@@ -4,9 +4,7 @@
  */
 package com.restaurant.quanlydatbannhahang.gui;
 
-import com.restaurant.quanlydatbannhahang.entity.Ban;
 import com.restaurant.quanlydatbannhahang.entity.ChiTietHoaDon;
-import com.restaurant.quanlydatbannhahang.entity.ChiTietPhieuDatBan;
 import com.restaurant.quanlydatbannhahang.entity.HoaDon;
 import com.restaurant.quanlydatbannhahang.entity.KhachHang;
 import com.restaurant.quanlydatbannhahang.entity.KhuyenMai;
@@ -29,7 +27,6 @@ import com.restaurant.quanlydatbannhahang.service.MonAnService;
 import com.restaurant.quanlydatbannhahang.service.NhanVienService;
 import com.restaurant.quanlydatbannhahang.service.PhieuDatBanService;
 import com.restaurant.quanlydatbannhahang.service.ThueService;
-import com.restaurant.quanlydatbannhahang.service.ChiTietPhieuDatBanService;
 import com.restaurant.quanlydatbannhahang.util.ComboBoxEnumLoader;
 import com.restaurant.quanlydatbannhahang.util.CurrencyUtility;
 import com.restaurant.quanlydatbannhahang.util.IDGeneratorHelper;
@@ -37,7 +34,6 @@ import java.awt.Frame;
 import java.awt.event.ItemEvent;
 import java.io.File;
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -46,7 +42,6 @@ import java.util.List;
 import java.util.Map;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -56,7 +51,6 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
-import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 
 /**
  *

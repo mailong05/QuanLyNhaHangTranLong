@@ -1,7 +1,6 @@
 package com.restaurant.quanlydatbannhahang.gui;
 
 // UIConfiguration để setup FlatLaf L&F
-import com.restaurant.quanlydatbannhahang.gui.UIConfiguration;
 import com.restaurant.quanlydatbannhahang.service.TaiKhoanService;
 import com.restaurant.quanlydatbannhahang.service.AuthService.ValidationResult;
 

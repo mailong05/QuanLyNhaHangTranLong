@@ -8,7 +8,6 @@ import java.awt.event.MouseListener;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.text.NumberFormatter;
 
 import com.restaurant.quanlydatbannhahang.service.KhuyenMaiService;
 import com.restaurant.quanlydatbannhahang.util.ComboBoxEnumLoader;
@@ -18,8 +17,6 @@ import com.restaurant.quanlydatbannhahang.util.IDQueryHelper;
 import com.restaurant.quanlydatbannhahang.entity.KhuyenMai;
 import java.util.List;
 import java.time.LocalDate;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 
 public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseListener {
 

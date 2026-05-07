@@ -9,7 +9,6 @@ import javax.swing.*;
 
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.text.NumberFormatter;
 
 import com.restaurant.quanlydatbannhahang.service.NhanVienService;
 import com.restaurant.quanlydatbannhahang.util.ComboBoxEnumLoader;

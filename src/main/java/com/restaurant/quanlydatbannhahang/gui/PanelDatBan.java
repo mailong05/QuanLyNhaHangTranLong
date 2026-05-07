@@ -6,13 +6,10 @@ import java.util.*;
 import com.restaurant.quanlydatbannhahang.service.BanService;
 import com.restaurant.quanlydatbannhahang.service.KhuVucService;
 
-import com.restaurant.quanlydatbannhahang.service.ChiTietPhieuDatBanService;
 import com.restaurant.quanlydatbannhahang.session.HoaDonDraftSession;
 import com.restaurant.quanlydatbannhahang.entity.Ban;
 import com.restaurant.quanlydatbannhahang.entity.KhuVuc;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiBan;
-import com.restaurant.quanlydatbannhahang.entity.ChiTietPhieuDatBan;
-import com.restaurant.quanlydatbannhahang.entity.TrangThaiPhieuDat;
 
 public class PanelDatBan extends javax.swing.JPanel {
 

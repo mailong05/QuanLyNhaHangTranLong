@@ -2,8 +2,6 @@ package com.restaurant.quanlydatbannhahang.gui;
 
 // UIConfiguration để setup FlatLaf L&F
 
-import com.restaurant.quanlydatbannhahang.entity.TrangThaiBan;
-import com.restaurant.quanlydatbannhahang.service.BanService;
 import com.restaurant.quanlydatbannhahang.service.PhieuDatBanService;
 import com.restaurant.quanlydatbannhahang.session.HoaDonDraftSession;
 import com.restaurant.quanlydatbannhahang.session.SessionManager;
@@ -11,7 +9,6 @@ import com.restaurant.quanlydatbannhahang.session.SessionManager;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.swing.JOptionPane;
 
 public class LuaChonDatBanDialog extends javax.swing.JDialog {
 

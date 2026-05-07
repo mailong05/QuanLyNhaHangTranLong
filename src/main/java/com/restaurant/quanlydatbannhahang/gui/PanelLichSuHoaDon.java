@@ -9,13 +9,10 @@ import javax.swing.table.DefaultTableModel;
 import com.restaurant.quanlydatbannhahang.util.ComboBoxEnumLoader;
 import com.restaurant.quanlydatbannhahang.service.HoaDonService;
 import com.restaurant.quanlydatbannhahang.entity.HoaDon;
-import com.restaurant.quanlydatbannhahang.entity.KhuVuc;
-import com.restaurant.quanlydatbannhahang.entity.TrangThaiBan;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiHoaDon;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.text.DecimalFormat;
 
 public class PanelLichSuHoaDon extends javax.swing.JPanel {
     private HoaDonService hoaDonService;
