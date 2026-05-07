@@ -11,7 +11,7 @@ public class MonAnService {
     private MonAnDAO monAnDAO;
 
     private static final String MAMON_PATTERN = "^MA\\d{3}$";
-    private static final String TENMON_PATTERN = "^[\\p{Lu}][\\p{Ll}\\s]*$";
+    private static final String TENMON_PATTERN = "^[\\p{Lu}][\\p{L}\\s]*$";
     private static final Pattern maMonPattern = Pattern.compile(MAMON_PATTERN);
     private static final Pattern tenMonPattern = Pattern.compile(TENMON_PATTERN);
 

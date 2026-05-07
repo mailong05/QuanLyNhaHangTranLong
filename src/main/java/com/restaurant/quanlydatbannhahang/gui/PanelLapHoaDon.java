@@ -31,6 +31,7 @@ import com.restaurant.quanlydatbannhahang.service.PhieuDatBanService;
 import com.restaurant.quanlydatbannhahang.service.ThueService;
 import com.restaurant.quanlydatbannhahang.service.ChiTietPhieuDatBanService;
 import com.restaurant.quanlydatbannhahang.util.ComboBoxEnumLoader;
+import com.restaurant.quanlydatbannhahang.util.CurrencyUtility;
 import com.restaurant.quanlydatbannhahang.util.IDGeneratorHelper;
 import java.awt.Frame;
 import java.awt.event.ItemEvent;
@@ -84,7 +85,6 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
     private static final String MA_THUE_VAT_MAC_DINH = "TH001";
     private static final String MA_PHI_DICH_VU_MAC_DINH = "TH003";
     private boolean loadingKhuyenMai = false;
-    private double tongThanhToanLuuTam = 0;
 
     /**
      * Creates new form PanelLapHoaDon
@@ -496,26 +496,12 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         add(panelTrungTam, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 20, -1, 740));
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnLuuHoaDonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnLuuHoaDonActionPerformed
-        if (tableThongTinHoaDon.getRowCount() == 0) {
-            JOptionPane.showMessageDialog(this, "Chưa có dữ liệu món ăn để lưu hóa đơn.");
-            return;
-        }
+    private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTimKiemActionPerformed
+        // TODO add your handling code here:
+    	searchKhachHang();
+    }//GEN-LAST:event_txtTimKiemActionPerformed
 
-        try {
-            // Tạo hóa đơn với trạng thái CHUA_THANH_TOAN
-            thucHienLuuHoaDon(TrangThaiHoaDon.CHUA_THANH_TOAN);
-
-            // Lưu draft của hóa đơn
-            saveHoaDonDraftToSession();
-
-            JOptionPane.showMessageDialog(this, "Hóa đơn đã được lưu thành công!");
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Lỗi khi lưu hóa đơn: " + ex.getMessage());
-            ex.printStackTrace();
-        }
-    }// GEN-LAST:event_btnLuuHoaDonActionPerformed
-
+    
     private void btnDungDiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnDungDiemActionPerformed
         if (selectedKhachHang == null) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn khách hàng trước khi dùng điểm.");
@@ -591,7 +577,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
 
     private void performAutoSaveOnHide() {
         String context = HoaDonDraftSession.getCurrentMaBanContext();
-
+        String pdbContext = HoaDonDraftSession.getCurrentMaPhieuDatContext();
         /*
          * * ĐIỀU KIỆN QUAN TRỌNG:
          * 1. Context phải tồn tại (Nếu thanh toán xong, context đã bị set về null).
@@ -602,7 +588,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
                 saveHoaDonDraftToSession();
                 // Chỉ lưu trạng thái CHƯA_THANH_TOÁN khi nhân viên tự ý rời trang
                 thucHienLuuHoaDon(TrangThaiHoaDon.CHUA_THANH_TOAN);
-                System.out.println("Hệ thống: Tự động lưu hóa đơn nháp cho bàn " + context);
+                System.out.println("Hệ thống: Tự động lưu hóa đơn nháp cho phiếu đặt bàn " + pdbContext);
             } catch (Exception ex) {
                 // In lỗi ra console để debug, không dùng Dialog ở đây tránh gây treo UI khi
                 // chuyển trang
@@ -917,13 +903,14 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
     }
 
     private void searchKhachHang() {
+    	allKhachHang = khachHangService.getAllKhachHang();
         String key = txtTimKiem.getText().trim().toLowerCase();
         DefaultTableModel model = (DefaultTableModel) tableThongTinKhachHang.getModel();
         model.setRowCount(0);
         searchedKhachHang.clear();
 
         selectedKhachHang = null;
-        txtTenKhachHang.setText("");
+        txtTenKhachHang.setText("Khách vãng lai");
 
         if (key.isEmpty() || key.equals("nhập số điện thoại khách hàng")) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập số điện thoại", "Thông báo",
@@ -980,7 +967,6 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
             saveFile = new File(saveFile.getParentFile(), saveFile.getName() + ".pdf");
         }
 
-        DecimalFormat df = new DecimalFormat("#,###");
 
         try (PDDocument document = new PDDocument()) {
 
@@ -1058,12 +1044,12 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
                     content.newLineAtOffset(50, 0);
                     double donGia = com.restaurant.quanlydatbannhahang.util.CurrencyUtility
                             .parseVND(String.valueOf(model.getValueAt(i, 2)));
-                    content.showText(df.format(donGia)); // Đơn giá
+                    content.showText(CurrencyUtility.formatVND(donGia)); // Đơn giá
 
                     content.newLineAtOffset(100, 0);
                     double thanhTien = com.restaurant.quanlydatbannhahang.util.CurrencyUtility
                             .parseVND(String.valueOf(model.getValueAt(i, 3)));
-                    content.showText(df.format(thanhTien)); // Thành tiền
+                    content.showText(CurrencyUtility.formatVND(thanhTien)); // Thành tiền
 
                     content.endText();
                     currentY -= 20;
@@ -1217,18 +1203,6 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         }
     }
 
-    private void capNhatTrangThaiPhieuDatBanTruoc(String maPhieuDat, TrangThaiPhieuDat trangThai) {
-        if (maPhieuDat == null || maPhieuDat.isBlank() || trangThai == null) {
-            return;
-        }
-
-        try {
-            phieuDatBanService.capNhatTrangThaiPhieu(maPhieuDat.trim(), trangThai);
-        } catch (Exception ex) {
-            throw new RuntimeException(
-                    "Khong the cap nhat trang thai phieu dat ban truoc sau khi thanh toan: " + ex.getMessage(), ex);
-        }
-    }
 
     private void capNhatTrangThaiBan(String maBanContext) {
         // 1. Kiểm tra đầu vào
@@ -1508,7 +1482,6 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
             }
         }
 
-        tongThanhToanLuuTam = tongThanhToan;
 
         lblTongTien
                 .setText("Tổng tiền: " + com.restaurant.quanlydatbannhahang.util.CurrencyUtility.formatVND(tongTien));
@@ -1569,14 +1542,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         }
     }
 
-    private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtTimKiemActionPerformed
-        searchKhachHang();
-    }// GEN-LAST:event_txtTimKiemActionPerformed
-
-    private void txtMaNhanVienActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtMaNhanVienActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_txtMaNhanVienActionPerformed
-
+  
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDungDiem;
     private javax.swing.JButton btnInHoaDon;

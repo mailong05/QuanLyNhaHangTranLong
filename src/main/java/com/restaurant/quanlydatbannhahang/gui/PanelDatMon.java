@@ -83,7 +83,7 @@ public class PanelDatMon extends javax.swing.JPanel {
                     // Nếu hiện tại Panel KHÔNG còn hiển thị trên màn hình
                     if (!isShowing() && isChanged) {
                         autoSavePhieuGoiMonDraft();
-                        capNhatTrangThaiSauKhiLuu();
+//                        capNhatTrangThaiSauKhiLuu();
                         isChanged = false;
                     }
                 }

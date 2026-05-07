@@ -369,6 +369,10 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="txtTienDatCoc">
+              <Properties>
+                <Property name="editable" type="boolean" value="false"/>
+                <Property name="enabled" type="boolean" value="false"/>
+              </Properties>
             </Component>
           </SubComponents>
         </Container>

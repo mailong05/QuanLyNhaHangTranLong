@@ -3,6 +3,7 @@ package com.restaurant.quanlydatbannhahang.service;
 import java.sql.PreparedStatement;
 import java.util.List;
 
+import com.restaurant.quanlydatbannhahang.dao.NhanVienDAO;
 import com.restaurant.quanlydatbannhahang.dao.TaiKhoanDAO;
 import com.restaurant.quanlydatbannhahang.entity.NhanVien;
 import com.restaurant.quanlydatbannhahang.entity.QuyenHan;
@@ -16,7 +17,7 @@ import com.restaurant.quanlydatbannhahang.service.AuthService.ValidationResult;
 public class TaiKhoanService {
 
     private static TaiKhoanDAO taiKhoanDAO = new TaiKhoanDAO();
-
+    private NhanVienService nhanVienService = new NhanVienService();
     /**
      * Cập nhật mật khẩu cho tài khoản
      * Có validate password + username inside
@@ -69,8 +70,12 @@ public class TaiKhoanService {
 
     public boolean themTaiKhoan(String username, String password, String maNV, QuyenHan quyenHan) {
     	
-    	if(taiKhoanDAO.getTaiKhoanByMaNV(maNV) == null) {
-    		throw new IllegalArgumentException("Không tìm thấy nhân viến với mã "+ maNV);
+    	if(nhanVienService.getNhanVienTheoMa(maNV) == null) {
+    		throw new IllegalArgumentException("Mã nhân viên không tồn tại. Vui lòng tạo thông tin nhân viên trước!");
+    	}
+    	
+    	if(taiKhoanDAO.getTaiKhoanByMaNV(maNV) != null) {
+    		throw new IllegalArgumentException("Nhân viên có mã" + maNV + " đã có tài khoản!");
     	}
     	
         if (username == null || username.trim().isEmpty()) {
