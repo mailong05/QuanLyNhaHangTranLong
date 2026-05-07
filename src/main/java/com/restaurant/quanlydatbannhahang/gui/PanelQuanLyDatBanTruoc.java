@@ -244,11 +244,20 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
         }
 
         private void syncCapNhatButtonState() {
-                btnCapNhat.setEnabled(tableBan.getSelectedRow() >= 0);
-                btnChonMon.setEnabled(tableBan.getSelectedRow() >= 0);
-                btnXoa.setEnabled(tableBan.getSelectedRow() >= 0);
-                btnDoiBan.setEnabled(tableBan.getSelectedRow() >= 0);
+                int selectedRow = tableBan.getSelectedRow();
+                boolean hasSelection = selectedRow >= 0;
+                btnCapNhat.setEnabled(hasSelection);
+                btnChonMon.setEnabled(hasSelection);
+                btnXoa.setEnabled(hasSelection);
 
+                if (!hasSelection) {
+                        btnDoiBan.setEnabled(false);
+                } else {
+                        int modelRow = tableBan.convertRowIndexToModel(selectedRow);
+                        Object statusValue = tableBan.getModel().getValueAt(modelRow, 6);
+                        String status = statusValue == null ? "" : statusValue.toString();
+                        btnDoiBan.setEnabled(TrangThaiPhieuDat.DANG_CHO.getDisplayName().equals(status));
+                }
         }
 
         // Từ đây không chỉnh sửa bên dưới
@@ -744,8 +753,8 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                 try {
                         ctpdbService.updateBanInPhieu(maPDB, oldBanSet, newBanSet);
                 } catch (Exception e) {
-                        // TODO: handle exception
                         JOptionPane.showMessageDialog(this, e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+                        throw new RuntimeException(e);
                 }
 
                 // 2. Cập nhật UI bàn từ DB (sau khi thêm/xóa hoàn tất)
@@ -853,6 +862,20 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                                                 HoaDonDraftSession.migrateContext(oldContext, newContext);
                                         } else {
                                                 updateChiTietPhieuDatBan(maPDB, oldBanSet, newBanSet);
+                                        }
+
+                                        // Cập nhật trạng thái bàn mới/cũ sau khi đổi bàn
+                                        BanService banService = new BanService();
+                                        Set<String> banCanThem = new HashSet<>(newBanSet);
+                                        banCanThem.removeAll(oldBanSet);
+                                        Set<String> banCanXoa = new HashSet<>(oldBanSet);
+                                        banCanXoa.removeAll(newBanSet);
+
+                                        for (String maBan : banCanXoa) {
+                                                banService.capNhatTrangThaiBan(maBan, TrangThaiBan.TRONG);
+                                        }
+                                        for (String maBan : banCanThem) {
+                                                banService.capNhatTrangThaiBan(maBan, TrangThaiBan.DA_DAT);
                                         }
                                 }
                         }

@@ -114,8 +114,8 @@ public class PhieuDatBanService {
             if (!phonePattern.matcher(sdt).matches()) {
                 throw new IllegalArgumentException("Số điện thoại phải đủ 10 số và bắt đầu bằng số 0");
             }
-            
-            if(phieu.getTienDatCoc() < 0) {
+
+            if (phieu.getTienDatCoc() < 0) {
                 throw new IllegalArgumentException("Tiền đặt cọc phải >= 0");
             }
 
