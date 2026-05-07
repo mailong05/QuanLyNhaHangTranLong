@@ -1,7 +1,5 @@
 package com.restaurant.quanlydatbannhahang.entity;
-
 import java.time.LocalDateTime;
-
 public class PhieuDatBan {
     private String maPhieuDat;
     private KhachHang khachHang;
@@ -13,14 +11,10 @@ public class PhieuDatBan {
     private String ghiChu;
     private TrangThaiPhieuDat trangThai;
     private double tienDatCoc;
-
-    
     public PhieuDatBan() {
         this.ngayLapPhieu = LocalDateTime.now();
         this.tienDatCoc = 0;
     }
-
-    
     public PhieuDatBan(String maPhieuDat, KhachHang khachHang, NhanVien nhanVien, Ban ban, LocalDateTime ngayLapPhieu,
             LocalDateTime thoiGianDen, int soLuongNguoi, String ghiChu, TrangThaiPhieuDat trangThai) {
         this.maPhieuDat = maPhieuDat;
@@ -34,8 +28,6 @@ public class PhieuDatBan {
         this.trangThai = trangThai;
         this.tienDatCoc = 0;
     }
-
-    
     public PhieuDatBan(String maPhieuDat, KhachHang khachHang, NhanVien nhanVien, Ban ban, LocalDateTime ngayLapPhieu,
             LocalDateTime thoiGianDen, int soLuongNguoi, String ghiChu, TrangThaiPhieuDat trangThai,
             double tienDatCoc) {
@@ -50,89 +42,66 @@ public class PhieuDatBan {
         this.trangThai = trangThai;
         this.tienDatCoc = tienDatCoc;
     }
-
-    
     public String getMaPhieuDat() {
         return maPhieuDat;
     }
-
     public void setMaPhieuDat(String maPhieuDat) {
         this.maPhieuDat = maPhieuDat;
     }
-
     public KhachHang getKhachHang() {
         return khachHang;
     }
-
     public void setKhachHang(KhachHang khachHang) {
         this.khachHang = khachHang;
     }
-
     public NhanVien getNhanVien() {
         return nhanVien;
     }
-
     public void setNhanVien(NhanVien nhanVien) {
         this.nhanVien = nhanVien;
     }
-
     public Ban getBan() {
         return ban;
     }
-
     public void setBan(Ban ban) {
         this.ban = ban;
     }
-
     public LocalDateTime getNgayLapPhieu() {
         return ngayLapPhieu;
     }
-
     public void setNgayLapPhieu(LocalDateTime ngayLapPhieu) {
         this.ngayLapPhieu = ngayLapPhieu;
     }
-
     public LocalDateTime getThoiGianDen() {
         return thoiGianDen;
     }
-
     public void setThoiGianDen(LocalDateTime thoiGianDen) {
         this.thoiGianDen = thoiGianDen;
     }
-
     public int getSoLuongNguoi() {
         return soLuongNguoi;
     }
-
     public void setSoLuongNguoi(int soLuongNguoi) {
         this.soLuongNguoi = soLuongNguoi;
     }
-
     public String getGhiChu() {
         return ghiChu;
     }
-
     public void setGhiChu(String ghiChu) {
         this.ghiChu = ghiChu;
     }
-
     public TrangThaiPhieuDat getTrangThai() {
         return trangThai;
     }
-
     public void setTrangThai(TrangThaiPhieuDat trangThai) {
         this.trangThai = trangThai;
     }
-
     public double getTienDatCoc() {
         return tienDatCoc;
     }
-
     public void setTienDatCoc(double tienDatCoc) {
         this.tienDatCoc = tienDatCoc;
     }
-
-    
     public boolean taoPhieuDat() {
         if (khachHang != null && ban != null && ban.kiemTraBanTrong()) {
             this.trangThai = TrangThaiPhieuDat.DANG_CHO;
@@ -140,7 +109,6 @@ public class PhieuDatBan {
         }
         return false;
     }
-
     public boolean huyPhieu() {
         if (trangThai != TrangThaiPhieuDat.DA_HUY) {
             this.trangThai = TrangThaiPhieuDat.DA_HUY;
@@ -151,7 +119,6 @@ public class PhieuDatBan {
         }
         return false;
     }
-
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -159,7 +126,6 @@ public class PhieuDatBan {
         result = prime * result + ((maPhieuDat == null) ? 0 : maPhieuDat.hashCode());
         return result;
     }
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -176,7 +142,6 @@ public class PhieuDatBan {
             return false;
         return true;
     }
-
     @Override
     public String toString() {
         return "PhieuDatBan{" +

@@ -1,5 +1,4 @@
 package com.restaurant.quanlydatbannhahang.dao;
-
 import com.restaurant.quanlydatbannhahang.connectDB.DatabaseConnection;
 import com.restaurant.quanlydatbannhahang.entity.PhieuDatBan;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiPhieuDat;
@@ -11,25 +10,16 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
 public class PhieuDatBanDAO {
     private KhachHangDAO khachHangDAO;
     private NhanVienDAO nhanVienDAO;
-
     public PhieuDatBanDAO() {
         this.khachHangDAO = new KhachHangDAO();
         this.nhanVienDAO = new NhanVienDAO();
     }
-
-    
-
-
-
-
     public String getLastPhieuDatBanID() {
         return IDQueryHelper.getLastID("PhieuDatBan", "maPhieuDat");
     }
-
     private PhieuDatBan buildPhieuDatBanFromResultSet(ResultSet rs) {
         try {
             String maPhieuDat = rs.getString("maPhieuDat");
@@ -41,7 +31,6 @@ public class PhieuDatBanDAO {
             String ghiChu = rs.getString("ghiChu");
             String trangThaiStr = rs.getString("trangThai");
             double tienDatCoc = rs.getDouble("tienDatCoc");
-
             PhieuDatBan phieu = new PhieuDatBan();
             phieu.setMaPhieuDat(maPhieuDat);
             if (maKH != null && !maKH.isBlank()) {
@@ -54,24 +43,20 @@ public class PhieuDatBanDAO {
             phieu.setGhiChu(ghiChu);
             phieu.setTrangThai(TrangThaiPhieuDat.valueOf(trangThaiStr));
             phieu.setTienDatCoc(tienDatCoc);
-
             return phieu;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
-
     public boolean themPhieuDatBan(PhieuDatBan phieu) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "insert into PhieuDatBan (maPhieuDat, maKH, maNV, ngayLapPhieu, thoiGianDen, soLuongNguoi, ghiChu, trangThai, tienDatCoc) values (?,?,?,?,?,?,?,?,?)";
         try {
-            
             if (phieu.getNhanVien() == null || phieu.getNhanVien().getMaNV() == null) {
                 System.err.println("Lỗi: Mã nhân viên không được NULL");
                 return false;
             }
-
             PreparedStatement pstm = connection.prepareStatement(sql);
             pstm.setString(1, phieu.getMaPhieuDat());
             if (phieu.getKhachHang() == null || phieu.getKhachHang().getMaKH() == null) {
@@ -98,7 +83,6 @@ public class PhieuDatBanDAO {
         }
         return false;
     }
-
     public PhieuDatBan getPhieuDatBanTheoMa(String maPhieuDat) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from PhieuDatBan where maPhieuDat = ?";
@@ -114,7 +98,6 @@ public class PhieuDatBanDAO {
         }
         return null;
     }
-
     public List<PhieuDatBan> getAllPhieuDatBan() {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from PhieuDatBan";
@@ -133,7 +116,6 @@ public class PhieuDatBanDAO {
         }
         return dsPhieu;
     }
-
     public List<PhieuDatBan> getHoatDongGanDay() {
         List<PhieuDatBan> list = new ArrayList<>();
         Connection con = DatabaseConnection.getConnection();
@@ -148,11 +130,9 @@ public class PhieuDatBanDAO {
                 list.add(pdb);
             }
         } catch (Exception e) {
-            
         }
         return list;
     }
-
     public List<PhieuDatBan> getPhieuDatBanTheoNgay(LocalDate ngay) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from PhieuDatBan where convert(date, thoiGianDen) = ?";
@@ -172,7 +152,6 @@ public class PhieuDatBanDAO {
         }
         return dsPhieu;
     }
-
     public List<PhieuDatBan> getPhieuDatBanTheoKhachHang(String maKH) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from PhieuDatBan where maKH = ?";
@@ -192,7 +171,6 @@ public class PhieuDatBanDAO {
         }
         return dsPhieu;
     }
-
     public List<PhieuDatBan> getPhieuDatBanTheoBan(String maBan) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "select pdb.* from PhieuDatBan pdb " +
@@ -214,7 +192,6 @@ public class PhieuDatBanDAO {
         }
         return dsPhieu;
     }
-
     public List<PhieuDatBan> getPhieuDatBanTheoBan(String maBan, LocalDate ngay) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "select pdb.* from PhieuDatBan pdb " +
@@ -237,7 +214,6 @@ public class PhieuDatBanDAO {
         }
         return dsPhieu;
     }
-
     public boolean capNhatPhieuDatBan(PhieuDatBan phieu) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "update PhieuDatBan set maKH = ?, maNV = ?, thoiGianDen = ?, soLuongNguoi = ?, ghiChu = ?, trangThai = ? where maPhieuDat = ?";
@@ -257,7 +233,6 @@ public class PhieuDatBanDAO {
         }
         return false;
     }
-
     public boolean capNhatTrangThaiPhieu(String maPhieuDat, TrangThaiPhieuDat trangThai) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "update PhieuDatBan set trangThai = ? where maPhieuDat = ?";
@@ -271,7 +246,6 @@ public class PhieuDatBanDAO {
         }
         return false;
     }
-
     public boolean xoaPhieuDatBan(String maPhieuDat) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "delete from PhieuDatBan where maPhieuDat = ?";
@@ -284,7 +258,6 @@ public class PhieuDatBanDAO {
         }
         return false;
     }
-
     public List<PhieuDatBan> getPhieuDatBanTheoTrangThai(TrangThaiPhieuDat trangThai) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from PhieuDatBan where trangThai = ?";
@@ -304,10 +277,7 @@ public class PhieuDatBanDAO {
         }
         return dsPhieu;
     }
-
     public boolean capNhatKhachHangChoPhieu(String maPhieu, String maKH) {
-        
         return false;
     }
-
 }

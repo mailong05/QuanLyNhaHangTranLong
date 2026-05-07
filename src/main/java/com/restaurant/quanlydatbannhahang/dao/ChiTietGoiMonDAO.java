@@ -1,5 +1,4 @@
 package com.restaurant.quanlydatbannhahang.dao;
-
 import com.restaurant.quanlydatbannhahang.connectDB.DatabaseConnection;
 import com.restaurant.quanlydatbannhahang.entity.ChiTietGoiMon;
 import java.sql.Connection;
@@ -7,14 +6,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-
 public class ChiTietGoiMonDAO {
     private MonAnDAO monAnDAO;
-
     public ChiTietGoiMonDAO() {
         this.monAnDAO = new MonAnDAO();
     }
-
     private ChiTietGoiMon buildChiTietGoiMonFromResultSet(ResultSet rs) {
         try {
             String maPhieuGoi = rs.getString("maPhieuGoi");
@@ -23,7 +19,6 @@ public class ChiTietGoiMonDAO {
             double donGiaLuuTru = rs.getDouble("donGiaLuuTru");
             double thanhTien = rs.getDouble("thanhTien");
             String ghiChu = rs.getString("ghiChu");
-
             ChiTietGoiMon chiTiet = new ChiTietGoiMon();
             chiTiet.setMaPhieuGoi(maPhieuGoi);
             chiTiet.setMonAn(monAnDAO.getMonAnTheoMa(maMon));
@@ -31,14 +26,12 @@ public class ChiTietGoiMonDAO {
             chiTiet.setDonGiaLuuTru(donGiaLuuTru);
             chiTiet.setThanhTien(thanhTien);
             chiTiet.setGhiChu(ghiChu);
-
             return chiTiet;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
-
     public boolean themChiTietGoiMon(ChiTietGoiMon ct) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "insert into ChiTietGoiMon (maPhieuGoi, maMon, soLuong, donGiaLuuTru, thanhTien, ghiChu) values (?,?,?,?,?,?)";
@@ -56,7 +49,6 @@ public class ChiTietGoiMonDAO {
         }
         return false;
     }
-
     public ChiTietGoiMon getChiTietGoiMonTheoMa(String maPhieuGoi, String maMon) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from ChiTietGoiMon where maPhieuGoi = ? and maMon = ?";
@@ -73,7 +65,6 @@ public class ChiTietGoiMonDAO {
         }
         return null;
     }
-
     public List<ChiTietGoiMon> getChiTietGoiMonByPhieu(String maPhieuGoi) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from ChiTietGoiMon where maPhieuGoi = ?";
@@ -93,7 +84,6 @@ public class ChiTietGoiMonDAO {
         }
         return dsChiTiet;
     }
-
     public List<ChiTietGoiMon> getChiTietGoiMonByMon(String maMon) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from ChiTietGoiMon where maMon = ?";
@@ -113,7 +103,6 @@ public class ChiTietGoiMonDAO {
         }
         return dsChiTiet;
     }
-
     public boolean capNhatChiTietGoiMon(ChiTietGoiMon ct) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "update ChiTietGoiMon set soLuong = ?, donGiaLuuTru = ?, thanhTien = ?, ghiChu = ? where maPhieuGoi = ? and maMon = ?";
@@ -131,12 +120,9 @@ public class ChiTietGoiMonDAO {
         }
         return false;
     }
-
     public boolean capNhatTrangThaiChiTietGoiMon(String maPhieu, String maMon, String trangThai) {
-        
         return true;
     }
-
     public boolean capNhatSoLuong(String maPhieuGoi, String maMon, int soLuongMoi) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "update ChiTietGoiMon set soLuong = ? where maPhieuGoi = ? and maMon = ?";
@@ -151,7 +137,6 @@ public class ChiTietGoiMonDAO {
         }
         return false;
     }
-
     public boolean xoaChiTietGoiMon(String maPhieuGoi, String maMon) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "delete from ChiTietGoiMon where maPhieuGoi = ? and maMon = ?";
@@ -165,7 +150,6 @@ public class ChiTietGoiMonDAO {
         }
         return false;
     }
-
     public boolean xoaAllChiTietByMaPhieu(String maPhieu) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "delete from ChiTietGoiMon where maPhieuGoi = ?";
@@ -178,7 +162,6 @@ public class ChiTietGoiMonDAO {
         }
         return false;
     }
-
     public double tinhTongTienPhieu(String maPhieuGoi) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "select sum(thanhTien) from ChiTietGoiMon where maPhieuGoi = ?";

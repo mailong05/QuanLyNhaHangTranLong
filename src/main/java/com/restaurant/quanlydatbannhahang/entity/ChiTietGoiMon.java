@@ -1,5 +1,4 @@
 package com.restaurant.quanlydatbannhahang.entity;
-
 public class ChiTietGoiMon {
     private String maPhieuGoi;
     private MonAn monAn;
@@ -7,12 +6,8 @@ public class ChiTietGoiMon {
     private double donGiaLuuTru;
     private double thanhTien;
     private String ghiChu;
-
-    
     public ChiTietGoiMon() {
     }
-
-    
     public ChiTietGoiMon(String maPhieuGoi, MonAn monAn, int soLuong, double donGiaLuuTru,
             double thanhTien, String ghiChu) {
         this.maPhieuGoi = maPhieuGoi;
@@ -22,62 +17,46 @@ public class ChiTietGoiMon {
         this.thanhTien = thanhTien;
         this.ghiChu = ghiChu;
     }
-
-    
     public String getMaPhieuGoi() {
         return maPhieuGoi;
     }
-
     public void setMaPhieuGoi(String maPhieuGoi) {
         this.maPhieuGoi = maPhieuGoi;
     }
-
     public MonAn getMonAn() {
         return monAn;
     }
-
     public void setMonAn(MonAn monAn) {
         this.monAn = monAn;
     }
-
     public int getSoLuong() {
         return soLuong;
     }
-
     public void setSoLuong(int soLuong) {
         this.soLuong = soLuong;
     }
-
     public double getDonGiaLuuTru() {
         return donGiaLuuTru;
     }
-
     public void setDonGiaLuuTru(double donGiaLuuTru) {
         this.donGiaLuuTru = donGiaLuuTru;
     }
-
     public double getThanhTien() {
         return thanhTien;
     }
-
     public void setThanhTien(double thanhTien) {
         this.thanhTien = thanhTien;
     }
-
     public String getGhiChu() {
         return ghiChu;
     }
-
     public void setGhiChu(String ghiChu) {
         this.ghiChu = ghiChu;
     }
-
-    
     public double tinhThanhTien() {
         this.thanhTien = soLuong * donGiaLuuTru;
         return thanhTien;
     }
-
     public boolean tangSoLuong(int n) {
         if (n > 0) {
             this.soLuong += n;
@@ -86,7 +65,6 @@ public class ChiTietGoiMon {
         }
         return false;
     }
-
     public boolean giamSoLuong(int n) {
         if (n > 0 && soLuong - n > 0) {
             this.soLuong -= n;
@@ -95,7 +73,6 @@ public class ChiTietGoiMon {
         }
         return false;
     }
-
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -104,7 +81,6 @@ public class ChiTietGoiMon {
         result = prime * result + ((monAn == null) ? 0 : monAn.hashCode());
         return result;
     }
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -126,7 +102,6 @@ public class ChiTietGoiMon {
             return false;
         return true;
     }
-
     @Override
     public String toString() {
         return "ChiTietGoiMon{" +

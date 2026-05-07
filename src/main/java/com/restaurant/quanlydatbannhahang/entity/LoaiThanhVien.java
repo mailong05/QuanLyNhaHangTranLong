@@ -1,22 +1,16 @@
 package com.restaurant.quanlydatbannhahang.entity;
-
 public enum LoaiThanhVien {
 	VIP("VIP"),
 	VANG("VÀNG"),
 	BAC("BẠC"),
 	DONG("ĐỒNG");
-
 	private final String displayName;
-
 	LoaiThanhVien(String displayName) {
-		
 		this.displayName = displayName;
 	}
-
 	public String getDisplayName() {
 		return displayName;
 	}
-
 	public static LoaiThanhVien fromDisplayName(String text) {
 		for (LoaiThanhVien b : LoaiThanhVien.values()) {
 			if (b.displayName.equalsIgnoreCase(text)) {
@@ -25,5 +19,4 @@ public enum LoaiThanhVien {
 		}
 		return null;
 	}
-
 }

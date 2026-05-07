@@ -1,47 +1,27 @@
 package com.restaurant.quanlydatbannhahang.service;
-
 import java.sql.PreparedStatement;
 import java.util.List;
-
 import com.restaurant.quanlydatbannhahang.dao.NhanVienDAO;
 import com.restaurant.quanlydatbannhahang.dao.TaiKhoanDAO;
 import com.restaurant.quanlydatbannhahang.entity.NhanVien;
 import com.restaurant.quanlydatbannhahang.entity.QuyenHan;
 import com.restaurant.quanlydatbannhahang.entity.TaiKhoan;
 import com.restaurant.quanlydatbannhahang.service.AuthService.ValidationResult;
-
-
-
-
-
 public class TaiKhoanService {
-
     private static TaiKhoanDAO taiKhoanDAO = new TaiKhoanDAO();
     private NhanVienService nhanVienService = new NhanVienService();
-    
-
-
-
-
-
-
-
-
     public static ValidationResult updatePassword(String username, String newPassword, String confirmPassword) {
         ValidationResult validationPassword = AuthService.validatePassword(newPassword);
         if (!validationPassword.success) {
             return validationPassword;
         }
-
         ValidationResult validationConfirm = AuthService.validateConfirmPassword(newPassword, confirmPassword);
         if (!validationConfirm.success) {
             return validationConfirm;
         }
-
         if (username == null || username.isEmpty()) {
             return new ValidationResult(false, "Tên đăng nhập không được để trống");
         }
-
         boolean updateSuccess = taiKhoanDAO.updatePassword(username, newPassword);
         if (updateSuccess) {
             return new ValidationResult(true, "Cập nhật mật khẩu thành công");
@@ -49,12 +29,9 @@ public class TaiKhoanService {
             return new ValidationResult(false, "Lỗi cập nhật mật khẩu từ cơ sở dữ liệu. Vui lòng thử lại!");
         }
     }
-
     public List<TaiKhoan> getAllTaiKhoan() {
-        
         return taiKhoanDAO.getAllTaiKhoan();
     }
-
     public String getPasswordByUsername(String username, String maNV) {
         if (username == null || maNV == null)
             throw new IllegalArgumentException("username null hoặc maNV null");
@@ -64,20 +41,15 @@ public class TaiKhoanService {
         if (taiKhoanDAO.getPasswordByUsernameAndID(username, maNV) == null) {
             throw new RuntimeException("Không tìm thấy thông tin mật khẩu của tài khoản");
         }
-
         return taiKhoanDAO.getPasswordByUsernameAndID(username, maNV);
     }
-
     public boolean themTaiKhoan(String username, String password, String maNV, QuyenHan quyenHan) {
-    	
     	if(nhanVienService.getNhanVienTheoMa(maNV) == null) {
     		throw new IllegalArgumentException("Mã nhân viên không tồn tại. Vui lòng tạo thông tin nhân viên trước!");
     	}
-    	
     	if(taiKhoanDAO.getTaiKhoanByMaNV(maNV) != null) {
     		throw new IllegalArgumentException("Nhân viên có mã" + maNV + " đã có tài khoản!");
     	}
-    	
         if (username == null || username.trim().isEmpty()) {
             throw new IllegalArgumentException("Tên tài khoản không được để trống");
         }
@@ -90,7 +62,6 @@ public class TaiKhoanService {
         if (quyenHan == null) {
             throw new IllegalArgumentException("Quyền hạn không hợp lệ");
         }
-
         TaiKhoan tk = new TaiKhoan();
         tk.setUsername(username);
         tk.setPassword(password);
@@ -98,7 +69,6 @@ public class TaiKhoanService {
         tk.setQuyenHan(quyenHan);
         return taiKhoanDAO.themTaiKhoan(tk);
     }
-
     public boolean capNhatTaiKhoan(String username, String maNV, QuyenHan quyenHan) {
         if (username == null || username.trim().isEmpty()) {
             throw new IllegalArgumentException("Tên tài khoản không được để trống");
@@ -109,21 +79,18 @@ public class TaiKhoanService {
         if (quyenHan == null) {
             throw new IllegalArgumentException("Quyền hạn không hợp lệ");
         }
-
         TaiKhoan tk = new TaiKhoan();
         tk.setUsername(username);
         tk.setNhanVien(new NhanVien(maNV, null, null, null, null, 0, null));
         tk.setQuyenHan(quyenHan);
         return taiKhoanDAO.capNhatTaiKhoan(tk);
     }
-
     public boolean xoaTaiKhoan(String username) {
         if (username == null || username.trim().isEmpty()) {
             throw new IllegalArgumentException("Tên tài khoản không được để trống");
         }
         return taiKhoanDAO.xoaTaiKhoan(username);
     }
-
     public boolean resetMatKhauMacDinh(String username) {
         if (username == null || username.trim().isEmpty()) {
             throw new IllegalArgumentException("Tên tài khoản không được để trống");

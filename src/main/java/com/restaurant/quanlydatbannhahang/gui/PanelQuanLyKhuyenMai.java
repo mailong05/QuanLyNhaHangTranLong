@@ -1,14 +1,11 @@
 package com.restaurant.quanlydatbannhahang.gui;
-
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-
 import com.restaurant.quanlydatbannhahang.service.KhuyenMaiService;
 import com.restaurant.quanlydatbannhahang.util.ComboBoxEnumLoader;
 import com.restaurant.quanlydatbannhahang.util.CurrencyUtility;
@@ -17,32 +14,24 @@ import com.restaurant.quanlydatbannhahang.util.IDQueryHelper;
 import com.restaurant.quanlydatbannhahang.entity.KhuyenMai;
 import java.util.List;
 import java.time.LocalDate;
-
 public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseListener {
-
         private ActionListener cbFilterTrangThaiListener;
-
         public PanelQuanLyKhuyenMai() {
-
                 initComponents();
                 customUI();
                 loadDataToComboBoxes();
                 loadDataToTable();
                 fillTxtMaKhuyenMai();
         }
-
         private void customUI() {
                 setupPlaceholder(txtTimKiem, "Nhập tên hoặc mã khuyến mãi");
-
                 ComboBoxEnumLoader.loadTrangThaiKhuyenMaiToComboBox(cbFilterTrangThai);
-
                 if (dpNgayBatDau != null) {
                         dpNgayBatDau.setDate(LocalDate.now());
                 }
                 if (dbNgayKetThuc != null) {
                         dbNgayKetThuc.setDate(LocalDate.now());
                 }
-
                 this.addMouseListener(new java.awt.event.MouseAdapter() {
                         @Override
                         public void mousePressed(java.awt.event.MouseEvent evt) {
@@ -54,7 +43,6 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                                 }
                         }
                 });
-
                 tableKhuyenMai.addMouseListener(this);
                 tableKhuyenMai.getSelectionModel().addListSelectionListener(e -> {
                         if (!e.getValueIsAdjusting()) {
@@ -65,7 +53,6 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                                 syncCapNhatButtonState();
                         }
                 });
-
                 for (int i = 0; i < tableKhuyenMai.getColumnCount(); i++) {
                         tableKhuyenMai.getColumnModel().getColumn(i).setCellRenderer(new DefaultTableCellRenderer() {
                                 @Override
@@ -82,21 +69,16 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                                 }
                         });
                 }
-
                 MainForm.attachGoHomeListener(btnTrangChu, this);
                 syncCapNhatButtonState();
         }
-
         private void loadDataToComboBoxes() {
                 try {
                         ActionListener[] trangThaiListeners = cbFilterTrangThai.getActionListeners();
-
                         for (ActionListener listener : trangThaiListeners) {
                                 cbFilterTrangThai.removeActionListener(listener);
                         }
-
                         ComboBoxEnumLoader.loadTrangThaiKhuyenMaiToComboBox(cbTrangThai);
-
                         for (ActionListener listener : trangThaiListeners) {
                                 cbFilterTrangThai.addActionListener(listener);
                         }
@@ -105,25 +87,20 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                         JOptionPane.showMessageDialog(this, "Lỗi load dữ liệu filter: " + e.getMessage());
                 }
         }
-
         private void loadDataToTable() {
                 loadFilteredData();
         }
-
         private void loadFilteredData() {
                 try {
                         KhuyenMaiService service = new KhuyenMaiService();
                         List<KhuyenMai> list = service.getAllKhuyenMai();
                         String selectedTrangThai = (String) cbFilterTrangThai.getSelectedItem();
-
                         DefaultTableModel model = (DefaultTableModel) tableKhuyenMai.getModel();
                         model.setRowCount(0);
-
                         for (KhuyenMai km : list) {
                                 if (km.getTrangThai() != com.restaurant.quanlydatbannhahang.entity.TrangThaiKhuyenMai.CON_AP_DUNG) {
                                         continue;
                                 }
-
                                 model.addRow(new Object[] {
                                                 km.getMaKM(),
                                                 km.getTenKM(),
@@ -135,7 +112,6 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                                 });
                         }
                         centerTableColumns(tableKhuyenMai);
-
                         DefaultTableCellRenderer currencyRenderer = new DefaultTableCellRenderer() {
                                 @Override
                                 protected void setValue(Object value) {
@@ -155,22 +131,18 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                         JOptionPane.showMessageDialog(this, "Lỗi load dữ liệu: " + e.getMessage());
                 }
         }
-
         private void searchByText() {
                 try {
                         KhuyenMaiService service = new KhuyenMaiService();
                         List<KhuyenMai> list = service.getAllKhuyenMai();
                         String searchText = txtTimKiem.getText().trim().toLowerCase();
                         String selectedTrangThai = (String) cbFilterTrangThai.getSelectedItem();
-
                         DefaultTableModel model = (DefaultTableModel) tableKhuyenMai.getModel();
                         model.setRowCount(0);
-
                         for (KhuyenMai km : list) {
                                 if (km.getTrangThai() != com.restaurant.quanlydatbannhahang.entity.TrangThaiKhuyenMai.CON_AP_DUNG) {
                                         continue;
                                 }
-
                                 if (!searchText.isEmpty()) {
                                         String maKM = km.getMaKM() != null ? km.getMaKM().toLowerCase()
                                                         : "";
@@ -180,7 +152,6 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                                                 continue;
                                         }
                                 }
-
                                 model.addRow(new Object[] {
                                                 km.getMaKM(),
                                                 km.getTenKM(),
@@ -192,7 +163,6 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                                 });
                         }
                         centerTableColumns(tableKhuyenMai);
-
                         DefaultTableCellRenderer currencyRenderer = new DefaultTableCellRenderer() {
                                 @Override
                                 protected void setValue(Object value) {
@@ -212,7 +182,6 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                         JOptionPane.showMessageDialog(this, "Lỗi tìm kiếm dữ liệu: " + e.getMessage());
                 }
         }
-
         private void loadDataFromRow(int rowIndex) {
                 try {
                         String maKM = (String) tableKhuyenMai.getValueAt(rowIndex, 0);
@@ -222,12 +191,10 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                         double giaTriGiam = (double) tableKhuyenMai.getValueAt(rowIndex, 2);
                         Object dieuKienObj = tableKhuyenMai.getValueAt(rowIndex, 5);
                         String trangThai = (String) tableKhuyenMai.getValueAt(rowIndex, 6);
-
                         txtMaKhuyenMai.setText(maKM);
                         txtTenKhuyenMai.setText(tenKM);
                         txtGiaTriGiam.setText(
                                         CurrencyUtility.formatVND(giaTriGiam));
-                        
                         if (ngayBDObj instanceof LocalDate && dpNgayBatDau != null) {
                                 dpNgayBatDau.setDate((LocalDate) ngayBDObj);
                         }
@@ -245,7 +212,6 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                         JOptionPane.showMessageDialog(this, "Lỗi khi load dữ liệu từ row: " + e.getMessage());
                 }
         }
-
         private void clearFields() {
                 txtTenKhuyenMai.setText("");
                 txtGiaTriGiam.setText("");
@@ -258,12 +224,10 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                         dbNgayKetThuc.setDate(LocalDate.now());
                 }
         }
-
         private void syncCapNhatButtonState() {
                 btnCapNhat.setEnabled(tableKhuyenMai.getSelectedRow() >= 0);
                 btnXoa.setEnabled(tableKhuyenMai.getSelectedRow() >= 0);
         }
-
         public void refreshData() {
                 clearFields();
                 fillTxtMaKhuyenMai();
@@ -274,32 +238,22 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                 tableKhuyenMai.clearSelection();
                 syncCapNhatButtonState();
         }
-
         private void fillTxtMaKhuyenMai() {
                 String lastID = IDQueryHelper.getLastID("KhuyenMai", "maKM");
                 String maKMNew = (lastID == null || lastID.isEmpty()) ? IDGeneratorHelper.generateDefaultID("KM")
                                 : IDGeneratorHelper.generateNextIDFromFullID(lastID);
                 txtMaKhuyenMai.setText(maKMNew);
         }
-
         private boolean isMouseOverTable(java.awt.event.MouseEvent evt) {
                 java.awt.Point p = evt.getPoint();
                 java.awt.Point tablePoint = SwingUtilities.convertPoint(this, p, tableKhuyenMai);
                 return tableKhuyenMai.getBounds().contains(tablePoint);
         }
-
-        /**
-         * Tao placeholder cho TextField
-         * Khi focus vao, placeholder bien mat
-         * Khi focus out va trong, placeholder xuat hien lai
-         */
         private void setupPlaceholder(JTextField textField, String placeholder) {
                 Color placeholderColor = new Color(153, 153, 153);
                 Color textColor = new Color(0, 0, 0);
-
                 textField.setText(placeholder);
                 textField.setForeground(placeholderColor);
-
                 textField.addFocusListener(new java.awt.event.FocusAdapter() {
                         @Override
                         public void focusGained(java.awt.event.FocusEvent evt) {
@@ -308,7 +262,6 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                                         textField.setForeground(textColor);
                                 }
                         }
-
                         @Override
                         public void focusLost(java.awt.event.FocusEvent evt) {
                                 if (textField.getText().isEmpty()) {
@@ -318,13 +271,11 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                         }
                 });
         }
-
         private void resetPlaceholder(JTextField textField, String placeholder) {
                 Color placeholderColor = new Color(153, 153, 153);
                 textField.setText(placeholder);
                 textField.setForeground(placeholderColor);
         }
-
         // <editor-fold defaultstate="collapsed" desc="Generated
         // <editor-fold defaultstate="collapsed" desc="Generated
         // <editor-fold defaultstate="collapsed" desc="Generated
@@ -333,7 +284,6 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
         // <editor-fold defaultstate="collapsed" desc="Generated
         // Code">//GEN-BEGIN:initComponents
         private void initComponents() {
-
                 pnlHeader = new javax.swing.JPanel();
                 lblTitle = new javax.swing.JLabel();
                 pnlThongTinKhuyenMai = new javax.swing.JPanel();
@@ -363,25 +313,19 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                 btnCapNhat = new javax.swing.JButton();
                 btnXoa = new javax.swing.JButton();
                 btnThem = new javax.swing.JButton();
-
                 setBackground(new java.awt.Color(255, 251, 233));
                 setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 60, 20, 60));
                 setLayout(new java.awt.BorderLayout(0, 15));
-
                 pnlHeader.setBackground(new java.awt.Color(255, 251, 233));
                 pnlHeader.setLayout(new java.awt.BorderLayout(0, 15));
-
-                lblTitle.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+                lblTitle.setFont(new java.awt.Font("Segoe UI", 0, 18));
                 lblTitle.setText("Quản lý các chương trình khuyến mãi và giảm giá  ");
                 pnlHeader.add(lblTitle, java.awt.BorderLayout.WEST);
-
                 pnlThongTinKhuyenMai.setBackground(new java.awt.Color(255, 251, 233));
-
                 lblMaKhuyenMai.setText("Mã khuyến mãi:");
-                lblMaKhuyenMai.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-
+                lblMaKhuyenMai.setFont(new java.awt.Font("Segoe UI", 0, 14));
                 txtMaKhuyenMai.setEditable(false);
-                txtMaKhuyenMai.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+                txtMaKhuyenMai.setFont(new java.awt.Font("Segoe UI", 0, 14));
                 txtMaKhuyenMai.setFocusable(false);
                 txtMaKhuyenMai.setPreferredSize(new java.awt.Dimension(64, 35));
                 txtMaKhuyenMai.addActionListener(new java.awt.event.ActionListener() {
@@ -389,56 +333,41 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                                 txtMaKhuyenMaiActionPerformed(evt);
                         }
                 });
-
                 lblTenKhuyenMai.setText("Tên khuyến mãi:");
-                lblTenKhuyenMai.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-
-                txtTenKhuyenMai.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+                lblTenKhuyenMai.setFont(new java.awt.Font("Segoe UI", 0, 14));
+                txtTenKhuyenMai.setFont(new java.awt.Font("Segoe UI", 0, 14));
                 txtTenKhuyenMai.setPreferredSize(new java.awt.Dimension(64, 35));
-
                 lblNgayBatDau.setText("Ngày bắt đầu:");
-                lblNgayBatDau.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-
+                lblNgayBatDau.setFont(new java.awt.Font("Segoe UI", 0, 14));
                 lblNgayKetThuc.setText("Ngày kết thúc:");
-                lblNgayKetThuc.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-
+                lblNgayKetThuc.setFont(new java.awt.Font("Segoe UI", 0, 14));
                 lblGiaTriGiam.setText("Giá trị giảm:");
-                lblGiaTriGiam.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-
-                txtGiaTriGiam.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+                lblGiaTriGiam.setFont(new java.awt.Font("Segoe UI", 0, 14));
+                txtGiaTriGiam.setFont(new java.awt.Font("Segoe UI", 0, 14));
                 txtGiaTriGiam.setPreferredSize(new java.awt.Dimension(64, 35));
                 txtGiaTriGiam.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
                                 txtGiaTriGiamActionPerformed(evt);
                         }
                 });
-
-                txtTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+                txtTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14));
                 txtTimKiem.setPreferredSize(new java.awt.Dimension(64, 35));
-
                 btnTimKiem.setText("Tìm kiếm");
-                btnTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+                btnTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14));
                 btnTimKiem.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
                                 btnTimKiemActionPerformed(evt);
                         }
                 });
-
                 lblDieuKienToiThieu.setText("Điều kiện tối thiểu:");
-                lblDieuKienToiThieu.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-
-                txtDieuKienToiThieu.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+                lblDieuKienToiThieu.setFont(new java.awt.Font("Segoe UI", 0, 14));
+                txtDieuKienToiThieu.setFont(new java.awt.Font("Segoe UI", 0, 14));
                 txtDieuKienToiThieu.setPreferredSize(new java.awt.Dimension(64, 35));
-
                 lblTrangThai.setText("Trạng thái:");
-                lblTrangThai.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-
+                lblTrangThai.setFont(new java.awt.Font("Segoe UI", 0, 14));
                 cbTrangThai.setPreferredSize(new java.awt.Dimension(72, 35));
-
                 dbNgayKetThuc.setPreferredSize(new java.awt.Dimension(143, 35));
-
                 dpNgayBatDau.setPreferredSize(new java.awt.Dimension(143, 35));
-
                 cbFilterTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(
                                 new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
                 cbFilterTrangThai.addActionListener(new java.awt.event.ActionListener() {
@@ -446,7 +375,6 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                                 cbFilterTrangThaiActionPerformed(evt);
                         }
                 });
-
                 javax.swing.GroupLayout pnlThongTinKhuyenMaiLayout = new javax.swing.GroupLayout(pnlThongTinKhuyenMai);
                 pnlThongTinKhuyenMai.setLayout(pnlThongTinKhuyenMaiLayout);
                 pnlThongTinKhuyenMaiLayout.setHorizontalGroup(
@@ -653,14 +581,10 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                                                                                                                 35,
                                                                                                                 Short.MAX_VALUE)))
                                                                 .addContainerGap()));
-
                 pnlHeader.add(pnlThongTinKhuyenMai, java.awt.BorderLayout.PAGE_END);
-
                 add(pnlHeader, java.awt.BorderLayout.PAGE_START);
-
                 tableKhuyenMai.setModel(new javax.swing.table.DefaultTableModel(
                                 new Object[][] {
-
                                 },
                                 new String[] {
                                                 "Mã khuyến mãi", "Tên khuyến mãi", "Giá trị giảm", "Ngày bắt đầu",
@@ -674,85 +598,70 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                         boolean[] canEdit = new boolean[] {
                                         false, false, false, false, false, false, false
                         };
-
                         public Class getColumnClass(int columnIndex) {
                                 return types[columnIndex];
                         }
-
                         public boolean isCellEditable(int rowIndex, int columnIndex) {
                                 return canEdit[columnIndex];
                         }
                 });
                 tableKhuyenMai.setRowHeight(35);
                 scrTableKhuyenMai.setViewportView(tableKhuyenMai);
-
                 add(scrTableKhuyenMai, java.awt.BorderLayout.CENTER);
-
                 pnlButton.setBackground(new java.awt.Color(255, 251, 233));
                 pnlButton.setLayout(new java.awt.BorderLayout());
-
                 btnTrangChu.setText("Trang Chủ");
-                btnTrangChu.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+                btnTrangChu.setFont(new java.awt.Font("Segoe UI", 0, 14));
                 pnlButton.add(btnTrangChu, java.awt.BorderLayout.WEST);
-
                 pnlRightButtons.setBackground(new java.awt.Color(255, 251, 233));
                 pnlRightButtons.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 15, 0));
-
                 btnXoaTrang.setText("Xóa trắng");
-                btnXoaTrang.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+                btnXoaTrang.setFont(new java.awt.Font("Segoe UI", 0, 14));
                 btnXoaTrang.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
                                 btnXoaTrangActionPerformed(evt);
                         }
                 });
                 pnlRightButtons.add(btnXoaTrang);
-
                 btnCapNhat.setText("Cập nhật");
-                btnCapNhat.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+                btnCapNhat.setFont(new java.awt.Font("Segoe UI", 0, 14));
                 btnCapNhat.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
                                 btnCapNhatActionPerformed(evt);
                         }
                 });
                 pnlRightButtons.add(btnCapNhat);
-
                 btnXoa.setText("Xóa");
-                btnXoa.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+                btnXoa.setFont(new java.awt.Font("Segoe UI", 0, 14));
                 btnXoa.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
                                 btnXoaActionPerformed(evt);
                         }
                 });
                 pnlRightButtons.add(btnXoa);
-
                 btnThem.setText("Thêm");
-                btnThem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+                btnThem.setFont(new java.awt.Font("Segoe UI", 0, 14));
                 btnThem.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
                                 btnThemActionPerformed(evt);
                         }
                 });
                 pnlRightButtons.add(btnThem);
-
                 pnlButton.add(pnlRightButtons, java.awt.BorderLayout.EAST);
-
                 add(pnlButton, java.awt.BorderLayout.PAGE_END);
         }// </editor-fold>//GEN-END:initComponents
-
         private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaActionPerformed
                 String maKM = txtMaKhuyenMai.getText().trim();
                 if (maKM.isEmpty()) {
                         JOptionPane.showMessageDialog(this, "Vui lòng chọn khuyến mãi để ngừng áp dụng.");
                         return;
                 }
-
                 int choice = JOptionPane.showConfirmDialog(this,
                                 "Bạn có chắc chắn muốn ngừng áp dụng khuyến mãi này không?",
                                 "Xác nhận", JOptionPane.YES_NO_OPTION);
                 if (choice != JOptionPane.YES_OPTION) {
                         return;
                 }
-
                 try {
                         KhuyenMaiService service = new KhuyenMaiService();
                         service.xoaKhuyenMai(maKM);
@@ -764,40 +673,28 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                                         "Cập nhật trạng thái khuyến mãi thất bại: " + ex.getMessage());
                 }
         }// GEN-LAST:event_btnXoaActionPerformed
-
         private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaTrangActionPerformed
-                // TODO add your handling code here:
                 refreshData();
         }// GEN-LAST:event_btnXoaTrangActionPerformed
-
         private void centerTableColumns(JTable table) {
                 DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
                 centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-                // Chỉ căn giữa các cột từ 0 đến 4 và cột 6. Bỏ qua cột 5 (Lương) vì đã có
-                // Renderer riêng
                 for (int i = 0; i < table.getColumnCount(); i++) {
                         if (i != 2 && i != 5) {
                                 table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
                         }
                 }
         }
-
         private void cbFilterTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterTrangThaiActionPerformed
                 loadDataToTable();
         }// GEN-LAST:event_cbFilterTrangThaiActionPerformed
-
         private void txtMaKhuyenMaiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtMaKhuyenMaiActionPerformed
-                // TODO add your handling code here:
         }// GEN-LAST:event_txtMaKhuyenMaiActionPerformed
-
         private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTimKiemActionPerformed
                 searchByText();
         }// GEN-LAST:event_btnTimKiemActionPerformed
-
         private void txtGiaTriGiamActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtGiaTriGiamActionPerformed
-                // TODO add your handling code here:
         }// GEN-LAST:event_txtGiaTriGiamActionPerformed
-
         private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCapNhatActionPerformed
                 try {
                         String maKM = txtMaKhuyenMai.getText().trim();
@@ -807,21 +704,17 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                         LocalDate ngayBatDau = dpNgayBatDau != null ? dpNgayBatDau.getDate() : null;
                         LocalDate ngayKetThuc = dbNgayKetThuc != null ? dbNgayKetThuc.getDate() : null;
                         String trangThaiDisplay = (String) cbTrangThai.getSelectedItem();
-
                         com.restaurant.quanlydatbannhahang.entity.TrangThaiKhuyenMai trangThai = ComboBoxEnumLoader
                                         .getTrangThaiKhuyenMaiFromDisplay(trangThaiDisplay);
-
                         if (maKM.isEmpty() || tenKM.isEmpty() || giaTriGiamText.isEmpty() || dieuKienText.isEmpty()
                                         || ngayBatDau == null || ngayKetThuc == null || trangThai == null) {
                                 JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin khuyến mãi.");
                                 return;
                         }
-
                         double giaTriGiam = com.restaurant.quanlydatbannhahang.util.CurrencyUtility
                                         .parseVND(giaTriGiamText);
                         double dieuKienToiThieu = com.restaurant.quanlydatbannhahang.util.CurrencyUtility
                                         .parseVND(dieuKienText);
-
                         KhuyenMai km = new KhuyenMai(maKM, tenKM, giaTriGiam, ngayBatDau, ngayKetThuc,
                                         dieuKienToiThieu, trangThai);
                         KhuyenMaiService service = new KhuyenMaiService();
@@ -834,7 +727,6 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                         JOptionPane.showMessageDialog(this, "Cập nhật khuyến mãi thất bại: " + ex.getMessage());
                 }
         }// GEN-LAST:event_btnCapNhatActionPerformed
-
         private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnThemActionPerformed
                 try {
                         String maKM = txtMaKhuyenMai.getText().trim();
@@ -844,21 +736,17 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                         LocalDate ngayBatDau = dpNgayBatDau != null ? dpNgayBatDau.getDate() : null;
                         LocalDate ngayKetThuc = dbNgayKetThuc != null ? dbNgayKetThuc.getDate() : null;
                         String trangThaiDisplay = (String) cbTrangThai.getSelectedItem();
-
                         com.restaurant.quanlydatbannhahang.entity.TrangThaiKhuyenMai trangThai = ComboBoxEnumLoader
                                         .getTrangThaiKhuyenMaiFromDisplay(trangThaiDisplay);
-
                         if (maKM.isEmpty() || tenKM.isEmpty() || giaTriGiamText.isEmpty() || dieuKienText.isEmpty()
                                         || ngayBatDau == null || ngayKetThuc == null || trangThai == null) {
                                 JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin khuyến mãi.");
                                 return;
                         }
-
                         double giaTriGiam = com.restaurant.quanlydatbannhahang.util.CurrencyUtility
                                         .parseVND(giaTriGiamText);
                         double dieuKienToiThieu = com.restaurant.quanlydatbannhahang.util.CurrencyUtility
                                         .parseVND(dieuKienText);
-
                         KhuyenMai km = new KhuyenMai(maKM, tenKM, giaTriGiam, ngayBatDau, ngayKetThuc,
                                         dieuKienToiThieu, trangThai);
                         KhuyenMaiService service = new KhuyenMaiService();
@@ -871,7 +759,6 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                         JOptionPane.showMessageDialog(this, "Thêm khuyến mãi thất bại: " + ex.getMessage());
                 }
         }// GEN-LAST:event_btnThemActionPerformed
-
         // Variables declaration - do not modify//GEN-BEGIN:variables
         private javax.swing.JButton btnCapNhat;
         private javax.swing.JButton btnThem;
@@ -902,34 +789,20 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
         private javax.swing.JTextField txtMaKhuyenMai;
         private javax.swing.JTextField txtTenKhuyenMai;
         private javax.swing.JTextField txtTimKiem;
-
         // End of variables declaration//GEN-END:variables
         @Override
         public void mouseClicked(MouseEvent e) {
-                // Được xử lý tập trung trong selection listener của bảng
         }
-
         @Override
         public void mousePressed(MouseEvent e) {
-                // TODO Auto-generated method stub
-
         }
-
         @Override
         public void mouseReleased(MouseEvent e) {
-                // TODO Auto-generated method stub
-
         }
-
         @Override
         public void mouseEntered(MouseEvent e) {
-                // TODO Auto-generated method stub
-
         }
-
         @Override
         public void mouseExited(MouseEvent e) {
-                // TODO Auto-generated method stub
-
         }
 }

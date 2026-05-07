@@ -1,5 +1,4 @@
 package com.restaurant.quanlydatbannhahang.dao;
-
 import com.restaurant.quanlydatbannhahang.connectDB.DatabaseConnection;
 import com.restaurant.quanlydatbannhahang.entity.Thue;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiThue;
@@ -8,28 +7,22 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-
 public class ThueDAO {
-
     public ThueDAO() {
     }
-
     private Thue buildThueFromResultSet(ResultSet rs) {
         try {
             String maThue = rs.getString("maThue");
             String tenThue = rs.getString("tenThue");
             double thueSuat = rs.getDouble("thueSuat");
             String trangThaiStr = rs.getString("trangThai");
-
             TrangThaiThue trangThai = TrangThaiThue.valueOf(trangThaiStr);
-
             return new Thue(maThue, tenThue, thueSuat, trangThai);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
-
     public boolean themThue(Thue thue) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "insert into Thue (maThue, tenThue, thueSuat, trangThai) values (?,?,?,?)";
@@ -45,7 +38,6 @@ public class ThueDAO {
         }
         return false;
     }
-
     public Thue getThueTheoMa(String maThue) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from Thue where maThue = ?";
@@ -61,7 +53,6 @@ public class ThueDAO {
         }
         return null;
     }
-
     public List<Thue> getAllThue() {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from Thue";
@@ -80,7 +71,6 @@ public class ThueDAO {
         }
         return dsThue;
     }
-
     public boolean capNhatThue(Thue thue) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "update Thue set tenThue = ?, thueSuat = ?, trangThai = ? where maThue = ?";
@@ -96,7 +86,6 @@ public class ThueDAO {
         }
         return false;
     }
-
     public boolean capNhatThueSuat(String maThue, double thueSuatMoi) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "update Thue set thueSuat = ? where maThue = ?";
@@ -110,7 +99,6 @@ public class ThueDAO {
         }
         return false;
     }
-
     public boolean xoaThue(String maThue) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "update Thue set trangThai = ? where maThue = ?";
@@ -124,7 +112,6 @@ public class ThueDAO {
         }
         return false;
     }
-
     public Thue getThueTheoTen(String tenThue) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from Thue where tenThue = ?";
@@ -140,7 +127,6 @@ public class ThueDAO {
         }
         return null;
     }
-
     public List<Thue> getThueTheoTrangThai(TrangThaiThue trangThai) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from Thue where trangThai = ?";

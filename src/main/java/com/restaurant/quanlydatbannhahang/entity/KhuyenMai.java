@@ -1,7 +1,5 @@
 package com.restaurant.quanlydatbannhahang.entity;
-
 import java.time.LocalDate;
-
 public class KhuyenMai {
     private String maKM;
     private String tenKM;
@@ -10,12 +8,8 @@ public class KhuyenMai {
     private LocalDate ngayKetThuc;
     private double dieuKienToiThieu;
     private TrangThaiKhuyenMai trangThai;
-
-    
     public KhuyenMai() {
     }
-
-    
     public KhuyenMai(String maKM, String tenKM, double giaTriGiam,
             LocalDate ngayBatDau, LocalDate ngayKetThuc, double dieuKienToiThieu,
             TrangThaiKhuyenMai trangThai) {
@@ -27,75 +21,57 @@ public class KhuyenMai {
         this.dieuKienToiThieu = dieuKienToiThieu;
         this.trangThai = trangThai;
     }
-
-    
     public String getMaKM() {
         return maKM;
     }
-
     public void setMaKM(String maKM) {
         this.maKM = maKM;
     }
-
     public String getTenKM() {
         return tenKM;
     }
-
     public void setTenKM(String tenKM) {
         this.tenKM = tenKM;
     }
-
     public double getGiaTriGiam() {
         return giaTriGiam;
     }
-
     public void setGiaTriGiam(double giaTriGiam) {
         this.giaTriGiam = giaTriGiam;
     }
-
     public double getDieuKienToiThieu() {
         return dieuKienToiThieu;
     }
-
     public void setDieuKienToiThieu(double dieuKienToiThieu) {
         this.dieuKienToiThieu = dieuKienToiThieu;
     }
-
     public LocalDate getNgayBatDau() {
         return ngayBatDau;
     }
-
     public void setNgayBatDau(LocalDate ngayBatDau) {
         this.ngayBatDau = ngayBatDau;
     }
-
     public LocalDate getNgayKetThuc() {
         return ngayKetThuc;
     }
-
     public TrangThaiKhuyenMai getTrangThai() {
         return trangThai;
     }
-
     public void setTrangThai(TrangThaiKhuyenMai trangThai) {
         this.trangThai = trangThai;
     }
-
-    
     public boolean kiemTraHieuLuc(LocalDate ngayHienTai) {
         if (trangThai != TrangThaiKhuyenMai.CON_AP_DUNG) {
             return false;
         }
         return !ngayHienTai.isBefore(ngayBatDau) && !ngayHienTai.isAfter(ngayKetThuc);
     }
-
     public double tinhSoTienGiam(double tongTien) {
         if (tongTien >= dieuKienToiThieu && trangThai == TrangThaiKhuyenMai.CON_AP_DUNG) {
             return giaTriGiam;
         }
         return 0.0;
     }
-
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -103,7 +79,6 @@ public class KhuyenMai {
         result = prime * result + ((maKM == null) ? 0 : maKM.hashCode());
         return result;
     }
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -120,7 +95,6 @@ public class KhuyenMai {
             return false;
         return true;
     }
-
     @Override
     public String toString() {
         return "KhuyenMai{" +

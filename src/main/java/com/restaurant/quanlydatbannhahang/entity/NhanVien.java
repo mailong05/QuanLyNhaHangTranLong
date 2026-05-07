@@ -1,7 +1,5 @@
 package com.restaurant.quanlydatbannhahang.entity;
-
 import java.time.LocalDate;
-
 public class NhanVien {
     private String maNV;
     private String hoTen;
@@ -10,12 +8,8 @@ public class NhanVien {
     private LocalDate ngayVaoLam;
     private double luongCoBan;
     private TrangThaiNhanVien trangThai;
-
-    
     public NhanVien() {
     }
-
-    
     public NhanVien(String maNV, String hoTen, String sdt, ChucVu chucVu, LocalDate ngayVaoLam,
             double luongCoBan, TrangThaiNhanVien trangThai) {
         this.maNV = maNV;
@@ -26,90 +20,68 @@ public class NhanVien {
         this.luongCoBan = luongCoBan;
         this.trangThai = trangThai;
     }
-
-    
     public String getMaNV() {
         return maNV;
     }
-
     public void setMaNV(String maNV) {
         this.maNV = maNV;
     }
-
     public String getHoTen() {
         return hoTen;
     }
-
     public void setHoTen(String hoTen) {
         this.hoTen = hoTen;
     }
-
     public String getSdt() {
         return sdt;
     }
-
     public ChucVu getChucVu() {
         return chucVu;
     }
-
     public void setChucVu(ChucVu chucVu) {
         this.chucVu = chucVu;
     }
-
     public LocalDate getNgayVaoLam() {
         return ngayVaoLam;
     }
-
     public void setNgayVaoLam(LocalDate ngayVaoLam) {
         this.ngayVaoLam = ngayVaoLam;
     }
-
     public void setSdt(String sdt) {
         this.sdt = sdt;
     }
-
     public double getLuongCoBan() {
         return luongCoBan;
     }
-
     public void setLuongCoBan(double luongCoBan) {
         this.luongCoBan = luongCoBan;
     }
-
     public TrangThaiNhanVien getTrangThai() {
         return trangThai;
     }
-
     public void setTrangThai(TrangThaiNhanVien trangThai) {
         this.trangThai = trangThai;
     }
-
-    
     public double tinhLuong() {
         if (trangThai == TrangThaiNhanVien.DANG_LAM_VIEC) {
             return luongCoBan;
         }
         return 0.0;
     }
-
     public boolean kiemTraDangNhap() {
         return trangThai == TrangThaiNhanVien.DANG_LAM_VIEC;
     }
-
     public void nhanThuong(double soTienThuong) {
         this.luongCoBan += soTienThuong;
     }
-
     public double duocThuong() {
-        return luongCoBan * 0.1; 
+        return luongCoBan * 0.1;
     }
-
     @Override
     public String toString() {
         return "NhanVien [maNV=" + maNV + ", hoTen=" + hoTen + ", sdt=" + sdt + ", chucVu=" + chucVu + ", ngayVaoLam="
                 + ngayVaoLam + ", luongCoBan=" + luongCoBan + ", trangThai=" + trangThai + "]";
     }
-
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -117,7 +89,6 @@ public class NhanVien {
         result = prime * result + ((maNV == null) ? 0 : maNV.hashCode());
         return result;
     }
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -134,5 +105,4 @@ public class NhanVien {
             return false;
         return true;
     }
-
 }

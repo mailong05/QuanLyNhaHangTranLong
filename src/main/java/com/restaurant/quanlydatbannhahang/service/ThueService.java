@@ -1,22 +1,16 @@
 package com.restaurant.quanlydatbannhahang.service;
-
 import com.restaurant.quanlydatbannhahang.dao.ThueDAO;
 import com.restaurant.quanlydatbannhahang.entity.Thue;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiThue;
-
 import java.util.List;
 import java.util.regex.Pattern;
-
 public class ThueService {
     private ThueDAO thueDAO;
-
     private static final String MATHUE_PATTERN = "^TH\\d{3}$";
     private static final Pattern maThuePattern = Pattern.compile(MATHUE_PATTERN);
-
     public ThueService() {
         this.thueDAO = new ThueDAO();
     }
-
     public void validateThue(Thue thue) {
         if (thue == null) {
             throw new IllegalArgumentException("Đối tượng thuế không được để trống");
@@ -37,8 +31,6 @@ public class ThueService {
             throw new IllegalArgumentException("Trạng thái thuế không được để trống");
         }
     }
-
-
     public Thue getThueTheoMa(String maThue) {
         if (maThue == null || maThue.isBlank()) {
             throw new IllegalArgumentException("Mã thuế không được để trống");
@@ -52,31 +44,24 @@ public class ThueService {
         }
         return thue;
     }
-
     public List<Thue> getAllThue() {
         return thueDAO.getAllThue();
     }
-
     public List<Thue> getThueHoatDong() {
         return thueDAO.getThueTheoTrangThai(TrangThaiThue.CON_AP_DUNG);
     }
-
     public void themThue(Thue thue) {
         validateThue(thue);
         if (!thueDAO.themThue(thue)) {
             throw new RuntimeException("Thêm thuế thất bại");
         }
     }
-
     public void capNhatThue(Thue thue) {
         validateThue(thue);
         if (!thueDAO.capNhatThue(thue)) {
             throw new RuntimeException("Cập nhật thuế thất bại");
         }
     }
-
-
-
     public void xoaThue(String maThue) {
         if (maThue == null || maThue.isBlank()) {
             throw new IllegalArgumentException("Mã thuế không được để trống");
@@ -88,10 +73,6 @@ public class ThueService {
             throw new RuntimeException("Xóa thuế thất bại");
         }
     }
-
-    
-
-
     public void capNhatThueSuat(String maThue, double thueSuatMoi) {
         if (maThue == null || maThue.isBlank()) {
             throw new IllegalArgumentException("Mã thuế không được để trống");
@@ -108,10 +89,6 @@ public class ThueService {
             capNhatThue(thue);
         }
     }
-
-    
-
-
     public void capNhatTrangThaiThue(String maThue, TrangThaiThue trangThai) {
         if (maThue == null || maThue.isBlank()) {
             throw new IllegalArgumentException("Mã thuế không được để trống");
@@ -128,39 +105,19 @@ public class ThueService {
             capNhatThue(thue);
         }
     }
-
-    
-
-
     public void kichHoat(String maThue) {
         capNhatTrangThaiThue(maThue, TrangThaiThue.CON_AP_DUNG);
     }
-
-    
-
-
     public void voHieuHoa(String maThue) {
         capNhatTrangThaiThue(maThue, TrangThaiThue.NGUNG_AP_DUNG);
     }
-
-    
-
-
     public boolean existThue(String maThue) {
         return getThueTheoMa(maThue) != null;
     }
-
-    
-
-
     public int getTotalThue() {
         List<Thue> list = getAllThue();
         return list != null ? list.size() : 0;
     }
-
-    
-
-
     public double tinhThue(String maThue, double soTien) {
         if (soTien < 0) {
             throw new IllegalArgumentException("Số tiền để tính thuế không được là số âm");

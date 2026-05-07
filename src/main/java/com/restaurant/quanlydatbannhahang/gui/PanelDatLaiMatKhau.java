@@ -1,30 +1,22 @@
 package com.restaurant.quanlydatbannhahang.gui;
-
 import com.restaurant.quanlydatbannhahang.service.TaiKhoanService;
 import com.restaurant.quanlydatbannhahang.service.AuthService.ValidationResult;
-
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-
 public class PanelDatLaiMatKhau extends javax.swing.JFrame {
-
     private String username;
-
     public PanelDatLaiMatKhau(String username) {
         this.username = username;
         initComponents();
-
         btnContinue.setFocusPainted(false);
         btnCancel.setFocusPainted(false);
     }
-
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
     // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
         jFileChooser1 = new javax.swing.JFileChooser();
         jPanel1 = new javax.swing.JPanel();
         lblLogo = new javax.swing.JLabel();
@@ -41,28 +33,21 @@ public class PanelDatLaiMatKhau extends javax.swing.JFrame {
         txtNhapLaiMatKhauMoi = new javax.swing.JPasswordField();
         jSeparator1 = new javax.swing.JSeparator();
         jSeparator2 = new javax.swing.JSeparator();
-
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
         jPanel1.setBackground(new java.awt.Color(142, 128, 106));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo_restaurantTL.png"))); // NOI18N
+        lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo_restaurantTL.png")));
         jPanel1.add(lblLogo, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 60, 230, 190));
-
-        lblRestaurantName.setFont(new java.awt.Font("Segoe UI Semilight", 3, 18)); // NOI18N
+        lblRestaurantName.setFont(new java.awt.Font("Segoe UI Semilight", 3, 18));
         lblRestaurantName.setForeground(new java.awt.Color(255, 255, 255));
         lblRestaurantName.setText("TRAN LONG RESTAURANT");
         jPanel1.add(lblRestaurantName, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 260, -1, -1));
-
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 300, 400));
-
         jPanel2.setBackground(new java.awt.Color(255, 251, 233));
-        jPanel2.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
-
-        clickCLose.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
+        jPanel2.setFont(new java.awt.Font("sansserif", 0, 14));
+        clickCLose.setFont(new java.awt.Font("sansserif", 1, 14));
         clickCLose.setText("X");
         clickCLose.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         clickCLose.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -70,8 +55,7 @@ public class PanelDatLaiMatKhau extends javax.swing.JFrame {
                 clickCLoseMouseClicked(evt);
             }
         });
-
-        clickMinimize.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
+        clickMinimize.setFont(new java.awt.Font("sansserif", 1, 18));
         clickMinimize.setText("-");
         clickMinimize.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         clickMinimize.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -79,9 +63,8 @@ public class PanelDatLaiMatKhau extends javax.swing.JFrame {
                 clickMinimizeMouseClicked(evt);
             }
         });
-
         btnContinue.setBackground(new java.awt.Color(250, 249, 235));
-        btnContinue.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnContinue.setFont(new java.awt.Font("Segoe UI", 0, 14));
         btnContinue.setText("Tiếp tục");
         btnContinue.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102)));
         btnContinue.setContentAreaFilled(false);
@@ -91,13 +74,11 @@ public class PanelDatLaiMatKhau extends javax.swing.JFrame {
                 btnContinueActionPerformed(evt);
             }
         });
-
-        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 24));
         jLabel6.setForeground(new java.awt.Color(102, 102, 102));
         jLabel6.setText("ĐẶT LẠI MẬT KHẨU");
-
         btnCancel.setBackground(new java.awt.Color(250, 249, 235));
-        btnCancel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnCancel.setFont(new java.awt.Font("Segoe UI", 0, 14));
         btnCancel.setText("Quay lại");
         btnCancel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102)));
         btnCancel.setContentAreaFilled(false);
@@ -107,15 +88,12 @@ public class PanelDatLaiMatKhau extends javax.swing.JFrame {
                 btnCancelActionPerformed(evt);
             }
         });
-
-        lblNhapLaiMK.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblNhapLaiMK.setFont(new java.awt.Font("Segoe UI", 0, 14));
         lblNhapLaiMK.setText("Nhập lại mật khẩu mới:");
-
-        lblMatKhauMoi.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblMatKhauMoi.setFont(new java.awt.Font("Segoe UI", 0, 14));
         lblMatKhauMoi.setText("Nhập mật khẩu mới:");
-
         txtMatKhauMoi.setBackground(new java.awt.Color(255, 251, 233));
-        txtMatKhauMoi.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtMatKhauMoi.setFont(new java.awt.Font("Segoe UI", 0, 14));
         txtMatKhauMoi.setBorder(null);
         txtMatKhauMoi.setPreferredSize(new java.awt.Dimension(64, 30));
         txtMatKhauMoi.addActionListener(new java.awt.event.ActionListener() {
@@ -123,16 +101,12 @@ public class PanelDatLaiMatKhau extends javax.swing.JFrame {
                 txtMatKhauMoiActionPerformed(evt);
             }
         });
-
         txtNhapLaiMatKhauMoi.setBackground(new java.awt.Color(255, 251, 233));
-        txtNhapLaiMatKhauMoi.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtNhapLaiMatKhauMoi.setFont(new java.awt.Font("Segoe UI", 0, 14));
         txtNhapLaiMatKhauMoi.setBorder(null);
         txtNhapLaiMatKhauMoi.setPreferredSize(new java.awt.Dimension(64, 30));
-
         jSeparator1.setForeground(new java.awt.Color(0, 0, 0));
-
         jSeparator2.setForeground(new java.awt.Color(0, 0, 0));
-
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -214,43 +188,29 @@ public class PanelDatLaiMatKhau extends javax.swing.JFrame {
                                         .addComponent(btnContinue, javax.swing.GroupLayout.PREFERRED_SIZE, 26,
                                                 javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addContainerGap()));
-
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 0, 300, 400));
-
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
     private void txtMatKhauMoiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtMatKhauMoiActionPerformed
-        // TODO add your handling code here:
     }// GEN-LAST:event_txtMatKhauMoiActionPerformed
-
     private void txtPhoneActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtPhoneActionPerformed
-        // TODO add your handling code here:
     }// GEN-LAST:event_txtPhoneActionPerformed
-
     private void clickCLoseMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_clickCLoseMouseClicked
         this.dispose();
         System.exit(0);
     }// GEN-LAST:event_clickCLoseMouseClicked
-
     private void clickMinimizeMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_clickMinimizeMouseClicked
         this.setState(JFrame.ICONIFIED);
     }// GEN-LAST:event_clickMinimizeMouseClicked
-
     private void txtUsernameActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtUsernameActionPerformed
-        // TODO add your handling code here:
     }// GEN-LAST:event_txtUsernameActionPerformed
-
     private void btnContinueActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnContinueActionPerformed
         String newPassword = String.valueOf(txtMatKhauMoi.getPassword());
         String confirmPassword = String.valueOf(txtNhapLaiMatKhauMoi.getPassword());
-
         ValidationResult result = TaiKhoanService.updatePassword(username, newPassword, confirmPassword);
-
         if (!result.success) {
             JOptionPane.showMessageDialog(this, result.message, "Lỗi", JOptionPane.ERROR_MESSAGE);
-
             if (result.message.contains("mật khẩu mới") || result.message.contains("phải")) {
                 txtMatKhauMoi.requestFocus();
             } else {
@@ -258,50 +218,35 @@ public class PanelDatLaiMatKhau extends javax.swing.JFrame {
             }
             return;
         }
-
         JOptionPane.showMessageDialog(this,
                 "Đặt lại mật khẩu thành công! Vui lòng đăng nhập lại.",
                 "Thành công",
                 JOptionPane.INFORMATION_MESSAGE);
-
         this.dispose();
         new LoginForm().setVisible(true);
     }// GEN-LAST:event_btnContinueActionPerformed
-
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCancelActionPerformed
         int confirm = JOptionPane.showConfirmDialog(this,
                 "Bạn có muốn quay lại đăng nhập?",
                 "Xác nhận",
                 JOptionPane.YES_NO_OPTION);
-
         if (confirm == JOptionPane.YES_OPTION) {
             this.dispose();
             new LoginForm().setVisible(true);
         }
     }// GEN-LAST:event_btnCancelActionPerformed
-
     private void txtMailActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtMailActionPerformed
-        // TODO add your handling code here:
     }// GEN-LAST:event_txtMailActionPerformed
-
     private void txtIdcardActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtIdcardActionPerformed
-        // TODO add your handling code here:
     }// GEN-LAST:event_txtIdcardActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
-        // ========== SETUP UI (FlatLaf) TRƯỚC TIÊN ==========
         UIConfiguration.setupUI();
-
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new PanelDatLaiMatKhau("testuser").setVisible(true);
             }
         });
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnContinue;

@@ -1,31 +1,21 @@
 package com.restaurant.quanlydatbannhahang.service;
-
 import com.restaurant.quanlydatbannhahang.dao.NhanVienDAO;
 import com.restaurant.quanlydatbannhahang.entity.NhanVien;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiNhanVien;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.regex.Pattern;
-
 public class NhanVienService {
     private NhanVienDAO nhanVienDAO;
-
     private static final String MANV_PATTERN = "^NV\\d{3}$";
     private static final String HOTEN_PATTERN = "^[\\p{Lu}][\\p{Ll}]*(\\s[\\p{Lu}][\\p{Ll}]*)*$";
     private static final String PHONE_PATTERN = "^0[1-9]\\d{8}$";
-
     private static final Pattern maNVPattern = Pattern.compile(MANV_PATTERN);
     private static final Pattern hoTenPattern = Pattern.compile(HOTEN_PATTERN);
     private static final Pattern phonePattern = Pattern.compile(PHONE_PATTERN);
-
     public NhanVienService() {
         this.nhanVienDAO = new NhanVienDAO();
     }
-
-    
-
-
     public void validateNhanVien(NhanVien nhanVien) {
         if (nhanVien == null) {
             throw new IllegalArgumentException("Đối tượng nhân viên không được để trống");
@@ -62,10 +52,6 @@ public class NhanVienService {
             throw new IllegalArgumentException("Lương cơ bản không được là số âm");
         }
     }
-
-    
-
-
     public NhanVien getNhanVienTheoMa(String maNV) {
         if (maNV == null || maNV.isBlank()) {
             throw new IllegalArgumentException("Mã nhân viên không được để trống");
@@ -79,37 +65,21 @@ public class NhanVienService {
         }
         return nhanVien;
     }
-
-    
-
-
     public List<NhanVien> getAllNhanVien() {
         return nhanVienDAO.getAllNhanVien();
     }
-
-    
-
-
     public void themNhanVien(NhanVien nhanVien) {
         validateNhanVien(nhanVien);
         if (!nhanVienDAO.themNhanVien(nhanVien)) {
             throw new RuntimeException("Thêm nhân viên thất bại");
         }
     }
-
-    
-
-
     public void capNhatNhanVien(NhanVien nhanVien) {
         validateNhanVien(nhanVien);
         if (!nhanVienDAO.capNhatNhanVien(nhanVien)) {
             throw new RuntimeException("Cập nhật nhân viên thất bại");
         }
     }
-
-    
-
-
     public void xoaNhanVien(String maNV) {
         if (maNV == null || maNV.isBlank()) {
             throw new IllegalArgumentException("Mã nhân viên không được để trống");
@@ -121,17 +91,9 @@ public class NhanVienService {
             throw new RuntimeException("Xóa nhân viên thất bại");
         }
     }
-
-    
-
-
     public List<NhanVien> getNhanVienDangLamViec() {
         return nhanVienDAO.getNhanVienDangLamViec();
     }
-
-    
-
-
     public void capNhatTrangThaiNhanVien(String maNV, TrangThaiNhanVien trangThai) {
         if (maNV == null || maNV.isBlank()) {
             throw new IllegalArgumentException("Mã nhân viên không được để trống");
@@ -148,18 +110,10 @@ public class NhanVienService {
             capNhatNhanVien(nhanVien);
         }
     }
-
-    
-
-
     public boolean isNhanVienDangLamViec(String maNV) {
         NhanVien nhanVien = getNhanVienTheoMa(maNV);
         return nhanVien != null && nhanVien.getTrangThai() == TrangThaiNhanVien.DANG_LAM_VIEC;
     }
-
-    
-
-
     public boolean isNhanVienCoThamNien(String maNV, int nam) {
         if (nam < 0) {
             throw new IllegalArgumentException("Số năm thâm niên phải lớn hơn hoặc bằng 0");
@@ -168,28 +122,14 @@ public class NhanVienService {
         return nhanVien != null && nhanVien.getNgayVaoLam() != null
                 && nhanVien.getNgayVaoLam().isBefore(LocalDate.now().minusYears(nam));
     }
-
-    
-
-
     public int getTotalNhanVien() {
         List<NhanVien> list = getAllNhanVien();
         return list != null ? list.size() : 0;
     }
-
-    
-
-
     public int getTotalNhanVienDangLamViec() {
         List<NhanVien> list = getNhanVienDangLamViec();
         return list != null ? list.size() : 0;
     }
-
-    
-
-
-
-
     public String getLastNhanVienID() {
         return nhanVienDAO.getLastNhanVienID();
     }

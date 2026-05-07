@@ -1,17 +1,12 @@
 package com.restaurant.quanlydatbannhahang.entity;
-
 public class KhachHang {
     private String maKH;
     private String hoTen;
     private String sdt;
     private int diemTichLuy;
     private LoaiThanhVien loaiThanhVien;
-
-    
     public KhachHang() {
     }
-
-    
     public KhachHang(String maKH, String hoTen, String sdt, int diemTichLuy, LoaiThanhVien loaiThanhVien) {
         this.maKH = maKH;
         this.hoTen = hoTen;
@@ -19,54 +14,40 @@ public class KhachHang {
         this.diemTichLuy = diemTichLuy;
         this.loaiThanhVien = loaiThanhVien;
     }
-
-    
     public String getMaKH() {
         return maKH;
     }
-
     public void setMaKH(String maKH) {
         this.maKH = maKH;
     }
-
     public String getHoTen() {
         return hoTen;
     }
-
     public void setHoTen(String hoTen) {
         this.hoTen = hoTen;
     }
-
     public String getSdt() {
         return sdt;
     }
-
     public void setSdt(String sdt) {
         this.sdt = sdt;
     }
-
     public int getDiemTichLuy() {
         return diemTichLuy;
     }
-
     public void setDiemTichLuy(int diemTichLuy) {
         this.diemTichLuy = diemTichLuy;
     }
-
     public LoaiThanhVien getLoaiThanhVien() {
         return loaiThanhVien;
     }
-
     public void setLoaiThanhVien(LoaiThanhVien loaiThanhVien) {
         this.loaiThanhVien = loaiThanhVien;
     }
-
-    
     public void tichDiem(double tongTien) {
         int diem = (int) (tongTien / 1000);
         this.diemTichLuy += diem;
     }
-
     public double layPhanTramGiamGia() {
         if (loaiThanhVien == LoaiThanhVien.VIP) {
             return 10.0;
@@ -76,11 +57,9 @@ public class KhachHang {
             return 5.0;
         return 0.0;
     }
-
     public boolean kiemTraThanhVienVIP() {
         return loaiThanhVien == LoaiThanhVien.VIP;
     }
-
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -88,7 +67,6 @@ public class KhachHang {
         result = prime * result + ((maKH == null) ? 0 : maKH.hashCode());
         return result;
     }
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -105,7 +83,6 @@ public class KhachHang {
             return false;
         return true;
     }
-
     @Override
     public String toString() {
         return "KhachHang{" +

@@ -1,45 +1,29 @@
 package com.restaurant.quanlydatbannhahang.entity;
-
 public class KhuVuc {
     private String maKhuVuc;
     private String tenKhuVuc;
-
-    
     public KhuVuc() {
     }
-
-    
     public KhuVuc(String maKhuVuc, String tenKhuVuc) {
         this.maKhuVuc = maKhuVuc;
         this.tenKhuVuc = tenKhuVuc;
     }
-
-    
     public String getMaKhuVuc() {
         return maKhuVuc;
     }
-
     public void setMaKhuVuc(String maKhuVuc) {
         this.maKhuVuc = maKhuVuc;
     }
-
     public String getTenKhuVuc() {
         return tenKhuVuc;
     }
-
     public void setTenKhuVuc(String tenKhuVuc) {
         this.tenKhuVuc = tenKhuVuc;
     }
-
-    
     public void themKhuVuc() {
-        
     }
-
     public void capNhatKhuVuc() {
-        
     }
-
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -47,7 +31,6 @@ public class KhuVuc {
         result = prime * result + ((maKhuVuc == null) ? 0 : maKhuVuc.hashCode());
         return result;
     }
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -64,7 +47,6 @@ public class KhuVuc {
             return false;
         return true;
     }
-
     @Override
     public String toString() {
         return "KhuVuc{" +

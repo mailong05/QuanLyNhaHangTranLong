@@ -1,31 +1,21 @@
 package com.restaurant.quanlydatbannhahang.dao;
-
 import com.restaurant.quanlydatbannhahang.connectDB.DatabaseConnection;
 import com.restaurant.quanlydatbannhahang.entity.ChucVu;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 public class ChucVuDAO {
-
     public ChucVuDAO() {
     }
-
-    
-
-
     public List<ChucVu> getAllChucVu() {
         Connection connection = DatabaseConnection.getConnection();
         List<ChucVu> list = new ArrayList<>();
         String sql = "SELECT * FROM ChucVu";
-
         try (PreparedStatement pstm = connection.prepareStatement(sql);
                 ResultSet rs = pstm.executeQuery()) {
-
             while (rs.next()) {
                 String name = rs.getString("tenChucVu");
                 ChucVu chucVu = ChucVu.valueOf(name);
@@ -37,14 +27,9 @@ public class ChucVuDAO {
         }
         return list;
     }
-
-    
-
-
     public ChucVu findByName(String name) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "SELECT * FROM ChucVu WHERE tenChucVu = ?";
-
         try (PreparedStatement pstm = connection.prepareStatement(sql)) {
             pstm.setString(1, name);
             try (ResultSet rs = pstm.executeQuery()) {
@@ -58,10 +43,6 @@ public class ChucVuDAO {
         }
         return null;
     }
-
-    
-
-
     public boolean exists(String name) {
         return findByName(name) != null;
     }

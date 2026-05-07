@@ -1,40 +1,23 @@
 package com.restaurant.quanlydatbannhahang.dao;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-
 import com.restaurant.quanlydatbannhahang.connectDB.DatabaseConnection;
 import com.restaurant.quanlydatbannhahang.entity.ChucVu;
 import com.restaurant.quanlydatbannhahang.entity.NhanVien;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiNhanVien;
 import com.restaurant.quanlydatbannhahang.util.IDQueryHelper;
-
 public class NhanVienDAO {
-
 	public NhanVienDAO() {
 	}
-
-	
-
-
-
-
 	public String getLastNhanVienID() {
 		return IDQueryHelper.getLastID("NhanVien", "maNV");
 	}
-
-	
-
-
-
 	NhanVien buildNhanVienFromResultSet(ResultSet rs) {
 		try {
 			String chucVuStr = rs.getString("chucVu");
 			ChucVu chucVu = ChucVu.valueOf(chucVuStr);
-
 			TrangThaiNhanVien trangThai = TrangThaiNhanVien.valueOf(rs.getString("trangThai"));
-
 			return new NhanVien(
 					rs.getString("maNV"),
 					rs.getString("hoTen"),
@@ -44,12 +27,10 @@ public class NhanVienDAO {
 					rs.getDouble("luongCoBan"),
 					trangThai);
 		} catch (Exception e) {
-			
 			e.printStackTrace();
 			return null;
 		}
 	}
-
 	public NhanVien getNhanVienTheoMa(String maNV) {
 		Connection connection = DatabaseConnection.getConnection();
 		String sql = "Select * from NhanVien where maNV = ?";
@@ -65,7 +46,6 @@ public class NhanVienDAO {
 		}
 		return null;
 	}
-
 	public java.util.List<NhanVien> getAllNhanVien() {
 		Connection connection = DatabaseConnection.getConnection();
 		java.util.List<NhanVien> list = new java.util.ArrayList<>();
@@ -84,7 +64,6 @@ public class NhanVienDAO {
 		}
 		return list;
 	}
-
 	public boolean themNhanVien(NhanVien nhanVien) {
 		Connection connection = DatabaseConnection.getConnection();
 		String sql = "INSERT INTO NhanVien (maNV, hoTen, sdt, chucVu, ngayVaoLam, luongCoBan, trangThai) "
@@ -104,7 +83,6 @@ public class NhanVienDAO {
 		}
 		return false;
 	}
-
 	public boolean capNhatNhanVien(NhanVien nhanVien) {
 		Connection connection = DatabaseConnection.getConnection();
 		String sql = "UPDATE NhanVien SET hoTen = ?, sdt = ?, chucVu = ?, ngayVaoLam = ?, luongCoBan = ?, trangThai = ? "
@@ -124,7 +102,6 @@ public class NhanVienDAO {
 		}
 		return false;
 	}
-
 	public boolean xoaNhanVien(String maNV) {
 		Connection connection = DatabaseConnection.getConnection();
 		String sql = "UPDATE NhanVien SET trangThai = ? WHERE maNV = ?";
@@ -138,7 +115,6 @@ public class NhanVienDAO {
 		}
 		return false;
 	}
-
 	public java.util.List<NhanVien> getNhanVienDangLamViec() {
 		Connection connection = DatabaseConnection.getConnection();
 		java.util.List<NhanVien> list = new java.util.ArrayList<>();
@@ -158,5 +134,4 @@ public class NhanVienDAO {
 		}
 		return list;
 	}
-
 }

@@ -1,43 +1,32 @@
 package com.restaurant.quanlydatbannhahang.dao;
-
 import com.restaurant.quanlydatbannhahang.connectDB.DatabaseConnection;
 import com.restaurant.quanlydatbannhahang.entity.NhanVien;
 import com.restaurant.quanlydatbannhahang.entity.TaiKhoan;
 import com.restaurant.quanlydatbannhahang.entity.QuyenHan;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 public class TaiKhoanDAO {
     private Connection connection;
     private NhanVienDAO nv_dao;
-
     private static final String SELECT_TAIKHOAN_WITH_NHANVIEN = "SELECT tk.username, tk.password, tk.maNV, tk.quyenHan, "
             +
             "nv.hoTen, nv.sdt, nv.chucVu, nv.ngayVaoLam, nv.luongCoBan, nv.trangThai " +
             "FROM TaiKhoan tk " +
             "INNER JOIN NhanVien nv ON tk.maNV = nv.maNV ";
-
     public TaiKhoanDAO() {
         this.connection = DatabaseConnection.getConnection();
         nv_dao = new NhanVienDAO();
     }
-
-    
-
-
     private TaiKhoan buildTaiKhoanFromResultSet(ResultSet rs) throws SQLException {
         NhanVien nhanVien = nv_dao.buildNhanVienFromResultSet(rs);
-
         TaiKhoan taiKhoan = new TaiKhoan();
         taiKhoan.setUsername(rs.getString("username"));
         taiKhoan.setPassword(rs.getString("password"));
         taiKhoan.setNhanVien(nhanVien);
-
         String quyenHanStr = rs.getString("quyenHan");
         if (quyenHanStr != null && !quyenHanStr.isEmpty()) {
             try {
@@ -47,21 +36,14 @@ public class TaiKhoanDAO {
                 taiKhoan.setQuyenHan(QuyenHan.MANAGER);
             }
         }
-
         return taiKhoan;
     }
-
-    
-
-
     public TaiKhoan findByUsernameAndPassword(String username, String password) {
         Connection connection = DatabaseConnection.getConnection();
         String query = SELECT_TAIKHOAN_WITH_NHANVIEN + "WHERE tk.username = ? AND tk.password = ?";
-
         try (PreparedStatement pstm = connection.prepareStatement(query)) {
             pstm.setString(1, username);
             pstm.setString(2, password);
-
             try (ResultSet rs = pstm.executeQuery()) {
                 if (rs.next()) {
                     return buildTaiKhoanFromResultSet(rs);
@@ -73,17 +55,11 @@ public class TaiKhoanDAO {
         }
         return null;
     }
-
-    
-
-
     public TaiKhoan findByUsername(String username) {
         Connection connection = DatabaseConnection.getConnection();
         String query = SELECT_TAIKHOAN_WITH_NHANVIEN + "WHERE tk.username = ?";
-
         try (PreparedStatement pstm = connection.prepareStatement(query)) {
             pstm.setString(1, username);
-
             try (ResultSet rs = pstm.executeQuery()) {
                 if (rs.next()) {
                     return buildTaiKhoanFromResultSet(rs);
@@ -95,17 +71,11 @@ public class TaiKhoanDAO {
         }
         return null;
     }
-
-    
-
-
     public boolean existUsername(String username) {
         Connection connection = DatabaseConnection.getConnection();
         String query = "SELECT COUNT(*) FROM TaiKhoan WHERE username = ?";
-
         try (PreparedStatement pstm = connection.prepareStatement(query)) {
             pstm.setString(1, username);
-
             try (ResultSet rs = pstm.executeQuery()) {
                 if (rs.next()) {
                     return rs.getInt(1) > 0;
@@ -117,7 +87,6 @@ public class TaiKhoanDAO {
         }
         return false;
     }
-
     public boolean updatePassword(String username, String newPassWord) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "Update TaiKhoan set password = ? where username = ?";
@@ -127,13 +96,10 @@ public class TaiKhoanDAO {
             pstm.setString(2, username);
             return pstm.executeUpdate() > 0;
         } catch (Exception e) {
-            
             e.printStackTrace();
         }
         return false;
-
     }
-
     public boolean themTaiKhoan(TaiKhoan taiKhoan) {
         Connection con = DatabaseConnection.getConnection();
         String sql = "INSERT INTO TaiKhoan (username, password, maNV, quyenHan) VALUES (?, ?, ?, ?)";
@@ -149,7 +115,6 @@ public class TaiKhoanDAO {
         }
         return false;
     }
-
     public boolean capNhatTaiKhoan(TaiKhoan taiKhoan) {
         Connection con = DatabaseConnection.getConnection();
         String sql = "UPDATE TaiKhoan SET username = ?, quyenHan = ? WHERE maNV = ?";
@@ -164,7 +129,6 @@ public class TaiKhoanDAO {
         }
         return false;
     }
-
     public boolean xoaTaiKhoan(String username) {
         Connection con = DatabaseConnection.getConnection();
         String sql = "DELETE FROM TaiKhoan WHERE username = ?";
@@ -177,13 +141,11 @@ public class TaiKhoanDAO {
         }
         return false;
     }
-
     public List<TaiKhoan> getAllTaiKhoan() {
         Connection connection = DatabaseConnection.getConnection();
         String query = SELECT_TAIKHOAN_WITH_NHANVIEN;
         List<TaiKhoan> dsTaiKhoan = new ArrayList<TaiKhoan>();
         try (PreparedStatement pstm = connection.prepareStatement(query)) {
-
             try (ResultSet rs = pstm.executeQuery()) {
                 while (rs.next()) {
                     dsTaiKhoan.add(buildTaiKhoanFromResultSet(rs));
@@ -195,7 +157,6 @@ public class TaiKhoanDAO {
         }
         return dsTaiKhoan;
     }
-
     public String getPasswordByUsernameAndID(String username, String maNV) {
         Connection con = DatabaseConnection.getConnection();
         String sql = SELECT_TAIKHOAN_WITH_NHANVIEN + "WHERE tk.username = ? AND tk.maNV = ?";
@@ -209,14 +170,11 @@ public class TaiKhoanDAO {
                 return tk.getPassword();
             }
         } catch (Exception e) {
-            
             e.printStackTrace();
         }
         return null;
     }
-
 	public TaiKhoan getTaiKhoanByMaNV(String maNV) {
-		
 		Connection con = DatabaseConnection.getConnection();
 		String sql = SELECT_TAIKHOAN_WITH_NHANVIEN + "where tk.maNV = ?";
 		try {
@@ -227,7 +185,6 @@ public class TaiKhoanDAO {
 				return buildTaiKhoanFromResultSet(rs);
 			}
 		} catch (Exception e) {
-			
 			e.printStackTrace();
 		}
 		return null;

@@ -1,26 +1,19 @@
 package com.restaurant.quanlydatbannhahang.gui;
-
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import java.awt.Color;
-
 import com.restaurant.quanlydatbannhahang.entity.TaiKhoan;
 import com.restaurant.quanlydatbannhahang.service.AuthService;
-
 public class LoginForm extends javax.swing.JFrame {
-
     public LoginForm() {
         initComponents();
         this.setLocationRelativeTo(null);
-
         txtUsername.setText("Username");
         txtPassword.setText("Password");
         txtPassword.setEchoChar((char) 0);
         txtUsername.setForeground(new Color(102, 102, 102));
         txtPassword.setForeground(new Color(102, 102, 102));
-
         jLabel6.requestFocusInWindow();
-
         txtUsername.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -29,7 +22,6 @@ public class LoginForm extends javax.swing.JFrame {
                     txtUsername.setForeground(Color.BLACK);
                 }
             }
-
             @Override
             public void focusLost(java.awt.event.FocusEvent evt) {
                 if (txtUsername.getText().isEmpty()) {
@@ -38,7 +30,6 @@ public class LoginForm extends javax.swing.JFrame {
                 }
             }
         });
-
         txtPassword.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -49,7 +40,6 @@ public class LoginForm extends javax.swing.JFrame {
                     txtPassword.setEchoChar('●');
                 }
             }
-
             @Override
             public void focusLost(java.awt.event.FocusEvent evt) {
                 String pass = String.valueOf(txtPassword.getPassword());
@@ -60,17 +50,13 @@ public class LoginForm extends javax.swing.JFrame {
                 }
             }
         });
-
         btnLogin.setFocusPainted(false);
         btnCancel.setFocusPainted(false);
-
         lblIconEye.setVisible(false);
         lblIconHide.setVisible(true);
     }
-
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
-
         jPanel1 = new javax.swing.JPanel();
         lblLogo = new javax.swing.JLabel();
         lblRestaurantName = new javax.swing.JLabel();
@@ -89,27 +75,20 @@ public class LoginForm extends javax.swing.JFrame {
         jSeparator3 = new javax.swing.JSeparator();
         lblIconEye = new javax.swing.JLabel();
         lblIconHide = new javax.swing.JLabel();
-
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
         jPanel1.setBackground(new java.awt.Color(142, 128, 106));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo_restaurantTL.png"))); 
+        lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo_restaurantTL.png")));
         jPanel1.add(lblLogo, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 60, 220, 200));
-
-        lblRestaurantName.setFont(new java.awt.Font("Segoe UI Semilight", 3, 18)); 
+        lblRestaurantName.setFont(new java.awt.Font("Segoe UI Semilight", 3, 18));
         lblRestaurantName.setForeground(new java.awt.Color(255, 255, 255));
         lblRestaurantName.setText("NHÀ HÀNG TRẦN LONG");
         jPanel1.add(lblRestaurantName, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 260, -1, -1));
-
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 300, 400));
-
         jPanel2.setBackground(new java.awt.Color(255, 251, 233));
-
-        lblClose.setFont(new java.awt.Font("sansserif", 1, 14)); 
+        lblClose.setFont(new java.awt.Font("sansserif", 1, 14));
         lblClose.setText("X");
         lblClose.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblClose.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -117,8 +96,7 @@ public class LoginForm extends javax.swing.JFrame {
                 lblCloseMouseClicked(evt);
             }
         });
-
-        lblMinimize.setFont(new java.awt.Font("sansserif", 1, 18)); 
+        lblMinimize.setFont(new java.awt.Font("sansserif", 1, 18));
         lblMinimize.setText("-");
         lblMinimize.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblMinimize.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -126,30 +104,26 @@ public class LoginForm extends javax.swing.JFrame {
                 lblMinimizeMouseClicked(evt);
             }
         });
-
         txtUsername.setBackground(new java.awt.Color(255, 251, 233));
-        txtUsername.setFont(new java.awt.Font("Segoe UI", 0, 14)); 
+        txtUsername.setFont(new java.awt.Font("Segoe UI", 0, 14));
         txtUsername.setBorder(null);
         txtUsername.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtUsernameActionPerformed(evt);
             }
         });
-
         txtPassword.setBackground(new java.awt.Color(255, 251, 233));
-        txtPassword.setFont(new java.awt.Font("Segoe UI", 0, 14)); 
+        txtPassword.setFont(new java.awt.Font("Segoe UI", 0, 14));
         txtPassword.setBorder(null);
         txtPassword.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtPasswordActionPerformed(evt);
             }
         });
-
         jSeparator2.setForeground(new java.awt.Color(102, 102, 102));
-        lblIconUser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icon_user.png"))); 
-        lblIconKey.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icon_key.png"))); 
-
-        btnLogin.setFont(new java.awt.Font("Segoe UI", 0, 13)); 
+        lblIconUser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icon_user.png")));
+        lblIconKey.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icon_key.png")));
+        btnLogin.setFont(new java.awt.Font("Segoe UI", 0, 13));
         btnLogin.setText("Đăng nhập");
         btnLogin.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102)));
         btnLogin.setContentAreaFilled(false);
@@ -159,8 +133,7 @@ public class LoginForm extends javax.swing.JFrame {
                 btnLoginActionPerformed(evt);
             }
         });
-
-        btnCancel.setFont(new java.awt.Font("Segoe UI", 0, 13)); 
+        btnCancel.setFont(new java.awt.Font("Segoe UI", 0, 13));
         btnCancel.setText("Hủy");
         btnCancel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102)));
         btnCancel.setContentAreaFilled(false);
@@ -170,8 +143,7 @@ public class LoginForm extends javax.swing.JFrame {
                 btnCancelActionPerformed(evt);
             }
         });
-
-        lblForgotPassword.setFont(new java.awt.Font("Segoe UI", 0, 14)); 
+        lblForgotPassword.setFont(new java.awt.Font("Segoe UI", 0, 14));
         lblForgotPassword.setForeground(new java.awt.Color(102, 102, 102));
         lblForgotPassword.setText("Quên mật khẩu?");
         lblForgotPassword.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -180,27 +152,22 @@ public class LoginForm extends javax.swing.JFrame {
                 lblForgotPasswordMouseClicked(evt);
             }
         });
-
-        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 24)); 
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 24));
         jLabel6.setForeground(new java.awt.Color(102, 102, 102));
         jLabel6.setText("ĐĂNG NHẬP");
-
         jSeparator3.setForeground(new java.awt.Color(102, 102, 102));
-
-        lblIconEye.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icon_eye.png"))); 
+        lblIconEye.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icon_eye.png")));
         lblIconEye.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 lblIconEyeMousePressed(evt);
             }
         });
-
-        lblIconHide.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icon_eyehide.png"))); 
+        lblIconHide.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icon_eyehide.png")));
         lblIconHide.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 lblIconHideMousePressed(evt);
             }
         });
-
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -277,7 +244,7 @@ public class LoginForm extends javax.swing.JFrame {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblIconHide)
                             .addComponent(lblIconEye))))
-                .addGap(40, 40, 40) // Tăng khoảng cách vì đã xóa checkbox
+                .addGap(40, 40, 40)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -285,56 +252,45 @@ public class LoginForm extends javax.swing.JFrame {
                 .addComponent(lblForgotPassword)
                 .addContainerGap())
         );
-
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 0, 300, 400));
         pack();
     }// </editor-fold>                        
-
-    private void lblMinimizeMouseClicked(java.awt.event.MouseEvent evt) {                                         
+    private void lblMinimizeMouseClicked(java.awt.event.MouseEvent evt) {
         this.setState(JFrame.ICONIFIED);
-    }                                        
-
-    private void lblCloseMouseClicked(java.awt.event.MouseEvent evt) {                                      
+    }
+    private void lblCloseMouseClicked(java.awt.event.MouseEvent evt) {
         System.exit(0);
-    }                                     
-
-    private void txtPasswordActionPerformed(java.awt.event.ActionEvent evt) {                                            
+    }
+    private void txtPasswordActionPerformed(java.awt.event.ActionEvent evt) {
         btnLoginActionPerformed(evt);
-    }                                           
-
-    private void txtUsernameActionPerformed(java.awt.event.ActionEvent evt) {                                            
+    }
+    private void txtUsernameActionPerformed(java.awt.event.ActionEvent evt) {
         txtPassword.requestFocus();
-    }                                           
-
-    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {                                          
+    }
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {
         txtUsername.setText("Username");
         txtUsername.setForeground(new Color(102, 102, 102));
         txtPassword.setText("Password");
         txtPassword.setForeground(new Color(102, 102, 102));
         txtPassword.setEchoChar((char) 0);
-    }                                         
-
-    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {                                         
+    }
+    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {
         String username = getTxtUsername().getText().trim();
         String password = String.valueOf(getTxtPassword().getPassword()).trim();
-
         AuthService.ValidationResult userValidation = AuthService.validateUsername(username);
         if (!userValidation.success) {
             JOptionPane.showMessageDialog(this, userValidation.message, "Lỗi tên đăng nhập", JOptionPane.ERROR_MESSAGE);
             getTxtUsername().requestFocus();
             return;
         }
-
         AuthService.ValidationResult passValidation = AuthService.validatePassword(password);
         if (!passValidation.success) {
             JOptionPane.showMessageDialog(this, passValidation.message, "Lỗi mật khẩu", JOptionPane.ERROR_MESSAGE);
             getTxtPassword().requestFocus();
             return;
         }
-
         AuthService authService = new AuthService();
         TaiKhoan taiKhoan = authService.login(username, password);
-
         if (taiKhoan != null) {
             JOptionPane.showMessageDialog(this, "Đăng nhập thành công!\nXin chào: " + taiKhoan.getNhanVien().getHoTen(), "Thành công", JOptionPane.INFORMATION_MESSAGE);
             this.dispose();
@@ -347,39 +303,32 @@ public class LoginForm extends javax.swing.JFrame {
             getTxtPassword().setForeground(new Color(102, 102, 102));
             getTxtUsername().requestFocus();
         }
-    }                                        
-
-    private void lblIconEyeMousePressed(java.awt.event.MouseEvent evt) {                                        
+    }
+    private void lblIconEyeMousePressed(java.awt.event.MouseEvent evt) {
         lblIconHide.setVisible(true);
         lblIconEye.setVisible(false);
         txtPassword.setEchoChar('●');
-    }                                       
-
-    private void lblIconHideMousePressed(java.awt.event.MouseEvent evt) {                                         
+    }
+    private void lblIconHideMousePressed(java.awt.event.MouseEvent evt) {
         lblIconEye.setVisible(true);
         lblIconHide.setVisible(false);
         txtPassword.setEchoChar((char) 0);
-    }                                        
-
-    private void lblForgotPasswordMouseClicked(java.awt.event.MouseEvent evt) {                                               
+    }
+    private void lblForgotPasswordMouseClicked(java.awt.event.MouseEvent evt) {
         new ForgetPasswordForm().setVisible(true);
-    }                                              
-
+    }
     public javax.swing.JTextField getTxtUsername() {
         return txtUsername;
     }
-
     public javax.swing.JPasswordField getTxtPassword() {
         return txtPassword;
     }
-
     public static void main(String args[]) {
         UIConfiguration.setupUI();
         java.awt.EventQueue.invokeLater(() -> {
             new LoginForm().setVisible(true);
         });
     }
-
     // Variables declaration - do not modify                     
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnLogin;

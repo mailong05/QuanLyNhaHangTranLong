@@ -1,18 +1,14 @@
 package com.restaurant.quanlydatbannhahang.gui;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 import com.restaurant.quanlydatbannhahang.service.BanService;
 import com.restaurant.quanlydatbannhahang.service.KhuVucService;
-
 import com.restaurant.quanlydatbannhahang.session.HoaDonDraftSession;
 import com.restaurant.quanlydatbannhahang.entity.Ban;
 import com.restaurant.quanlydatbannhahang.entity.KhuVuc;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiBan;
-
 public class PanelDatBan extends javax.swing.JPanel {
-
     private Set<String> selectedTables;
     private Map<String, JPanel> tableCards;
     private Map<String, TrangThaiBan> tableTrangThai;
@@ -26,7 +22,6 @@ public class PanelDatBan extends javax.swing.JPanel {
     private String flowOrigin = "";
     private static final Color EDIT_MODE_SELECTED_COLOR = new Color(51, 153, 255);
     private BanService banService;
-
     public PanelDatBan() {
         selectedTables = new HashSet<>();
         tableCards = new HashMap<>();
@@ -57,19 +52,8 @@ public class PanelDatBan extends javax.swing.JPanel {
             }
         });
     }
-
-    /**
-     * Method để pre-populate selectedTables khi edit (dùng cho
-     * PanelQuanLyDatBanTruoc) - bàn cũ được highlight với màu xanh nhạt (Light
-     * Green)
-     * để phân biệt với bàn được chọn mới (vàng). User có thể click bàn xanh để bỏ
-     * chọn.
-     * 
-     * @param tablesToSelect Danh sách mã bàn cũ cần highlight
-     */
     public void setSelectedTablesForEdit(Set<String> tablesToSelect) {
         this.editMode = true;
-
         for (String maBan : new HashSet<>(selectedTables)) {
             JPanel card = tableCards.get(maBan);
             if (card != null) {
@@ -79,10 +63,8 @@ public class PanelDatBan extends javax.swing.JPanel {
             }
         }
         selectedTables.clear();
-
         if (tablesToSelect != null) {
             selectedTables.addAll(tablesToSelect);
-
             for (String maBan : selectedTables) {
                 JPanel card = tableCards.get(maBan);
                 if (card != null) {
@@ -94,97 +76,53 @@ public class PanelDatBan extends javax.swing.JPanel {
                     card.repaint();
                 }
             }
-
             panelSoDoBan.revalidate();
             panelSoDoBan.repaint();
             this.revalidate();
             this.repaint();
         }
     }
-
-    /**
-     * Setter để pass PanelQuanLyDatBanTruoc reference (callback khi edit mode)
-     */
     public void setPanelQuanLyDatBanTruoc(PanelQuanLyDatBanTruoc panelQuanLyDatBanTruoc) {
         this.panelQuanLyDatBanTruoc = panelQuanLyDatBanTruoc;
         this.panelDatMon = null;
     }
-
-    /**
-     * Setter để pass PanelDatMon reference (callback khi đổi bàn từ PanelDatMon)
-     */
     public void setPanelDatMon(PanelDatMon panelDatMon) {
         this.panelDatMon = panelDatMon;
         this.panelQuanLyDatBanTruoc = null;
     }
-
-    /**
-     * Setter để thiết lập flowOrigin (nơi gọi PanelDatBan)
-     * 
-     * @param origin "DAT_MON" hoặc "QUAN_LY_DAT_TRUOC"
-     */
     public void setFlowOrigin(String origin) {
         this.flowOrigin = (origin != null) ? origin : "";
     }
-
-    /**
-     * Getter để lấy flowOrigin
-     */
     public String getFlowOrigin() {
         return this.flowOrigin;
     }
-
-    /**
-     * PUBLIC METHOD: Reload lại toàn bộ giao diện PanelDatBan để lấy dữ liệu mới
-     * nhất từ DB
-     * Gọi khi chuyển sang tab PanelDatBan để cập nhật trạng thái bàn
-     */
     public void refreshData() {
         try {
             this.editMode = false;
-
             selectedTables.clear();
             tableCards.clear();
             tableTrangThai.clear();
             tableLabelStatus.clear();
-
             loadSoDoBanFromDatabase();
-
             updateAllTableStatusFromDatabase();
-
             this.revalidate();
             this.repaint();
-
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
-    /**
-     * PUBLIC METHOD: Cập nhật trạng thái tất cả bàn dựa vào dữ liệu phiếu từ DB
-     * Single source of truth: Database phiếu đặt bàn → trạng thái bàn
-     * Mapping:
-     * - Bàn trong phiếu DA_HUY → TRONG (white)
-     * - Bàn trong phiếu DANG_SU_DUNG → DANG_DUNG (xanh)
-     * - Bàn trong phiếu DANG_CHO → DA_DAT (vàng)
-     * - Bàn không trong phiếu nào → TRONG (white)
-     */
-
     private void customUI() {
         setupPlaceholder(txtTimKiem, "Nhập mã bàn");
     }
-
     private void loadDataToComboBoxes() {
         try {
             KhuVucService khuVucService = new KhuVucService();
             java.util.List<KhuVuc> khuVucList = khuVucService.getAllKhuVuc();
-
             cbFilterKhuVuc.removeAllItems();
             cbFilterKhuVuc.addItem("Khu vực");
             for (KhuVuc kv : khuVucList) {
                 cbFilterKhuVuc.addItem(kv.getMaKhuVuc());
             }
-
             cbFilterTrangThai.removeAllItems();
             cbFilterTrangThai.addItem("Trạng thái");
             for (TrangThaiBan trangThai : TrangThaiBan.values()) {
@@ -195,7 +133,6 @@ public class PanelDatBan extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Lỗi load dữ liệu filter: " + e.getMessage());
         }
     }
-
     private void setUpDatBanButton() {
         JButton btnTrangChu = new JButton("Trang chủ");
         btnTrangChu.setFont(new Font("Segoe UI", Font.BOLD, 14));
@@ -212,7 +149,6 @@ public class PanelDatBan extends javax.swing.JPanel {
                 ((MainForm) parentFrame).goToTrangChuFromPanel();
             }
         });
-
         btnDatBan = new JButton("Đặt bàn");
         btnDatBan.setFont(new Font("Segoe UI", Font.BOLD, 14));
         btnDatBan.setBackground(new Color(5, 223, 114));
@@ -223,25 +159,19 @@ public class PanelDatBan extends javax.swing.JPanel {
         btnDatBan.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnDatBan.setPreferredSize(new Dimension(150, 50));
         btnDatBan.addActionListener(e -> onButtonDatBanClicked());
-
         JPanel bottomPanel = new JPanel(new BorderLayout());
         bottomPanel.setBackground(new java.awt.Color(255, 251, 233));
         bottomPanel.setBorder(BorderFactory.createEmptyBorder(10, 60, 20, 60));
-
         JPanel leftButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         leftButtonPanel.setBackground(new java.awt.Color(255, 251, 233));
         leftButtonPanel.add(btnTrangChu);
-
         JPanel rightButtonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         rightButtonPanel.setBackground(new java.awt.Color(255, 251, 233));
         rightButtonPanel.add(btnDatBan);
-
         bottomPanel.add(leftButtonPanel, BorderLayout.WEST);
         bottomPanel.add(rightButtonPanel, BorderLayout.EAST);
-
         this.add(bottomPanel, BorderLayout.SOUTH);
     }
-
     private void loadSoDoBanFromDatabase() {
         panelSoDoBan.removeAll();
         panelSoDoBan.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 20));
@@ -249,11 +179,9 @@ public class PanelDatBan extends javax.swing.JPanel {
         tableTrangThai.clear();
         tableLabelStatus.clear();
         selectedTables.clear();
-
         try {
             BanService banService = new BanService();
             java.util.List<Ban> allBan = banService.getAllBan();
-
             Map<String, java.util.List<Ban>> banByKhuVuc = new TreeMap<>();
             for (Ban ban : allBan) {
                 if (selectedKhuVuc != null && !selectedKhuVuc.isEmpty() && !selectedKhuVuc.equals("Khu vực")) {
@@ -261,49 +189,40 @@ public class PanelDatBan extends javax.swing.JPanel {
                         continue;
                     }
                 }
-
                 if (selectedTrangThai != null && !selectedTrangThai.isEmpty()
                         && !selectedTrangThai.equals("Trạng thái")) {
                     if (!ban.getTrangThai().getDisplayName().equals(selectedTrangThai)) {
                         continue;
                     }
                 }
-
                 String maKV = ban.getKhuVuc().getMaKhuVuc();
                 banByKhuVuc.putIfAbsent(maKV, new ArrayList<>());
                 banByKhuVuc.get(maKV).add(ban);
             }
-
             JPanel wrapperPanel = new JPanel();
             wrapperPanel.setLayout(new BoxLayout(wrapperPanel, BoxLayout.Y_AXIS));
             wrapperPanel.setBackground(new java.awt.Color(255, 251, 233));
             wrapperPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-
             for (String khuVuc : banByKhuVuc.keySet()) {
                 JPanel pnlGroup = new JPanel();
                 pnlGroup.setLayout(new BorderLayout());
                 pnlGroup.setBackground(new java.awt.Color(255, 251, 233));
                 pnlGroup.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
                 pnlGroup.setMaximumSize(new Dimension(Integer.MAX_VALUE, 300));
-
                 JLabel lblTitle = new JLabel("Khu vực " + khuVuc);
                 lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 18));
                 lblTitle.setForeground(new Color(153, 153, 102));
                 lblTitle.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
                 pnlGroup.add(lblTitle, BorderLayout.NORTH);
-
                 JPanel pnlTables = new JPanel(new GridLayout(0, 5, 20, 20));
                 pnlTables.setBackground(new java.awt.Color(255, 251, 233));
                 pnlTables.setPreferredSize(new Dimension(1200, 200));
-
                 for (Ban ban : banByKhuVuc.get(khuVuc)) {
                     pnlTables.add(createTableCard(ban.getMaBan(), ban.getTrangThai()));
                 }
-
                 pnlGroup.add(pnlTables, BorderLayout.CENTER);
                 wrapperPanel.add(pnlGroup);
             }
-
             panelSoDoBan.add(wrapperPanel);
             panelSoDoBan.revalidate();
             panelSoDoBan.repaint();
@@ -312,11 +231,9 @@ public class PanelDatBan extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Lỗi load bàn từ database: " + e.getMessage());
         }
     }
-
     private JPanel createTableCard(String maBan, TrangThaiBan trangThai) {
         JPanel card = new JPanel(new GridBagLayout());
         card.setPreferredSize(new Dimension(150, 120));
-
         if (trangThai == TrangThaiBan.TRONG) {
             card.setBackground(Color.WHITE);
         } else if (trangThai == TrangThaiBan.DANG_DUNG) {
@@ -324,48 +241,39 @@ public class PanelDatBan extends javax.swing.JPanel {
         } else if (trangThai == TrangThaiBan.DA_DAT) {
             card.setBackground(new Color(255, 200, 0));
         }
-
         card.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(new Color(200, 200, 200), 1, true),
                 BorderFactory.createEmptyBorder(10, 10, 10, 10)));
-
         tableCards.put(maBan, card);
         tableTrangThai.put(maBan, trangThai);
-
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-
         JLabel lblName = new JLabel(maBan, SwingConstants.CENTER);
         lblName.setFont(new Font("Segoe UI", Font.BOLD, 18));
         lblName.setForeground(Color.BLACK);
         gbc.gridy = 0;
         gbc.weighty = 0.6;
         card.add(lblName, gbc);
-
         JLabel lblStatus = new JLabel(trangThai.getDisplayName(), SwingConstants.CENTER);
         lblStatus.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         lblStatus.setForeground(Color.GRAY);
         gbc.gridy = 1;
         gbc.weighty = 0.4;
         card.add(lblStatus, gbc);
-
         tableLabelStatus.put(maBan, lblStatus);
-
         card.setCursor(new Cursor(Cursor.HAND_CURSOR));
         card.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 toggleTableSelection(maBan, card);
             }
-
             @Override
             public void mouseEntered(java.awt.event.MouseEvent e) {
                 if (!selectedTables.contains(maBan) && trangThai != TrangThaiBan.DANG_DUNG) {
                     card.setBorder(BorderFactory.createLineBorder(new Color(153, 153, 102), 2, true));
                 }
             }
-
             @Override
             public void mouseExited(java.awt.event.MouseEvent e) {
                 if (!selectedTables.contains(maBan)) {
@@ -373,22 +281,18 @@ public class PanelDatBan extends javax.swing.JPanel {
                 }
             }
         });
-
         return card;
     }
-
     private void toggleTableSelection(String maBan, JPanel card) {
         if (isEditSelectedCard(card)) {
             selectedTables.remove(maBan);
             updateBanStatusUI(maBan, TrangThaiBan.TRONG);
             return;
         }
-
         TrangThaiBan trangThai = tableTrangThai.get(maBan);
         if (trangThai == null) {
             return;
         }
-
         if (trangThai == TrangThaiBan.DA_DAT) {
             JOptionPane.showMessageDialog(this,
                     "Nếu muốn làm trống bàn vui lòng chỉnh sửa bên quản lý phiếu đặt bàn",
@@ -396,12 +300,10 @@ public class PanelDatBan extends javax.swing.JPanel {
                     JOptionPane.INFORMATION_MESSAGE);
             return;
         }
-
         if (trangThai == TrangThaiBan.DANG_DUNG) {
             showDangDungOptions(maBan);
             return;
         }
-
         if (selectedTables.contains(maBan)) {
             selectedTables.remove(maBan);
             card.setBackground(Color.WHITE);
@@ -418,11 +320,9 @@ public class PanelDatBan extends javax.swing.JPanel {
         card.revalidate();
         card.repaint();
     }
-
     private boolean isEditSelectedCard(JPanel card) {
         return card != null && EDIT_MODE_SELECTED_COLOR.equals(card.getBackground());
     }
-
     private void showDangDungOptions(String maBan) {
         Object[] options = { "Làm trống", "Chọn món", "Hủy" };
         int choice = JOptionPane.showOptionDialog(
@@ -434,7 +334,6 @@ public class PanelDatBan extends javax.swing.JPanel {
                 null,
                 options,
                 options[1]);
-
         if (choice == 0) {
             BanService banService = new BanService();
             try {
@@ -446,7 +345,6 @@ public class PanelDatBan extends javax.swing.JPanel {
             }
             return;
         }
-
         if (choice == 1) {
             java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
             if (parentFrame instanceof MainForm) {
@@ -456,23 +354,12 @@ public class PanelDatBan extends javax.swing.JPanel {
             }
         }
     }
-
-    /**
-     * Cập nhật trạng thái bàn và UI ngay tức thì (Tái sử dụng cho các trường hợp
-     * cần update)
-     * Phương thức này giúp còn lại không cần reload data từ DB
-     * 
-     * @param maBan        Mã bàn cần cập nhật
-     * @param newTrangThai Trạng thái mới (TrangThaiBan enum)
-     */
     public void updateBanStatusUI(String maBan, TrangThaiBan newTrangThai) {
         JPanel card = tableCards.get(maBan);
         if (card == null) {
             throw new IllegalStateException("Không tìm thấy card cho bàn: " + maBan);
         }
-
         tableTrangThai.put(maBan, newTrangThai);
-
         if (newTrangThai == TrangThaiBan.TRONG) {
             card.setBackground(Color.WHITE);
         } else if (newTrangThai == TrangThaiBan.DANG_DUNG) {
@@ -480,24 +367,16 @@ public class PanelDatBan extends javax.swing.JPanel {
         } else if (newTrangThai == TrangThaiBan.DA_DAT) {
             card.setBackground(new Color(255, 200, 0));
         }
-
         JLabel lblStatus = tableLabelStatus.get(maBan);
         if (lblStatus != null) {
             lblStatus.setText(newTrangThai.getDisplayName());
         }
-
         card.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(new Color(200, 200, 200), 1, true),
                 BorderFactory.createEmptyBorder(10, 10, 10, 10)));
-
         card.revalidate();
         card.repaint();
     }
-
-    /**
-     * Helper method: Reset UI cho tất cả bàn về trạng thái gốc
-     * Duyệt qua toàn bộ bàn, lấy trạng thái từ DB, update UI bàn
-     */
     private void resetAllTablesUI() {
         selectedTables.clear();
         for (String maBan : tableCards.keySet()) {
@@ -507,37 +386,24 @@ public class PanelDatBan extends javax.swing.JPanel {
             }
         }
     }
-
-    /**
-     * Helper method: Force repaint toàn bộ panel để highlight bị remove được render
-     */
     private void repaintAllUI() {
         panelSoDoBan.revalidate();
         panelSoDoBan.repaint();
         this.revalidate();
         this.repaint();
     }
-
-    /**
-     * Public method: Để external có thể force repaint toàn bộ panel
-     * (gọi từ PanelQuanLyDatBanTruoc khi cập nhật trạng thái bàn)
-     */
     public void forceRepaintUI() {
         repaintAllUI();
     }
-
     public void updateAllTableStatusFromDatabase() {
         try {
             java.util.List<Ban> allBan = banService.getAllBan();
-
             for (Ban ban : allBan) {
                 String maBan = ban.getMaBan();
                 JPanel card = tableCards.get(maBan);
                 if (card == null)
                     continue;
-
                 TrangThaiBan trangThaiBan = ban.getTrangThai();
-
                 if (trangThaiBan == TrangThaiBan.TRONG) {
                     card.setBackground(Color.WHITE);
                 } else if (trangThaiBan == TrangThaiBan.DANG_DUNG) {
@@ -545,129 +411,102 @@ public class PanelDatBan extends javax.swing.JPanel {
                 } else if (trangThaiBan == TrangThaiBan.DA_DAT) {
                     card.setBackground(new Color(255, 200, 0));
                 }
-
                 JLabel lblStatus = tableLabelStatus.get(maBan);
                 if (lblStatus != null) {
                     lblStatus.setText(trangThaiBan.getDisplayName());
                 }
-
                 card.setBorder(BorderFactory.createCompoundBorder(
                         BorderFactory.createLineBorder(new Color(200, 200, 200), 1, true),
                         BorderFactory.createEmptyBorder(10, 10, 10, 10)));
-
                 tableTrangThai.put(maBan, trangThaiBan);
                 card.revalidate();
                 card.repaint();
             }
-
             panelSoDoBan.revalidate();
             panelSoDoBan.repaint();
             this.revalidate();
             this.repaint();
-
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
     private void onButtonDatBanClicked() {
         if (selectedTables.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn ít nhất một bàn!");
             return;
         }
-
         String selectedBanList = String.join(", ", selectedTables);
         String message = "Có xác nhận đặt bàn: " + selectedBanList + "?";
-
         int result = JOptionPane.showConfirmDialog(
                 this,
                 message,
                 "Xác nhận đặt bàn",
                 JOptionPane.YES_NO_OPTION);
-
         if (result == JOptionPane.YES_OPTION) {
             if (editMode) {
                 if ((flowOrigin.equals("DAT_MON") || flowOrigin.isEmpty()) && panelDatMon != null) {
                     panelDatMon.updateMaBanContextForEdit(new HashSet<>(selectedTables));
-
                     this.updateAllTableStatusFromDatabase();
-
                     java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
                     if (parentFrame instanceof MainForm) {
                         ((MainForm) parentFrame).goBackToPanelDatMon();
                     }
-
                     this.editMode = false;
                     this.flowOrigin = "";
                     this.panelDatMon = null;
                     return;
                 }
-
                 if (flowOrigin.equals("QUAN_LY_DAT_TRUOC") && panelQuanLyDatBanTruoc != null) {
                     panelQuanLyDatBanTruoc.updateMaBanForEdit(new HashSet<>(selectedTables));
-
                     this.updateAllTableStatusFromDatabase();
                     resetAllTablesUI();
                     repaintAllUI();
-
                     java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
                     if (parentFrame instanceof MainForm) {
                         ((MainForm) parentFrame).switchToQuanLyDatBanTruocTab();
                     }
-
                     this.editMode = false;
                     this.flowOrigin = "";
                     return;
                 }
-
                 if (panelDatMon != null) {
                     panelDatMon.updateMaBanContextForEdit(new HashSet<>(selectedTables));
-
                     java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
                     if (parentFrame instanceof MainForm) {
                         ((MainForm) parentFrame).goBackToPanelDatMon();
                     }
-
                     this.editMode = false;
                     this.flowOrigin = "";
                     this.panelDatMon = null;
                     return;
                 }
-
                 if (panelQuanLyDatBanTruoc != null) {
                     panelQuanLyDatBanTruoc.updateMaBanForEdit(new HashSet<>(selectedTables));
-
                     resetAllTablesUI();
                     repaintAllUI();
-
                     java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
                     if (parentFrame instanceof MainForm) {
                         ((MainForm) parentFrame).switchToQuanLyDatBanTruocTab();
                     }
-
                     this.editMode = false;
                     this.flowOrigin = "";
                     return;
                 }
-
                 JOptionPane.showMessageDialog(this, "Không tìm thấy panel callback cho chế độ đổi bàn.",
                         "Lỗi", JOptionPane.ERROR_MESSAGE);
                 this.editMode = false;
                 this.flowOrigin = "";
                 return;
             }
-
             java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
             LuaChonDatBanDialog dialog = new LuaChonDatBanDialog(parentFrame, true, selectedTables, this,
                     panelQuanLyDatBanTruoc);
             dialog.setVisible(true);
             this.updateAllTableStatusFromDatabase();
-
             resetAllTablesUI();
             repaintAllUI();
         }
     }
-
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
@@ -677,7 +516,6 @@ public class PanelDatBan extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated
     // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
         jPanel2 = new javax.swing.JPanel();
         panelTimKiem = new javax.swing.JPanel();
         txtTimKiem = new javax.swing.JTextField();
@@ -696,35 +534,28 @@ public class PanelDatBan extends javax.swing.JPanel {
         jLabel6 = new javax.swing.JLabel();
         scrSoDoBan = new javax.swing.JScrollPane();
         panelSoDoBan = new javax.swing.JPanel();
-
         setLayout(new java.awt.BorderLayout());
-
         jPanel2.setBackground(new java.awt.Color(255, 251, 233));
         jPanel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 60, 1, 60));
         jPanel2.setLayout(new java.awt.GridLayout(1, 0));
-
         panelTimKiem.setBackground(new java.awt.Color(255, 255, 255));
-
         txtTimKiem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtTimKiemActionPerformed(evt);
             }
         });
-
         btnSearch.setText("Tim Kiếm");
         btnSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSearchActionPerformed(evt);
             }
         });
-
         cbFilterKhuVuc.setModel(new javax.swing.DefaultComboBoxModel<>());
         cbFilterKhuVuc.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbFilterKhuVucActionPerformed(evt);
             }
         });
-
         cbFilterTrangThai.setModel(
                 new javax.swing.DefaultComboBoxModel<>(new String[] {}));
         cbFilterTrangThai.addActionListener(new java.awt.event.ActionListener() {
@@ -732,12 +563,9 @@ public class PanelDatBan extends javax.swing.JPanel {
                 cbFilterTrangThaiActionPerformed(evt);
             }
         });
-
         jLabel1.setText("Trống");
-
         pnlStatusTrong.setBackground(new java.awt.Color(255, 255, 255));
         pnlStatusTrong.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204), 2));
-
         javax.swing.GroupLayout pnlStatusTrongLayout = new javax.swing.GroupLayout(pnlStatusTrong);
         pnlStatusTrong.setLayout(pnlStatusTrongLayout);
         pnlStatusTrongLayout.setHorizontalGroup(
@@ -746,9 +574,7 @@ public class PanelDatBan extends javax.swing.JPanel {
         pnlStatusTrongLayout.setVerticalGroup(
                 pnlStatusTrongLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGap(0, 16, Short.MAX_VALUE));
-
         pnlStatusServing.setBackground(new java.awt.Color(0, 153, 0));
-
         javax.swing.GroupLayout pnlStatusServingLayout = new javax.swing.GroupLayout(pnlStatusServing);
         pnlStatusServing.setLayout(pnlStatusServingLayout);
         pnlStatusServingLayout.setHorizontalGroup(
@@ -757,9 +583,7 @@ public class PanelDatBan extends javax.swing.JPanel {
         pnlStatusServingLayout.setVerticalGroup(
                 pnlStatusServingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGap(0, 20, Short.MAX_VALUE));
-
         pnlStatusReserved.setBackground(new java.awt.Color(255, 204, 0));
-
         javax.swing.GroupLayout pnlStatusReservedLayout = new javax.swing.GroupLayout(pnlStatusReserved);
         pnlStatusReserved.setLayout(pnlStatusReservedLayout);
         pnlStatusReservedLayout.setHorizontalGroup(
@@ -768,17 +592,11 @@ public class PanelDatBan extends javax.swing.JPanel {
         pnlStatusReservedLayout.setVerticalGroup(
                 pnlStatusReservedLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGap(0, 20, Short.MAX_VALUE));
-
         jLabel2.setText("Đang dùng");
-
         jLabel3.setText("Đã đặt");
-
         jLabel4.setText("Khu vực:");
-
         jLabel5.setText("Trạng thái:");
-
         pnlStatusBanDuocChonTuPhieu.setBackground(new java.awt.Color(51, 153, 255));
-
         javax.swing.GroupLayout pnlStatusBanDuocChonTuPhieuLayout = new javax.swing.GroupLayout(
                 pnlStatusBanDuocChonTuPhieu);
         pnlStatusBanDuocChonTuPhieu.setLayout(pnlStatusBanDuocChonTuPhieuLayout);
@@ -788,9 +606,7 @@ public class PanelDatBan extends javax.swing.JPanel {
         pnlStatusBanDuocChonTuPhieuLayout.setVerticalGroup(
                 pnlStatusBanDuocChonTuPhieuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGap(0, 0, Short.MAX_VALUE));
-
         jLabel6.setText("Bàn trong phiếu");
-
         javax.swing.GroupLayout panelTimKiemLayout = new javax.swing.GroupLayout(panelTimKiem);
         panelTimKiem.setLayout(panelTimKiemLayout);
         panelTimKiemLayout.setHorizontalGroup(
@@ -880,16 +696,11 @@ public class PanelDatBan extends javax.swing.JPanel {
                                         .addComponent(jLabel6)
                                         .addComponent(jLabel3))
                                 .addGap(11, 11, 11)));
-
         jPanel2.add(panelTimKiem);
-
         add(jPanel2, java.awt.BorderLayout.NORTH);
-
         scrSoDoBan.setBorder(null);
-
         panelSoDoBan.setBackground(new java.awt.Color(255, 251, 233));
         panelSoDoBan.setBorder(javax.swing.BorderFactory.createEmptyBorder(15, 60, 20, 40));
-
         javax.swing.GroupLayout panelSoDoBanLayout = new javax.swing.GroupLayout(panelSoDoBan);
         panelSoDoBan.setLayout(panelSoDoBanLayout);
         panelSoDoBanLayout.setHorizontalGroup(
@@ -898,12 +709,9 @@ public class PanelDatBan extends javax.swing.JPanel {
         panelSoDoBanLayout.setVerticalGroup(
                 panelSoDoBanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGap(0, 496, Short.MAX_VALUE));
-
         scrSoDoBan.setViewportView(panelSoDoBan);
-
         add(scrSoDoBan, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
-
     private void cbFilterTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterTrangThaiActionPerformed
         String selected = (String) cbFilterTrangThai.getSelectedItem();
         if (selected != null && selected.equals("Trạng thái")) {
@@ -913,33 +721,21 @@ public class PanelDatBan extends javax.swing.JPanel {
         }
         loadSoDoBanFromDatabase();
     }// GEN-LAST:event_cbFilterTrangThaiActionPerformed
-
-    /**
-     * Tao placeholder cho TextField
-     * Khi focus vao, placeholder bien mat
-     * Khi focus out va trong, placeholder xuat hien lai
-     */
     private void setupPlaceholder(JTextField textField, String placeholder) {
         Color placeholderColor = new Color(153, 153, 153);
         Color textColor = new Color(0, 0, 0);
-
-        // Set text mac dinh va mau
         textField.setText(placeholder);
         textField.setForeground(placeholderColor);
-
         textField.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusGained(java.awt.event.FocusEvent evt) {
-                // Khi focus vao, neu la placeholder thi xoa
                 if (textField.getText().equals(placeholder)) {
                     textField.setText("");
                     textField.setForeground(textColor);
                 }
             }
-
             @Override
             public void focusLost(java.awt.event.FocusEvent evt) {
-                // Khi focus out, neu trong thi hien thi placeholder
                 if (textField.getText().isEmpty()) {
                     textField.setText(placeholder);
                     textField.setForeground(placeholderColor);
@@ -947,15 +743,10 @@ public class PanelDatBan extends javax.swing.JPanel {
             }
         });
     }
-
     private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtTimKiemActionPerformed
-        // TODO add your handling code here:
     }// GEN-LAST:event_txtTimKiemActionPerformed
-
     private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtSearchActionPerformed
-        // TODO add your handling code here:
     }// GEN-LAST:event_txtSearchActionPerformed
-
     private void cbFilterKhuVucActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterKhuVucActionPerformed
         String selected = (String) cbFilterKhuVuc.getSelectedItem();
         if (selected != null && selected.equals("Khu vực")) {
@@ -965,13 +756,9 @@ public class PanelDatBan extends javax.swing.JPanel {
         }
         loadSoDoBanFromDatabase();
     }// GEN-LAST:event_cbFilterKhuVucActionPerformed
-
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnSearchActionPerformed
         String searchText = txtTimKiem.getText().trim();
-
-        // Nếu search text là placeholder hoặc trống thì load toàn bộ
         if (searchText.isEmpty() || searchText.equals("Nhập mã bàn")) {
-            // Reset filter status
             selectedKhuVuc = null;
             selectedTrangThai = null;
             cbFilterKhuVuc.setSelectedItem("-- Tất cả --");
@@ -979,31 +766,24 @@ public class PanelDatBan extends javax.swing.JPanel {
             loadSoDoBanFromDatabase();
             return;
         }
-
-        // Search bàn theo mã
         panelSoDoBan.removeAll();
         panelSoDoBan.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 20));
         tableCards.clear();
         tableTrangThai.clear();
         tableLabelStatus.clear();
         selectedTables.clear();
-
         try {
             BanService banService = new BanService();
             java.util.List<Ban> allBan = banService.getAllBan();
-
             Map<String, java.util.List<Ban>> banByKhuVuc = new TreeMap<>();
             for (Ban ban : allBan) {
-                // Filter theo từ khóa tìm kiếm (case-insensitive)
                 if (!ban.getMaBan().toLowerCase().contains(searchText.toLowerCase())) {
                     continue;
                 }
-
                 String maKV = ban.getKhuVuc().getMaKhuVuc();
                 banByKhuVuc.putIfAbsent(maKV, new ArrayList<>());
                 banByKhuVuc.get(maKV).add(ban);
             }
-
             if (banByKhuVuc.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Không tìm thấy bàn: " + searchText, "Thông báo",
                         JOptionPane.INFORMATION_MESSAGE);
@@ -1012,35 +792,28 @@ public class PanelDatBan extends javax.swing.JPanel {
                 wrapperPanel.setLayout(new BoxLayout(wrapperPanel, BoxLayout.Y_AXIS));
                 wrapperPanel.setBackground(new java.awt.Color(255, 251, 233));
                 wrapperPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-
                 for (String khuVuc : banByKhuVuc.keySet()) {
                     JPanel pnlGroup = new JPanel();
                     pnlGroup.setLayout(new BorderLayout());
                     pnlGroup.setBackground(new java.awt.Color(255, 251, 233));
                     pnlGroup.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
                     pnlGroup.setMaximumSize(new Dimension(Integer.MAX_VALUE, 300));
-
                     JLabel lblTitle = new JLabel("Khu vực " + khuVuc);
                     lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 18));
                     lblTitle.setForeground(new Color(153, 153, 102));
                     lblTitle.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
                     pnlGroup.add(lblTitle, BorderLayout.NORTH);
-
                     JPanel pnlTables = new JPanel(new GridLayout(0, 5, 20, 20));
                     pnlTables.setBackground(new java.awt.Color(255, 251, 233));
                     pnlTables.setPreferredSize(new Dimension(1200, 200));
-
                     for (Ban ban : banByKhuVuc.get(khuVuc)) {
                         pnlTables.add(createTableCard(ban.getMaBan(), ban.getTrangThai()));
                     }
-
                     pnlGroup.add(pnlTables, BorderLayout.CENTER);
                     wrapperPanel.add(pnlGroup);
                 }
-
                 panelSoDoBan.add(wrapperPanel);
             }
-
             panelSoDoBan.revalidate();
             panelSoDoBan.repaint();
         } catch (Exception e) {
@@ -1048,8 +821,6 @@ public class PanelDatBan extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Lỗi tìm kiếm: " + e.getMessage());
         }
     }// GEN-LAST:event_btnSearchActionPerformed
-
-    // Không sửa bên dưới
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSearch;
     private javax.swing.JComboBox<String> cbFilterKhuVuc;

@@ -1,5 +1,4 @@
 package com.restaurant.quanlydatbannhahang.dao;
-
 import com.restaurant.quanlydatbannhahang.connectDB.DatabaseConnection;
 import com.restaurant.quanlydatbannhahang.entity.MonAn;
 import com.restaurant.quanlydatbannhahang.entity.LoaiMonAn;
@@ -10,21 +9,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-
 public class MonAnDAO {
-
     public MonAnDAO() {
     }
-
-    
-
-
-
-
     public String getLastMonAnID() {
         return IDQueryHelper.getLastID("MonAn", "maMon");
     }
-
     private MonAn buildMonAnFromResultSet(ResultSet rs) {
         try {
             String maMon = rs.getString("maMon");
@@ -34,17 +24,14 @@ public class MonAnDAO {
             String tenLoaiStr = rs.getString("tenLoai");
             String trangThaiStr = rs.getString("trangThai");
             String urlHinhAnh = rs.getString("urlHinhAnh");
-
             LoaiMonAn tenLoai = LoaiMonAn.valueOf(tenLoaiStr);
             TrangThaiMonAn trangThai = TrangThaiMonAn.valueOf(trangThaiStr);
-
             return new MonAn(maMon, tenMon, donGia, donViTinh, tenLoai, trangThai, urlHinhAnh);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
-
     public boolean themMonAn(MonAn monAn) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "insert into MonAn (maMon, tenMon, donGia, donViTinh, tenLoai, trangThai, urlHinhAnh) values (?,?,?,?,?,?,?)";
@@ -63,7 +50,6 @@ public class MonAnDAO {
         }
         return false;
     }
-
     public MonAn getMonAnTheoMa(String maMon) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from MonAn where maMon = ?";
@@ -79,7 +65,6 @@ public class MonAnDAO {
         }
         return null;
     }
-
     public List<MonAn> getAllMonAn() {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from MonAn";
@@ -98,7 +83,6 @@ public class MonAnDAO {
         }
         return dsMonAn;
     }
-
     public List<MonAn> getMonAnTheoLoai(String maLoai) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from MonAn where tenLoai = ?";
@@ -118,7 +102,6 @@ public class MonAnDAO {
         }
         return dsMonAn;
     }
-
     public List<MonAn> getMonAnConHang() {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from MonAn where trangThai = ?";
@@ -138,7 +121,6 @@ public class MonAnDAO {
         }
         return dsMonAn;
     }
-
     public boolean capNhatMonAn(MonAn monAn) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "update MonAn set tenMon = ?, donGia = ?, donViTinh = ?, tenLoai = ?, trangThai = ?, urlHinhAnh = ? where maMon = ?";
@@ -157,7 +139,6 @@ public class MonAnDAO {
         }
         return false;
     }
-
     public boolean capNhatGiaMonAn(String maMon, double giaMoi) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "update MonAn set donGia = ? where maMon = ?";
@@ -171,7 +152,6 @@ public class MonAnDAO {
         }
         return false;
     }
-
     public boolean capNhatTrangThaiMonAn(String maMon, String trangThai) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "update MonAn set trangThai = ? where maMon = ?";
@@ -185,7 +165,6 @@ public class MonAnDAO {
         }
         return false;
     }
-
     public boolean xoaMonAn(String maMon) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "update MonAn set trangThai = ? where maMon = ?";
@@ -199,7 +178,6 @@ public class MonAnDAO {
         }
         return false;
     }
-
     public List<MonAn> timMonAnTheoTen(String tenMon) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from MonAn where tenMon like ?";

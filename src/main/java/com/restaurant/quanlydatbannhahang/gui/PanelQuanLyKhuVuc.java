@@ -1,13 +1,10 @@
 package com.restaurant.quanlydatbannhahang.gui;
-
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
 import javax.swing.*;
-
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import com.restaurant.quanlydatbannhahang.service.KhuVucService;
@@ -15,32 +12,22 @@ import com.restaurant.quanlydatbannhahang.util.IDGeneratorHelper;
 import com.restaurant.quanlydatbannhahang.util.IDQueryHelper;
 import com.restaurant.quanlydatbannhahang.entity.KhuVuc;
 import java.util.List;
-
 public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListener {
-
-
-
     public PanelQuanLyKhuVuc() {
-
         initComponents();
         customUI();
         loadDataToTable();
         fillMaKhuVuc(txtMaKhuVuc);
-
     }
-
     private void fillMaKhuVuc(JTextField txtMaKhuVuc) {
         String lastID = IDQueryHelper.getLastID("KhuVuc", "maKhuVuc");
         String maPDBNew = (lastID == null || lastID.isEmpty()) ? IDGeneratorHelper.generateDefaultID("KV")
                 : IDGeneratorHelper.generateNextIDFromFullID(lastID);
         txtMaKhuVuc.setText(maPDBNew);
     }
-
     private void customUI() {
         setupPlaceholder(txtTimKiem, "Nhập tên hoặc mã khu vực");
-
         MainForm.attachGoHomeListener(btnTrangChu, this);
-
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent evt) {
@@ -51,7 +38,6 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
                 }
             }
         });
-
         tableKhuVuc.addMouseListener(this);
         tableKhuVuc.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
@@ -62,22 +48,13 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
                 syncCapNhatButtonState();
             }
         });
-
         syncCapNhatButtonState();
     }
-
-    /**
-     * Tao placeholder cho TextField
-     * Khi focus vao, placeholder bien mat
-     * Khi focus out va trong, placeholder xuat hien lai
-     */
     private void setupPlaceholder(JTextField textField, String placeholder) {
         Color placeholderColor = new Color(153, 153, 153);
         Color textColor = new Color(0, 0, 0);
-
         textField.setText(placeholder);
         textField.setForeground(placeholderColor);
-
         textField.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -86,7 +63,6 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
                     textField.setForeground(textColor);
                 }
             }
-
             @Override
             public void focusLost(java.awt.event.FocusEvent evt) {
                 if (textField.getText().isEmpty()) {
@@ -96,7 +72,6 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
             }
         });
     }
-
     private void applyCardStyle(JPanel panel, int radius) {
         panel.setOpaque(false);
         panel.setUI(new javax.swing.plaf.PanelUI() {
@@ -110,7 +85,6 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
             }
         });
     }
-
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
@@ -118,7 +92,6 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
         pnlHeader = new javax.swing.JPanel();
         lblTitle = new javax.swing.JLabel();
         pnlThongTinKhuVuc = new javax.swing.JPanel();
@@ -137,54 +110,43 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
         btnCapNhat = new javax.swing.JButton();
         btnXoa = new javax.swing.JButton();
         btnThem = new javax.swing.JButton();
-
         setBackground(new java.awt.Color(255, 251, 233));
         setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 60, 20, 60));
         setLayout(new java.awt.BorderLayout(0, 10));
-
         pnlHeader.setOpaque(false);
         pnlHeader.setLayout(new java.awt.BorderLayout(0, 15));
-
-        lblTitle.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        lblTitle.setFont(new java.awt.Font("Segoe UI", 0, 18));
         lblTitle.setText("Quản lý thông tin khu vực trong nhà hàng");
         pnlHeader.add(lblTitle, java.awt.BorderLayout.WEST);
-
         pnlThongTinKhuVuc.setBackground(new java.awt.Color(255, 251, 233));
-
-        lblMaKhuVuc.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblMaKhuVuc.setFont(new java.awt.Font("Segoe UI", 0, 14));
         lblMaKhuVuc.setText("Mã khu vực:");
-
         txtMaKhuVuc.setEditable(false);
-        txtMaKhuVuc.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtMaKhuVuc.setFont(new java.awt.Font("Segoe UI", 0, 14));
         txtMaKhuVuc.setPreferredSize(new java.awt.Dimension(64, 35));
         txtMaKhuVuc.addActionListener(new ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtMaKhuVucActionPerformed(evt);
             }
         });
-
-        lblTenKhuVuc.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblTenKhuVuc.setFont(new java.awt.Font("Segoe UI", 0, 14));
         lblTenKhuVuc.setText("Tên khu vực:");
-
-        txtTenKhuVuc.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtTenKhuVuc.setFont(new java.awt.Font("Segoe UI", 0, 14));
         txtTenKhuVuc.setPreferredSize(new java.awt.Dimension(64, 35));
-
-        txtTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14));
         txtTimKiem.setPreferredSize(new java.awt.Dimension(64, 35));
         txtTimKiem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtTimKiemActionPerformed(evt);
             }
         });
-
-        btnTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14));
         btnTimKiem.setText("Tìm kiếm");
         btnTimKiem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTimKiemActionPerformed(evt);
             }
         });
-
         javax.swing.GroupLayout pnlThongTinKhuVucLayout = new javax.swing.GroupLayout(pnlThongTinKhuVuc);
         pnlThongTinKhuVuc.setLayout(pnlThongTinKhuVucLayout);
         pnlThongTinKhuVucLayout.setHorizontalGroup(
@@ -223,14 +185,10 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
                     .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, 0))
         );
-
         pnlHeader.add(pnlThongTinKhuVuc, java.awt.BorderLayout.PAGE_END);
-
         add(pnlHeader, java.awt.BorderLayout.PAGE_START);
-
         tableKhuVuc.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-
             },
             new String [] {
                 "Mã khu vực", "Tên khu vực"
@@ -239,27 +197,21 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
             boolean[] canEdit = new boolean [] {
                 false, false
             };
-
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
         tableKhuVuc.setRowHeight(35);
         scrTableKhuVuc.setViewportView(tableKhuVuc);
-
         add(scrTableKhuVuc, java.awt.BorderLayout.CENTER);
-
         pnlButton.setBackground(new java.awt.Color(255, 251, 233));
         pnlButton.setLayout(new java.awt.BorderLayout());
-
-        btnTrangChu.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnTrangChu.setFont(new java.awt.Font("Segoe UI", 0, 14));
         btnTrangChu.setText("Trang Chủ");
         pnlButton.add(btnTrangChu, java.awt.BorderLayout.WEST);
-
         pnlRightButtons.setBackground(new java.awt.Color(255, 251, 233));
         pnlRightButtons.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 15, 0));
-
-        btnXoaTrang.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnXoaTrang.setFont(new java.awt.Font("Segoe UI", 0, 14));
         btnXoaTrang.setText("Xóa trắng");
         btnXoaTrang.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -267,17 +219,15 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
             }
         });
         pnlRightButtons.add(btnXoaTrang);
-
         btnCapNhat.setText("Cập nhật");
-        btnCapNhat.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnCapNhat.setFont(new java.awt.Font("Segoe UI", 0, 14));
         btnCapNhat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCapNhatActionPerformed(evt);
             }
         });
         pnlRightButtons.add(btnCapNhat);
-
-        btnXoa.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnXoa.setFont(new java.awt.Font("Segoe UI", 0, 14));
         btnXoa.setText("Xóa");
         btnXoa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -285,48 +235,35 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
             }
         });
         pnlRightButtons.add(btnXoa);
-
         btnThem.setText("Thêm");
-        btnThem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnThem.setFont(new java.awt.Font("Segoe UI", 0, 14));
         btnThem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnThemActionPerformed(evt);
             }
         });
         pnlRightButtons.add(btnThem);
-
         pnlButton.add(pnlRightButtons, java.awt.BorderLayout.EAST);
-
         add(pnlButton, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
-
     private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTimKiemActionPerformed
-        // TODO add your handling code here:
     	searchByText();
     }//GEN-LAST:event_txtTimKiemActionPerformed
-
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
-        // TODO add your handling code here:
     	searchByText();
     }//GEN-LAST:event_btnTimKiemActionPerformed
-
     private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaTrangActionPerformed
-        // TODO add your handling code here:
         refreshData();
     }// GEN-LAST:event_btnXoaTrangActionPerformed
-
     private void loadDataToTable() {
         loadFilteredData();
     }
-
     private void loadFilteredData() {
         try {
             KhuVucService service = new KhuVucService();
             List<KhuVuc> list = service.getAllKhuVuc();
-
             DefaultTableModel model = (DefaultTableModel) tableKhuVuc.getModel();
             model.setRowCount(0);
-
             for (KhuVuc kv : list) {
                 model.addRow(new Object[] {
                         kv.getMaKhuVuc(),
@@ -339,16 +276,13 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
             JOptionPane.showMessageDialog(this, "Lỗi load dữ liệu: " + e.getMessage());
         }
     }
-
     private void searchByText() {
         try {
             KhuVucService service = new KhuVucService();
             List<KhuVuc> list = service.getAllKhuVuc();
             String searchText = txtTimKiem.getText().trim().toLowerCase();
-
             DefaultTableModel model = (DefaultTableModel) tableKhuVuc.getModel();
             model.setRowCount(0);
-
             for (KhuVuc kv : list) {
                 if (!searchText.isEmpty()) {
                     String maKhuVuc = kv.getMaKhuVuc() != null ? kv.getMaKhuVuc().toLowerCase() : "";
@@ -357,7 +291,6 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
                         continue;
                     }
                 }
-
                 model.addRow(new Object[] {
                         kv.getMaKhuVuc(),
                         kv.getTenKhuVuc()
@@ -369,7 +302,6 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
             JOptionPane.showMessageDialog(this, "Lỗi tìm kiếm dữ liệu: " + e.getMessage());
         }
     }
-
     private void centerTableColumns(JTable table) {
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
@@ -377,20 +309,17 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
             table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
         }
     }
-
     private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaActionPerformed
         String maKhuVuc = txtMaKhuVuc.getText().trim();
         if (maKhuVuc.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn khu vực cần xóa.");
             return;
         }
-
         int choice = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa khu vực này không?",
                 "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
         if (choice != JOptionPane.YES_OPTION) {
             return;
         }
-
         try {
             KhuVucService service = new KhuVucService();
             service.xoaKhuVuc(maKhuVuc);
@@ -400,16 +329,13 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
             JOptionPane.showMessageDialog(this, "Xóa khu vực thất bại: " + ex.getMessage());
         }
     }// GEN-LAST:event_btnXoaActionPerformed
-
     private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCapNhatActionPerformed
         String maKhuVuc = txtMaKhuVuc.getText().trim();
         String tenKhuVuc = txtTenKhuVuc.getText().trim();
-
         if (maKhuVuc.isEmpty() || tenKhuVuc.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin khu vực.");
             return;
         }
-
         try {
             KhuVuc khuVuc = new KhuVuc(maKhuVuc, tenKhuVuc);
             KhuVucService service = new KhuVucService();
@@ -420,16 +346,13 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
             JOptionPane.showMessageDialog(this, "Cập nhật khu vực thất bại: " + ex.getMessage());
         }
     }// GEN-LAST:event_btnCapNhatActionPerformed
-
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnThemActionPerformed
         String maKhuVuc = txtMaKhuVuc.getText().trim();
         String tenKhuVuc = txtTenKhuVuc.getText().trim();
-
         if (maKhuVuc.isEmpty() || tenKhuVuc.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin khu vực.");
             return;
         }
-
         try {
             KhuVuc khuVuc = new KhuVuc(maKhuVuc, tenKhuVuc);
             KhuVucService service = new KhuVucService();
@@ -440,18 +363,12 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
             JOptionPane.showMessageDialog(this, "Thêm khu vực thất bại: " + ex.getMessage());
         }
     }// GEN-LAST:event_btnThemActionPerformed
-
     private void txtMaKhuVucActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtMaKhuVucActionPerformed
-        // TODO add your handling code here:
     }// GEN-LAST:event_txtMaKhuVucActionPerformed
-
-    
-
     private void loadDataFromRow(int rowIndex) {
         try {
             String maKhuVuc = (String) tableKhuVuc.getValueAt(rowIndex, 0);
             String tenKhuVuc = (String) tableKhuVuc.getValueAt(rowIndex, 1);
-
             txtMaKhuVuc.setText(maKhuVuc);
             txtTenKhuVuc.setText(tenKhuVuc);
         } catch (Exception e) {
@@ -459,17 +376,14 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
             JOptionPane.showMessageDialog(this, "Lỗi khi load dữ liệu từ row: " + e.getMessage());
         }
     }
-
     private void clearFields() {
         txtTenKhuVuc.setText("");
         txtTimKiem.setText("");
     }
-
     private void syncCapNhatButtonState() {
         btnCapNhat.setEnabled(tableKhuVuc.getSelectedRow() >= 0);
         btnXoa.setEnabled(tableKhuVuc.getSelectedRow() >= 0);
     }
-
     public void refreshData() {
         clearFields();
         fillMaKhuVuc(txtMaKhuVuc);
@@ -478,19 +392,16 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
         tableKhuVuc.clearSelection();
         syncCapNhatButtonState();
     }
-
     private void resetPlaceholder(JTextField textField, String placeholder) {
         Color placeholderColor = new Color(153, 153, 153);
         textField.setText(placeholder);
         textField.setForeground(placeholderColor);
     }
-
     private boolean isMouseOverTable(java.awt.event.MouseEvent evt) {
         java.awt.Point p = evt.getPoint();
         java.awt.Point tablePoint = SwingUtilities.convertPoint(this, p, tableKhuVuc);
         return tableKhuVuc.getBounds().contains(tablePoint);
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCapNhat;
     private javax.swing.JButton btnThem;
@@ -513,26 +424,17 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
     // End of variables declaration//GEN-END:variables
     @Override
     public void mouseClicked(MouseEvent e) {
-        // Được xử lý tập trung trong selection listener của bảng
     }
-
     @Override
     public void mousePressed(MouseEvent e) {
-        // TODO Auto-generated method stub
     }
-
     @Override
     public void mouseReleased(MouseEvent e) {
-        // TODO Auto-generated method stub
     }
-
     @Override
     public void mouseEntered(MouseEvent e) {
-        // TODO Auto-generated method stub
     }
-
     @Override
     public void mouseExited(MouseEvent e) {
-        // TODO Auto-generated method stub
     }
 }
