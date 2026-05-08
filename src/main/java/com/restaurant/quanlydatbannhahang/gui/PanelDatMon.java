@@ -255,7 +255,7 @@ public class PanelDatMon extends javax.swing.JPanel {
     }
     private List<MonAn> ensureMonAnDataLoaded() {
         if (allMonAn == null) {
-            allMonAn = monAnService.getAllMonAn();
+            allMonAn = monAnService.getMonAnConHang();
         }
         return allMonAn;
     }
