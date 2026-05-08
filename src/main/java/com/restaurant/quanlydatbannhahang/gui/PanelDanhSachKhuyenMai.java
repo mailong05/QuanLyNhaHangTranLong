@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import com.restaurant.quanlydatbannhahang.service.KhuyenMaiService;
+import com.restaurant.quanlydatbannhahang.util.CurrencyUtility;
 import com.restaurant.quanlydatbannhahang.entity.KhuyenMai;
 import java.util.List;
 public class PanelDanhSachKhuyenMai extends javax.swing.JPanel {
@@ -33,7 +34,7 @@ public class PanelDanhSachKhuyenMai extends javax.swing.JPanel {
                 public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
                         boolean hasFocus, int row, int column) {
                     if (value != null && value instanceof Number) {
-                        value = com.restaurant.quanlydatbannhahang.util.CurrencyUtility
+                        value = CurrencyUtility
                                 .formatVND(((Number) value).doubleValue());
                     }
                     setHorizontalAlignment(JLabel.CENTER);
