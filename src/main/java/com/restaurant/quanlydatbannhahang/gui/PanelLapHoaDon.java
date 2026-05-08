@@ -1112,9 +1112,11 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         for (int row = 0; row < model.getRowCount(); row++) {
             String tenMon = String.valueOf(model.getValueAt(row, 0));
             int soLuong = Integer.parseInt(String.valueOf(model.getValueAt(row, 1)));
-            double donGia = CurrencyUtility
-                    .parseVND(String.valueOf(model.getValueAt(row, 2)));
-            String maMon = findMaMonByTenMon(tenMon);
+            Object donGiaObj = model.getValueAt(row, 2);
+            double donGia = 0;
+            if (donGiaObj instanceof Number) {
+                donGia = ((Number) donGiaObj).doubleValue();
+            }  String maMon = findMaMonByTenMon(tenMon);
             draftItems.add(new HoaDonDraftSession.DraftMonItem(maMon, tenMon, soLuong, donGia));
         }
         String soDienThoai = txtTimKiem.getText() != null ? txtTimKiem.getText().trim() : "";
@@ -1189,11 +1191,12 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         double tyLeThue = apDungThue(maThue);
         return Math.max(0, coSoTinhThue) * tyLeThue;
     }
+
     private double tinhTongTienMonAn() {
         double tong = 0;
         DefaultTableModel model = (DefaultTableModel) tableThongTinHoaDon.getModel();
         for (int i = 0; i < model.getRowCount(); i++) {
-            Object value = model.getValueAt(i, 3);
+            Object value = model.getValueAt(i, 3); 
             if (value instanceof Number) {
                 tong += ((Number) value).doubleValue();
             }
