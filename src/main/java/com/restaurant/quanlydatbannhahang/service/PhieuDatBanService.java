@@ -1,4 +1,5 @@
 package com.restaurant.quanlydatbannhahang.service;
+
 import com.restaurant.quanlydatbannhahang.dao.PhieuDatBanDAO;
 import com.restaurant.quanlydatbannhahang.connectDB.DatabaseConnection;
 import com.restaurant.quanlydatbannhahang.dao.ChiTietPhieuDatBanDAO;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
+
 public class PhieuDatBanService {
     private PhieuDatBanDAO phieuDatBanDAO;
     private ChiTietPhieuDatBanDAO chiTietPhieuDatBanDAO;
@@ -29,12 +31,14 @@ public class PhieuDatBanService {
     private static final String HOTEN_PATTERN = "^[\\p{Lu}][\\p{Ll}]*(\\s[\\p{Lu}][\\p{Ll}]*)*$";
     private static final Pattern phonePattern = Pattern.compile(PHONE_PATTERN);
     private static final Pattern hoTenPattern = Pattern.compile(HOTEN_PATTERN);
+
     public PhieuDatBanService() {
         this.phieuDatBanDAO = new PhieuDatBanDAO();
         this.chiTietPhieuDatBanDAO = new ChiTietPhieuDatBanDAO();
         this.banService = new BanService();
         this.nhanVienService = new NhanVienService();
     }
+
     public String taoPhieuDatDungNgay(Set<String> dsMaBan, String maNV) {
         if (dsMaBan == null || dsMaBan.isEmpty()) {
             throw new IllegalArgumentException("Phải chọn ít nhất một bàn để bắt đầu phục vụ");
@@ -60,6 +64,7 @@ public class PhieuDatBanService {
         }
         return maPhieuMoi;
     }
+
     public void validatePhieuDatBan(PhieuDatBan phieu) {
         if (phieu == null) {
             throw new IllegalArgumentException("Dữ liệu phiếu đặt không được để trống");
@@ -93,6 +98,7 @@ public class PhieuDatBanService {
             throw new IllegalArgumentException("Số lượng người không được là số âm");
         }
     }
+
     public void capNhatKhachHangChoPhieu(String maPhieu, String maKH) {
         if (maPhieu == null || maPhieu.isBlank()) {
             throw new IllegalArgumentException("Mã phiếu không được để trống");
@@ -102,6 +108,7 @@ public class PhieuDatBanService {
             throw new RuntimeException("Cập nhật khách hàng vào phiếu thất bại");
         }
     }
+
     public void hoanTatPhieuDatBan(String maPhieu) {
         phieuDatBanDAO.capNhatTrangThaiPhieu(maPhieu, TrangThaiPhieuDat.DA_SU_DUNG);
         List<ChiTietPhieuDatBan> chiTiets = chiTietPhieuDatBanDAO.getChiTietByMaPhieuDat(maPhieu);
@@ -109,12 +116,14 @@ public class PhieuDatBanService {
             banService.capNhatTrangThaiBan(ct.getBan().getMaBan(), TrangThaiBan.TRONG);
         }
     }
+
     public PhieuDatBan getPhieuDatBanTheoMa(String maPhieu) {
         if (maPhieu == null || maPhieu.isBlank()) {
             throw new IllegalArgumentException("Mã phiếu không được rỗng");
         }
         return phieuDatBanDAO.getPhieuDatBanTheoMa(maPhieu);
     }
+
     public PhieuDatBan getActivePhieuDatByBan(String maBan) {
         if (maBan == null || maBan.isBlank()) {
             return null;
@@ -128,15 +137,41 @@ public class PhieuDatBanService {
         }
         return null;
     }
+
+    public List<String> getDanhSachBanTrongTheoThoiGian(LocalDateTime selectedTime) {
+        List<String> availableBan = new ArrayList<>();
+        if (selectedTime == null) {
+            return availableBan;
+        }
+        java.time.LocalDate selectedDate = selectedTime.toLocalDate();
+        List<Ban> allBan = banService.getAllBan();
+        for (Ban ban : allBan) {
+            if (ban == null || ban.getMaBan() == null) {
+                continue;
+            }
+            if (ban.getTrangThai() == TrangThaiBan.TRONG) {
+                availableBan.add(ban.getMaBan());
+            } else if (ban.getTrangThai() == TrangThaiBan.DA_DAT) {
+                List<PhieuDatBan> dsPhieu = phieuDatBanDAO.getPhieuDatBanTheoBan(ban.getMaBan(), selectedDate);
+                if (dsPhieu == null || dsPhieu.isEmpty()) {
+                    availableBan.add(ban.getMaBan());
+                }
+            }
+        }
+        return availableBan;
+    }
+
     public void themPhieuDatBan(PhieuDatBan phieuDatBan) {
         validatePhieuDatBan(phieuDatBan);
         if (!phieuDatBanDAO.themPhieuDatBan(phieuDatBan)) {
             throw new RuntimeException("Thêm phiếu đặt bàn thất bại");
         }
     }
+
     public String getLastPhieuDatBanID() {
         return phieuDatBanDAO.getLastPhieuDatBanID();
     }
+
     public String themPhieuDatBan(String maPDB, String tenKhachHang, String soDienThoai, int soLuongNguoi,
             LocalDateTime thoiGianDen, String ghiChu, Set<String> selectedTables) {
         KhachHangService khService = new KhachHangService();
@@ -172,22 +207,27 @@ public class PhieuDatBanService {
         }
         return "Đặt bàn thành công cho khách hàng " + tenKhachHang;
     }
+
     public void capNhatTrangThaiPhieu(String maPDB, TrangThaiPhieuDat trangThai) {
         phieuDatBanDAO.capNhatTrangThaiPhieu(maPDB, trangThai);
     }
+
     public void capNhatPhieuDatBan(PhieuDatBan phieu) {
         validatePhieuDatBan(phieu);
         phieuDatBanDAO.capNhatPhieuDatBan(phieu);
     }
+
     public void xoaPhieuDatBan(String maPDB) {
         if (maPDB == null || maPDB.isBlank()) {
             throw new IllegalArgumentException("Không thể xóa với mã phiếu đặt bàn trống");
         }
         phieuDatBanDAO.xoaPhieuDatBan(maPDB);
     }
+
     public ArrayList<PhieuDatBan> getAllPhieuDatBan() {
         return (ArrayList<PhieuDatBan>) phieuDatBanDAO.getAllPhieuDatBan();
     }
+
     public void batDauSuDung(String maPhieu) {
         PhieuDatBan phieu = getPhieuDatBanTheoMa(maPhieu);
         if (phieu != null && phieu.getTrangThai() == TrangThaiPhieuDat.DANG_CHO) {
@@ -196,6 +236,7 @@ public class PhieuDatBanService {
             throw new IllegalStateException("Không thể bắt đầu sử dụng. Phiếu phải ở trạng thái Đang chờ");
         }
     }
+
     public List<PhieuDatBan> getDanhSachHoatDongGanDay() {
         return phieuDatBanDAO.getHoatDongGanDay();
     }

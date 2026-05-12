@@ -1,4 +1,5 @@
 package com.restaurant.quanlydatbannhahang.gui;
+
 import java.time.LocalDateTime;
 import java.util.Set;
 import javax.swing.JOptionPane;
@@ -7,6 +8,7 @@ import com.restaurant.quanlydatbannhahang.service.PhieuDatBanService;
 import com.restaurant.quanlydatbannhahang.util.CurrencyUtility;
 import com.restaurant.quanlydatbannhahang.util.IDGeneratorHelper;
 import com.restaurant.quanlydatbannhahang.util.IDQueryHelper;
+
 public class DatBanTruocDialog extends javax.swing.JDialog {
     private boolean datBanThanhCong = false;
     private IDGeneratorHelper helper;
@@ -14,6 +16,7 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
     private Set<String> selectedTables;
     private PanelDatBan panelDatBan;
     private PanelQuanLyDatBanTruoc panelQuanLyDatBanTruoc;
+
     public DatBanTruocDialog(java.awt.Frame parent, boolean modal, Set<String> selectedTables,
             PanelDatBan panelDatBan, PanelQuanLyDatBanTruoc panelQuanLyDatBanTruoc) {
         super(parent, modal);
@@ -30,9 +33,11 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
         fillMaPhieuDat(txtMaPhieuDat);
         updateTienDatCoc();
     }
+
     public boolean isDatBanThanhCong() {
         return datBanThanhCong;
     }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
@@ -138,22 +143,41 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 480, 430));
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
     private void txtTenKhachHangActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtTenKhachHangActionPerformed
     }// GEN-LAST:event_txtTenKhachHangActionPerformed
+
     private void fillMaPhieuDat(JTextField txtMaKhuVuc) {
         String lastID = IDQueryHelper.getLastID("PhieuDatBan", "maPhieuDat");
         String maPDBNew = (lastID == null || lastID.isEmpty()) ? IDGeneratorHelper.generateDefaultID("PD")
                 : IDGeneratorHelper.generateNextIDFromFullID(lastID);
         txtMaPhieuDat.setText(maPDBNew);
     }
+
     private void btnDatBanActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnDatBanActionPerformed
         try {
             String maPDB = txtMaPhieuDat.getText().trim();
             String soDienThoai = txtSoDienThoai.getText().trim();
             String tenKhachHang = txtTenKhachHang.getText().trim();
+            String ghiChu = txtGhiChu.getText().trim();
             int soLuongNguoi = (int) spSoLuong.getValue();
             LocalDateTime thoiGianDen = dtpThoiGianDen.getDateTimeStrict();
-            String ghiChu = txtGhiChu.getText().trim();
+            java.util.Set<String> invalidTables = new java.util.HashSet<>();
+            java.util.List<String> availableTables = pdbService.getDanhSachBanTrongTheoThoiGian(thoiGianDen);
+            for (String maBan : selectedTables) {
+                if (!availableTables.contains(maBan)) {
+                    invalidTables.add(maBan);
+                }
+            }
+            if (!invalidTables.isEmpty()) {
+                JOptionPane.showMessageDialog(this,
+                        "Không thể đặt trước các bàn sau vào ngày đã chọn: "
+                                + String.join(", ", invalidTables)
+                                + "\nVui lòng chọn lại bàn khác hoặc ngày khác.",
+                        "Xung đột đặt bàn",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             String maPhieuDat = pdbService.themPhieuDatBan(maPDB, tenKhachHang, soDienThoai, soLuongNguoi,
                     thoiGianDen, ghiChu, selectedTables);
             if (panelDatBan != null) {
@@ -178,8 +202,10 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
             e.printStackTrace();
         }
     }// GEN-LAST:event_btnDatBanActionPerformed
+
     private void txtMaPhieuDatActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtMaPhieuDatActionPerformed
     }// GEN-LAST:event_txtMaPhieuDatActionPerformed
+
     public static void main(String args[]) {
         UIConfiguration.setupUI();
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -199,6 +225,7 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
             }
         });
     }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDatBan;
     private com.github.lgooddatepicker.components.DateTimePicker dtpThoiGianDen;
@@ -218,6 +245,7 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
     private javax.swing.JTextField txtSoDienThoai;
     private javax.swing.JTextField txtTenKhachHang;
     private javax.swing.JTextField txtTienDatCoc;
+
     // End of variables declaration//GEN-END:variables
     private void updateTienDatCoc() {
         if (selectedTables != null && !selectedTables.isEmpty()) {

@@ -1,4 +1,5 @@
 package com.restaurant.quanlydatbannhahang.gui;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -20,6 +21,7 @@ import com.restaurant.quanlydatbannhahang.session.HoaDonDraftSession;
 import com.restaurant.quanlydatbannhahang.session.SessionManager;
 import com.restaurant.quanlydatbannhahang.util.AppConfig;
 import com.restaurant.quanlydatbannhahang.util.ImageUtil;
+
 public class MainForm extends javax.swing.JFrame {
     private String userRole;
     private TaiKhoan taiKhoan = null;
@@ -37,10 +39,12 @@ public class MainForm extends javax.swing.JFrame {
     private final Color COLOR_MENU_BG = new Color(142, 128, 106);
     private final Color COLOR_MENU_HOVER = new Color(165, 150, 125);
     private final Color COLOR_TEXT_NORMAL = new Color(255, 255, 255);
+
     public MainForm() {
         this("Quản lý");
         panelQuanLyKhachHang = new PanelQuanLyKhachHang();
     }
+
     public MainForm(String role) {
         this.userRole = (role != null) ? role : "Quản lý";
         this.taiKhoan = null;
@@ -53,6 +57,7 @@ public class MainForm extends javax.swing.JFrame {
         }
         initAll();
     }
+
     public MainForm(TaiKhoan taiKhoan) {
         this.taiKhoan = taiKhoan;
         this.userRole = (taiKhoan != null && taiKhoan.getNhanVien() != null
@@ -62,6 +67,7 @@ public class MainForm extends javax.swing.JFrame {
         SessionManager.setCurrentTaiKhoan(taiKhoan);
         initAll();
     }
+
     private void initAll() {
         try {
             initComponents();
@@ -70,6 +76,7 @@ public class MainForm extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }
+
     private void initCustomComponents() {
         AppConfig.initializeImagePaths();
         java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
@@ -102,6 +109,7 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
     }
+
     private void initializePanelsEarly() {
         if (panelDatBan == null) {
             panelDatBan = new PanelDatBan();
@@ -112,15 +120,18 @@ public class MainForm extends javax.swing.JFrame {
         panelDatBan.setPanelQuanLyDatBanTruoc(panelQuanLyDatBanTruoc);
         panelQuanLyDatBanTruoc.setPanelDatBan(panelDatBan);
     }
+
     private boolean isManager() {
         if (taiKhoan == null || taiKhoan.getQuyenHan() == null)
             return false;
         return taiKhoan.getQuyenHan() == QuyenHan.MANAGER;
     }
+
     private void showNoAccessMessage() {
         JOptionPane.showMessageDialog(this, "Bạn không có quyền truy cập chức năng này!", "Chú ý",
                 JOptionPane.WARNING_MESSAGE);
     }
+
     private void disableMenuForStaff() {
         if (!isManager()) {
             JLabel[] restrictedMenus = {
@@ -141,6 +152,7 @@ public class MainForm extends javax.swing.JFrame {
             }
         }
     }
+
     private boolean canAccessLabel(JLabel lbl) {
         if (isManager())
             return true;
@@ -160,6 +172,7 @@ public class MainForm extends javax.swing.JFrame {
         }
         return true;
     }
+
     private void phanQuyenGiaoDien() {
         String tenNhanVien = "Nhân viên";
         String chucVu = userRole;
@@ -170,6 +183,7 @@ public class MainForm extends javax.swing.JFrame {
         lblTenNhanVien.setText(tenNhanVien);
         lblPhanQuyen.setText(chucVu);
     }
+
     private void updateActivePanel(JPanel newActive) {
         if (activePanel != null) {
             paintRoundedPanel(activePanel, COLOR_MENU_BG, false);
@@ -177,6 +191,7 @@ public class MainForm extends javax.swing.JFrame {
         activePanel = newActive;
         paintRoundedPanel(activePanel, COLOR_MENU_HOVER, true);
     }
+
     private void showPanel(JPanel panel) {
         if (panel != null) {
             panelBody.removeAll();
@@ -185,6 +200,7 @@ public class MainForm extends javax.swing.JFrame {
             panelBody.repaint();
         }
     }
+
     public void showTrangChuPanel() {
         PanelTrangChu panel = new PanelTrangChu();
         currentTrangChuPanel = panel;
@@ -195,6 +211,7 @@ public class MainForm extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }
+
     public void goToTrangChuFromPanel() {
         updateActivePanel(panelTrangChu);
         lblTenTrang.setText("TRANG CHỦ");
@@ -205,11 +222,13 @@ public class MainForm extends javax.swing.JFrame {
             activeSubLabel = null;
         }
     }
+
     public void openPanelDatMon() {
         HoaDonDraftSession.clearCurrentPhoneNumber();
         HoaDonDraftSession.clearCurrentMaPhieuDatContext();
         openPanelDatMon(null);
     }
+
     public void openPanelDatMon(String maBanContext) {
         if (panelDatMon == null) {
             panelDatMon = new PanelDatMon();
@@ -220,6 +239,7 @@ public class MainForm extends javax.swing.JFrame {
         showPanel(panelDatMon);
         lblTenTrang.setText("ĐẶT MÓN");
     }
+
     public void openPanelLapHoaDon() {
         if (panelLapHoaDon == null) {
             panelLapHoaDon = new PanelLapHoaDon();
@@ -229,6 +249,18 @@ public class MainForm extends javax.swing.JFrame {
         showPanel(panelLapHoaDon);
         lblTenTrang.setText("LẬP HÓA ĐƠN");
     }
+
+    public void openPanelLapHoaDonFromBillMode(String maBan, String maPhieuDat) {
+        if (panelLapHoaDon == null) {
+            panelLapHoaDon = new PanelLapHoaDon();
+        }
+        HoaDonDraftSession.setCurrentMaBanContext(maBan);
+        HoaDonDraftSession.setCurrentMaPhieuDatContext(maPhieuDat);
+        panelLapHoaDon.refreshDraftData();
+        showPanel(panelLapHoaDon);
+        lblTenTrang.setText("LẬP HÓA ĐƠN");
+    }
+
     public void goBackToPreviousPanel() {
         if (lastVisitedPanel != null) {
             showPanel(lastVisitedPanel);
@@ -266,6 +298,7 @@ public class MainForm extends javax.swing.JFrame {
             goToTrangChuFromPanel();
         }
     }
+
     public static void attachGoHomeListener(javax.swing.JButton btn, JPanel panel) {
         btn.addActionListener(e -> {
             MainForm mainForm = (MainForm) SwingUtilities.getWindowAncestor(panel);
@@ -274,6 +307,7 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
     }
+
     private void paintRoundedPanel(JPanel panel, Color color, boolean forceDown) {
         panel.setOpaque(false);
         panel.setBorder(new AbstractBorder() {
@@ -302,6 +336,7 @@ public class MainForm extends javax.swing.JFrame {
         });
         panel.repaint();
     }
+
     private void batSuKienMenu() {
         JPanel[] pagePanels = {
                 panelTrangChu, panelBan, panelKhuVuc, panelNhanVien,
@@ -363,12 +398,14 @@ public class MainForm extends javax.swing.JFrame {
                         }
                     }
                 }
+
                 @Override
                 public void mouseEntered(MouseEvent evt) {
                     if (pnl != activePanel) {
                         paintRoundedPanel(pnl, COLOR_MENU_HOVER, (subPnl != null && subPnl.isVisible()));
                     }
                 }
+
                 @Override
                 public void mouseExited(MouseEvent evt) {
                     if (pnl == activePanel) {
@@ -390,16 +427,19 @@ public class MainForm extends javax.swing.JFrame {
                     });
                 }
             }
+
             @Override
             public void mouseEntered(MouseEvent e) {
                 paintRoundedPanel(panelDangXuat, new Color(200, 80, 80), false);
             }
+
             @Override
             public void mouseExited(MouseEvent e) {
                 paintRoundedPanel(panelDangXuat, COLOR_MENU_BG, false);
             }
         });
     }
+
     private void batSuKienSubMenu(JLabel lbl, JPanel[] pages, JPanel[] groups) {
         lbl.addMouseListener(new MouseAdapter() {
             @Override
@@ -435,6 +475,21 @@ public class MainForm extends javax.swing.JFrame {
                     if (panelDatBan == null) {
                         panelDatBan = new PanelDatBan();
                     }
+                    panelDatBan.setBillMode(false);
+                    if (panelQuanLyDatBanTruoc != null) {
+                        panelDatBan.setPanelQuanLyDatBanTruoc(panelQuanLyDatBanTruoc);
+                        panelQuanLyDatBanTruoc.setPanelDatBan(panelDatBan);
+                    }
+                    if (isMenuClick) {
+                        panelDatBan.refreshData();
+                    }
+                    lastVisitedSubLabel = lbl;
+                    showPanel(panelDatBan);
+                } else if (lbl == subLapHoaDon) {
+                    if (panelDatBan == null) {
+                        panelDatBan = new PanelDatBan();
+                    }
+                    panelDatBan.setBillMode(true);
                     if (panelQuanLyDatBanTruoc != null) {
                         panelDatBan.setPanelQuanLyDatBanTruoc(panelQuanLyDatBanTruoc);
                         panelQuanLyDatBanTruoc.setPanelDatBan(panelDatBan);
@@ -490,11 +545,13 @@ public class MainForm extends javax.swing.JFrame {
                     showPanel(new PanelQuanLyTaiKhoan());
                 }
             }
+
             @Override
             public void mouseEntered(MouseEvent e) {
                 if (lbl != activeSubLabel)
                     lbl.setForeground(Color.YELLOW);
             }
+
             @Override
             public void mouseExited(MouseEvent e) {
                 if (lbl != activeSubLabel)
@@ -502,6 +559,7 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
     }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
@@ -793,17 +851,23 @@ public class MainForm extends javax.swing.JFrame {
         lblHoaDon.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 35, 1, 1));
         panelHoaDon.add(lblHoaDon);
         panelMenu.add(panelHoaDon);
+        subLapHoaDon = new javax.swing.JLabel();
         groupSubHoaDon.setBackground(new java.awt.Color(142, 128, 106));
         groupSubHoaDon.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 40, 0, 1));
         groupSubHoaDon.setAlignmentY(0.0F);
         groupSubHoaDon.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        groupSubHoaDon.setPreferredSize(new java.awt.Dimension(200, 60));
+        groupSubHoaDon.setPreferredSize(new java.awt.Dimension(200, 110));
         groupSubHoaDon.setLayout(new javax.swing.BoxLayout(groupSubHoaDon, javax.swing.BoxLayout.Y_AXIS));
         subLichSuHoaDon.setFont(new java.awt.Font("Segoe UI", 0, 14));
         subLichSuHoaDon.setForeground(new java.awt.Color(255, 255, 255));
         subLichSuHoaDon.setText("+ Lịch sử hóa đơn");
         subLichSuHoaDon.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 1, 5, 1));
         groupSubHoaDon.add(subLichSuHoaDon);
+        subLapHoaDon.setFont(new java.awt.Font("Segoe UI", 0, 14));
+        subLapHoaDon.setForeground(new java.awt.Color(255, 255, 255));
+        subLapHoaDon.setText("+ Lập hóa đơn");
+        subLapHoaDon.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 1, 5, 1));
+        groupSubHoaDon.add(subLapHoaDon);
         subThongKeDoanhThu.setFont(new java.awt.Font("Segoe UI", 0, 14));
         subThongKeDoanhThu.setForeground(new java.awt.Color(255, 255, 255));
         subThongKeDoanhThu.setText("+ Thống kê doanh thu");
@@ -997,6 +1061,7 @@ public class MainForm extends javax.swing.JFrame {
         getContentPane().add(panelMainContent, java.awt.BorderLayout.CENTER);
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
     private void panelTaiKhoanMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_panelTaiKhoanMouseClicked
         TaiKhoanDialog popup = new TaiKhoanDialog(this, true);
         java.awt.Point location = panelTaiKhoan.getLocationOnScreen();
@@ -1007,10 +1072,12 @@ public class MainForm extends javax.swing.JFrame {
         popup.setLocation(x, y);
         popup.setVisible(true);
     }// GEN-LAST:event_panelTaiKhoanMouseClicked
+
     private void lblMenuTrangChuMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_lblMenuTrangChuMouseClicked
         new PanelTrangChu().setVisible(true);
     }// GEN-LAST:event_lblMenuTrangChuMouseClicked
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+     // Variables declaration - do not modify//GEN-BEGIN:variables
+
     private javax.swing.JPanel PanelKhuyenMai;
     private javax.swing.JPanel PanelMonAn;
     private javax.swing.Box.Filler filler1;
@@ -1069,6 +1136,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JLabel subDanhSachNhanVien;
     private javax.swing.JLabel subDanhSachThue;
     private javax.swing.JLabel subLapPhieuDatBan;
+
     public void switchToPanelDatBan() {
         if (subLapPhieuDatBan != null) {
             isMenuClick = false;
@@ -1081,12 +1149,21 @@ public class MainForm extends javax.swing.JFrame {
             isMenuClick = true;
         }
     }
+
     public void startEditBanFromDatMon(Set<String> oldTables, PanelDatMon sourcePanel) {
         showPanel(panelDatBan);
         panelDatBan.setFlowOrigin("DAT_MON");
         panelDatBan.setPanelDatMon(sourcePanel);
         panelDatBan.setSelectedTablesForEdit(oldTables);
     }
+
+    public void startGopBanFlow(Set<String> currentTables, PanelDatMon sourcePanel) {
+        showPanel(panelDatBan);
+        panelDatBan.setFlowOrigin("GOP_BAN");
+        panelDatBan.setPanelDatMon(sourcePanel);
+        panelDatBan.setSelectedTablesForEdit(currentTables);
+    }
+
     public void goBackToPanelDatMon() {
         showPanel(panelDatMon);
         if (panelDatBan != null) {
@@ -1095,6 +1172,7 @@ public class MainForm extends javax.swing.JFrame {
             panelDatBan.repaint();
         }
     }
+
     public void switchToQuanLyDatBanTruocTab() {
         if (subQuanLyDatBanTruoc != null) {
             isMenuClick = false;
@@ -1107,6 +1185,14 @@ public class MainForm extends javax.swing.JFrame {
             isMenuClick = true;
         }
     }
+
+    public void switchToDoiBanTab(Set<String> selectedTables) {
+        showPanel(panelDatBan);
+        panelDatBan.setSelectedTablesForEdit(selectedTables);
+        lblTenTrang.setText("ĐỔI BÀN");
+    }
+
+    private javax.swing.JLabel subLapHoaDon;
     private javax.swing.JLabel subLichSuHoaDon;
     private javax.swing.JLabel subQuanLyBan;
     private javax.swing.JLabel subQuanLyDatBanTruoc;
@@ -1118,6 +1204,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JLabel subQuanLyTaiKhoan;
     private javax.swing.JLabel subQuanLyThue;
     private javax.swing.JLabel subThongKeDoanhThu;
+
     // End of variables declaration//GEN-END:variables
     public static void main(String args[]) {
         UIConfiguration.setupUI();
@@ -1134,6 +1221,7 @@ public class MainForm extends javax.swing.JFrame {
             new MainForm().setVisible(true);
         });
     }
+
     public void openPanelQuanLyKhachHang() {
         if (panelQuanLyKhachHang == null) {
             panelQuanLyKhachHang = new PanelQuanLyKhachHang();
@@ -1141,6 +1229,7 @@ public class MainForm extends javax.swing.JFrame {
         showPanel(panelQuanLyKhachHang);
         lblTenTrang.setText("QUẢN LÝ KHÁCH HÀNG");
     }
+
     public void openPanelDatBan() {
         if (panelDatBan == null) {
             panelDatBan = new PanelDatBan();
