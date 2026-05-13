@@ -151,7 +151,7 @@ public class PhieuDatBanService {
             }
             if (ban.getTrangThai() == TrangThaiBan.TRONG) {
                 availableBan.add(ban.getMaBan());
-            } else if (ban.getTrangThai() == TrangThaiBan.DA_DAT) {
+            } else if (ban.getTrangThai() == TrangThaiBan.DA_DAT || ban.getTrangThai() == TrangThaiBan.DANG_DUNG) {
                 List<PhieuDatBan> dsPhieu = phieuDatBanDAO.getPhieuDatBanTheoBan(ban.getMaBan(), selectedDate);
                 if (dsPhieu == null || dsPhieu.isEmpty()) {
                     availableBan.add(ban.getMaBan());
@@ -239,5 +239,24 @@ public class PhieuDatBanService {
 
     public List<PhieuDatBan> getDanhSachHoatDongGanDay() {
         return phieuDatBanDAO.getHoatDongGanDay();
+    }
+
+    public boolean hasFutureReservation(String maBan) {
+        String sql = "SELECT COUNT(*) FROM PhieuDatBan pdb " +
+                     "JOIN ChiTietPhieuDatBan ct ON pdb.maPhieuDat = ct.maPhieuDat " +
+                     "WHERE ct.maBan = ? AND pdb.trangThai = 'DANG_CHO' AND pdb.thoiGianDen >= ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, maBan);
+            stmt.setTimestamp(2, java.sql.Timestamp.valueOf(LocalDateTime.now().plusDays(1).toLocalDate().atStartOfDay()));
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

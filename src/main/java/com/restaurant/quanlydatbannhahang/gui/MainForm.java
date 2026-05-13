@@ -1154,14 +1154,14 @@ public class MainForm extends javax.swing.JFrame {
         showPanel(panelDatBan);
         panelDatBan.setFlowOrigin("DAT_MON");
         panelDatBan.setPanelDatMon(sourcePanel);
-        panelDatBan.setSelectedTablesForEdit(oldTables);
+        panelDatBan.setSelectedTablesForEdit(oldTables, null); // Null cho ngày hôm nay (DAT_MON không có thoiGianPhieu)
     }
 
     public void startGopBanFlow(Set<String> currentTables, PanelDatMon sourcePanel) {
         showPanel(panelDatBan);
         panelDatBan.setFlowOrigin("GOP_BAN");
         panelDatBan.setPanelDatMon(sourcePanel);
-        panelDatBan.setSelectedTablesForEdit(currentTables);
+        panelDatBan.setSelectedTablesForEdit(currentTables, null); // Null cho ngày hôm nay (GOP_BAN không có thoiGianPhieu)
     }
 
     public void goBackToPanelDatMon() {

@@ -1,4 +1,5 @@
 package com.restaurant.quanlydatbannhahang.gui;
+
 import com.restaurant.quanlydatbannhahang.entity.ChiTietHoaDon;
 import com.restaurant.quanlydatbannhahang.entity.HoaDon;
 import com.restaurant.quanlydatbannhahang.entity.KhachHang;
@@ -29,6 +30,7 @@ import java.awt.Frame;
 import java.awt.event.ItemEvent;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -46,6 +48,7 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
+
 public class PanelLapHoaDon extends javax.swing.JPanel {
     private KhachHangService khachHangService;
     private KhuyenMaiService khuyenMaiService;
@@ -68,6 +71,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
     private static final String MA_THUE_VAT_MAC_DINH = "TH001";
     private static final String MA_PHI_DICH_VU_MAC_DINH = "TH003";
     private boolean loadingKhuyenMai = false;
+
     public PanelLapHoaDon() {
         initComponents();
         khachHangService = new KhachHangService();
@@ -96,6 +100,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
             }
         });
     }
+
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
@@ -200,9 +205,11 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
             boolean[] canEdit = new boolean[] {
                     false, false, false
             };
+
             public Class getColumnClass(int columnIndex) {
                 return types[columnIndex];
             }
+
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit[columnIndex];
             }
@@ -369,9 +376,11 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
             boolean[] canEdit = new boolean[] {
                     false, false, false, false
             };
+
             public Class getColumnClass(int columnIndex) {
                 return types[columnIndex];
             }
+
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit[columnIndex];
             }
@@ -435,9 +444,11 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         panelTrungTam.add(panelButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(-1, 690, 1170, -1));
         add(panelTrungTam, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 20, -1, 740));
     }// </editor-fold>//GEN-END:initComponents
+
     private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtTimKiemActionPerformed
         searchKhachHang();
     }// GEN-LAST:event_txtTimKiemActionPerformed
+
     private void btnDungDiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnDungDiemActionPerformed
         if (selectedKhachHang == null) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn khách hàng trước khi dùng điểm.");
@@ -481,6 +492,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         }
         JOptionPane.showMessageDialog(this, "Đã trừ " + diemDaApDung + " điểm tích lũy khỏi khách hàng.");
     }// GEN-LAST:event_btnDungDiemActionPerformed
+
     private void cbKhuyenMaiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbKhuyenMaiActionPerformed
         if (loadingKhuyenMai) {
             return;
@@ -491,9 +503,11 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         }
         updateTongTienSummary();
     }// GEN-LAST:event_cbKhuyenMaiActionPerformed
+
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTimKiemActionPerformed
         searchKhachHang();
     }// GEN-LAST:event_btnTimKiemActionPerformed
+
     private void performAutoSaveOnHide() {
         String context = HoaDonDraftSession.getCurrentMaBanContext();
         String pdbContext = HoaDonDraftSession.getCurrentMaPhieuDatContext();
@@ -507,12 +521,14 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
             }
         }
     }
+
     private void btnTaoTaiKhoanActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTaoTaiKhoanActionPerformed
         Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
         if (parentFrame instanceof MainForm) {
             ((MainForm) parentFrame).openPanelQuanLyKhachHang();
         }
     }// GEN-LAST:event_btnTaoTaiKhoanActionPerformed
+
     private void btnInHoaDonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnInHoaDonActionPerformed
         if (tableThongTinHoaDon.getRowCount() == 0) {
             JOptionPane.showMessageDialog(this, "Chưa có dữ liệu món ăn để in hóa đơn.");
@@ -535,6 +551,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
             ex.printStackTrace();
         }
     }// GEN-LAST:event_btnInHoaDonActionPerformed
+
     private void customUI() {
         setupPlaceholder(txtTimKiem, "Nhập số điện thoại khách hàng");
         btnTrangChu.addActionListener(new java.awt.event.ActionListener() {
@@ -581,6 +598,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         initHoaDonHeader();
         updateTongTienSummary();
     }
+
     private void initHoaDonHeader() {
         txtNgayTao.setText(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
         try {
@@ -595,6 +613,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         txtTenNhanVien.setText(currentNhanVien != null ? currentNhanVien.getHoTen() : "");
         txtMaBan.setText(HoaDonDraftSession.getCurrentMaBanContext());
     }
+
     private void loadHoaDonDraft() {
         DefaultTableModel model = (DefaultTableModel) tableThongTinHoaDon.getModel();
         model.setRowCount(0);
@@ -625,6 +644,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         tableThongTinHoaDon.getColumnModel().getColumn(3).setCellRenderer(currencyRenderer);
         updateTongTienSummary();
     }
+
     public void refreshDraftData() {
         initHoaDonHeader();
         loadHoaDonDraft();
@@ -634,6 +654,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         populateCustomerInfoFromReservation();
         updateTongTienSummary();
     }
+
     private void populateCustomerInfoFromReservation() {
         String maBanContext = HoaDonDraftSession.getCurrentMaBanContext();
         String maKH = HoaDonDraftSession.getMaKH(maBanContext);
@@ -692,6 +713,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         restoreSelectedKhuyenMai(maKM);
         centerTableColumns(tableThongTinKhachHang);
     }
+
     private void loadKhachHangToTable() {
         try {
             allKhachHang = khachHangService.getAllKhachHang();
@@ -703,6 +725,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
             javax.swing.JOptionPane.showMessageDialog(this, "Lỗi tải khách hàng: " + ex.getMessage());
         }
     }
+
     private void loadKhuyenMaiToComboBox() {
         loadingKhuyenMai = true;
         try {
@@ -742,6 +765,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
             updateTongTienSummary();
         }
     }
+
     private void updateKhuyenMaiEligibility() {
         double tongTien = tinhTongTienMonAn();
         double tienPhiDichVu = apDungPhiDichVu(MA_PHI_DICH_VU_MAC_DINH, tongTien);
@@ -768,6 +792,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
             cbKhuyenMai.setSelectedItem(bestDisplay);
         }
     }
+
     private KhuyenMai getSelectedKhuyenMai() {
         Object selected = cbKhuyenMai.getSelectedItem();
         if (selected == null || NO_PROMO_DISPLAY.equals(selected.toString())) {
@@ -777,6 +802,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         Boolean eligible = khuyenMaiEligible.get(selected.toString());
         return km != null && Boolean.TRUE.equals(eligible) ? km : null;
     }
+
     private void searchKhachHang() {
         allKhachHang = khachHangService.getAllKhachHang();
         String key = txtTimKiem.getText().trim().toLowerCase();
@@ -813,6 +839,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         }
         centerTableColumns(tableThongTinKhachHang);
     }
+
     private void centerTableColumns(javax.swing.JTable table) {
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
@@ -820,6 +847,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
             table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
         }
     }
+
     private void generatePdfInvoice() throws IOException {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Lưu PDF hóa đơn");
@@ -899,8 +927,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
                 content.lineTo(550, currentY + 10);
                 content.stroke();
                 String rawTongMon = CurrencyUtility.formatVND(
-                	    CurrencyUtility.parseVND(lblTongTien.getText())
-                	);
+                        CurrencyUtility.parseVND(lblTongTien.getText()));
                 String rawPhiDV = CurrencyUtility
                         .formatVND(CurrencyUtility
                                 .parseVND(lblPhiDichVu.getText()));
@@ -975,6 +1002,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
             ex.printStackTrace();
         }
     }
+
     private void congDiemTichLuyChoKhachHang() {
         KhachHang kh = selectedKhachHang;
         if (kh == null) {
@@ -1003,6 +1031,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
                     JOptionPane.ERROR_MESSAGE);
         }
     }
+
     private void capNhatTrangThaiBan(String maBanContext) {
         if (maBanContext == null || maBanContext.isBlank()) {
             return;
@@ -1011,15 +1040,21 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
             String[] danhSachMaBan = maBanContext.split(",");
             for (String maBan : danhSachMaBan) {
                 String maBanTrim = maBan.trim();
-                System.out.println("Mã bàn: " + maBan);
                 if (!maBanTrim.isEmpty()) {
-                    banService.capNhatTrangThaiBan(maBanTrim, TrangThaiBan.TRONG);
+                    // Kiểm tra có phiếu đặt trong tương lai không
+                    boolean hasFutureReservation = phieuDatBanService.hasFutureReservation(maBanTrim);
+                    if (hasFutureReservation) {
+                        banService.capNhatTrangThaiBan(maBanTrim, TrangThaiBan.DA_DAT);
+                    } else {
+                        banService.capNhatTrangThaiBan(maBanTrim, TrangThaiBan.TRONG);
+                    }
                 }
             }
         } catch (Exception e) {
-            throw new RuntimeException("Khong the cap nhat trang thai ban sau khi thanh toan: " + e.getMessage(), e);
+            throw new RuntimeException("Không thể cập nhật trạng thái bàn sau khi thanh toán: " + e.getMessage(), e);
         }
     }
+
     private void thucHienLuuHoaDon(TrangThaiHoaDon trangThai) throws Exception {
         String maHD = txtMaHoaDon.getText().trim();
         String maBan = txtMaBan.getText().trim();
@@ -1102,6 +1137,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
             }
         }
     }
+
     private void saveHoaDonDraftToSession() {
         String maBanContext = HoaDonDraftSession.getCurrentMaBanContext();
         if (maBanContext == null || maBanContext.isBlank()) {
@@ -1116,7 +1152,8 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
             double donGia = 0;
             if (donGiaObj instanceof Number) {
                 donGia = ((Number) donGiaObj).doubleValue();
-            }  String maMon = findMaMonByTenMon(tenMon);
+            }
+            String maMon = findMaMonByTenMon(tenMon);
             draftItems.add(new HoaDonDraftSession.DraftMonItem(maMon, tenMon, soLuong, donGia));
         }
         String soDienThoai = txtTimKiem.getText() != null ? txtTimKiem.getText().trim() : "";
@@ -1135,6 +1172,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
             HoaDonDraftSession.setMonItems(maBanContext, draftItems);
         }
     }
+
     private void restoreSelectedKhuyenMai(String maKM) {
         if (maKM == null || maKM.isBlank()) {
             cbKhuyenMai.setSelectedItem(NO_PROMO_DISPLAY);
@@ -1149,6 +1187,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         }
         cbKhuyenMai.setSelectedItem(NO_PROMO_DISPLAY);
     }
+
     private String findMaMonByTenMon(String tenMon) {
         if (tenMon == null || tenMon.isBlank()) {
             return "";
@@ -1160,12 +1199,14 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         }
         return "";
     }
+
     private double normalizeThueSuat(double thueSuatRaw) {
         if (thueSuatRaw <= 0) {
             return 0;
         }
         return thueSuatRaw > 1 ? thueSuatRaw / 100.0 : thueSuatRaw;
     }
+
     private double layTyLeThue(String maThue) {
         if (maThue == null || maThue.trim().isEmpty()) {
             return 0;
@@ -1177,16 +1218,20 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
             return 0;
         }
     }
+
     private double apDungPhiDichVu(String maThueDichVu) {
         return layTyLeThue(maThueDichVu);
     }
+
     private double apDungPhiDichVu(String maThueDichVu, double tongTien) {
         double tyLePhiDV = apDungPhiDichVu(maThueDichVu);
         return Math.max(0, tongTien) * tyLePhiDV;
     }
+
     private double apDungThue(String maThue) {
         return layTyLeThue(maThue);
     }
+
     private double apDungThue(String maThue, double coSoTinhThue) {
         double tyLeThue = apDungThue(maThue);
         return Math.max(0, coSoTinhThue) * tyLeThue;
@@ -1196,13 +1241,14 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         double tong = 0;
         DefaultTableModel model = (DefaultTableModel) tableThongTinHoaDon.getModel();
         for (int i = 0; i < model.getRowCount(); i++) {
-            Object value = model.getValueAt(i, 3); 
+            Object value = model.getValueAt(i, 3);
             if (value instanceof Number) {
                 tong += ((Number) value).doubleValue();
             }
         }
         return tong;
     }
+
     private void updateTongTienSummary() {
         updateKhuyenMaiEligibility();
         double tongTien = tinhTongTienMonAn();
@@ -1248,6 +1294,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         lblTongThanhToan.setText("Tổng tiền cần thanh toán: "
                 + CurrencyUtility.formatVND(tongThanhToan));
     }
+
     private void setupPlaceholder(javax.swing.JTextField textField, String placeholder) {
         java.awt.Color placeholderColor = new java.awt.Color(153, 153, 153);
         java.awt.Color textColor = new java.awt.Color(0, 0, 0);
@@ -1261,6 +1308,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
                     textField.setForeground(textColor);
                 }
             }
+
             @Override
             public void focusLost(java.awt.event.FocusEvent evt) {
                 if (textField.getText().isEmpty()) {
@@ -1270,12 +1318,14 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
             }
         });
     }
+
     private void btnTrangChuActionPerformed(java.awt.event.ActionEvent evt) {
         java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
         if (parentFrame instanceof MainForm) {
             ((MainForm) parentFrame).goBackToPanelDatMon();
         }
     }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDungDiem;
     private javax.swing.JButton btnInHoaDon;
