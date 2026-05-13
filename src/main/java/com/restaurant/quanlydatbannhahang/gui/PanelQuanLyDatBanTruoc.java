@@ -1,4 +1,5 @@
 package com.restaurant.quanlydatbannhahang.gui;
+
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -26,17 +27,20 @@ import com.restaurant.quanlydatbannhahang.util.IDGeneratorHelper;
 import com.restaurant.quanlydatbannhahang.util.IDQueryHelper;
 import com.restaurant.quanlydatbannhahang.service.BanService;
 import com.restaurant.quanlydatbannhahang.session.HoaDonDraftSession;
+import com.restaurant.quanlydatbannhahang.session.ReservationSession;
 import com.restaurant.quanlydatbannhahang.entity.PhieuDatBan;
 import com.restaurant.quanlydatbannhahang.entity.Ban;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiPhieuDat;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiBan;
 import com.restaurant.quanlydatbannhahang.entity.ChiTietPhieuDatBan;
 import java.util.List;
+
 public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseListener {
         private PhieuDatBanService pdbService;
         private ChiTietPhieuDatBanService ctpdbService;
         private PanelDatBan panelDatBan;
         private BanService banService;
+
         public PanelQuanLyDatBanTruoc() {
                 pdbService = new PhieuDatBanService();
                 ctpdbService = new ChiTietPhieuDatBanService();
@@ -49,9 +53,11 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                 pushDataToComboBox(cbFilterTrangThai);
                 pushDataToComboBox(cbTrangThai);
         }
+
         public void setPanelDatBan(PanelDatBan panelDatBan) {
                 this.panelDatBan = panelDatBan;
         }
+
         public void refreshData() {
                 try {
                         loadDataToTable();
@@ -63,6 +69,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                         e.printStackTrace();
                 }
         }
+
         private void customUI() {
                 setupPlaceholder(txtTimKiem, "Nhập mã đặt bàn hoặc SĐT khách");
                 if (dtpThoiGianDen != null) {
@@ -92,6 +99,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                 });
                 syncCapNhatButtonState();
         }
+
         private void setupPlaceholder(JTextField textField, String placeholder) {
                 Color placeholderColor = new Color(153, 153, 153);
                 Color textColor = new Color(0, 0, 0);
@@ -105,6 +113,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                                         textField.setForeground(textColor);
                                 }
                         }
+
                         @Override
                         public void focusLost(java.awt.event.FocusEvent evt) {
                                 if (textField.getText().isEmpty()) {
@@ -114,6 +123,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                         }
                 });
         }
+
         private void pushDataToComboBox(JComboBox<String> cb) {
                 cb.removeAllItems();
                 cb.addItem("Trạng thái");
@@ -121,6 +131,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                         cb.addItem(trangThai.getDisplayName());
                 }
         }
+
         private void loadDataToTable() {
                 ArrayList<PhieuDatBan> listPDB = (ArrayList<PhieuDatBan>) pdbService.getAllPhieuDatBan();
                 DefaultTableModel model = (DefaultTableModel) tableBan.getModel();
@@ -168,11 +179,13 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                 currencyRenderer.setHorizontalAlignment(JLabel.RIGHT);
                 tableBan.getColumnModel().getColumn(7).setCellRenderer(currencyRenderer);
         }
+
         private boolean isMouseOverTable(java.awt.event.MouseEvent evt) {
                 java.awt.Point p = evt.getPoint();
                 java.awt.Point tablePoint = javax.swing.SwingUtilities.convertPoint(this, p, tableBan);
                 return tableBan.getBounds().contains(tablePoint);
         }
+
         private void clearFields() {
                 txtSoDienThoai.setText("");
                 txtMaNhanVien.setText("");
@@ -182,6 +195,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                 cbTrangThai.setSelectedIndex(0);
                 txtTienDatCoc.setText("0.0");
         }
+
         private void syncCapNhatButtonState() {
                 int selectedRow = tableBan.getSelectedRow();
                 boolean hasSelection = selectedRow >= 0;
@@ -197,6 +211,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                         btnDoiBan.setEnabled(TrangThaiPhieuDat.DANG_CHO.getDisplayName().equals(status));
                 }
         }
+
         @SuppressWarnings("unchecked")
         // <editor-fold defaultstate="collapsed" desc="Generated
         // <editor-fold defaultstate="collapsed" desc="Generated
@@ -563,9 +578,11 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                         boolean[] canEdit = new boolean[] {
                                         false, false, false, false, false, true, false, true, false
                         };
+
                         public Class getColumnClass(int columnIndex) {
                                 return types[columnIndex];
                         }
+
                         public boolean isCellEditable(int rowIndex, int columnIndex) {
                                 return canEdit[columnIndex];
                         }
@@ -626,12 +643,14 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                 pnlButton.add(pnlRightButtons, java.awt.BorderLayout.EAST);
                 add(pnlButton, java.awt.BorderLayout.PAGE_END);
         }// </editor-fold>//GEN-END:initComponents
+
         private void fillMaDatBan(JTextField txtMaPhieuDat) {
                 String lastID = IDQueryHelper.getLastID("PhieuDatBan", "maPhieuDat");
                 String maPDBNew = (lastID == null || lastID.isEmpty()) ? IDGeneratorHelper.generateDefaultID("PD")
                                 : IDGeneratorHelper.generateNextIDFromFullID(lastID);
                 txtMaPhieuDat.setText(maPDBNew);
         }
+
         private void centerTableColumns(JTable table) {
                 DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
                 centerRenderer.setHorizontalAlignment(JLabel.CENTER);
@@ -639,11 +658,13 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                         table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
                 }
         }
+
         private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaTrangActionPerformed
                 refreshData();
                 cbFilterTrangThai.setSelectedIndex(0);
                 setupPlaceholder(txtTimKiem, "Nhập mã đặt bàn hoặc SĐT khách");
         }// GEN-LAST:event_btnXoaTrangActionPerformed
+
         private void btnDoiBanActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnChonBanActionPerformed
                 try {
                         String maPDB = txtMaPhieuDat.getText().trim();
@@ -660,9 +681,10 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                         }
                         Set<String> oldBanSet = getTableSetFromDB(maPDB);
                         if (panelDatBan != null) {
+                                // Truyền thời gian của phiếu vào setSelectedTablesForEdit
                                 panelDatBan.setPanelQuanLyDatBanTruoc(this);
                                 panelDatBan.setFlowOrigin("QUAN_LY_DAT_TRUOC");
-                                panelDatBan.setSelectedTablesForEdit(oldBanSet);
+                                panelDatBan.setSelectedTablesForEdit(oldBanSet, phieu.getThoiGianDen());
                                 storeMaPDBForEditMode(maPDB);
                                 int response = JOptionPane.showConfirmDialog(this,
                                                 "Bạn chắn chắc muốn chọn lại bàn?", "Nhắc nhở",
@@ -683,11 +705,14 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                         e.printStackTrace();
                 }
         }// GEN-LAST:event_btnChonBanActionPerformed
+
         private String maPDBEditMode = null;
         private Set<String> newSelectedTablesForEdit = null;
+
         private void storeMaPDBForEditMode(String maPDB) {
                 this.maPDBEditMode = maPDB;
         }
+
         private Set<String> getTableSetFromDB(String maPDB) {
                 Set<String> banSet = new HashSet<>();
                 List<ChiTietPhieuDatBan> chiTietList = ctpdbService.getChiTietByMaPhieuDat(maPDB);
@@ -698,6 +723,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                 }
                 return banSet;
         }
+
         public void updateMaBanForEdit(Set<String> newSelectedTables) {
                 if (newSelectedTables != null && !newSelectedTables.isEmpty()) {
                         String banList = String.join(", ", newSelectedTables);
@@ -706,6 +732,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                         storeMaPDBForEditMode(txtMaPhieuDat.getText().trim());
                 }
         }
+
         public void finishEditBansFromPanelDatBan(Set<String> newSelectedTables) {
                 if (maPDBEditMode == null || maPDBEditMode.isEmpty()) {
                         JOptionPane.showMessageDialog(this, "Không tìm thấy phiếu cần chỉnh sửa", "Lỗi",
@@ -722,6 +749,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                         e.printStackTrace();
                 }
         }
+
         private void updateChiTietPhieuDatBan(String maPDB, Set<String> oldBanSet, Set<String> newBanSet)
                         throws IllegalArgumentException {
                 try {
@@ -736,9 +764,11 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                 JOptionPane.showMessageDialog(this, "Cập nhật bàn thành công", "Thành công",
                                 JOptionPane.INFORMATION_MESSAGE);
         }
+
         private void cbFilterTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterTrangThaiActionPerformed
                 filterAction();
         }// GEN-LAST:event_cbFilterTrangThaiActionPerformed
+
         @SuppressWarnings("unchecked")
         private void filterAction() {
                 String selectedStatus = (String) cbFilterTrangThai.getSelectedItem();
@@ -755,6 +785,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                         sorter.setRowFilter(filter);
                 }
         }
+
         private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCapNhatActionPerformed
                 try {
                         String maPDB = txtMaPhieuDat.getText().trim();
@@ -834,6 +865,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                         e.printStackTrace();
                 }
         }
+
         // GEN-LAST:event_btnCapNhatActionPerformed
         private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaActionPerformed
                 try {
@@ -865,8 +897,10 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                         e.printStackTrace();
                 }
         }// GEN-LAST:event_btnXoaActionPerformed
+
         private void txtMaPhieuDatActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtMaPhieuDatActionPerformed
         }// GEN-LAST:event_txtMaPhieuDatActionPerformed
+
         private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTimKiemActionPerformed
                 try {
                         String searchText = txtTimKiem.getText().trim();
@@ -898,11 +932,14 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                         e.printStackTrace();
                 }
         }// GEN-LAST:event_btnTimKiemActionPerformed
+
         private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtTimKiemActionPerformed
         }// GEN-LAST:event_txtTimKiemActionPerformed
+
         private void btnChonMonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnChonMonActionPerformed
                 chonMonAction();
         }// GEN-LAST:event_btnChonMonActionPerformed
+
         private void chonMonAction() {
                 int rowSelected = tableBan.getSelectedRow();
                 if (rowSelected < 0) {
@@ -921,6 +958,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                         ((MainForm) parentFrame).openPanelDatMon(maBanContext);
                 }
         }
+
         private void pushDataToFieldsFromRow(int rowIndex) {
                 String maPDB = (String) tableBan.getValueAt(rowIndex, 0);
                 String sdt = (String) tableBan.getValueAt(rowIndex, 1);
@@ -941,9 +979,11 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                 cbTrangThai.setSelectedItem(trangThai);
                 txtTienDatCoc.setText(com.restaurant.quanlydatbannhahang.util.CurrencyUtility.formatVND(tienDatCoc));
         }
+
         private void txtMaBanActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtMaBanActionPerformed
         }// GEN-LAST:event_txtMaBanActionPerformed
-        // Variables declaration - do not modify//GEN-BEGIN:variables
+         // Variables declaration - do not modify//GEN-BEGIN:variables
+
         private javax.swing.JButton btnCapNhat;
         private javax.swing.JButton btnChonMon;
         private javax.swing.JButton btnDoiBan;
@@ -976,19 +1016,24 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
         private javax.swing.JTextField txtSoDienThoai;
         private javax.swing.JTextField txtTienDatCoc;
         private javax.swing.JTextField txtTimKiem;
+
         // End of variables declaration//GEN-END:variables
         @Override
         public void mouseClicked(MouseEvent e) {
         }
+
         @Override
         public void mouseReleased(MouseEvent e) {
         }
+
         @Override
         public void mouseEntered(MouseEvent e) {
         }
+
         @Override
         public void mouseExited(MouseEvent e) {
         }
+
         @Override
         public void mousePressed(MouseEvent e) {
         }

@@ -52,10 +52,10 @@ public class PanelQuanLyBan extends javax.swing.JPanel implements MouseListener 
                 if (row >= 0) {
                     loadDataFromRow(row);
                 }
-                syncCapNhatButtonState();
+                syncButtonState();
             }
         });
-        syncCapNhatButtonState();
+        syncButtonState();
     }
     private void setupPlaceholder(JTextField textField, String placeholder) {
         Color placeholderColor = new Color(153, 153, 153);
@@ -604,9 +604,10 @@ public class PanelQuanLyBan extends javax.swing.JPanel implements MouseListener 
         cbKhuVuc.setSelectedIndex(0);
         cbTrangThai.setSelectedIndex(0);
     }
-    private void syncCapNhatButtonState() {
+    private void syncButtonState() {
         btnCapNhat.setEnabled(tableBan.getSelectedRow() >= 0);
         btnXoa.setEnabled(tableBan.getSelectedRow() >= 0);
+        btnThem.setEnabled(tableBan.getSelectedRow() == -1);
     }
     public void refreshData() {
         clearFields();
@@ -617,7 +618,7 @@ public class PanelQuanLyBan extends javax.swing.JPanel implements MouseListener 
         loadDataToComboBoxes();
         loadDataToTable();
         tableBan.clearSelection();
-        syncCapNhatButtonState();
+        syncButtonState();
     }
     private boolean isMouseOverTable(java.awt.event.MouseEvent evt) {
         java.awt.Point p = evt.getPoint();

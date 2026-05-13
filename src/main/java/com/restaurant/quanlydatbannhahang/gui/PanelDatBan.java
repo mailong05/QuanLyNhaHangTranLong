@@ -18,6 +18,7 @@ import com.restaurant.quanlydatbannhahang.entity.TrangThaiBan;
 
 public class PanelDatBan extends javax.swing.JPanel {
     private Set<String> selectedTables;
+    private Set<String> originalTablesForEdit;
     private Map<String, JPanel> tableCards;
     private Map<String, TrangThaiBan> tableTrangThai;
     private Map<String, JLabel> tableLabelStatus;
@@ -34,11 +35,14 @@ public class PanelDatBan extends javax.swing.JPanel {
     private Set<String> availableBanForReservation = new HashSet<>();
     private boolean billMode = false;
     private String flowOrigin = "";
-    private static final Color EDIT_MODE_SELECTED_COLOR = new Color(51, 153, 255);
+    private static final Color EDIT_MODE_SELECTED_COLOR = new Color(51, 153, 255);   // Xánh dương (bàn cũ giữ lại)
+    private static final Color EDIT_MODE_NEW_COLOR = new Color(255, 255, 150);        // Vàng nhạt (bàn mới chọn)
+    private static final Color EDIT_MODE_VACATING_COLOR = Color.WHITE;               // Trắng (bàn cũ bỏ chọn)
     private BanService banService;
 
     public PanelDatBan() {
         selectedTables = new HashSet<>();
+        originalTablesForEdit = new HashSet<>();
         tableCards = new HashMap<>();
         tableTrangThai = new HashMap<>();
         tableLabelStatus = new HashMap<>();
@@ -54,7 +58,7 @@ public class PanelDatBan extends javax.swing.JPanel {
             public void hierarchyChanged(java.awt.event.HierarchyEvent e) {
                 if ((e.getChangeFlags() & java.awt.event.HierarchyEvent.SHOWING_CHANGED) != 0) {
                     if (isShowing()) {
-                    	isEnableBtnDoiBan();
+                        isEnableBtnDoiBan();
                         if (!editMode) {
                             refreshData();
                         } else {
@@ -67,70 +71,85 @@ public class PanelDatBan extends javax.swing.JPanel {
                 }
             }
         });
-         
+
     }
-    
+
     private void isEnableBtnDoiBan() {
-    	System.out.println("debug");
-    	if(flowOrigin.isBlank()) {
-    		return;
-    	}
-		if(flowOrigin.equals("QUAN_LY_DAT_TRUOC") || flowOrigin.equals("DAT_MON") || flowOrigin.equals("GOP_BAN")) {
-			btnDoiBan.setEnabled(true);
-		}
-	}
+        System.out.println("debug");
+        if (flowOrigin.isBlank()) {
+            return;
+        }
+        if (flowOrigin.equals("QUAN_LY_DAT_TRUOC") || flowOrigin.equals("DAT_MON") || flowOrigin.equals("GOP_BAN")) {
+            btnDoiBan.setEnabled(true);
+        }
+    }
 
-//    public void setSelectedTablesForEdit(Set<String> tablesToSelect) {
-//        this.editMode = true;
-//        this.billMode = false;
-//        if (btnDoiBan != null) {
-//            btnDoiBan.setEnabled(true);
-//        }
-//        for (String maBan : new HashSet<>(selectedTables)) {
-//            JPanel card = tableCards.get(maBan);
-//            if (card != null) {
-//                card.setBackground(new java.awt.Color(255, 255, 255));
-//                card.revalidate();
-//                card.repaint();
-//            }
-//        }
-//        selectedTables.clear();
-//        if (tablesToSelect != null) {
-//            selectedTables.addAll(tablesToSelect);
-//            for (String maBan : selectedTables) {
-//                JPanel card = tableCards.get(maBan);
-//                if (card != null) {
-//                    card.setBackground(EDIT_MODE_SELECTED_COLOR);
-//                    card.setBorder(BorderFactory.createCompoundBorder(
-//                            BorderFactory.createLineBorder(new Color(34, 139, 34), 2, true),
-//                            BorderFactory.createEmptyBorder(10, 10, 10, 10)));
-//                    card.revalidate();
-//                    card.repaint();
-//                }
-//            }
-//            panelSoDoBan.revalidate();
-//            panelSoDoBan.repaint();
-//            this.revalidate();
-//            this.repaint();
-//        }
-//    }
+    // public void setSelectedTablesForEdit(Set<String> tablesToSelect) {
+    // this.editMode = true;
+    // this.billMode = false;
+    // if (btnDoiBan != null) {
+    // btnDoiBan.setEnabled(true);
+    // }
+    // for (String maBan : new HashSet<>(selectedTables)) {
+    // JPanel card = tableCards.get(maBan);
+    // if (card != null) {
+    // card.setBackground(new java.awt.Color(255, 255, 255));
+    // card.revalidate();
+    // card.repaint();
+    // }
+    // }
+    // selectedTables.clear();
+    // if (tablesToSelect != null) {
+    // selectedTables.addAll(tablesToSelect);
+    // for (String maBan : selectedTables) {
+    // JPanel card = tableCards.get(maBan);
+    // if (card != null) {
+    // card.setBackground(EDIT_MODE_SELECTED_COLOR);
+    // card.setBorder(BorderFactory.createCompoundBorder(
+    // BorderFactory.createLineBorder(new Color(34, 139, 34), 2, true),
+    // BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+    // card.revalidate();
+    // card.repaint();
+    // }
+    // }
+    // panelSoDoBan.revalidate();
+    // panelSoDoBan.repaint();
+    // this.revalidate();
+    // this.repaint();
+    // }
+    // }
 
-    public void setSelectedTablesForEdit(Set<String> tablesToSelect) {
+    public void setSelectedTablesForEdit(Set<String> tablesToSelect, LocalDateTime thoiGianPhieu) {
         this.editMode = true;
         this.billMode = false;
         this.reservationMode = false;
-        
+
+        // Lưu thời gian vào ReservationSession
+        if (thoiGianPhieu != null) {
+            ReservationSession.setTempSelectedDateTime(thoiGianPhieu);
+        }
+
+        // Lưu danh sách bàn gốc và hiện tại
+        this.originalTablesForEdit.clear();
         this.selectedTables.clear();
         if (tablesToSelect != null) {
+            this.originalTablesForEdit.addAll(tablesToSelect);
             this.selectedTables.addAll(tablesToSelect);
         }
-        
-        if (btnDoiBan != null) btnDoiBan.setEnabled(true);
-        
-        // Quan trọng: Load lại sơ đồ để hàm setTableCardBackground mới ở trên áp dụng màu xanh
-        loadSoDoBanFromDatabase(); 
+
+        if (btnDoiBan != null)
+            btnDoiBan.setEnabled(true);
+
+        // Quan trọng: Load lại sơ đồ để hàm setTableCardBackground mới ở trên áp dụng
+        // màu xanh
+        loadSoDoBanFromDatabase();
     }
-    
+
+    // Overload để hỗ trợ các hàm cũ
+    public void setSelectedTablesForEdit(Set<String> tablesToSelect) {
+        this.setSelectedTablesForEdit(tablesToSelect, null);
+    }
+
     public void setPanelQuanLyDatBanTruoc(PanelQuanLyDatBanTruoc panelQuanLyDatBanTruoc) {
         this.panelQuanLyDatBanTruoc = panelQuanLyDatBanTruoc;
         this.panelDatMon = null;
@@ -173,6 +192,7 @@ public class PanelDatBan extends javax.swing.JPanel {
         try {
             this.editMode = false;
             selectedTables.clear();
+            originalTablesForEdit.clear();
             tableCards.clear();
             tableTrangThai.clear();
             tableLabelStatus.clear();
@@ -281,7 +301,7 @@ public class PanelDatBan extends javax.swing.JPanel {
         tableCards.clear();
         tableTrangThai.clear();
         tableLabelStatus.clear();
-        selectedTables.clear();
+        // Xóa selectedTables.clear() để giữ trạng thái chọn trong editMode
         try {
             BanService banService = new BanService();
             java.util.List<Ban> allBan = banService.getAllBan();
@@ -389,36 +409,52 @@ public class PanelDatBan extends javax.swing.JPanel {
         });
         return card;
     }
+    
 
     private void toggleTableSelection(String maBan, JPanel card) {
-        if (isEditSelectedCard(card)) {
-            selectedTables.remove(maBan);
-            resetCardBackground(maBan, card);
-            return;
-        }
         TrangThaiBan trangThai = tableTrangThai.get(maBan);
         if (trangThai == null) {
             return;
         }
+        
         if (editMode) {
             if (selectedTables.contains(maBan)) {
+                // Cho phép xóa khỏi Set (bỏ chọn)
                 selectedTables.remove(maBan);
-                // Khi bỏ chọn bàn đang edit, trả nó về màu trạng thái gốc của nó
-                applyDefaultBackground(maBan, card, trangThai);
+                setTableCardBackground(maBan, card, trangThai);
             } else {
-                // Chỉ cho phép chọn thêm bàn TRONG khi edit (hoặc gộp)
-                if (trangThai == TrangThaiBan.TRONG || flowOrigin.equals("GOP_BAN")) {
-                    selectedTables.add(maBan);
-                    card.setBackground(EDIT_MODE_SELECTED_COLOR);
+                // Kiểm tra bàn khả dụng theo sessionTime
+                LocalDateTime sessionTime = ReservationSession.getTempSelectedDateTime();
+                if (sessionTime != null) {
+                    try {
+                        PhieuDatBanService phieuService = new PhieuDatBanService();
+                        java.util.List<String> availableBans = phieuService.getDanhSachBanTrongTheoThoiGian(sessionTime);
+                        // Điều kiện chọn: Bàn phải nằm trong danh sách "Trong" của ngày đó HOẶC là bàn thuộc originalTablesForEdit
+                        if (availableBans.contains(maBan) || originalTablesForEdit.contains(maBan)) {
+                            selectedTables.add(maBan);
+                            setTableCardBackground(maBan, card, trangThai);
+                        } else {
+                            JOptionPane.showMessageDialog(this,
+                                    "Bàn này đã có khách đặt vào ngày đã chọn. Vui lòng chọn bàn khác.");
+                        }
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(this, "Lỗi kiểm tra bàn khả dụng: " + e.getMessage());
+                    }
                 } else {
-                    JOptionPane.showMessageDialog(this, "Chỉ có thể chọn thêm bàn đang trống.");
+                    // Nếu không có sessionTime, cho phép chọn bàn TRONG hoặc bàn thuộc originalTablesForEdit
+                    if (trangThai == TrangThaiBan.TRONG || originalTablesForEdit.contains(maBan)) {
+                        selectedTables.add(maBan);
+                        setTableCardBackground(maBan, card, trangThai);
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Chỉ có thể chọn bàn đang trống hoặc bàn đã được đặt trước đó.");
+                    }
                 }
             }
             card.revalidate();
             card.repaint();
             return;
         }
-        
+
         if (billMode) {
             if (trangThai == TrangThaiBan.DANG_DUNG) {
                 PhieuDatBanService phieuService = new PhieuDatBanService();
@@ -457,19 +493,18 @@ public class PanelDatBan extends javax.swing.JPanel {
         toggleSelectionCard(maBan, card);
     }
 
-    private void applyDefaultBackground(String maBan, JPanel card, TrangThaiBan trangThai) {
-        if (trangThai == TrangThaiBan.TRONG) card.setBackground(Color.WHITE);
-        else if (trangThai == TrangThaiBan.DANG_DUNG) card.setBackground(new Color(0, 200, 100));
-        else if (trangThai == TrangThaiBan.DA_DAT) card.setBackground(new Color(255, 200, 0));
-    }
-    
     private void toggleSelectionCard(String maBan, JPanel card) {
+        TrangThaiBan trangThai = tableTrangThai.get(maBan);
+        if (trangThai == null) {
+            return;
+        }
+        
         if (selectedTables.contains(maBan)) {
             selectedTables.remove(maBan);
-            resetCardBackground(maBan, card);
+            setTableCardBackground(maBan, card, trangThai);
         } else {
             selectedTables.add(maBan);
-            card.setBackground(new Color(255, 255, 100));
+            card.setBackground(EDIT_MODE_NEW_COLOR);
             card.setBorder(BorderFactory.createCompoundBorder(
                     BorderFactory.createLineBorder(new Color(255, 200, 0), 2, true),
                     BorderFactory.createEmptyBorder(10, 10, 10, 10)));
@@ -478,51 +513,76 @@ public class PanelDatBan extends javax.swing.JPanel {
         card.repaint();
     }
 
-    private void resetCardBackground(String maBan, JPanel card) {
-        if (reservationMode && availableBanForReservation.contains(maBan)) {
-            card.setBackground(Color.WHITE);
-            JLabel lblStatus = tableLabelStatus.get(maBan);
-            if (lblStatus != null) {
-                lblStatus.setText(TrangThaiBan.TRONG.getDisplayName());
-            }
-        } else {
-            TrangThaiBan trangThai = tableTrangThai.get(maBan);
-            if (trangThai == TrangThaiBan.TRONG) {
-                card.setBackground(Color.WHITE);
-            } else if (trangThai == TrangThaiBan.DANG_DUNG) {
-                card.setBackground(new Color(0, 200, 100));
-            } else if (trangThai == TrangThaiBan.DA_DAT) {
-                card.setBackground(new Color(255, 200, 0));
-            }
-            JLabel lblStatus = tableLabelStatus.get(maBan);
-            if (lblStatus != null && trangThai != null) {
-                lblStatus.setText(trangThai.getDisplayName());
-            }
-        }
-        card.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(200, 200, 200), 1, true),
-                BorderFactory.createEmptyBorder(10, 10, 10, 10)));
-    }
-
     private void setTableCardBackground(String maBan, JPanel card, TrangThaiBan trangThai) {
-    	
-    	if (editMode && selectedTables.contains(maBan)) {
-            card.setBackground(EDIT_MODE_SELECTED_COLOR);
+        // Ưu tiên thứ 1: editMode == true
+        if (editMode) {
+            // Nếu selectedTables có maBan
+            if (selectedTables.contains(maBan)) {
+                // Nằm trong originalTablesForEdit -> Màu Xanh dương
+                if (originalTablesForEdit.contains(maBan)) {
+                    card.setBackground(EDIT_MODE_SELECTED_COLOR);
+                    card.setBorder(BorderFactory.createCompoundBorder(
+                            BorderFactory.createLineBorder(new Color(0, 123, 255), 3, true),
+                            BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+                } else {
+                    // KHÔNG nằm trong originalTablesForEdit -> Màu Vàng nhạt (bàn mới chọn)
+                    card.setBackground(EDIT_MODE_NEW_COLOR);
+                    card.setBorder(BorderFactory.createCompoundBorder(
+                            BorderFactory.createLineBorder(new Color(200, 180, 0), 2, true),
+                            BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+                }
+            } else {
+                // selectedTables KHÔNG có maBan
+                // Nằm trong originalTablesForEdit -> Màu Trắng (bàn cũ nhưng sẽ bị giải phóng)
+                if (originalTablesForEdit.contains(maBan)) {
+                    card.setBackground(EDIT_MODE_VACATING_COLOR);
+                    card.setBorder(BorderFactory.createCompoundBorder(
+                            BorderFactory.createLineBorder(new Color(200, 200, 200), 1, true),
+                            BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+                } else {
+                    // KHÔNG nằm trong originalTablesForEdit -> Màu theo trạng thái DB
+                    applyDefaultStatusColor(card, trangThai);
+                }
+            }
             return;
         }
-        if (reservationMode && availableBanForReservation.contains(maBan)) {
-            card.setBackground(Color.WHITE);
-        } else if (trangThai == TrangThaiBan.TRONG) {
+
+        // Ưu tiên thứ 2: reservationMode == true
+        if (reservationMode) {
+            if (selectedTables.contains(maBan)) {
+                // Bàn trong selectedTables -> Màu Vàng nhạt
+                card.setBackground(EDIT_MODE_NEW_COLOR);
+                card.setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(new Color(255, 200, 0), 2, true),
+                        BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+            } else if (availableBanForReservation.contains(maBan)) {
+                // Bàn khả dụng -> Màu Trắng
+                card.setBackground(Color.WHITE);
+                card.setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(new Color(200, 200, 200), 1, true),
+                        BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+            } else {
+                // Bàn khác -> Màu theo trạng thái DB
+                applyDefaultStatusColor(card, trangThai);
+            }
+            return;
+        }
+
+        // Mặc định: Hiển thị theo TrangThaiBan thực tế
+        applyDefaultStatusColor(card, trangThai);
+    }
+
+    private void applyDefaultStatusColor(JPanel card, TrangThaiBan trangThai) {
+        if (trangThai == TrangThaiBan.TRONG) {
             card.setBackground(Color.WHITE);
         } else if (trangThai == TrangThaiBan.DANG_DUNG) {
             card.setBackground(new Color(0, 200, 100));
         } else if (trangThai == TrangThaiBan.DA_DAT) {
             card.setBackground(new Color(255, 200, 0));
         }
-    }
-
-    private boolean isEditSelectedCard(JPanel card) {
-        return card != null && EDIT_MODE_SELECTED_COLOR.equals(card.getBackground());
+        card.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(200, 200, 200), 1, true),
+                BorderFactory.createEmptyBorder(10, 10, 10, 10)));
     }
 
     private void showDangDungOptions(String maBan) {
@@ -583,6 +643,7 @@ public class PanelDatBan extends javax.swing.JPanel {
 
     private void resetAllTablesUI() {
         selectedTables.clear();
+        originalTablesForEdit.clear();
         for (String maBan : tableCards.keySet()) {
             TrangThaiBan trangThai = tableTrangThai.get(maBan);
             if (trangThai != null) {

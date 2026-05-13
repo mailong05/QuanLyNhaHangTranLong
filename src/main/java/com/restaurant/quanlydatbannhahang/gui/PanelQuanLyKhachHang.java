@@ -40,7 +40,7 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseLis
                 if (row >= 0) {
                     loadDataFromRow(row);
                 }
-                syncCapNhatButtonState();
+                syncButtonState();
             }
         });
         this.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -52,7 +52,7 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseLis
                 }
             }
         });
-        syncCapNhatButtonState();
+        syncButtonState();
     }
     private void loadDataToComboBoxes() {
         try {
@@ -168,9 +168,10 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseLis
         txtSoDienThoai.setText("");
         txtDiemTichLuy.setText("0");
     }
-    private void syncCapNhatButtonState() {
+    private void syncButtonState() {
         btnCapNhat.setEnabled(tableKhachHang.getSelectedRow() >= 0);
         btnXoa.setEnabled(tableKhachHang.getSelectedRow() >= 0);
+        btnThem.setEnabled(tableKhachHang.getSelectedRow() == -1);
     }
     public void refreshData() {
         clearFields();
@@ -182,7 +183,7 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseLis
         loadDataToComboBoxes();
         loadDataToTable();
         tableKhachHang.clearSelection();
-        syncCapNhatButtonState();
+        syncButtonState();
     }
     private void fillMaKH() {
     	 String lastID = IDQueryHelper.getLastID("KhachHang", "maKH");

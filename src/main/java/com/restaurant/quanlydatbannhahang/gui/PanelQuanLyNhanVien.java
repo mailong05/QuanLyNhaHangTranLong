@@ -37,7 +37,7 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                                         tableNhanVien.clearSelection();
                                         clearFields();
                                         fillTxtMaNhanVien();
-                                        syncCapNhatButtonState();
+                                        syncButtonState();
                                 }
                         }
                 });
@@ -48,7 +48,7 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                                 if (row >= 0) {
                                         loadDataFromRow(row);
                                 }
-                                syncCapNhatButtonState();
+                                syncButtonState();
                         }
                 });
                 tableNhanVien.getColumnModel().getColumn(5).setCellRenderer(new DefaultTableCellRenderer() {
@@ -83,7 +83,7 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                                 }
                         }
                 });
-                syncCapNhatButtonState();
+                syncButtonState();
         }
         private void loadDataToComboBoxes() {
                 try {
@@ -234,11 +234,13 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                 loadDataToComboBoxes();
                 loadDataToTable();
                 tableNhanVien.clearSelection();
-                syncCapNhatButtonState();
+                syncButtonState();
         }
-        private void syncCapNhatButtonState() {
+        private void syncButtonState() {
                 btnCapNhat.setEnabled(tableNhanVien.getSelectedRow() >= 0);
                 btnXoa.setEnabled(tableNhanVien.getSelectedRow() >= 0);
+                btnThem.setEnabled(tableNhanVien.getSelectedRow() == -1);
+
         }
         private boolean isMouseOverTable(java.awt.event.MouseEvent evt) {
                 java.awt.Point p = evt.getPoint();

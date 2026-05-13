@@ -57,10 +57,10 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
                 if (row >= 0) {
                     loadDataFromRow(row);
                 }
-                syncCapNhatButtonState();
+                syncButtonState();
             }
         });
-        syncCapNhatButtonState();
+        syncButtonState();
     }
     private void loadDataToComboBoxes() {
         try {
@@ -268,9 +268,11 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
                 : IDGeneratorHelper.generateNextIDFromFullID(lastID);
         txtMaMon.setText(maMonNew);
     }
-    private void syncCapNhatButtonState() {
+    private void syncButtonState() {
         btnCapNhat.setEnabled(tableMonAn.getSelectedRow() >= 0);
         btnXoa.setEnabled(tableMonAn.getSelectedRow() >= 0);
+        btnThem.setEnabled(tableMonAn.getSelectedRow() == -1);
+
     }
     public void refreshData() {
         clearFields();
@@ -283,7 +285,7 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
         loadDataToComboBoxes();
         loadDataToTable();
         tableMonAn.clearSelection();
-        syncCapNhatButtonState();
+        syncButtonState();
     }
     private boolean isMouseOverTable(java.awt.event.MouseEvent evt) {
         java.awt.Point p = evt.getPoint();

@@ -39,7 +39,7 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                                         tableKhuyenMai.clearSelection();
                                         clearFields();
                                         fillTxtMaKhuyenMai();
-                                        syncCapNhatButtonState();
+                                        syncButtonState();
                                 }
                         }
                 });
@@ -50,7 +50,7 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                                 if (row >= 0) {
                                         loadDataFromRow(row);
                                 }
-                                syncCapNhatButtonState();
+                                syncButtonState();
                         }
                 });
                 for (int i = 0; i < tableKhuyenMai.getColumnCount(); i++) {
@@ -70,7 +70,7 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                         });
                 }
                 MainForm.attachGoHomeListener(btnTrangChu, this);
-                syncCapNhatButtonState();
+                syncButtonState();
         }
         private void loadDataToComboBoxes() {
                 try {
@@ -224,9 +224,11 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                         dbNgayKetThuc.setDate(LocalDate.now());
                 }
         }
-        private void syncCapNhatButtonState() {
+        private void syncButtonState() {
                 btnCapNhat.setEnabled(tableKhuyenMai.getSelectedRow() >= 0);
                 btnXoa.setEnabled(tableKhuyenMai.getSelectedRow() >= 0);
+                btnThem.setEnabled(tableKhuyenMai.getSelectedRow() == -1);
+
         }
         public void refreshData() {
                 clearFields();
@@ -236,7 +238,7 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                 loadDataToComboBoxes();
                 loadDataToTable();
                 tableKhuyenMai.clearSelection();
-                syncCapNhatButtonState();
+                syncButtonState();
         }
         private void fillTxtMaKhuyenMai() {
                 String lastID = IDQueryHelper.getLastID("KhuyenMai", "maKM");

@@ -43,10 +43,10 @@ public class PanelQuanLyThue extends javax.swing.JPanel implements MouseListener
                 if (row >= 0) {
                     loadDataFromRow(row);
                 }
-                syncCapNhatButtonState();
+                syncButtonState();
             }
         });
-        syncCapNhatButtonState();
+        syncButtonState();
     }
     private void loadDataFromRow(int rowIndex) {
         try {
@@ -181,9 +181,11 @@ public class PanelQuanLyThue extends javax.swing.JPanel implements MouseListener
         cbTrangThai.setSelectedIndex(0);
         fillTxtMaThue();
     }
-    private void syncCapNhatButtonState() {
+    private void syncButtonState() {
         btnCapNhat.setEnabled(tableThue.getSelectedRow() >= 0);
         btnXoa.setEnabled(tableThue.getSelectedRow() >= 0);
+        btnThem.setEnabled(tableThue.getSelectedRow() == -1);
+
     }
     public void refreshData() {
         clearFields();
@@ -192,7 +194,7 @@ public class PanelQuanLyThue extends javax.swing.JPanel implements MouseListener
         loadDataToComboBoxes();
         loadDataToTable();
         tableThue.clearSelection();
-        syncCapNhatButtonState();
+        syncButtonState();
     }
     private boolean isMouseOverTable(java.awt.event.MouseEvent evt) {
         java.awt.Point p = evt.getPoint();

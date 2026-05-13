@@ -45,10 +45,10 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
                 if (row >= 0) {
                     loadDataFromRow(row);
                 }
-                syncCapNhatButtonState();
+                syncButtonState();
             }
         });
-        syncCapNhatButtonState();
+        syncButtonState();
     }
     private void setupPlaceholder(JTextField textField, String placeholder) {
         Color placeholderColor = new Color(153, 153, 153);
@@ -380,9 +380,11 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
         txtTenKhuVuc.setText("");
         txtTimKiem.setText("");
     }
-    private void syncCapNhatButtonState() {
+    private void syncButtonState() {
         btnCapNhat.setEnabled(tableKhuVuc.getSelectedRow() >= 0);
         btnXoa.setEnabled(tableKhuVuc.getSelectedRow() >= 0);
+        btnThem.setEnabled(tableKhuVuc.getSelectedRow() == -1);
+
     }
     public void refreshData() {
         clearFields();
@@ -390,7 +392,7 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
         resetPlaceholder(txtTimKiem, "Nhập tên hoặc mã khu vực");
         loadDataToTable();
         tableKhuVuc.clearSelection();
-        syncCapNhatButtonState();
+        syncButtonState();
     }
     private void resetPlaceholder(JTextField textField, String placeholder) {
         Color placeholderColor = new Color(153, 153, 153);
