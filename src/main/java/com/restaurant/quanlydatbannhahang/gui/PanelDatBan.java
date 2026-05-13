@@ -9,6 +9,7 @@ import com.restaurant.quanlydatbannhahang.service.BanService;
 import com.restaurant.quanlydatbannhahang.service.KhuVucService;
 import com.restaurant.quanlydatbannhahang.service.PhieuDatBanService;
 import com.restaurant.quanlydatbannhahang.session.HoaDonDraftSession;
+import com.restaurant.quanlydatbannhahang.session.ReservationSession;
 import com.restaurant.quanlydatbannhahang.session.SessionManager;
 import com.restaurant.quanlydatbannhahang.entity.Ban;
 import com.restaurant.quanlydatbannhahang.entity.KhuVuc;
@@ -30,7 +31,6 @@ public class PanelDatBan extends javax.swing.JPanel {
     private PanelDatMon panelDatMon = null;
     private boolean editMode = false;
     private boolean reservationMode = false;
-    private LocalDateTime reservationSelectedDateTime = null;
     private Set<String> availableBanForReservation = new HashSet<>();
     private boolean billMode = false;
     private String flowOrigin = "";
@@ -54,6 +54,7 @@ public class PanelDatBan extends javax.swing.JPanel {
             public void hierarchyChanged(java.awt.event.HierarchyEvent e) {
                 if ((e.getChangeFlags() & java.awt.event.HierarchyEvent.SHOWING_CHANGED) != 0) {
                     if (isShowing()) {
+                    	isEnableBtnDoiBan();
                         if (!editMode) {
                             refreshData();
                         } else {
@@ -66,7 +67,18 @@ public class PanelDatBan extends javax.swing.JPanel {
                 }
             }
         });
+         
     }
+    
+    private void isEnableBtnDoiBan() {
+    	System.out.println("debug");
+    	if(flowOrigin.isBlank()) {
+    		return;
+    	}
+		if(flowOrigin.equals("QUAN_LY_DAT_TRUOC") || flowOrigin.equals("DAT_MON") || flowOrigin.equals("GOP_BAN")) {
+			btnDoiBan.setEnabled(true);
+		}
+	}
 
     public void setSelectedTablesForEdit(Set<String> tablesToSelect) {
         this.editMode = true;
@@ -542,7 +554,6 @@ public class PanelDatBan extends javax.swing.JPanel {
 
     private void resetReservationMode() {
         reservationMode = false;
-        reservationSelectedDateTime = null;
         availableBanForReservation.clear();
         if (btnDatBanTruoc != null) {
             btnDatBanTruoc.setText("Đặt bàn trước");
@@ -551,8 +562,8 @@ public class PanelDatBan extends javax.swing.JPanel {
 
     private void enterReservationMode(LocalDateTime thoiGianDen, java.util.List<String> availableBans) {
         reservationMode = true;
-        reservationSelectedDateTime = thoiGianDen;
         availableBanForReservation.clear();
+        ReservationSession.setTempSelectedDateTime(thoiGianDen);
         availableBanForReservation.addAll(availableBans);
         selectedTables.clear();
         if (btnDatBanTruoc != null) {

@@ -5,6 +5,7 @@ import java.util.Set;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import com.restaurant.quanlydatbannhahang.service.PhieuDatBanService;
+import com.restaurant.quanlydatbannhahang.session.ReservationSession;
 import com.restaurant.quanlydatbannhahang.util.CurrencyUtility;
 import com.restaurant.quanlydatbannhahang.util.IDGeneratorHelper;
 import com.restaurant.quanlydatbannhahang.util.IDQueryHelper;
@@ -30,7 +31,9 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
         if (dtpThoiGianDen != null) {
             dtpThoiGianDen.setDateTimeStrict(LocalDateTime.now());
         }
+        dtpThoiGianDen.setEnabled(false);
         fillMaPhieuDat(txtMaPhieuDat);
+        fillThoiGianDen();
         updateTienDatCoc();
     }
 
@@ -153,6 +156,10 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
                 : IDGeneratorHelper.generateNextIDFromFullID(lastID);
         txtMaPhieuDat.setText(maPDBNew);
     }
+    
+    private void fillThoiGianDen() {
+		dtpThoiGianDen.setDateTimeStrict(ReservationSession.getTempSelectedDateTime());
+	}
 
     private void btnDatBanActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnDatBanActionPerformed
         try {
