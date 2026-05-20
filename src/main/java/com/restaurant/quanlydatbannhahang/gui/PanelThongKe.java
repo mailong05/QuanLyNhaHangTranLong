@@ -1,11 +1,14 @@
 package com.restaurant.quanlydatbannhahang.gui;
+
 import com.restaurant.quanlydatbannhahang.entity.ChiTietHoaDon;
 import com.restaurant.quanlydatbannhahang.entity.HoaDon;
 import com.restaurant.quanlydatbannhahang.entity.MonAn;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiHoaDon;
 import com.restaurant.quanlydatbannhahang.entity.NhanVien;
+import com.restaurant.quanlydatbannhahang.entity.KhachHang;
 import com.restaurant.quanlydatbannhahang.service.ChiTietHoaDonService;
 import com.restaurant.quanlydatbannhahang.service.HoaDonService;
+import com.restaurant.quanlydatbannhahang.service.KhachHangService;
 import com.restaurant.quanlydatbannhahang.util.CurrencyUtility;
 import com.restaurant.quanlydatbannhahang.util.ImageUtil;
 import com.restaurant.quanlydatbannhahang.session.SessionManager;
@@ -27,42 +30,59 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
+
 public class PanelThongKe extends javax.swing.JPanel {
     private static final int TOP_TABLE_IMAGE_SIZE = 48;
     private static final int TOP_TABLE_IMAGE_ROW_HEIGHT = 84;
     private static final int TOP_TABLE_IMAGE_VERTICAL_PADDING = 4;
     private HoaDonService hoaDonService;
     private ChiTietHoaDonService chiTietHoaDonService;
+    private KhachHangService khachHangService;
+
     public PanelThongKe() {
         initComponents();
         hoaDonService = new HoaDonService();
         chiTietHoaDonService = new ChiTietHoaDonService();
+        khachHangService = new KhachHangService();
         customUI();
         setupImageRenderer();
         loadStatistics();
         cbThoiGianThongKe.setSelectedIndex(0);
     }
+
     private void setupImageRenderer() {
         ImageRenderer imageRenderer = new ImageRenderer();
         tableTopMonAn.getColumnModel().getColumn(1).setCellRenderer(imageRenderer);
         tableTopMonAn.getColumnModel().getColumn(1).setPreferredWidth(100);
         tableTopMonAn.setRowHeight(TOP_TABLE_IMAGE_ROW_HEIGHT);
     }
-    private void centerTableColumns(JTable table) {
+
+    private void centerTableColumns(JTable table, boolean isTableMonAn) {
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        for (int i = 0; i < table.getColumnCount(); i++) {
-            if (i != 1 && i != 3) {
-                table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        if(isTableMonAn)
+        {
+        	 for (int i = 0; i < table.getColumnCount(); i++) {
+                 if (i != 1 && i != 3) {
+                     table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+                 }
+             }
+        }else {
+        	for (int i = 0; i < table.getColumnCount(); i++) {
+        		 if (i != 4) {
+                     table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+                 }
             }
         }
     }
+
     private static class TopMonAnItem {
         private String maMon;
         private String tenMon;
         private String imagePath;
         private double donGia;
         private int soLuong;
+
         TopMonAnItem(MonAn monAn, int soLuong) {
             this.maMon = monAn.getMaMon();
             this.tenMon = monAn.getTenMon();
@@ -71,6 +91,7 @@ public class PanelThongKe extends javax.swing.JPanel {
             this.soLuong = soLuong;
         }
     }
+
     private static class ImageRenderer extends DefaultTableCellRenderer {
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
@@ -88,6 +109,7 @@ public class PanelThongKe extends javax.swing.JPanel {
             return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
         }
     }
+
     private void loadStatistics() {
         try {
             List<HoaDon> dsHoaDon = hoaDonService.getAllHoaDon();
@@ -136,10 +158,42 @@ public class PanelThongKe extends javax.swing.JPanel {
                 });
                 top++;
             }
+
+            // Load Top 10 Khách hàng từ Service (startDate = null để lấy toàn thời gian)
+            List<Object[]> topKhachHangList = khachHangService.getTopKhachHangThongKe(null);
+            DefaultTableModel modelKhachHang = (DefaultTableModel) tableTopKhachHang.getModel();
+            modelKhachHang.setRowCount(0);
+            int topKhachHang = 1;
+            if (topKhachHangList != null) {
+                for (Object[] item : topKhachHangList) {
+                    if (topKhachHang > 10) {
+                        break;
+                    }
+                    KhachHang kh = (KhachHang) item[0];
+                    Integer soLuongHD = (Integer) item[1];
+                    Double tongChi = (Double) item[2];
+
+                    String displayName = "";
+                    if (kh != null && kh.getLoaiThanhVien() != null) {
+                        displayName = kh.getLoaiThanhVien().getDisplayName();
+                    }
+
+                    modelKhachHang.addRow(new Object[] {
+                            topKhachHang,
+                            kh != null ? kh.getHoTen() : "",
+                            kh != null ? kh.getSdt() : "",
+                            soLuongHD != null ? soLuongHD : 0,
+                            tongChi != null ? tongChi : 0.0,
+                            displayName
+                    });
+                    topKhachHang++;
+                }
+            }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Lỗi tải dữ liệu thống kê: " + ex.getMessage());
         }
     }
+
     private void customUI() {
         applyCardStyle(carTongDoanhThu, 30);
         applyCardStyle(cardTongHoaDon, 30);
@@ -147,34 +201,10 @@ public class PanelThongKe extends javax.swing.JPanel {
         pnlContainerTable.setBackground(new Color(254, 243, 198));
         applyCardStyle(pnlContainerTable, 40);
         pnlContainerTable.setBorder(new EmptyBorder(25, 25, 25, 25));
-        lblTitleTable.setForeground(new Color(148, 134, 111));
-        lblTitleTable.setFont(new Font("Segoe UI", Font.BOLD, 20));
-        scrTableTopMonAn.setBorder(BorderFactory.createEmptyBorder());
-        scrTableTopMonAn.setViewportBorder(null);
-        scrTableTopMonAn.setOpaque(false);
-        scrTableTopMonAn.getViewport().setOpaque(false);
-        JPanel corner = new JPanel();
-        corner.setBackground(new Color(255, 251, 235));
-        scrTableTopMonAn.setCorner(JScrollPane.UPPER_RIGHT_CORNER, corner);
-        tableTopMonAn.setShowGrid(false);
-        tableTopMonAn.setIntercellSpacing(new Dimension(0, 0));
-        tableTopMonAn.setRowHeight(45);
-        tableTopMonAn.setBorder(BorderFactory.createEmptyBorder());
-        tableTopMonAn.getTableHeader().setPreferredSize(new Dimension(tableTopMonAn.getTableHeader().getWidth(), 45));
-        tableTopMonAn.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-                    boolean hasFocus, int row, int column) {
-                JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row,
-                        column);
-                label.setBackground(new Color(255, 251, 235));
-                label.setForeground(new Color(148, 134, 111));
-                label.setFont(new Font("Segoe UI", Font.BOLD, 14));
-                label.setHorizontalAlignment(JLabel.CENTER);
-                label.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(230, 230, 230)));
-                return label;
-            }
-        });
+        lblTitleTableMonAn.setForeground(new Color(148, 134, 111));
+        lblTitleTableMonAn.setFont(new Font("Segoe UI", Font.BOLD, 20));
+
+        // Format tiền tệ cho cột Đơn giá (tableTopMonAn - cột 3)
         tableTopMonAn.getColumnModel().getColumn(3).setCellRenderer(new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
@@ -187,10 +217,80 @@ public class PanelThongKe extends javax.swing.JPanel {
                 return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
             }
         });
-        centerTableColumns(tableTopMonAn);
+
+        // Format tiền tệ cho cột Tổng chi (tableTopKhachHang - cột 4)
+        tableTopKhachHang.getColumnModel().getColumn(4).setCellRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                    boolean hasFocus, int row, int column) {
+                if (value != null && value instanceof Number) {
+                    value = com.restaurant.quanlydatbannhahang.util.CurrencyUtility
+                            .formatVND(((Number) value).doubleValue());
+                }
+                setHorizontalAlignment(JLabel.CENTER);
+                return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            }
+        });
+
+        centerTableColumns(tableTopMonAn, true);
+        centerTableColumns(tableTopKhachHang,false);
         btnTrangChu.setFocusPainted(false);
         btnInThongKe.setFocusPainted(false);
+
+        // --- BẮT ĐẦU ĐOẠN CODE OVERRIDE LAYOUT RESPONSIVE ---
+        // 1. Chuyển Panel chính sang BorderLayout và xóa bỏ GroupLayout cũ
+        this.setLayout(new BorderLayout(0, 20));
+        this.removeAll();
+
+        // 2. Panel Top: Chứa ComboBox thời gian (căn phải)
+        JPanel pnlTop = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        pnlTop.setOpaque(false);
+        pnlTop.add(cbThoiGianThongKe);
+
+        // 3. Panel Center: Chứa các Thẻ Doanh Thu và 2 Bảng Thống kê
+        JPanel pnlCenter = new JPanel(new BorderLayout(0, 20));
+        pnlCenter.setOpaque(false);
+        pnlCenter.add(jPanel1, BorderLayout.NORTH); // jPanel1 chứa 3 thẻ màu đã có sẵn GridLayout
+
+        // Xóa bỏ AbsoluteLayout của pnlContainerTable, dùng GridLayout(1, 2) để chia
+        // đôi màn hình
+        pnlContainerTable.setLayout(new GridLayout(1, 2, 20, 0));
+        pnlContainerTable.removeAll();
+
+        // Bảng Món Ăn (Bên trái)
+        JPanel pnlLeft = new JPanel(new BorderLayout(0, 10));
+        pnlLeft.setOpaque(false);
+        pnlLeft.add(lblTitleTableMonAn, BorderLayout.NORTH);
+        pnlLeft.add(scrTableTopMonAn, BorderLayout.CENTER);
+
+        // Bảng Khách Hàng (Bên phải)
+        JPanel pnlRight = new JPanel(new BorderLayout(0, 10));
+        pnlRight.setOpaque(false);
+        pnlRight.add(lblTitleTableKhachHang, BorderLayout.NORTH);
+        pnlRight.add(scrTableTopKhachHang, BorderLayout.CENTER);
+
+        pnlContainerTable.add(pnlLeft);
+        pnlContainerTable.add(pnlRight);
+
+        pnlCenter.add(pnlContainerTable, BorderLayout.CENTER);
+
+        // 4. Panel Bottom: Chứa các nút chức năng
+        JPanel pnlBottom = new JPanel(new BorderLayout());
+        pnlBottom.setOpaque(false);
+        pnlBottom.add(btnTrangChu, BorderLayout.WEST);
+        pnlBottom.add(btnInThongKe, BorderLayout.EAST);
+
+        // 5. Gắn tất cả các phần tử đã được tổ chức lại vào Panel chính
+        this.add(pnlTop, BorderLayout.NORTH);
+        this.add(pnlCenter, BorderLayout.CENTER);
+        this.add(pnlBottom, BorderLayout.SOUTH);
+
+        // Cập nhật lại giao diện
+        this.revalidate();
+        this.repaint();
+        // --- KẾT THÚC ĐOẠN CODE OVERRIDE LAYOUT ---
     }
+
     private void applyCardStyle(JPanel panel, int radius) {
         panel.setOpaque(false);
         panel.setBorder(new EmptyBorder(0, 0, 0, 0));
@@ -205,10 +305,15 @@ public class PanelThongKe extends javax.swing.JPanel {
             }
         });
     }
+
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
     // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+
         jPanel1 = new javax.swing.JPanel();
         carTongDoanhThu = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -223,61 +328,79 @@ public class PanelThongKe extends javax.swing.JPanel {
         btnTrangChu = new javax.swing.JButton();
         btnInThongKe = new javax.swing.JButton();
         pnlContainerTable = new javax.swing.JPanel();
+        scrTableTopKhachHang = new javax.swing.JScrollPane();
+        tableTopKhachHang = new javax.swing.JTable();
+        lblTitleTableMonAn = new javax.swing.JLabel();
         scrTableTopMonAn = new javax.swing.JScrollPane();
         tableTopMonAn = new javax.swing.JTable();
-        lblTitleTable = new javax.swing.JLabel();
+        lblTitleTableKhachHang = new javax.swing.JLabel();
         cbThoiGianThongKe = new javax.swing.JComboBox<>();
+
         setBackground(new java.awt.Color(255, 251, 233));
-        setLayout(new java.awt.BorderLayout(10, 10));
-        setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 60, 20, 60));
+
         jPanel1.setBackground(new java.awt.Color(255, 251, 233));
         jPanel1.setPreferredSize(new java.awt.Dimension(100, 150));
         jPanel1.setLayout(new java.awt.GridLayout(1, 0, 60, 0));
+
         carTongDoanhThu.setBackground(new java.awt.Color(153, 255, 153));
         carTongDoanhThu.setPreferredSize(new java.awt.Dimension(150, 150));
         carTongDoanhThu.setLayout(new java.awt.GridLayout(2, 1, 0, 10));
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 20));
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Tổng doanh thu");
         jLabel1.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         carTongDoanhThu.add(jLabel1);
-        lblTongDoanhThu.setFont(new java.awt.Font("Segoe UI", 1, 22));
+
+        lblTongDoanhThu.setFont(new java.awt.Font("Segoe UI", 1, 22)); // NOI18N
         lblTongDoanhThu.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblTongDoanhThu.setText("0 VND");
         lblTongDoanhThu.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         carTongDoanhThu.add(lblTongDoanhThu);
+
         jPanel1.add(carTongDoanhThu);
+
         cardTongHoaDon.setBackground(new java.awt.Color(102, 204, 255));
         cardTongHoaDon.setPreferredSize(new java.awt.Dimension(150, 150));
         cardTongHoaDon.setLayout(new java.awt.GridLayout(2, 1, 0, 10));
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 20));
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Tổng số hóa đơn");
         jLabel2.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         cardTongHoaDon.add(jLabel2);
-        lblTongSoHoaDon.setFont(new java.awt.Font("Segoe UI", 1, 22));
+
+        lblTongSoHoaDon.setFont(new java.awt.Font("Segoe UI", 1, 22)); // NOI18N
         lblTongSoHoaDon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblTongSoHoaDon.setText("0");
         lblTongSoHoaDon.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         cardTongHoaDon.add(lblTongSoHoaDon);
+
         jPanel1.add(cardTongHoaDon);
+
         carDoanhThuTrungBinh.setBackground(new java.awt.Color(255, 255, 153));
         carDoanhThuTrungBinh.setPreferredSize(new java.awt.Dimension(150, 150));
         carDoanhThuTrungBinh.setLayout(new java.awt.GridLayout(2, 1, 0, 10));
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 20));
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("Doanh thu trung bình");
         jLabel3.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         carDoanhThuTrungBinh.add(jLabel3);
-        lblDoanhThuTrungBinh.setFont(new java.awt.Font("Segoe UI", 1, 22));
+
+        lblDoanhThuTrungBinh.setFont(new java.awt.Font("Segoe UI", 1, 22)); // NOI18N
         lblDoanhThuTrungBinh.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblDoanhThuTrungBinh.setText("0 VND");
         lblDoanhThuTrungBinh.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         carDoanhThuTrungBinh.add(lblDoanhThuTrungBinh);
+
         jPanel1.add(carDoanhThuTrungBinh);
+
         jPanel6.setBackground(new java.awt.Color(255, 251, 233));
         jPanel6.setPreferredSize(new java.awt.Dimension(1022, 30));
         jPanel6.setLayout(new java.awt.BorderLayout());
+
         btnTrangChu.setText("Trang chủ");
         btnTrangChu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -285,6 +408,7 @@ public class PanelThongKe extends javax.swing.JPanel {
             }
         });
         jPanel6.add(btnTrangChu, java.awt.BorderLayout.WEST);
+
         btnInThongKe.setText("In thống kê");
         btnInThongKe.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -292,10 +416,46 @@ public class PanelThongKe extends javax.swing.JPanel {
             }
         });
         jPanel6.add(btnInThongKe, java.awt.BorderLayout.EAST);
+
         pnlContainerTable.setBackground(new java.awt.Color(255, 251, 233));
-        pnlContainerTable.setLayout(new java.awt.BorderLayout());
+        pnlContainerTable.setPreferredSize(new java.awt.Dimension(1022, 200));
+        pnlContainerTable.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        tableTopKhachHang.setModel(new javax.swing.table.DefaultTableModel(
+                new Object[][] {
+
+                },
+                new String[] {
+                        "Top", "Tên khách hàng", "Số điện thoại", "Số lượng hóa đơn", "Tổng chi", "Loại thành viên"
+                }) {
+            Class[] types = new Class[] {
+                    java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class,
+                    java.lang.Double.class, java.lang.Object.class
+            };
+            boolean[] canEdit = new boolean[] {
+                    false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types[columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit[columnIndex];
+            }
+        });
+        scrTableTopKhachHang.setViewportView(tableTopKhachHang);
+
+        pnlContainerTable.add(scrTableTopKhachHang,
+                new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 25, 580, 260));
+
+        lblTitleTableMonAn.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        lblTitleTableMonAn.setText("Top 10 món ăn bán chạy nhất");
+        pnlContainerTable.add(lblTitleTableMonAn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 260, -1));
+
         tableTopMonAn.setModel(new javax.swing.table.DefaultTableModel(
                 new Object[][] {
+
                 },
                 new String[] {
                         "Top", "Hình ảnh", "Tên món ăn", "Đơn giá", "Số lượng"
@@ -307,38 +467,62 @@ public class PanelThongKe extends javax.swing.JPanel {
             boolean[] canEdit = new boolean[] {
                     false, false, false, false, false
             };
+
             public Class getColumnClass(int columnIndex) {
                 return types[columnIndex];
             }
+
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit[columnIndex];
             }
         });
         scrTableTopMonAn.setViewportView(tableTopMonAn);
-        pnlContainerTable.add(scrTableTopMonAn, java.awt.BorderLayout.CENTER);
-        lblTitleTable.setFont(new java.awt.Font("Segoe UI", 0, 18));
-        lblTitleTable.setText("Top 10 món ăn bán chạy nhất");
-        pnlContainerTable.add(lblTitleTable, java.awt.BorderLayout.PAGE_START);
-        cbThoiGianThongKe.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ngày", "Tuần", "Tháng" }));
+
+        pnlContainerTable.add(scrTableTopMonAn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 25, 430, 255));
+
+        lblTitleTableKhachHang.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lblTitleTableKhachHang.setText("Top 10 khách hàng ");
+        pnlContainerTable.add(lblTitleTableKhachHang,
+                new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 0, 260, -1));
+
+        cbThoiGianThongKe.setModel(
+                new javax.swing.DefaultComboBoxModel<>(new String[] { "Ngày", "Tuần", "Tháng"}));
         cbThoiGianThongKe.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbThoiGianThongKeActionPerformed(evt);
             }
         });
-        javax.swing.JPanel pnlTimeFilter = new javax.swing.JPanel();
-        pnlTimeFilter.setBackground(new java.awt.Color(255, 251, 233));
-        pnlTimeFilter.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
-        pnlTimeFilter.add(new javax.swing.JLabel("Thống kê:"));
-        pnlTimeFilter.add(cbThoiGianThongKe);
-        javax.swing.JPanel pnlHeader = new javax.swing.JPanel();
-        pnlHeader.setBackground(new java.awt.Color(255, 251, 233));
-        pnlHeader.setLayout(new java.awt.BorderLayout());
-        pnlHeader.add(pnlTimeFilter, java.awt.BorderLayout.NORTH);
-        pnlHeader.add(jPanel1, java.awt.BorderLayout.CENTER);
-        add(pnlHeader, java.awt.BorderLayout.NORTH);
-        add(pnlContainerTable, java.awt.BorderLayout.CENTER);
-        add(jPanel6, java.awt.BorderLayout.PAGE_END);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addGap(902, 902, 902)
+                                .addComponent(cbThoiGianThongKe, javax.swing.GroupLayout.PREFERRED_SIZE, 120,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1022,
+                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(pnlContainerTable, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE));
+        layout.setVerticalGroup(
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addComponent(cbThoiGianThongKe, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(24, 24, 24)
+                                .addComponent(pnlContainerTable, javax.swing.GroupLayout.PREFERRED_SIZE, 280,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(10, 10, 10)
+                                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)));
     }// </editor-fold>//GEN-END:initComponents
+
     private void cbThoiGianThongKeActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbThoiGianThongKeActionPerformed
         String selectedOption = (String) cbThoiGianThongKe.getSelectedItem();
         if (selectedOption == null) {
@@ -407,16 +591,49 @@ public class PanelThongKe extends javax.swing.JPanel {
                 });
                 top++;
             }
+
+            // Load Top 10 Khách hàng từ Service với startDate đã xác định
+            List<Object[]> topKhachHangList = khachHangService.getTopKhachHangThongKe(startDate);
+            DefaultTableModel modelKhachHang = (DefaultTableModel) tableTopKhachHang.getModel();
+            modelKhachHang.setRowCount(0);
+            int topKhachHang = 1;
+            if (topKhachHangList != null) {
+                for (Object[] item : topKhachHangList) {
+                    if (topKhachHang > 10) {
+                        break;
+                    }
+                    KhachHang kh = (KhachHang) item[0];
+                    Integer soLuongHD = (Integer) item[1];
+                    Double tongChi = (Double) item[2];
+
+                    String displayName = "";
+                    if (kh != null && kh.getLoaiThanhVien() != null) {
+                        displayName = kh.getLoaiThanhVien().getDisplayName();
+                    }
+
+                    modelKhachHang.addRow(new Object[] {
+                            topKhachHang,
+                            kh != null ? kh.getHoTen() : "",
+                            kh != null ? kh.getSdt() : "",
+                            soLuongHD != null ? soLuongHD : 0,
+                            tongChi != null ? tongChi : 0.0,
+                            displayName
+                    });
+                    topKhachHang++;
+                }
+            }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Lỗi cập nhật thống kê: " + ex.getMessage());
         }
     }// GEN-LAST:event_cbThoiGianThongKeActionPerformed
+
     private void btnTrangChuActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTrangChuActionPerformed
         java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
         if (parentFrame instanceof MainForm) {
             ((MainForm) parentFrame).goToTrangChuFromPanel();
         }
     }// GEN-LAST:event_btnTrangChuActionPerformed
+
     private void btnInThongKeActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnInThongKeActionPerformed
         try {
             generateStatisticsReport();
@@ -425,6 +642,156 @@ public class PanelThongKe extends javax.swing.JPanel {
             ex.printStackTrace();
         }
     }// GEN-LAST:event_btnInThongKeActionPerformed
+
+//    private void generateStatisticsReport() throws IOException {
+//        JFileChooser fileChooser = new JFileChooser();
+//        fileChooser.setDialogTitle("Lưu báo cáo thống kê PDF");
+//        fileChooser.setFileFilter(new FileNameExtensionFilter("PDF Files", "pdf"));
+//        fileChooser.setSelectedFile(new File("ThongKe_" + java.time.LocalDate.now() + ".pdf"));
+//        if (fileChooser.showSaveDialog(this) != JFileChooser.APPROVE_OPTION) {
+//            return;
+//        }
+//        File saveFile = fileChooser.getSelectedFile();
+//        if (!saveFile.getName().toLowerCase().endsWith(".pdf")) {
+//            saveFile = new File(saveFile.getParentFile(), saveFile.getName() + ".pdf");
+//        }
+//        try (PDDocument document = new PDDocument()) {
+//            PDPage page = new PDPage(org.apache.pdfbox.pdmodel.common.PDRectangle.A4);
+//            document.addPage(page);
+//            PDType0Font fontUnicode = PDType0Font.load(document, new File("fonts/Arial.ttf"));
+//            try (PDPageContentStream content = new PDPageContentStream(document, page)) {
+//                float pageWidth = org.apache.pdfbox.pdmodel.common.PDRectangle.A4.getWidth();
+//                float currentY = 770;
+//                DecimalFormat moneyFormat = new DecimalFormat("#,##0.00");
+//                content.setFont(fontUnicode, 18);
+//                content.beginText();
+//                content.newLineAtOffset(50, currentY);
+//                content.showText("NHÀ HÀNG TRẦN LONG");
+//                content.endText();
+//                currentY -= 25;
+//                content.setFont(fontUnicode, 14);
+//                content.beginText();
+//                content.newLineAtOffset(50, currentY);
+//                content.showText("BÁO CÁO THỐNG KÊ DOANH THU");
+//                content.endText();
+//                currentY -= 20;
+//                content.setFont(fontUnicode, 10);
+//                String thoiGian = (String) cbThoiGianThongKe.getSelectedItem();
+//                content.beginText();
+//                content.newLineAtOffset(50, currentY);
+//                content.showText("Thời gian thống kê: " + getThoiGianDisplay(thoiGian));
+//                content.endText();
+//                currentY -= 15;
+//                java.time.LocalDateTime now = java.time.LocalDateTime.now();
+//                java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter
+//                        .ofPattern("dd/MM/yyyy HH:mm:ss");
+//                content.beginText();
+//                content.newLineAtOffset(50, currentY);
+//                content.showText("Ngày lập báo cáo: " + now.format(formatter));
+//                content.endText();
+//                currentY -= 15;
+//                NhanVien nhanVien = SessionManager.getCurrentNhanVien();
+//                String tenNhanVien = nhanVien != null ? nhanVien.getHoTen() : "[Chưa xác định]";
+//                content.beginText();
+//                content.newLineAtOffset(50, currentY);
+//                content.showText("Người lập: " + tenNhanVien);
+//                content.endText();
+//                currentY -= 30;
+//                content.setFont(fontUnicode, 12);
+//                content.beginText();
+//                content.newLineAtOffset(50, currentY);
+//                content.showText("=== TÓM TẮT THỐNG KÊ ===");
+//                content.endText();
+//                currentY -= 18;
+//                content.setFont(fontUnicode, 11);
+//                String tongDoanhThu = lblTongDoanhThu.getText();
+//                content.beginText();
+//                content.newLineAtOffset(50, currentY);
+//                content.showText("• Tổng doanh thu: " + tongDoanhThu);
+//                content.endText();
+//                currentY -= 15;
+//                String tongHoaDon = lblTongSoHoaDon.getText();
+//                content.beginText();
+//                content.newLineAtOffset(50, currentY);
+//                content.showText("• Tổng số hóa đơn: " + tongHoaDon);
+//                content.endText();
+//                currentY -= 15;
+//                String doanhThuTrungBinh = lblDoanhThuTrungBinh.getText();
+//                content.beginText();
+//                content.newLineAtOffset(50, currentY);
+//                content.showText("• Doanh thu trung bình: " + doanhThuTrungBinh);
+//                content.endText();
+//                currentY -= 30;
+//                content.setFont(fontUnicode, 12);
+//                content.beginText();
+//                content.newLineAtOffset(50, currentY);
+//                content.showText("=== TOP 10 MÓN ĂN BÁN CHẠY NHẤT ===");
+//                content.endText();
+//                currentY -= 20;
+//                content.setFont(fontUnicode, 10);
+//                content.beginText();
+//                content.newLineAtOffset(50, currentY);
+//                content.showText("STT");
+//                content.newLineAtOffset(40, 0);
+//                content.showText("Tên món ăn");
+//                content.newLineAtOffset(150, 0);
+//                content.showText("Đơn giá");
+//                content.newLineAtOffset(80, 0);
+//                content.showText("Số lượng");
+//                content.newLineAtOffset(70, 0);
+//                content.showText("Thành tiền");
+//                content.endText();
+//                content.setLineWidth(1f);
+//                currentY -= 3;
+//                content.moveTo(50, currentY);
+//                content.lineTo(pageWidth - 50, currentY);
+//                content.stroke();
+//                currentY -= 15;
+//                content.setFont(fontUnicode, 9);
+//                DefaultTableModel model = (DefaultTableModel) tableTopMonAn.getModel();
+//                for (int i = 0; i < model.getRowCount(); i++) {
+//                    Object stt = model.getValueAt(i, 0);
+//                    Object tenMon = model.getValueAt(i, 2);
+//                    Object donGia = model.getValueAt(i, 3);
+//                    Object soLuong = model.getValueAt(i, 4);
+//                    double giaDbl = CurrencyUtility.parseVND(String.valueOf(donGia));
+//                    int soLuongInt = Integer.parseInt(soLuong.toString());
+//                    double thanhTien = giaDbl * soLuongInt;
+//                    content.beginText();
+//                    content.newLineAtOffset(50, currentY);
+//                    content.showText(stt.toString());
+//                    content.newLineAtOffset(40, 0);
+//                    content.showText(tenMon.toString());
+//                    content.newLineAtOffset(150, 0);
+//                    content.showText(moneyFormat.format(giaDbl));
+//                    content.newLineAtOffset(80, 0);
+//                    content.showText(soLuongInt + "");
+//                    content.newLineAtOffset(70, 0);
+//                    content.showText(moneyFormat.format(thanhTien));
+//                    content.endText();
+//                    currentY -= 12;
+//                }
+//                currentY -= 20;
+//                content.setFont(fontUnicode, 10);
+//                content.beginText();
+//                content.newLineAtOffset(50, currentY);
+//                content.showText("Người lập biểu");
+//                content.newLineAtOffset(200, 0);
+//                content.showText("Quản lý/Chủ nhà hàng");
+//                content.endText();
+//                currentY -= 30;
+//                content.beginText();
+//                content.newLineAtOffset(50, currentY);
+//                content.showText("(Ký và ghi rõ họ tên)");
+//                content.newLineAtOffset(200, 0);
+//                content.showText("(Ký và ghi rõ họ tên)");
+//                content.endText();
+//            }
+//            document.save(saveFile);
+//            JOptionPane.showMessageDialog(this, "Báo cáo thống kê đã được lưu tại:\n" + saveFile.getAbsolutePath());
+//        }
+//    }
+    
     private void generateStatisticsReport() throws IOException {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Lưu báo cáo thống kê PDF");
@@ -445,18 +812,22 @@ public class PanelThongKe extends javax.swing.JPanel {
                 float pageWidth = org.apache.pdfbox.pdmodel.common.PDRectangle.A4.getWidth();
                 float currentY = 770;
                 DecimalFormat moneyFormat = new DecimalFormat("#,##0.00");
+                
+                // HEADER
                 content.setFont(fontUnicode, 18);
                 content.beginText();
                 content.newLineAtOffset(50, currentY);
                 content.showText("NHÀ HÀNG TRẦN LONG");
                 content.endText();
                 currentY -= 25;
+                
                 content.setFont(fontUnicode, 14);
                 content.beginText();
                 content.newLineAtOffset(50, currentY);
                 content.showText("BÁO CÁO THỐNG KÊ DOANH THU");
                 content.endText();
                 currentY -= 20;
+                
                 content.setFont(fontUnicode, 10);
                 String thoiGian = (String) cbThoiGianThongKe.getSelectedItem();
                 content.beginText();
@@ -464,6 +835,7 @@ public class PanelThongKe extends javax.swing.JPanel {
                 content.showText("Thời gian thống kê: " + getThoiGianDisplay(thoiGian));
                 content.endText();
                 currentY -= 15;
+                
                 java.time.LocalDateTime now = java.time.LocalDateTime.now();
                 java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter
                         .ofPattern("dd/MM/yyyy HH:mm:ss");
@@ -472,6 +844,7 @@ public class PanelThongKe extends javax.swing.JPanel {
                 content.showText("Ngày lập báo cáo: " + now.format(formatter));
                 content.endText();
                 currentY -= 15;
+                
                 NhanVien nhanVien = SessionManager.getCurrentNhanVien();
                 String tenNhanVien = nhanVien != null ? nhanVien.getHoTen() : "[Chưa xác định]";
                 content.beginText();
@@ -479,12 +852,15 @@ public class PanelThongKe extends javax.swing.JPanel {
                 content.showText("Người lập: " + tenNhanVien);
                 content.endText();
                 currentY -= 30;
+                
+                // === TÓM TẮT THỐNG KÊ ===
                 content.setFont(fontUnicode, 12);
                 content.beginText();
                 content.newLineAtOffset(50, currentY);
                 content.showText("=== TÓM TẮT THỐNG KÊ ===");
                 content.endText();
                 currentY -= 18;
+                
                 content.setFont(fontUnicode, 11);
                 String tongDoanhThu = lblTongDoanhThu.getText();
                 content.beginText();
@@ -492,24 +868,29 @@ public class PanelThongKe extends javax.swing.JPanel {
                 content.showText("• Tổng doanh thu: " + tongDoanhThu);
                 content.endText();
                 currentY -= 15;
+                
                 String tongHoaDon = lblTongSoHoaDon.getText();
                 content.beginText();
                 content.newLineAtOffset(50, currentY);
                 content.showText("• Tổng số hóa đơn: " + tongHoaDon);
                 content.endText();
                 currentY -= 15;
+                
                 String doanhThuTrungBinh = lblDoanhThuTrungBinh.getText();
                 content.beginText();
                 content.newLineAtOffset(50, currentY);
                 content.showText("• Doanh thu trung bình: " + doanhThuTrungBinh);
                 content.endText();
                 currentY -= 30;
+                
+                // === TOP 10 MÓN ĂN ===
                 content.setFont(fontUnicode, 12);
                 content.beginText();
                 content.newLineAtOffset(50, currentY);
                 content.showText("=== TOP 10 MÓN ĂN BÁN CHẠY NHẤT ===");
                 content.endText();
                 currentY -= 20;
+                
                 content.setFont(fontUnicode, 10);
                 content.beginText();
                 content.newLineAtOffset(50, currentY);
@@ -523,22 +904,25 @@ public class PanelThongKe extends javax.swing.JPanel {
                 content.newLineAtOffset(70, 0);
                 content.showText("Thành tiền");
                 content.endText();
+                
                 content.setLineWidth(1f);
                 currentY -= 3;
                 content.moveTo(50, currentY);
                 content.lineTo(pageWidth - 50, currentY);
                 content.stroke();
                 currentY -= 15;
+                
                 content.setFont(fontUnicode, 9);
-                DefaultTableModel model = (DefaultTableModel) tableTopMonAn.getModel();
-                for (int i = 0; i < model.getRowCount(); i++) {
-                    Object stt = model.getValueAt(i, 0);
-                    Object tenMon = model.getValueAt(i, 2);
-                    Object donGia = model.getValueAt(i, 3);
-                    Object soLuong = model.getValueAt(i, 4);
+                DefaultTableModel modelMon = (DefaultTableModel) tableTopMonAn.getModel();
+                for (int i = 0; i < modelMon.getRowCount(); i++) {
+                    Object stt = modelMon.getValueAt(i, 0);
+                    Object tenMon = modelMon.getValueAt(i, 2);
+                    Object donGia = modelMon.getValueAt(i, 3);
+                    Object soLuong = modelMon.getValueAt(i, 4);
                     double giaDbl = CurrencyUtility.parseVND(String.valueOf(donGia));
                     int soLuongInt = Integer.parseInt(soLuong.toString());
                     double thanhTien = giaDbl * soLuongInt;
+                    
                     content.beginText();
                     content.newLineAtOffset(50, currentY);
                     content.showText(stt.toString());
@@ -554,18 +938,89 @@ public class PanelThongKe extends javax.swing.JPanel {
                     currentY -= 12;
                 }
                 currentY -= 20;
+
+                // === TOP 10 KHÁCH HÀNG ===
+                content.setFont(fontUnicode, 12);
+                content.beginText();
+                content.newLineAtOffset(50, currentY);
+                content.showText("=== TOP 10 KHÁCH HÀNG ===");
+                content.endText();
+                currentY -= 20;
+                
+                content.setFont(fontUnicode, 10);
+                content.beginText();
+                content.newLineAtOffset(50, currentY);
+                content.showText("STT");
+                content.newLineAtOffset(35, 0);
+                content.showText("Tên khách hàng");
+                content.newLineAtOffset(120, 0);
+                content.showText("SĐT");
+                content.newLineAtOffset(85, 0);
+                content.showText("Hóa đơn");
+                content.newLineAtOffset(60, 0);
+                content.showText("Tổng chi");
+                content.newLineAtOffset(80, 0);
+                content.showText("Loại thành viên");
+                content.endText();
+                
+                content.setLineWidth(1f);
+                currentY -= 3;
+                content.moveTo(50, currentY);
+                content.lineTo(pageWidth - 50, currentY);
+                content.stroke();
+                currentY -= 15;
+                
+                content.setFont(fontUnicode, 9);
+                DefaultTableModel modelKH = (DefaultTableModel) tableTopKhachHang.getModel();
+                for (int i = 0; i < modelKH.getRowCount(); i++) {
+                    Object stt = modelKH.getValueAt(i, 0);
+                    Object tenKH = modelKH.getValueAt(i, 1);
+                    Object sdt = modelKH.getValueAt(i, 2);
+                    Object soHD = modelKH.getValueAt(i, 3);
+                    Object tongChi = modelKH.getValueAt(i, 4);
+                    Object loaiThe = modelKH.getValueAt(i, 5);
+                    
+                    double tongChiDbl = 0;
+                    try {
+                        if (tongChi instanceof Number) {
+                            tongChiDbl = ((Number) tongChi).doubleValue();
+                        } else {
+                            tongChiDbl = CurrencyUtility.parseVND(String.valueOf(tongChi));
+                        }
+                    } catch (Exception e) {}
+                    
+                    content.beginText();
+                    content.newLineAtOffset(50, currentY);
+                    content.showText(stt != null ? stt.toString() : "");
+                    content.newLineAtOffset(35, 0);
+                    content.showText(tenKH != null ? tenKH.toString() : "");
+                    content.newLineAtOffset(120, 0);
+                    content.showText(sdt != null ? sdt.toString() : "");
+                    content.newLineAtOffset(85, 0);
+                    content.showText(soHD != null ? soHD.toString() : "0");
+                    content.newLineAtOffset(60, 0);
+                    content.showText(moneyFormat.format(tongChiDbl));
+                    content.newLineAtOffset(80, 0);
+                    content.showText(loaiThe != null ? loaiThe.toString() : "");
+                    content.endText();
+                    currentY -= 12;
+                }
+                currentY -= 30;
+                
+                // === CHỮ KÝ ===
                 content.setFont(fontUnicode, 10);
                 content.beginText();
                 content.newLineAtOffset(50, currentY);
                 content.showText("Người lập biểu");
-                content.newLineAtOffset(200, 0);
+                content.newLineAtOffset(300, 0);
                 content.showText("Quản lý/Chủ nhà hàng");
                 content.endText();
-                currentY -= 30;
+                currentY -= 15;
+                
                 content.beginText();
                 content.newLineAtOffset(50, currentY);
                 content.showText("(Ký và ghi rõ họ tên)");
-                content.newLineAtOffset(200, 0);
+                content.newLineAtOffset(300, 0);
                 content.showText("(Ký và ghi rõ họ tên)");
                 content.endText();
             }
@@ -573,6 +1028,7 @@ public class PanelThongKe extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Báo cáo thống kê đã được lưu tại:\n" + saveFile.getAbsolutePath());
         }
     }
+
     private String getThoiGianDisplay(String option) {
         java.time.LocalDate today = java.time.LocalDate.now();
         java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -591,6 +1047,7 @@ public class PanelThongKe extends javax.swing.JPanel {
                 return "Không xác định";
         }
     }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnInThongKe;
     private javax.swing.JButton btnTrangChu;
@@ -604,11 +1061,14 @@ public class PanelThongKe extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JLabel lblDoanhThuTrungBinh;
-    private javax.swing.JLabel lblTitleTable;
+    private javax.swing.JLabel lblTitleTableKhachHang;
+    private javax.swing.JLabel lblTitleTableMonAn;
     private javax.swing.JLabel lblTongDoanhThu;
     private javax.swing.JLabel lblTongSoHoaDon;
     private javax.swing.JPanel pnlContainerTable;
+    private javax.swing.JScrollPane scrTableTopKhachHang;
     private javax.swing.JScrollPane scrTableTopMonAn;
+    private javax.swing.JTable tableTopKhachHang;
     private javax.swing.JTable tableTopMonAn;
     // End of variables declaration//GEN-END:variables
 }

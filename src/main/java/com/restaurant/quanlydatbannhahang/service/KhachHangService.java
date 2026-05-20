@@ -1,8 +1,11 @@
 package com.restaurant.quanlydatbannhahang.service;
+
 import com.restaurant.quanlydatbannhahang.dao.KhachHangDAO;
 import com.restaurant.quanlydatbannhahang.entity.KhachHang;
 import java.util.List;
+import java.time.LocalDate;
 import java.util.regex.Pattern;
+
 public class KhachHangService {
     private KhachHangDAO khachHangDAO;
     private static final String PHONE_PATTERN = "^0[1-9]\\d{8}$";
@@ -11,9 +14,11 @@ public class KhachHangService {
     private static final Pattern phonePattern = Pattern.compile(PHONE_PATTERN);
     private static final Pattern hoTenPattern = Pattern.compile(HOTEN_PATTERN);
     private static final Pattern maKHPattern = Pattern.compile(MAKH_PATTERN);
+
     public KhachHangService() {
         this.khachHangDAO = new KhachHangDAO();
     }
+
     public KhachHang getKhachHangTheoMa(String maKH) {
         if (maKH == null || maKH.isBlank()) {
             throw new IllegalArgumentException("Mã khách hàng không được để trống");
@@ -27,9 +32,11 @@ public class KhachHangService {
         }
         return khachHang;
     }
+
     public List<KhachHang> getAllKhachHang() {
         return khachHangDAO.getAllKhachHang();
     }
+
     public boolean themKhachHang(KhachHang khachHang) {
         validateKhachHang(khachHang);
         boolean success = khachHangDAO.themKhachHang(khachHang);
@@ -38,6 +45,7 @@ public class KhachHangService {
         }
         return success;
     }
+
     public void validateKhachHang(KhachHang kh) {
         if (kh == null) {
             throw new IllegalArgumentException("Đối tượng khách hàng không tồn tại");
@@ -67,6 +75,7 @@ public class KhachHangService {
             throw new IllegalArgumentException("Vui lòng chọn loại thành viên");
         }
     }
+
     public boolean capNhatKhachHang(KhachHang khachHang) {
         validateKhachHang(khachHang);
         boolean success = khachHangDAO.capNhatKhachHang(khachHang);
@@ -75,6 +84,7 @@ public class KhachHangService {
         }
         return true;
     }
+
     public boolean xoaKhachHang(String maKH) {
         if (maKH == null || maKH.isBlank()) {
             throw new IllegalArgumentException("Mã khách hàng không được để trống");
@@ -88,6 +98,7 @@ public class KhachHangService {
         }
         return true;
     }
+
     public KhachHang getKhachHangTheoSDT(String sdt) {
         if (sdt == null || sdt.trim().isBlank()) {
             throw new IllegalArgumentException("Số điện thoại không được để trống");
@@ -97,6 +108,7 @@ public class KhachHangService {
         }
         return khachHangDAO.getKhachHangTheoSDT(sdt);
     }
+
     public void capNhatDiemTichLuy(String maKH, int diemThem) {
         KhachHang khachHang = getKhachHangTheoMa(maKH);
         if (khachHang != null) {
@@ -105,6 +117,7 @@ public class KhachHangService {
             capNhatKhachHang(khachHang);
         }
     }
+
     public boolean suDungDiemTichLuy(String maKH, int diemSuDung) {
         KhachHang khachHang = getKhachHangTheoMa(maKH);
         if (khachHang != null) {
@@ -115,14 +128,21 @@ public class KhachHangService {
         }
         return false;
     }
+
     public int getTotalKhachHang() {
         List<KhachHang> list = getAllKhachHang();
         return list != null ? list.size() : 0;
     }
+
     public boolean existKhachHang(String maKH) {
         return getKhachHangTheoMa(maKH) != null;
     }
+
     public String getLastKhachHangID() {
         return khachHangDAO.getLastKhachHangID();
+    }
+
+    public List<Object[]> getTopKhachHangThongKe(LocalDate startDate) {
+        return khachHangDAO.getTopKhachHangThongKe(startDate);
     }
 }
