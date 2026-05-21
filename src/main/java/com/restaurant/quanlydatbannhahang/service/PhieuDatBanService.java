@@ -277,4 +277,6 @@ public class PhieuDatBanService {
 		}
 		return phieuDatBanDAO.hasReservationToday(maBanTrim);
 	}
+
+	
 }

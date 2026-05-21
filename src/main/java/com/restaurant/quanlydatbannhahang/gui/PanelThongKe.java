@@ -159,7 +159,6 @@ public class PanelThongKe extends javax.swing.JPanel {
                 top++;
             }
 
-            // Load Top 10 Khách hàng từ Service (startDate = null để lấy toàn thời gian)
             List<Object[]> topKhachHangList = khachHangService.getTopKhachHangThongKe(null);
             DefaultTableModel modelKhachHang = (DefaultTableModel) tableTopKhachHang.getModel();
             modelKhachHang.setRowCount(0);

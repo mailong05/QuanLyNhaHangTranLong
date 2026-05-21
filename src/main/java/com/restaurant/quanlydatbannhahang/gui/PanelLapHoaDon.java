@@ -667,6 +667,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         if (maKH != null && !maKH.trim().isEmpty()) {
             try {
                 KhachHang khachHang = khachHangService.getKhachHangTheoMa(maKH);
+          
                 if (khachHang != null) {
                     selectedKhachHang = khachHang;
                     searchedKhachHang.add(khachHang);
@@ -977,8 +978,14 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
             String currentMaBan = txtMaBan.getText().trim();
             String currentMaPhieuDat = HoaDonDraftSession.getCurrentMaPhieuDatContext();
             String normalizedMaBan = HoaDonDraftSession.normalizeMaBanContext(currentMaBan);
+            if(selectedKhachHang != null) {
+            	System.out.println("PanelLapHoaDon: "+ selectedKhachHang.getMaKH());
+            	phieuDatBanService.capNhatKhachHangChoPhieu(currentMaPhieuDat, selectedKhachHang.getMaKH());
+            }
             thucHienLuuHoaDon(TrangThaiHoaDon.DA_THANH_TOAN);
             capNhatTrangThaiBan(currentMaBan);
+            
+           
             if (!currentMaPhieuDat.isEmpty()) {
                 phieuDatBanService.capNhatTrangThaiPhieu(currentMaPhieuDat, TrangThaiPhieuDat.DA_SU_DUNG);
             }

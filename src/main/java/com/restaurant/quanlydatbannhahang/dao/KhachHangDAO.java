@@ -178,7 +178,6 @@ public class KhachHangDAO {
         String sql;
         
         if (startDate == null) {
-            // Lấy toàn bộ thời gian, JOIN qua bảng PhieuDatBan
             sql = "SELECT TOP 10 kh.maKH, kh.hoTen, kh.sdt, kh.diemTichLuy, kh.loaiThanhVien, " +
                   "COUNT(hd.maHD) as soHoaDon, SUM(hd.tongThanhToan) as tongChi " +
                   "FROM KhachHang kh " +
@@ -187,7 +186,6 @@ public class KhachHangDAO {
                   "GROUP BY kh.maKH, kh.hoTen, kh.sdt, kh.diemTichLuy, kh.loaiThanhVien " +
                   "ORDER BY tongChi DESC, soHoaDon DESC";
         } else {
-            // Lấy từ startDate trở đi, JOIN qua bảng PhieuDatBan
             sql = "SELECT TOP 10 kh.maKH, kh.hoTen, kh.sdt, kh.diemTichLuy, kh.loaiThanhVien, " +
                   "COUNT(hd.maHD) as soHoaDon, SUM(hd.tongThanhToan) as tongChi " +
                   "FROM KhachHang kh " +
@@ -206,7 +204,6 @@ public class KhachHangDAO {
             }
             ResultSet rs = pstm.executeQuery();
             while (rs.next()) {
-                // Build đối tượng KhachHang từ ResultSet (đảm bảo hàm này lấy đúng các cột đã Select)
                 KhachHang kh = buildKhachHangFromResultSet(rs);
                 Integer soHoaDon = rs.getInt("soHoaDon");
                 Double tongChi = rs.getDouble("tongChi");

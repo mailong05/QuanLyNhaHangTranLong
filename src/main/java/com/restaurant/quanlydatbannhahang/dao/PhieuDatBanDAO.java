@@ -332,6 +332,8 @@ public class PhieuDatBanDAO {
     	if(kh!= null) {
     		try {
 				PreparedStatement pstm = con.prepareStatement(sql);
+				pstm.setString(1, maKH);
+				pstm.setString(2, maPhieu);
 				return pstm.executeUpdate() > 0;
 			} catch (Exception e) {
 				// TODO: handle exceptione
@@ -414,4 +416,6 @@ public class PhieuDatBanDAO {
         }
         return dsPhieu;
     }
+
+	
 }
