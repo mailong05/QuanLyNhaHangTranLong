@@ -138,27 +138,16 @@ public class PhieuDatBanService {
         return null;
     }
 
+ // Thay thế hoàn toàn hàm cũ trong file PhieuDatBanService.java
     public List<String> getDanhSachBanTrongTheoThoiGian(LocalDateTime selectedTime) {
-        List<String> availableBan = new ArrayList<>();
+        // 1. Kiểm tra đầu vào
         if (selectedTime == null) {
-            return availableBan;
+            return new ArrayList<>();
         }
-        java.time.LocalDate selectedDate = selectedTime.toLocalDate();
-        List<Ban> allBan = banService.getAllBan();
-        for (Ban ban : allBan) {
-            if (ban == null || ban.getMaBan() == null) {
-                continue;
-            }
-            if (ban.getTrangThai() == TrangThaiBan.TRONG) {
-                availableBan.add(ban.getMaBan());
-            } else if (ban.getTrangThai() == TrangThaiBan.DA_DAT || ban.getTrangThai() == TrangThaiBan.DANG_DUNG) {
-                List<PhieuDatBan> dsPhieu = phieuDatBanDAO.getPhieuDatBanTheoBan(ban.getMaBan(), selectedDate);
-                if (dsPhieu == null || dsPhieu.isEmpty()) {
-                    availableBan.add(ban.getMaBan());
-                }
-            }
-        }
-        return availableBan;
+        
+        // 2. Gọi thẳng xuống DAO để lấy danh sách (DAO đã xử lý SQL 1 lần duy nhất)
+        // Lưu ý: Đảm bảo class Service của bạn đã khởi tạo biến phieuDatBanDAO
+        return phieuDatBanDAO.getDanhSachBanTrongTheoThoiGian(selectedTime);
     }
 
     public void themPhieuDatBan(PhieuDatBan phieuDatBan) {
@@ -259,4 +248,10 @@ public class PhieuDatBanService {
         }
         return false;
     }
+
+	public Set<String> getDanhSachBanCuaPhieu(String maPhieuDat) {
+		// TODO Auto-generated method stub
+		
+		return null;
+	}
 }

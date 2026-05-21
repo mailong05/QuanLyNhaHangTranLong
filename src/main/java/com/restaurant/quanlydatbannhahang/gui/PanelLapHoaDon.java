@@ -979,7 +979,6 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
             String normalizedMaBan = HoaDonDraftSession.normalizeMaBanContext(currentMaBan);
             thucHienLuuHoaDon(TrangThaiHoaDon.DA_THANH_TOAN);
             capNhatTrangThaiBan(currentMaBan);
-            System.out.println("mã phiếu đặt: " + currentMaPhieuDat);
             if (!currentMaPhieuDat.isEmpty()) {
                 phieuDatBanService.capNhatTrangThaiPhieu(currentMaPhieuDat, TrangThaiPhieuDat.DA_SU_DUNG);
             }

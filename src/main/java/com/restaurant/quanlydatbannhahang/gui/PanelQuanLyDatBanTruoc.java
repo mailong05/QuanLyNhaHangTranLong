@@ -724,6 +724,28 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                 return banSet;
         }
 
+        
+        private void capNhatTrangThaiBan(List<ChiTietPhieuDatBan> list) {
+            
+            try {
+               
+                for (ChiTietPhieuDatBan ctpdb : list) {
+                    String maBan = ctpdb.getBan().getMaBan();
+                    if (!maBan.isEmpty()) {
+                        // Kiểm tra có phiếu đặt trong tương lai không
+                        boolean hasFutureReservation = pdbService.hasFutureReservation(maBan);
+                        if (hasFutureReservation) {
+                            banService.capNhatTrangThaiBan(maBan, TrangThaiBan.DA_DAT);
+                        } else {
+                            banService.capNhatTrangThaiBan(maBan, TrangThaiBan.TRONG);
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                throw new RuntimeException("Không thể cập nhật trạng thái bàn sau khi thanh toán: " + e.getMessage(), e);
+            }
+        }
+        
         public void updateMaBanForEdit(Set<String> newSelectedTables) {
                 if (newSelectedTables != null && !newSelectedTables.isEmpty()) {
                         String banList = String.join(", ", newSelectedTables);
@@ -866,6 +888,8 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                 }
         }
 
+        
+        
         // GEN-LAST:event_btnCapNhatActionPerformed
         private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaActionPerformed
                 try {
@@ -883,7 +907,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                         if (result == JOptionPane.YES_OPTION) {
                                 List<ChiTietPhieuDatBan> chiTietList = ctpdbService.getChiTietByMaPhieuDat(maPDB);
                                 pdbService.capNhatTrangThaiPhieu(maPDB, TrangThaiPhieuDat.DA_HUY);
-                                banService.capNhatTrangThaiBanTrongChiTietPDB(chiTietList, TrangThaiBan.TRONG);
+                                capNhatTrangThaiBan(chiTietList);
                                 if (panelDatBan != null) {
                                         panelDatBan.updateAllTableStatusFromDatabase();
                                 }

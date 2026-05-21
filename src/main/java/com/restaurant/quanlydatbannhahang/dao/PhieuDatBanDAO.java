@@ -206,27 +206,32 @@ public class PhieuDatBanDAO {
         return dsPhieu;
     }
 
-    public List<PhieuDatBan> getPhieuDatBanTheoBan(String maBan, LocalDate ngay) {
+    public List<String> getDanhSachBanTrongTheoThoiGian(LocalDateTime targetTime) {
+        List<String> dsBanTrong = new ArrayList<>();
         Connection connection = DatabaseConnection.getConnection();
-        String sql = "select pdb.* from PhieuDatBan pdb " +
-                "inner join ChiTietPhieuDatBan ctpdb on pdb.maPhieuDat = ctpdb.maPhieuDat " +
-                "where ctpdb.maBan = ? and convert(date, pdb.thoiGianDen) = ?";
-        ArrayList<PhieuDatBan> dsPhieu = new ArrayList<>();
+        
+        // Logic: Lấy TẤT CẢ mã bàn NGOẠI TRỪ những bàn đang bận (DANG_DUNG) 
+        // và những bàn có phiếu đặt (DANG_CHO) trùng vào ngày 'targetTime'
+        String sql = "SELECT maBan FROM BanAn WHERE maBan NOT IN (" +
+                     "    SELECT ctpdb.maBan FROM ChiTietPhieuDatBan ctpdb " +
+                     "    INNER JOIN PhieuDatBan pdb ON ctpdb.maPhieuDat = pdb.maPhieuDat " +
+                     "    WHERE CONVERT(date, pdb.thoiGianDen) = ? " +
+                     "    AND pdb.trangThai = N'DANG_CHO'" + // Lưu ý: sửa lại value string cho khớp DB của ông
+                     ") AND trangThai != N'DANG_SU_DUNG'"; 
+                     
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
-            pstm.setString(1, maBan);
-            pstm.setDate(2, java.sql.Date.valueOf(ngay));
+            // Lấy ngày từ targetTime để so sánh
+            pstm.setDate(1, java.sql.Date.valueOf(targetTime.toLocalDate()));
             ResultSet rs = pstm.executeQuery();
+            
             while (rs.next()) {
-                PhieuDatBan phieu = buildPhieuDatBanFromResultSet(rs);
-                if (phieu != null) {
-                    dsPhieu.add(phieu);
-                }
+                dsBanTrong.add(rs.getString("maBan"));
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return dsPhieu;
+        return dsBanTrong;
     }
 
     public List<Ban> getAllBan() {

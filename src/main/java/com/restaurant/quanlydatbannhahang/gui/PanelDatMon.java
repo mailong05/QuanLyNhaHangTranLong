@@ -998,18 +998,7 @@ public class PanelDatMon extends javax.swing.JPanel {
         isChanged = true;
     }// GEN-LAST:event_btnChonMonActionPerformed
 
-    private void btnThanhToanActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnThanhToanActionPerformed
-        if (phieuGoiMonMap.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn ít nhất một món trước khi thanh toán.");
-            return;
-        }
-        saveDraftToSession();
-        java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
-        if (parentFrame instanceof MainForm) {
-            ((MainForm) parentFrame).openPanelLapHoaDon();
-        }
-    }// GEN-LAST:event_btnThanhToanActionPerformed
-
+    
     private void btnQuayLaiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnQuayLaiActionPerformed
         java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
         if (parentFrame instanceof MainForm) {
