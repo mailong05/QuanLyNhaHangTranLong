@@ -131,7 +131,7 @@ public class BanService {
             }
 
             PhieuDatBanService pdb_service = new PhieuDatBanService();
-            boolean hasFutureReservation = pdb_service.hasFutureReservation(maBan);
+            boolean hasFutureReservation = pdb_service.hasReservationToday(maBan);
 
             if (hasFutureReservation) {
                 banDAO.capNhatTrangThaiBan(maBan, TrangThaiBan.DA_DAT);

@@ -660,53 +660,73 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                 }
         }
 
+        private void capNhatTrangThaiBanThongMinh(String maBan) {
+            try {
+                Ban ban = banService.getBanTheoMa(maBan);
+                if (ban != null && ban.getTrangThai() == TrangThaiBan.DANG_DUNG) {
+                    return; 
+                }
+
+                boolean hasToday = pdbService.hasReservationToday(maBan);
+                if (hasToday) {
+                    banService.capNhatTrangThaiBan(maBan, TrangThaiBan.DA_DAT);
+                } else {
+                    banService.capNhatTrangThaiBan(maBan, TrangThaiBan.TRONG);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        
         private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaTrangActionPerformed
                 refreshData();
                 cbFilterTrangThai.setSelectedIndex(0);
                 setupPlaceholder(txtTimKiem, "Nhập mã đặt bàn hoặc SĐT khách");
         }// GEN-LAST:event_btnXoaTrangActionPerformed
 
-        private void btnDoiBanActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnChonBanActionPerformed
-                try {
-                        String maPDB = txtMaPhieuDat.getText().trim();
-                        if (maPDB.isEmpty()) {
-                                JOptionPane.showMessageDialog(this, "Vui lòng chọn phiếu đặt bàn trước khi chọn bàn",
-                                                "Thông báo", JOptionPane.WARNING_MESSAGE);
-                                return;
-                        }
-                        PhieuDatBan phieu = pdbService.getPhieuDatBanTheoMa(maPDB);
-                        if (phieu == null) {
-                                JOptionPane.showMessageDialog(this, "Không tìm thấy phiếu đặt bàn", "Lỗi",
-                                                JOptionPane.ERROR_MESSAGE);
-                                return;
-                        }
-                        Set<String> oldBanSet = getTableSetFromDB(maPDB);
-                        if (panelDatBan != null) {
-                                // Truyền thời gian của phiếu vào setSelectedTablesForEdit
-                                panelDatBan.setPanelQuanLyDatBanTruoc(this);
-                                panelDatBan.setFlowOrigin("QUAN_LY_DAT_TRUOC");
-                                panelDatBan.setSelectedTablesForEdit(oldBanSet, phieu.getThoiGianDen());
-                                storeMaPDBForEditMode(maPDB);
-                                int response = JOptionPane.showConfirmDialog(this,
-                                                "Bạn chắn chắc muốn chọn lại bàn?", "Nhắc nhở",
-                                                JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
-                                if (response == JOptionPane.YES_OPTION) {
-                                        MainForm mainForm = (MainForm) SwingUtilities.getWindowAncestor(this);
-                                        if (mainForm != null) {
-                                                mainForm.switchToPanelDatBan();
-                                        }
-                                }
-                        } else {
-                                JOptionPane.showMessageDialog(this, "PanelDatBan không khả dụng", "Lỗi",
-                                                JOptionPane.ERROR_MESSAGE);
-                        }
-                } catch (Exception e) {
-                        JOptionPane.showMessageDialog(this, "Lỗi khi chọn bàn: " + e.getMessage(), "Lỗi",
-                                        JOptionPane.ERROR_MESSAGE);
-                        e.printStackTrace();
+        private void btnDoiBanActionPerformed(java.awt.event.ActionEvent evt) {
+            try {
+                String maPDB = txtMaPhieuDat.getText().trim();
+                if (maPDB.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Vui lòng chọn phiếu đặt bàn trước khi chọn bàn", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                    return;
                 }
-        }// GEN-LAST:event_btnChonBanActionPerformed
+                PhieuDatBan phieu = pdbService.getPhieuDatBanTheoMa(maPDB);
+                if (phieu == null) {
+                    JOptionPane.showMessageDialog(this, "Không tìm thấy phiếu đặt bàn", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                
+                Set<String> oldBanSet = getTableSetFromDB(maPDB);
 
+                // 1. HỎI Ý KIẾN NGƯỜI DÙNG TRƯỚC
+                int response = JOptionPane.showConfirmDialog(this,
+                        "Bạn chắn chắc muốn chọn lại bàn?", "Nhắc nhở",
+                        JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+
+                // 2. CHỈ KHI BẤM YES MỚI ĐẨY DỮ LIỆU VÀ CHUYỂN TRANG
+                if (response == JOptionPane.YES_OPTION) {
+                    if (panelDatBan != null) {
+                        panelDatBan.setPanelQuanLyDatBanTruoc(this);
+                        panelDatBan.setFlowOrigin("QUAN_LY_DAT_TRUOC");
+                        // Truyền dữ liệu bàn và thời gian
+                        panelDatBan.setSelectedTablesForEdit(oldBanSet, phieu.getThoiGianDen());
+                        storeMaPDBForEditMode(maPDB);
+                        
+                        MainForm mainForm = (MainForm) SwingUtilities.getWindowAncestor(this);
+                        if (mainForm != null) {
+                            // 3. GỌI HÀM CHUYÊN DỤNG VỪA TẠO BÊN MAIN FORM
+                            mainForm.startEditBanFromQuanLyDatTruoc();
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(this, "PanelDatBan không khả dụng", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Lỗi khi chọn bàn: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+                e.printStackTrace();
+            }
+        }
         private String maPDBEditMode = null;
         private Set<String> newSelectedTablesForEdit = null;
 
@@ -731,14 +751,9 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                
                 for (ChiTietPhieuDatBan ctpdb : list) {
                     String maBan = ctpdb.getBan().getMaBan();
-                    if (!maBan.isEmpty()) {
-                        boolean hasFutureReservation = pdbService.hasFutureReservation(maBan);
-                        if (hasFutureReservation) {
-                            banService.capNhatTrangThaiBan(maBan, TrangThaiBan.DA_DAT);
-                        } else {
-                            banService.capNhatTrangThaiBan(maBan, TrangThaiBan.TRONG);
-                        }
-                    }
+                    if (!maBan.isEmpty()) 
+                            capNhatTrangThaiBanThongMinh(maBan);
+                         
                 }
             } catch (Exception e) {
                 throw new RuntimeException("Không thể cập nhật trạng thái bàn sau khi thanh toán: " + e.getMessage(), e);
@@ -861,16 +876,15 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                                         } else {
                                                 updateChiTietPhieuDatBan(maPDB, oldBanSet, newBanSet);
                                         }
-                                        BanService banService = new BanService();
                                         Set<String> banCanThem = new HashSet<>(newBanSet);
                                         banCanThem.removeAll(oldBanSet);
                                         Set<String> banCanXoa = new HashSet<>(oldBanSet);
                                         banCanXoa.removeAll(newBanSet);
                                         for (String maBan : banCanXoa) {
-                                                banService.capNhatTrangThaiBan(maBan, TrangThaiBan.TRONG);
+                                            capNhatTrangThaiBanThongMinh(maBan); 
                                         }
                                         for (String maBan : banCanThem) {
-                                                banService.capNhatTrangThaiBan(maBan, TrangThaiBan.DA_DAT);
+                                            capNhatTrangThaiBanThongMinh(maBan);
                                         }
                                 }
                         }

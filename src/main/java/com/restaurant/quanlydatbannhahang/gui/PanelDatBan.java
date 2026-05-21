@@ -133,12 +133,10 @@ public class PanelDatBan extends javax.swing.JPanel {
         this.billMode = false;
         this.reservationMode = false;
 
-        // Lưu thời gian vào ReservationSession
         if (thoiGianPhieu != null) {
             ReservationSession.setTempSelectedDateTime(thoiGianPhieu);
         }
 
-        // Lưu danh sách bàn gốc và hiện tại
         this.originalTablesForEdit.clear();
         this.selectedTables.clear();
         if (tablesToSelect != null) {
@@ -152,12 +150,10 @@ public class PanelDatBan extends javax.swing.JPanel {
         if (btnGopBan != null)
             btnGopBan.setEnabled(true);
 
-        // Quan trọng: Load lại sơ đồ để hàm setTableCardBackground mới ở trên áp dụng
-        // màu xanh
+
         loadSoDoBanFromDatabase();
     }
 
-    // Overload để hỗ trợ các hàm cũ
     public void setSelectedTablesForEdit(Set<String> tablesToSelect) {
         this.setSelectedTablesForEdit(tablesToSelect, null);
     }
@@ -416,8 +412,7 @@ public class PanelDatBan extends javax.swing.JPanel {
             if (ReservationSession.getTempSelectedDateTime() != null) {
                 targetTime = ReservationSession.getTempSelectedDateTime();
             }
-            // Nếu đang ở flow chỉnh sửa phiếu (có originalTablesForEdit) -> lấy thời gian
-            // phiếu hiện tại
+
             else if (!originalTablesForEdit.isEmpty()) {
                 // Trong chế độ edit, ReservationSession đã được set bởi
                 // setSelectedTablesForEdit

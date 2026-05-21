@@ -341,14 +341,16 @@ public class PhieuDatBanDAO {
         return false;
     }
     
-    public boolean hasFutureReservation(String maBan) {
+ // Trong PhieuDatBanDAO.java
+    public boolean hasReservationToday(String maBan) {
+        // Chỉ check những phiếu có thoiGianDen thuộc NGÀY HÔM NAY
         String sql = "SELECT COUNT(*) FROM PhieuDatBan pdb " +
                      "JOIN ChiTietPhieuDatBan ct ON pdb.maPhieuDat = ct.maPhieuDat " +
-                     "WHERE ct.maBan = ? AND pdb.trangThai = 'DANG_CHO' AND pdb.thoiGianDen >= ?";
+                     "WHERE ct.maBan = ? AND pdb.trangThai = 'DANG_CHO' " +
+                     "AND CAST(pdb.thoiGianDen AS DATE) = CAST(GETDATE() AS DATE)";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, maBan);
-            stmt.setTimestamp(2, java.sql.Timestamp.valueOf(LocalDateTime.now().plusDays(1).toLocalDate().atStartOfDay()));
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     return rs.getInt(1) > 0;

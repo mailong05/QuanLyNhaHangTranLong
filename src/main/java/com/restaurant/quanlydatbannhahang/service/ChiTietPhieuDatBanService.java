@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -108,6 +109,7 @@ public class ChiTietPhieuDatBanService {
             }
         }
         BanService banService = new BanService();
+        List<String> availableBans = pdbService.getDanhSachBanTrongTheoThoiGian(phieu.getThoiGianDen());
         for (String maBan : banCanThem) {
             if (chiTietMap.containsKey(maBan)) {
                 throw new IllegalArgumentException("Bàn " + maBan + " đã tồn tại trong phiếu này");
@@ -116,10 +118,11 @@ public class ChiTietPhieuDatBanService {
             if (ban == null) {
                 throw new IllegalArgumentException("Bàn " + maBan + " không tồn tại");
             }
-            if (ban.getTrangThai() == TrangThaiBan.DA_DAT
-                    || ban.getTrangThai() == TrangThaiBan.DANG_DUNG) {
-                if (!oldBanSet.contains(maBan)) {
-                    throw new IllegalArgumentException("Bàn " + maBan + " đang được sử dụng hoặc đã đặt");
+            if (!availableBans.contains(maBan)) {
+                if (!oldBanSet.contains(maBan)) { 
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+                    throw new IllegalArgumentException("Bàn " + maBan + " đã được đặt lịch bởi người khác vào lúc " 
+                            + phieu.getThoiGianDen().format(formatter) + " hoặc đang có khách ngồi.");
                 }
             }
         }

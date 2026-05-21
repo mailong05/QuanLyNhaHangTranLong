@@ -271,10 +271,10 @@ public class PhieuDatBanService {
 		return phieuDatBanDAO.getDanhSachPhieuDatBanTheoTrangThai(trangThai);
 	}
 
-	public boolean hasFutureReservation(String maBanTrim) {
+	public boolean hasReservationToday(String maBanTrim) {
 		if(maBanTrim.isBlank()) {
 			throw new IllegalArgumentException("Mã bàn không được để trống. Không xác định được phiếu đặt!");
 		}
-		return phieuDatBanDAO.hasFutureReservation(maBanTrim);
+		return phieuDatBanDAO.hasReservationToday(maBanTrim);
 	}
 }
