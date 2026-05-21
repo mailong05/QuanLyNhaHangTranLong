@@ -1,6 +1,7 @@
 package com.restaurant.quanlydatbannhahang.gui;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
@@ -1150,6 +1151,14 @@ public class MainForm extends javax.swing.JFrame {
         }
     }
 
+    public void startEditBanFromQuanLyDatTruoc() {
+        // Chỉ gọi hàm showPanel để hiển thị UI, TUYỆT ĐỐI KHÔNG simulate click menu (để tránh bị gọi refreshData)
+        if (panelDatBan != null) {
+            showPanel(panelDatBan);
+            lblTenTrang.setText("ĐỔI BÀN"); // Cập nhật lại tiêu đề trang cho đúng ngữ cảnh
+        }
+    }
+    
     public void startEditBanFromDatMon(Set<String> oldTables, PanelDatMon sourcePanel) {
         showPanel(panelDatBan);
         panelDatBan.setFlowOrigin("DAT_MON");
