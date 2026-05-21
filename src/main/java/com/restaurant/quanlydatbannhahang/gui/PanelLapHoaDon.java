@@ -1040,7 +1040,6 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
             for (String maBan : danhSachMaBan) {
                 String maBanTrim = maBan.trim();
                 if (!maBanTrim.isEmpty()) {
-                    // Kiểm tra có phiếu đặt trong tương lai không
                     boolean hasFutureReservation = phieuDatBanService.hasFutureReservation(maBanTrim);
                     if (hasFutureReservation) {
                         banService.capNhatTrangThaiBan(maBanTrim, TrangThaiBan.DA_DAT);

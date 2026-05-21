@@ -115,7 +115,40 @@ public class BanService {
     }
     public void capNhatTrangThaiBanTrongChiTietPDB(List<ChiTietPhieuDatBan> list, TrangThaiBan trangThai) {
 		for(ChiTietPhieuDatBan ct: list) {
-			capNhatTrangThaiBan(ct.getBan().getMaBan(), trangThai);
+			capNhatTrangThaiThongMinh(ct.getBan().getMaBan());
 		}
 	}
+    
+    public void capNhatTrangThaiThongMinh(String maBan) {
+        if (maBan == null || maBan.isBlank()) return;
+        
+        try {
+            Ban ban = banDAO.getBanTheoMa(maBan);
+            if (ban == null) return;
+
+            if (ban.getTrangThai() == TrangThaiBan.DANG_DUNG) {
+                return; 
+            }
+
+            PhieuDatBanService pdb_service = new PhieuDatBanService();
+            boolean hasFutureReservation = pdb_service.hasFutureReservation(maBan);
+
+            if (hasFutureReservation) {
+                banDAO.capNhatTrangThaiBan(maBan, TrangThaiBan.DA_DAT);
+            } else {
+                banDAO.capNhatTrangThaiBan(maBan, TrangThaiBan.TRONG);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Lỗi định đoạt trạng thái bàn " + maBan + ": " + e.getMessage());
+        }
+    }
+    
+    public void capNhatTrangThaiThongMinhChoChuoiContext(String maBanContext) {
+        if (maBanContext == null || maBanContext.isBlank()) return;
+        String[] danhSachMaBan = maBanContext.split(",");
+        for (String maBan : danhSachMaBan) {
+            capNhatTrangThaiThongMinh(maBan.trim());
+        }
+    }
 }

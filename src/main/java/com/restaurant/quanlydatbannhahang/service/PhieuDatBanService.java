@@ -13,6 +13,8 @@ import com.restaurant.quanlydatbannhahang.entity.TrangThaiBan;
 import com.restaurant.quanlydatbannhahang.entity.Ban;
 import com.restaurant.quanlydatbannhahang.util.IDGeneratorHelper;
 import com.restaurant.quanlydatbannhahang.util.IDQueryHelper;
+
+import java.awt.Component;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class PhieuDatBanService {
     private PhieuDatBanDAO phieuDatBanDAO;
@@ -230,28 +234,47 @@ public class PhieuDatBanService {
         return phieuDatBanDAO.getHoatDongGanDay();
     }
 
-    public boolean hasFutureReservation(String maBan) {
-        String sql = "SELECT COUNT(*) FROM PhieuDatBan pdb " +
-                     "JOIN ChiTietPhieuDatBan ct ON pdb.maPhieuDat = ct.maPhieuDat " +
-                     "WHERE ct.maBan = ? AND pdb.trangThai = 'DANG_CHO' AND pdb.thoiGianDen >= ?";
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, maBan);
-            stmt.setTimestamp(2, java.sql.Timestamp.valueOf(LocalDateTime.now().plusDays(1).toLocalDate().atStartOfDay()));
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt(1) > 0;
+    public boolean tuDongHuyPhieuQuaHan() {
+        boolean coPhieuBiHuy = false;
+        try {
+            List<PhieuDatBan> danhSachCho = getDanhSachPhieuDatBanTheoTrangThai(TrangThaiPhieuDat.DANG_CHO);
+
+
+            LocalDateTime now = LocalDateTime.now();
+
+            BanService banService = new BanService();
+            ChiTietPhieuDatBanService ctpdbService = new ChiTietPhieuDatBanService();
+
+            for (PhieuDatBan phieu : danhSachCho) {
+                LocalDateTime thoiGianHetHan = phieu.getThoiGianDen().plusMinutes(30);
+
+                if (now.isAfter(thoiGianHetHan)) {
+                    capNhatTrangThaiPhieu(phieu.getMaPhieuDat(), TrangThaiPhieuDat.DA_HUY);
+
+                    List<ChiTietPhieuDatBan> chiTietList = ctpdbService.getChiTietByMaPhieuDat(phieu.getMaPhieuDat());
+                    banService.capNhatTrangThaiBanTrongChiTietPDB(chiTietList, TrangThaiBan.TRONG);
+                    
+                    coPhieuBiHuy = true;
+                    System.out.println("Hệ thống tự động hủy phiếu quá hạn: " + phieu.getMaPhieuDat());
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return false;
+        return coPhieuBiHuy; 
     }
 
-	public Set<String> getDanhSachBanCuaPhieu(String maPhieuDat) {
+
+
+	public List<PhieuDatBan> getDanhSachPhieuDatBanTheoTrangThai(TrangThaiPhieuDat trangThai) {
 		// TODO Auto-generated method stub
-		
-		return null;
+		return phieuDatBanDAO.getDanhSachPhieuDatBanTheoTrangThai(trangThai);
+	}
+
+	public boolean hasFutureReservation(String maBanTrim) {
+		if(maBanTrim.isBlank()) {
+			throw new IllegalArgumentException("Mã bàn không được để trống. Không xác định được phiếu đặt!");
+		}
+		return phieuDatBanDAO.hasFutureReservation(maBanTrim);
 	}
 }

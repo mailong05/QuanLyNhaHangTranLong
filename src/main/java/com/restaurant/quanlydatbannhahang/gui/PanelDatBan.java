@@ -403,20 +403,6 @@ public class PanelDatBan extends javax.swing.JPanel {
         this.add(bottomPanel, BorderLayout.SOUTH);
     }
 
-    public void initDataForEdit(String maPhieuDat) {
-        // 1. Khởi tạo service (hoặc dùng service đã có sẵn trong class)
-        PhieuDatBanService phieuService = new PhieuDatBanService();
-
-        // 2. Lấy danh sách bàn cũ từ DB
-        Set<String> banCu = phieuService.getDanhSachBanCuaPhieu(maPhieuDat);
-
-        // 3. Đổ dữ liệu vào biến để khóa bàn cũ và hiển thị màu xanh
-        this.originalTablesForEdit = new HashSet<>(banCu);
-        this.selectedTables = new HashSet<>(banCu);
-
-        // 4. Load lại giao diện sau khi đã có dữ liệu
-        loadSoDoBanFromDatabase();
-    }
 
     private void loadSoDoBanFromDatabase() {
         panelSoDoBan.removeAll();
@@ -424,12 +410,9 @@ public class PanelDatBan extends javax.swing.JPanel {
         tableCards.clear();
         tableTrangThai.clear();
         tableLabelStatus.clear();
-        // Xóa selectedTables.clear() để giữ trạng thái chọn trong editMode
         try {
-            // ========== BƯỚC 1: THIẾT LẬP TEMPORAL CONTEXT (NGỮ CẢN THỜI GIAN) ==========
             LocalDateTime targetTime = null;
 
-            // Kiểm tra có thời gian đã chọn từ ReservationSession không
             if (ReservationSession.getTempSelectedDateTime() != null) {
                 targetTime = ReservationSession.getTempSelectedDateTime();
             }

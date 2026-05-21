@@ -2,8 +2,13 @@ package com.restaurant.quanlydatbannhahang.dao;
 
 import com.restaurant.quanlydatbannhahang.connectDB.DatabaseConnection;
 import com.restaurant.quanlydatbannhahang.entity.Ban;
+import com.restaurant.quanlydatbannhahang.entity.ChiTietPhieuDatBan;
+import com.restaurant.quanlydatbannhahang.entity.KhachHang;
 import com.restaurant.quanlydatbannhahang.entity.PhieuDatBan;
+import com.restaurant.quanlydatbannhahang.entity.TrangThaiBan;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiPhieuDat;
+import com.restaurant.quanlydatbannhahang.service.BanService;
+import com.restaurant.quanlydatbannhahang.service.ChiTietPhieuDatBanService;
 import com.restaurant.quanlydatbannhahang.util.IDQueryHelper;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -321,6 +326,90 @@ public class PhieuDatBanDAO {
     }
 
     public boolean capNhatKhachHangChoPhieu(String maPhieu, String maKH) {
+    	String sql = "update PhieuDatBan set maKH = ? where maPhieuDat = ?";
+    	KhachHang kh = khachHangDAO.getKhachHangTheoMa(maKH);
+    	Connection con = DatabaseConnection.getConnection();
+    	if(kh!= null) {
+    		try {
+				PreparedStatement pstm = con.prepareStatement(sql);
+				return pstm.executeUpdate() > 0;
+			} catch (Exception e) {
+				// TODO: handle exceptione
+				e.printStackTrace();
+			}
+    	}
         return false;
+    }
+    
+    public boolean hasFutureReservation(String maBan) {
+        String sql = "SELECT COUNT(*) FROM PhieuDatBan pdb " +
+                     "JOIN ChiTietPhieuDatBan ct ON pdb.maPhieuDat = ct.maPhieuDat " +
+                     "WHERE ct.maBan = ? AND pdb.trangThai = 'DANG_CHO' AND pdb.thoiGianDen >= ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, maBan);
+            stmt.setTimestamp(2, java.sql.Timestamp.valueOf(LocalDateTime.now().plusDays(1).toLocalDate().atStartOfDay()));
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+    public boolean tuDongHuyPhieuQuaHan() {
+        boolean coPhieuBiHuy = false;
+        try {
+            List<PhieuDatBan> danhSachCho = getDanhSachPhieuDatBanTheoTrangThai(TrangThaiPhieuDat.DANG_CHO);
+            LocalDateTime now = LocalDateTime.now();
+
+            BanService banService = new BanService();
+            ChiTietPhieuDatBanService ctpdbService = new ChiTietPhieuDatBanService();
+
+            for (PhieuDatBan phieu : danhSachCho) {
+                LocalDateTime thoiGianHetHan = phieu.getThoiGianDen().plusMinutes(30);
+
+                if (now.isAfter(thoiGianHetHan)) {
+                    capNhatTrangThaiPhieu(phieu.getMaPhieuDat(), TrangThaiPhieuDat.DA_HUY);
+
+                    List<ChiTietPhieuDatBan> chiTietList = ctpdbService.getChiTietByMaPhieuDat(phieu.getMaPhieuDat());
+                    banService.capNhatTrangThaiBanTrongChiTietPDB(chiTietList, TrangThaiBan.TRONG);
+                    
+                    coPhieuBiHuy = true;
+                    System.out.println("Hệ thống tự động hủy phiếu quá hạn: " + phieu.getMaPhieuDat());
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return coPhieuBiHuy; 
+    }
+    
+
+    public List<PhieuDatBan> getDanhSachPhieuDatBanTheoTrangThai(TrangThaiPhieuDat trangThai) {
+        List<PhieuDatBan> dsPhieu = new ArrayList<>();
+        Connection connection = DatabaseConnection.getConnection();
+
+        String sql = "SELECT * FROM PhieuDatBan WHERE trangThai = ?";
+        
+        try {
+            PreparedStatement pstm = connection.prepareStatement(sql);
+            
+             pstm.setString(1, trangThai.name()); 
+             ResultSet rs = pstm.executeQuery();
+            
+            while (rs.next()) {
+                PhieuDatBan phieu = buildPhieuDatBanFromResultSet(rs);
+                if (phieu != null) {
+                    dsPhieu.add(phieu);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return dsPhieu;
     }
 }

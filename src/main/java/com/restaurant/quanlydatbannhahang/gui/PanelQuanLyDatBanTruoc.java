@@ -48,6 +48,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                 this.panelDatBan = null;
                 initComponents();
                 customUI();
+                pdbService.tuDongHuyPhieuQuaHan();
                 loadDataToTable();
                 fillMaDatBan(txtMaPhieuDat);
                 pushDataToComboBox(cbFilterTrangThai);
@@ -726,13 +727,11 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
 
         
         private void capNhatTrangThaiBan(List<ChiTietPhieuDatBan> list) {
-            
             try {
                
                 for (ChiTietPhieuDatBan ctpdb : list) {
                     String maBan = ctpdb.getBan().getMaBan();
                     if (!maBan.isEmpty()) {
-                        // Kiểm tra có phiếu đặt trong tương lai không
                         boolean hasFutureReservation = pdbService.hasFutureReservation(maBan);
                         if (hasFutureReservation) {
                             banService.capNhatTrangThaiBan(maBan, TrangThaiBan.DA_DAT);

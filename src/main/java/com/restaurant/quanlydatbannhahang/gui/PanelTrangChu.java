@@ -6,6 +6,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import com.restaurant.quanlydatbannhahang.entity.PhieuDatBan;
+import com.restaurant.quanlydatbannhahang.entity.TrangThaiPhieuDat;
 import com.restaurant.quanlydatbannhahang.service.BanService;
 import com.restaurant.quanlydatbannhahang.service.ChiTietPhieuDatBanService;
 import com.restaurant.quanlydatbannhahang.service.HoaDonService;
@@ -37,7 +38,7 @@ public class PanelTrangChu extends javax.swing.JPanel {
     private void loadDataToCard() {
         try {
             int countBanDangSuDung = (int) banService.getBanDangSuDung().size();
-            int countBanDatTruoc = (int) phieuDatBanService.getAllPhieuDatBan().size();
+            int countBanDatTruoc = (int) phieuDatBanService.getDanhSachPhieuDatBanTheoTrangThai(TrangThaiPhieuDat.DANG_CHO).size();
             double doanhThuHomNay = hoaDonService.tinhDoanhThuHomNay();
             lblCountBanSuDung.setText(String.valueOf(countBanDangSuDung));
             lblCountBanDatTruoc.setText(String.valueOf(countBanDatTruoc));

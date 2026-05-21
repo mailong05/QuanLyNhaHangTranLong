@@ -3,6 +3,7 @@ import com.restaurant.quanlydatbannhahang.connectDB.DatabaseConnection;
 import com.restaurant.quanlydatbannhahang.entity.Ban;
 import com.restaurant.quanlydatbannhahang.entity.KhuVuc;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiBan;
+import com.restaurant.quanlydatbannhahang.service.PhieuDatBanService;
 import com.restaurant.quanlydatbannhahang.util.IDQueryHelper;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -185,4 +186,6 @@ public class BanDAO {
     public boolean capNhatTrangThaiBan(String maBan,TrangThaiBan trangThai) {
         return capNhatTrangThaiBan(maBan, trangThai.name());
     }
+    
 }
+
