@@ -49,7 +49,7 @@ public class PanelDatBan extends javax.swing.JPanel {
     private static final Color EDIT_MODE_VACATING_COLOR = Color.WHITE; // Trắng (bàn cũ bỏ chọn)
     private BanService banService;
     private Set<String> lockedOriginTables = new HashSet<>();
-    
+
     public PanelDatBan() {
         selectedTables = new HashSet<>();
         originalTablesForEdit = new HashSet<>();
@@ -78,7 +78,7 @@ public class PanelDatBan extends javax.swing.JPanel {
                             PanelDatBan.this.revalidate();
                             PanelDatBan.this.repaint();
                         }
-                    }  else {
+                    } else {
                         flowOrigin = "";
                         isMerging = false;
                         isSwitching = false;
@@ -91,8 +91,8 @@ public class PanelDatBan extends javax.swing.JPanel {
                         panelQuanLyDatBanTruoc = null;
                         panelDatMon = null;
 
-                        ReservationSession.setTempSelectedDateTime(null); 
-                        
+                        ReservationSession.setTempSelectedDateTime(null);
+
                     }
                 }
             }
@@ -134,21 +134,22 @@ public class PanelDatBan extends javax.swing.JPanel {
         this.isMerging = true;
         this.flowOrigin = "GOP_BAN";
         this.panelDatMon = panel;
-        this.lockedOriginTables = new HashSet<>(currentTables);    // Dùng để cấm bỏ chọn
+        this.lockedOriginTables = new HashSet<>(currentTables); // Dùng để cấm bỏ chọn
         this.originalTablesForEdit = new HashSet<>(currentTables); // Dùng để TÔ MÀU XANH DƯƠNG
-        this.selectedTables = new HashSet<>(currentTables);        // Dùng để lưu các bàn đang tick
+        this.selectedTables = new HashSet<>(currentTables); // Dùng để lưu các bàn đang tick
         updateAllTableStatusFromDatabase();
         this.panelSoDoBan.revalidate();
         this.panelSoDoBan.repaint();
         // Giả sử ông có 1 hàm hiển thị thanh xác nhận bên dưới (giống như đặt trước)
-        // btnXacNhan.setVisible(true); 
+        // btnXacNhan.setVisible(true);
         System.out.println("PanelDatBan: Callback đã được gán: " + (this.panelDatMon != null));
         System.out.println("PanelDatBan: Đã setup xong Gộp bàn với " + selectedTables.size() + " bàn.");
-   }
-    
+    }
+
     /**
      * Hàm dọn dẹp và reset toàn bộ trạng thái (State) của sơ đồ bàn về mặc định.
-     * Giúp triệt tiêu hoàn toàn xung đột dữ liệu khi nhân viên chuyển đổi qua lại giữa các luồng:
+     * Giúp triệt tiêu hoàn toàn xung đột dữ liệu khi nhân viên chuyển đổi qua lại
+     * giữa các luồng:
      * Đặt bàn trước, Vào ăn ngay, Đổi bàn, Gộp bàn.
      */
     public void clearAllState() {
@@ -167,21 +168,21 @@ public class PanelDatBan extends javax.swing.JPanel {
         if (this.lockedOriginTables != null) {
             this.lockedOriginTables.clear();
         }
-        
+
         // 🌟 MỞ COMMENT DÒNG NÀY ĐỂ XÓA MÀU UI CŨ TRÁNH LỖI VÀO LẦN SAU
-        if (this.originalTablesForEdit != null) { 
-            this.originalTablesForEdit.clear(); 
+        if (this.originalTablesForEdit != null) {
+            this.originalTablesForEdit.clear();
         }
 
         btnGopBan.setText("Gộp bàn");
-        
+
         // 3. Hủy liên kết tạm thời
         this.panelDatMon = null;
 
         System.out.println("Sơ đồ bàn: Hệ thống đã dọn dẹp sạch sẽ toàn bộ State!");
     }
 
-	public void setSelectedTablesForEdit(Set<String> tablesToSelect, LocalDateTime thoiGianPhieu) {
+    public void setSelectedTablesForEdit(Set<String> tablesToSelect, LocalDateTime thoiGianPhieu) {
         this.editMode = true;
         this.billMode = false;
         this.reservationMode = false;
@@ -202,7 +203,6 @@ public class PanelDatBan extends javax.swing.JPanel {
 
         if (btnGopBan != null)
             btnGopBan.setEnabled(true);
-
 
         loadSoDoBanFromDatabase();
     }
@@ -382,7 +382,8 @@ public class PanelDatBan extends javax.swing.JPanel {
         btnGopBan.setPreferredSize(new Dimension(150, 50));
         btnGopBan.addActionListener(e -> {
             if (isMerging) {
-                // 1. Kiểm tra xem nhân viên đã chọn thêm được bàn mới nào chưa (so với nhóm bàn gốc ban đầu)
+                // 1. Kiểm tra xem nhân viên đã chọn thêm được bàn mới nào chưa (so với nhóm bàn
+                // gốc ban đầu)
                 if (selectedTables.isEmpty() || selectedTables.size() <= lockedOriginTables.size()) {
                     JOptionPane.showMessageDialog(this,
                             "Vui lòng chọn ít nhất một bàn mới để gộp.",
@@ -390,10 +391,12 @@ public class PanelDatBan extends javax.swing.JPanel {
                     return;
                 }
 
-                // 2. Chạy thẳng luồng xử lý tập trung (Hàm này đã lo việc Hỏi xác nhận, ghi DB, gộp RAM và quay về)
+                // 2. Chạy thẳng luồng xử lý tập trung (Hàm này đã lo việc Hỏi xác nhận, ghi DB,
+                // gộp RAM và quay về)
                 executeMergeTableFlow();
             } else {
-                // Phòng hờ trường hợp nhân viên tự ý bấm nút này khi đang xem sơ đồ bàn bình thường
+                // Phòng hờ trường hợp nhân viên tự ý bấm nút này khi đang xem sơ đồ bàn bình
+                // thường
                 JOptionPane.showMessageDialog(this,
                         "Để thực hiện gộp bàn, vui lòng nhấn nút 'Gộp bàn' tại màn hình Đặt Món của bàn đang sử dụng.",
                         "Thông báo", JOptionPane.INFORMATION_MESSAGE);
@@ -417,7 +420,6 @@ public class PanelDatBan extends javax.swing.JPanel {
         bottomPanel.add(rightButtonPanel, BorderLayout.EAST);
         this.add(bottomPanel, BorderLayout.SOUTH);
     }
-
 
     private void loadSoDoBanFromDatabase() {
         panelSoDoBan.removeAll();
@@ -629,20 +631,22 @@ public class PanelDatBan extends javax.swing.JPanel {
         }
         if (isMerging) {
             if (lockedOriginTables.contains(maBan)) {
-                JOptionPane.showMessageDialog(this, "Không thể bỏ chọn bàn gốc khi đang gộp bàn!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Không thể bỏ chọn bàn gốc khi đang gộp bàn!", "Thông báo",
+                        JOptionPane.WARNING_MESSAGE);
                 return;
             }
             // Cho phép click chọn thêm bàn DANG_DUNG hoặc TRONG
             if (trangThai == TrangThaiBan.TRONG || trangThai == TrangThaiBan.DANG_DUNG) {
-                 if (selectedTables.contains(maBan)) {
-                     selectedTables.remove(maBan);
-                 } else {
-                     selectedTables.add(maBan);
-                 }
-                 updateAllTableStatusFromDatabase();
-                 // updateBottomBar();
+                if (selectedTables.contains(maBan)) {
+                    selectedTables.remove(maBan);
+                } else {
+                    selectedTables.add(maBan);
+                }
+                updateAllTableStatusFromDatabase();
+                // updateBottomBar();
             } else {
-                 JOptionPane.showMessageDialog(this, "Chỉ có thể gộp với bàn Trống hoặc Đang dùng!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Chỉ có thể gộp với bàn Trống hoặc Đang dùng!", "Thông báo",
+                        JOptionPane.WARNING_MESSAGE);
             }
             return; // Thoát ra, không chạy các logic bình thường bên dưới
         }
@@ -757,9 +761,6 @@ public class PanelDatBan extends javax.swing.JPanel {
         }
         toggleSelectionCard(maBan, card);
     }
-    
-    
-   
 
     private void toggleSelectionCard(String maBan, JPanel card) {
         TrangThaiBan trangThai = tableTrangThai.get(maBan);
@@ -798,9 +799,6 @@ public class PanelDatBan extends javax.swing.JPanel {
         // 3. Mặc định trả về trạng thái DB
         return ban.getTrangThai();
     }
-    
-    
-    
 
     private void setTableCardBackground(String maBan, JPanel card, TrangThaiBan trangThai) {
         // *** HIỂN THỊ KHÁC BIỆT KHI MERGE VS SWITCH ***
@@ -1120,7 +1118,8 @@ public class PanelDatBan extends javax.swing.JPanel {
                 return;
             }
             LocalDateTime selectedDateTime = dateTimePicker.getDateTimeStrict();
-         // Lấy thời gian hiện tại và thời gian chọn, cắt bỏ phần giây/mili-giây để so sánh công bằng
+            // Lấy thời gian hiện tại và thời gian chọn, cắt bỏ phần giây/mili-giây để so
+            // sánh công bằng
             LocalDateTime now = LocalDateTime.now().truncatedTo(java.time.temporal.ChronoUnit.MINUTES);
             LocalDateTime selected = selectedDateTime.truncatedTo(java.time.temporal.ChronoUnit.MINUTES);
             if (selectedDateTime == null || selected.isBefore(now)) {
@@ -1241,7 +1240,26 @@ public class PanelDatBan extends javax.swing.JPanel {
             BanService banService = new BanService();
             PhieuDatBanService pService = new PhieuDatBanService();
 
+            // Lấy danh sách bàn đã tồn tại trong phiếu để tránh insert duplicate key
+            Set<String> existingBans = new HashSet<>();
+            try {
+                List<ChiTietPhieuDatBan> existingChiTiets = ctpService.getChiTietByMaPhieuDat(currentMaPhieuDat);
+                if (existingChiTiets != null) {
+                    for (ChiTietPhieuDatBan ct : existingChiTiets) {
+                        if (ct != null && ct.getBan() != null && ct.getBan().getMaBan() != null) {
+                            existingBans.add(ct.getBan().getMaBan());
+                        }
+                    }
+                }
+            } catch (Exception ex) {
+                // ignore and proceed; existingBans may be empty
+            }
+
             for (String newBan : newTables) {
+                if (existingBans.contains(newBan)) {
+                    // Đã tồn tại chi tiết cho bàn này trong phiếu, bỏ qua
+                    continue;
+                }
                 Ban ban = banService.getBanTheoMa(newBan);
                 PhieuDatBan phieu = pService.getPhieuDatBanTheoMa(currentMaPhieuDat);
 
@@ -1253,12 +1271,27 @@ public class PanelDatBan extends javax.swing.JPanel {
 
                     // Cập nhật trạng thái bàn mới thành DANG_DUNG (phục vụ)
                     banService.capNhatTrangThaiBan(newBan, TrangThaiBan.DANG_DUNG);
+
+                    // Thêm vào existingBans để tránh duplicate khi loop tiếp
+                    existingBans.add(newBan);
                 }
             }
 
             // Cập nhật context
             String newContext = HoaDonDraftSession
                     .resolveMaBanContext(String.join(",", selectedTables));
+            // Gom các context nguồn (các bàn hiện tại và bàn mới) để merge dữ liệu draft
+            // (món, metadata)
+            Set<String> sourceContexts = new HashSet<>();
+            for (String tb : selectedTables) {
+                String src = HoaDonDraftSession.resolveMaBanContext(tb);
+                if (src != null && !src.isEmpty()) {
+                    sourceContexts.add(src);
+                }
+            }
+            if (!sourceContexts.isEmpty()) {
+                HoaDonDraftSession.mergeContexts(sourceContexts, newContext);
+            }
             HoaDonDraftSession.setCurrentMaBanContext(newContext);
 
             // Cập nhật UI và quay lại
@@ -1346,8 +1379,26 @@ public class PanelDatBan extends javax.swing.JPanel {
                             banService.capNhatTrangThaiBan(oldBan, TrangThaiBan.TRONG);
                         }
 
-                        // THÊM bàn mới
+                        // THÊM bàn mới (bảo vệ duplicate PK bằng cách kiểm tra trước)
+                        Set<String> existingBansForPhieu = new HashSet<>();
+                        try {
+                            List<ChiTietPhieuDatBan> existingChiTiets = ctpService
+                                    .getChiTietByMaPhieuDat(currentMaPhieuDat);
+                            if (existingChiTiets != null) {
+                                for (ChiTietPhieuDatBan ct : existingChiTiets) {
+                                    if (ct != null && ct.getBan() != null && ct.getBan().getMaBan() != null) {
+                                        existingBansForPhieu.add(ct.getBan().getMaBan());
+                                    }
+                                }
+                            }
+                        } catch (Exception ex) {
+                            // ignore, proceed with empty set
+                        }
+
                         for (String newBan : newTables) {
+                            if (existingBansForPhieu.contains(newBan)) {
+                                continue; // đã có chi tiết cho bàn này
+                            }
                             Ban ban = banService.getBanTheoMa(newBan);
                             PhieuDatBan phieu = pService.getPhieuDatBanTheoMa(currentMaPhieuDat);
 
@@ -1363,6 +1414,8 @@ public class PanelDatBan extends javax.swing.JPanel {
                                 } else if (phieu.getTrangThai() == TrangThaiPhieuDat.DANG_CHO) {
                                     banService.capNhatTrangThaiBan(newBan, TrangThaiBan.DA_DAT);
                                 }
+
+                                existingBansForPhieu.add(newBan);
                             }
                         }
                     }
