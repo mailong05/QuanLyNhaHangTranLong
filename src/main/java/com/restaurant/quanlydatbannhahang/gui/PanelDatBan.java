@@ -1211,7 +1211,6 @@ public class PanelDatBan extends javax.swing.JPanel {
      * Thực hiện logic GỘP BÀN: Chỉ THÊM bàn mới, KHÔNG xóa bàn cũ
      */
     private void executeMergeTableFlow() {
-    	System.out.println("DEBUG: Kiểm tra callback trước khi gộp: panelDatMon = " + this.panelDatMon);
         if (panelDatMon == null && panelQuanLyDatBanTruoc == null) {
             JOptionPane.showMessageDialog(this, "Không tìm thấy panel callback cho gộp bàn.",
                     "Lỗi", JOptionPane.ERROR_MESSAGE);

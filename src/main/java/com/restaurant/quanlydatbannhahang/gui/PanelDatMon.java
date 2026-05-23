@@ -985,10 +985,11 @@ public class PanelDatMon extends javax.swing.JPanel {
             
             // 🌟 BƯỚC 2: Chuyển sang giao diện Sơ đồ bàn với chế độ Gộp
             Set<String> currentTables = HoaDonDraftSession.parseMaBanContextToSet(datMonContext);
-            MainForm mainForm = (MainForm) SwingUtilities.getWindowAncestor(this);
-            if (mainForm != null) {
-                mainForm.startGopBanFlow(currentTables, null);
-            }
+                MainForm mainForm = (MainForm) SwingUtilities.getWindowAncestor(this);
+                if (mainForm != null) {
+                    // Truyền PanelDatMon hiện tại làm callback để PanelDatBan có thể gọi lại
+                    mainForm.startGopBanFlow(currentTables, this);
+                }
             
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Lỗi khi chuyển sang luồng gộp bàn: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
