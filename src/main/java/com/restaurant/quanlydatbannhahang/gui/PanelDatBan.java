@@ -692,8 +692,9 @@ public class PanelDatBan extends javax.swing.JPanel {
                             JOptionPane.WARNING_MESSAGE);
                     return;
                 }
+                String resolvedMaBan = HoaDonDraftSession.resolveMaBanContext(maBan);
                 HoaDonDraftSession.setCurrentMaPhieuDatContext(activePhieu.getMaPhieuDat());
-                HoaDonDraftSession.setCurrentMaBanContext(maBan);
+                HoaDonDraftSession.setCurrentMaBanContext(resolvedMaBan);
                 java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
                 if (parentFrame instanceof MainForm) {
                     ((MainForm) parentFrame).openPanelLapHoaDonFromBillMode(maBan, activePhieu.getMaPhieuDat());
@@ -1043,8 +1044,9 @@ public class PanelDatBan extends javax.swing.JPanel {
                     throw new IllegalStateException("Không thể tạo phiếu đặt dùng ngay.");
                 }
                 HoaDonDraftSession.setCurrentMaPhieuDatContext(maPhieuDat);
-                String maBanContext = selectedTables.iterator().next();
+                String maBanContext = String.join(",", selectedTables);
                 HoaDonDraftSession.setCurrentMaBanContext(maBanContext);
+                HoaDonDraftSession.luuGioVao(maBanContext, LocalDateTime.now());
                 this.updateAllTableStatusFromDatabase();
                 resetAllTablesUI();
                 repaintAllUI();

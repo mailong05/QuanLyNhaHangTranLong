@@ -255,7 +255,8 @@ public class MainForm extends javax.swing.JFrame {
         if (panelLapHoaDon == null) {
             panelLapHoaDon = new PanelLapHoaDon();
         }
-        HoaDonDraftSession.setCurrentMaBanContext(maBan);
+        String resolvedMaBan = HoaDonDraftSession.resolveMaBanContext(maBan);
+        HoaDonDraftSession.setCurrentMaBanContext(resolvedMaBan);
         HoaDonDraftSession.setCurrentMaPhieuDatContext(maPhieuDat);
         panelLapHoaDon.refreshDraftData();
         showPanel(panelLapHoaDon);

@@ -6,6 +6,7 @@ import com.restaurant.quanlydatbannhahang.entity.ChiTietHoaDon;
 import com.restaurant.quanlydatbannhahang.entity.PhieuDatBan;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiHoaDon;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.regex.Pattern;
 public class HoaDonService {
@@ -224,4 +225,32 @@ public class HoaDonService {
     public String getLastHoaDonID() {
         return hoaDonDAO.getLastHoaDonID();
     }
+    
+    public void capNhatGioVao(String maHD, LocalDateTime now) {
+        if (maHD == null || maHD.isBlank()) {
+            throw new IllegalArgumentException("Mã hóa đơn không được để trống khi cập nhật giờ vào.");
+        }
+        
+        boolean success = hoaDonDAO.capNhatGioVao(maHD, now);
+        if (!success) {
+            throw new RuntimeException("Cập nhật giờ vào thất bại cho phiếu: " + maHD);
+        }
+    }
+
+    public void capNhatGioRa(String maHD, LocalDateTime now) {
+        if (maHD == null || maHD.isBlank()) {
+            throw new IllegalArgumentException("Mã phiếu đặt không được để trống khi cập nhật giờ ra.");
+        }
+        
+
+
+        boolean success = hoaDonDAO.capNhatGioRa(maHD, now);
+        if (!success) {
+            throw new RuntimeException("Cập nhật giờ ra thất bại cho phiếu: " + maHD);
+        }
+    }
+	public HoaDon getHoaDonTheoMaPDB(String currentMaPhieuDatContext) {
+		if (currentMaPhieuDatContext == null || currentMaPhieuDatContext.isBlank()) return null;
+	    return hoaDonDAO.getHoaDonTheoMaPDB(currentMaPhieuDatContext);
+	}
 }

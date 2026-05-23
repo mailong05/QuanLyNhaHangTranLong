@@ -1,4 +1,5 @@
 package com.restaurant.quanlydatbannhahang.session;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -14,6 +15,7 @@ public final class HoaDonDraftSession {
     private static final Map<String, String> maKMByMaBan = new LinkedHashMap<>();
     private static final Map<String, Integer> diemDungByMaBan = new LinkedHashMap<>();
     private static final Map<String, String> maPhieuDatByMaBan = new LinkedHashMap<>();
+    private static final Map<String, LocalDateTime> gioVaoByMaBan = new LinkedHashMap<>();
     private static String currentMaBanContext = "";
     private static String currentPhoneNumber = "";
     private static String currentMaPhieuDatContext = "";
@@ -151,6 +153,7 @@ public final class HoaDonDraftSession {
         maKMByMaBan.remove(normalized);
         diemDungByMaBan.remove(normalized);
         maPhieuDatByMaBan.remove(normalized);
+        gioVaoByMaBan.remove(normalized);
     }
     public static void migrateContext(String oldMaBanContext, String newMaBanContext) {
         String oldNormalized = normalizeMaBanContext(oldMaBanContext);
@@ -163,10 +166,16 @@ public final class HoaDonDraftSession {
         String maKH = getMaKH(oldNormalized);
         String maKM = getMaKM(oldNormalized);
         int diemDung = getDiemDung(oldNormalized);
+        
+        LocalDateTime oldGioVao = getGioVao(oldNormalized);
         setInvoiceMetadata(newNormalized,
                 (maKH != null && !maKH.isBlank()) ? maKH : null,
                 (maKM != null && !maKM.isBlank()) ? maKM : null,
                 diemDung);
+        
+        if (oldGioVao != null) {
+            luuGioVao(newNormalized, oldGioVao);
+        }
         clear(oldNormalized);
     }
     public static void setInvoiceMetadata(String maBanContext, String maKH, String maKM, int diemDung) {
@@ -209,6 +218,7 @@ public final class HoaDonDraftSession {
         maKMByMaBan.clear();
         diemDungByMaBan.clear();
         maPhieuDatByMaBan.clear();
+        gioVaoByMaBan.clear();
         currentMaBanContext = "";
         currentPhoneNumber = "";
         currentMaPhieuDatContext = "";
@@ -237,4 +247,19 @@ public final class HoaDonDraftSession {
             return donGia;
         }
     }
+    
+    
+    public static void luuGioVao(String maBanContext, LocalDateTime gioVao) {
+        String normalized = normalizeMaBanContext(maBanContext);
+        if (!normalized.isEmpty() && gioVao != null) {
+            gioVaoByMaBan.put(normalized, gioVao);
+            System.out.println("Session: Đã lưu giờ vào cho bàn [" + normalized + "] là: " + gioVao);
+        }
+    }
+
+    public static LocalDateTime getGioVao(String maBanContext) {
+        String normalized = normalizeMaBanContext(maBanContext);
+        return normalized.isEmpty() ? null : gioVaoByMaBan.get(normalized);
+    }
+  
 }

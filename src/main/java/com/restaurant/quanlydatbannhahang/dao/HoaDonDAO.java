@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -362,4 +363,52 @@ public class HoaDonDAO {
         }
         return dsHoaDon;
     }
+    
+	public boolean capNhatGioVao(String maHD, LocalDateTime gioVao) {
+	    String sql = "UPDATE HoaDon SET gioVao = ? WHERE maHD = ?";
+	    try (Connection con = DatabaseConnection.getConnection();
+	         PreparedStatement pstm = con.prepareStatement(sql)) {
+	        
+	        pstm.setTimestamp(1, java.sql.Timestamp.valueOf(gioVao));
+	        pstm.setString(2, maHD);
+	        
+	        return pstm.executeUpdate() > 0;
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return false;
+	}
+
+	public boolean capNhatGioRa(String maHD, LocalDateTime gioRa) {
+	    String sql = "UPDATE HoaDon SET gioRa = ? WHERE maHD = ?";
+	    try (Connection con = DatabaseConnection.getConnection();
+	         PreparedStatement pstm = con.prepareStatement(sql)) {
+	        
+	        pstm.setTimestamp(1, java.sql.Timestamp.valueOf(gioRa));
+	        pstm.setString(2, maHD);
+	        
+	        return pstm.executeUpdate() > 0;
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return false;
+	}
+
+	
+	public HoaDon getHoaDonTheoMaPDB(String maPhieuDat) {
+	    String sql = "SELECT * FROM HoaDon WHERE maPhieuDat = ? AND trangThaiThanhToan = 'CHUA_THANH_TOAN'";
+	    try (Connection con = DatabaseConnection.getConnection();
+	         PreparedStatement pstm = con.prepareStatement(sql)) {
+	        
+	        pstm.setString(1, maPhieuDat);
+	        try (ResultSet rs = pstm.executeQuery()) {
+	            if (rs.next()) {
+	                return buildHoaDonFromResultSet(rs); 
+	            }
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return null;
+	}
 }

@@ -396,9 +396,9 @@
                 <Column editable="false" title="M&#xe3; nh&#xe2;n vi&#xea;n" type="java.lang.String"/>
                 <Column editable="false" title="M&#xe3; b&#xe0;n" type="java.lang.String"/>
                 <Column editable="false" title="S&#x1ed1; ng&#x1b0;&#x1edd;i" type="java.lang.Integer"/>
-                <Column editable="true" title="Ng&#xe0;y l&#x1ead;p phi&#x1ebf;u" type="java.lang.Object"/>
+                <Column editable="false" title="Ng&#xe0;y l&#x1ead;p phi&#x1ebf;u" type="java.lang.Object"/>
                 <Column editable="false" title="Th&#x1edd;i gian &#x111;&#x1ebf;n" type="java.lang.Object"/>
-                <Column editable="true" title="Ti&#x1ec1;n &#x111;&#x1eb7;t c&#x1ecd;c" type="java.lang.String"/>
+                <Column editable="false" title="Ti&#x1ec1;n &#x111;&#x1eb7;t c&#x1ecd;c" type="java.lang.String"/>
                 <Column editable="false" title="Tr&#x1ea1;ng th&#xe1;i" type="java.lang.String"/>
               </Table>
             </Property>
