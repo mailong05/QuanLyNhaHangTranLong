@@ -974,21 +974,24 @@ public class PanelDatMon extends javax.swing.JPanel {
     }// GEN-LAST:event_btnDoiBanActionPerformed
 
     private void onButtonGopBanClicked() {
-        try {
+    	try {
             if (datMonContext == null || datMonContext.isBlank()) {
-                JOptionPane.showMessageDialog(this, "Không có bàn hiện tại để gộp.", "Thông báo",
-                        JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Không có bàn hiện tại để gộp.", "Thông báo", JOptionPane.WARNING_MESSAGE);
                 return;
             }
-            // Lưu datMonContext hiện tại và chuyển sang PanelDatBan để chọn bàn gộp
+            
+            // 🌟 BƯỚC 1: LƯU TOÀN BỘ MÓN ĂN VÀO SESSION TRƯỚC KHI CHUYỂN TRANG
+            saveDraftToSession();
+            
+            // 🌟 BƯỚC 2: Chuyển sang giao diện Sơ đồ bàn với chế độ Gộp
             Set<String> currentTables = HoaDonDraftSession.parseMaBanContextToSet(datMonContext);
-            java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
-            if (parentFrame instanceof MainForm) {
-                ((MainForm) parentFrame).startGopBanFlow(currentTables, this);
+            MainForm mainForm = (MainForm) SwingUtilities.getWindowAncestor(this);
+            if (mainForm != null) {
+                mainForm.startGopBanFlow(currentTables, null);
             }
+            
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Lỗi khi chuyển sang luồng gộp bàn: " + e.getMessage(), "Lỗi",
-                    JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Lỗi khi chuyển sang luồng gộp bàn: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
     }

@@ -230,6 +230,8 @@ public class MainForm extends javax.swing.JFrame {
         openPanelDatMon(null);
     }
 
+
+    
     public void openPanelDatMon(String maBanContext) {
         if (panelDatMon == null) {
             panelDatMon = new PanelDatMon();
@@ -1168,12 +1170,13 @@ public class MainForm extends javax.swing.JFrame {
     }
 
     public void startGopBanFlow(Set<String> currentTables, PanelDatMon sourcePanel) {
+        panelDatBan.setMergingMode(currentTables, sourcePanel);
+        
         showPanel(panelDatBan);
-        panelDatBan.setFlowOrigin("GOP_BAN");
-        panelDatBan.setPanelDatMon(sourcePanel);
-        panelDatBan.setSelectedTablesForEdit(currentTables, null); // Null cho ngày hôm nay (GOP_BAN không có thoiGianPhieu)
+        lblTenTrang.setText("GỘP BÀN");
     }
-
+    
+    
     public void goBackToPanelDatMon() {
         showPanel(panelDatMon);
         if (panelDatBan != null) {

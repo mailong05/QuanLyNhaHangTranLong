@@ -148,4 +148,23 @@ public class ChiTietPhieuDatBanService {
         }
         return String.join(", ", dsMaBan);
     }
+    
+    public void gopBanVaoPhieu(String maPDB, Set<String> oldBanSet, Set<String> newBanSet) {
+        Set<String> banCanThem = new HashSet<>(newBanSet);
+        banCanThem.removeAll(oldBanSet);
+        
+        PhieuDatBanService pdbService = new PhieuDatBanService();
+        PhieuDatBan phieu = pdbService.getPhieuDatBanTheoMa(maPDB);
+        if (phieu == null) throw new IllegalArgumentException("Phiếu đặt bàn gốc không tồn tại");
+        
+        BanService banService = new BanService();
+        for (String maBan : banCanThem) {
+            Ban ban = banService.getBanTheoMa(maBan);
+            ChiTietPhieuDatBan chiTietMoi = new ChiTietPhieuDatBan();
+            chiTietMoi.setPhieuDatBan(phieu);
+            chiTietMoi.setBan(ban);
+            chiTietMoi.setGhiChu("Bàn được gộp thêm");
+            themChiTietPhieuDatBan(chiTietMoi);
+        }
+    }
 }

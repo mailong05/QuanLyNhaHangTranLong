@@ -261,5 +261,59 @@ public final class HoaDonDraftSession {
         String normalized = normalizeMaBanContext(maBanContext);
         return normalized.isEmpty() ? null : gioVaoByMaBan.get(normalized);
     }
+    
+ // Thêm method này vào HoaDonDraftSession.java
+    public static void mergeContexts(Set<String> sourceContexts, String finalContext) {
+        String finalNormalized = normalizeMaBanContext(finalContext);
+        if (finalNormalized.isEmpty()) return;
+
+        Map<String, DraftMonItem> mergedItems = new LinkedHashMap<>();
+        String mergedKH = null;
+        String mergedKM = null;
+        int mergedDiemDung = 0;
+        LocalDateTime earliestGioVao = null;
+
+        for (String source : sourceContexts) {
+            String sourceNormalized = normalizeMaBanContext(source);
+            if (sourceNormalized.isEmpty()) continue;
+
+            // 1. Cộng dồn Món ăn (Nếu trùng mã thì cộng dồn số lượng)
+            List<DraftMonItem> items = getMonItems(sourceNormalized);
+            for (DraftMonItem item : items) {
+                if (mergedItems.containsKey(item.getMaMon())) {
+                    DraftMonItem existing = mergedItems.get(item.getMaMon());
+                    mergedItems.put(item.getMaMon(), new DraftMonItem(item.getMaMon(), item.getTenMon(), 
+                                        existing.getSoLuong() + item.getSoLuong(), item.getDonGia()));
+                } else {
+                    mergedItems.put(item.getMaMon(), item);
+                }
+            }
+
+            // 2. Gom Metadata (Ưu tiên lấy cái nào có dữ liệu trước)
+            if (mergedKH == null || mergedKH.isBlank()) mergedKH = getMaKH(sourceNormalized);
+            if (mergedKM == null || mergedKM.isBlank()) mergedKM = getMaKM(sourceNormalized);
+            mergedDiemDung = Math.max(mergedDiemDung, getDiemDung(sourceNormalized));
+
+            // 3. Gom Giờ vào (Lấy giờ vào sớm nhất của các bàn bị gộp)
+            LocalDateTime gv = getGioVao(sourceNormalized);
+            if (gv != null) {
+                if (earliestGioVao == null || gv.isBefore(earliestGioVao)) {
+                    earliestGioVao = gv;
+                }
+            }
+
+            // Dọn dẹp session cũ
+            if (!sourceNormalized.equals(finalNormalized)) {
+                clear(sourceNormalized);
+            }
+        }
+
+        // Lưu toàn bộ dữ liệu đã gộp vào Context mới
+        setMonItems(finalNormalized, new ArrayList<>(mergedItems.values()));
+        setInvoiceMetadata(finalNormalized, mergedKH, mergedKM, mergedDiemDung);
+        if (earliestGioVao != null) {
+            luuGioVao(finalNormalized, earliestGioVao);
+        }
+    }
   
 }
