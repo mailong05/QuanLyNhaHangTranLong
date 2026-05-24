@@ -35,6 +35,7 @@ public class MainForm extends javax.swing.JFrame {
     private PanelQuanLyDatBanTruoc panelQuanLyDatBanTruoc = null;
     private PanelDatMon panelDatMon = null;
     private PanelLapHoaDon panelLapHoaDon = null;
+    private PanelVaoCa panelVaoCa = null;
     private JPanel lastVisitedPanel = null;
     private JLabel lastVisitedSubLabel = null;
     private final Color COLOR_MENU_BG = new Color(142, 128, 106);
@@ -99,14 +100,22 @@ public class MainForm extends javax.swing.JFrame {
             if (p != null)
                 paintRoundedPanel(p, COLOR_MENU_BG, false);
         }
-        updateActivePanel(panelTrangChu);
-        lblTenTrang.setText("TRANG CHỦ");
-        showTrangChuPanel();
+        setMenuEnabled(false);
+        showVaoCaPanel();
         initializePanelsEarly();
+        this.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent e) {
-                ImageUtil.shutdown();
+                if (SessionManager.getCurrentCaLamViec() != null) {
+                    JOptionPane.showMessageDialog(MainForm.this,
+                            "Bạn đang trong ca làm việc. Vui lòng kết ca trước khi đóng cửa sổ.",
+                            "Chú ý", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    ImageUtil.shutdown();
+                    dispose();
+                    System.exit(0);
+                }
             }
         });
     }
@@ -213,6 +222,31 @@ public class MainForm extends javax.swing.JFrame {
         }
     }
 
+    public void showVaoCaPanel() {
+        if (panelVaoCa == null) {
+            panelVaoCa = new PanelVaoCa();
+        }
+        setMenuEnabled(false);
+        showPanel(panelVaoCa);
+        lblTenTrang.setText("BẮT ĐẦU CA");
+    }
+
+    public void setMenuEnabled(boolean enabled) {
+        setEnabledRecursive(panelMenu, enabled);
+    }
+
+    private void setEnabledRecursive(java.awt.Component comp, boolean enabled) {
+        if (comp == null) {
+            return;
+        }
+        comp.setEnabled(enabled);
+        if (comp instanceof java.awt.Container) {
+            for (java.awt.Component child : ((java.awt.Container) comp).getComponents()) {
+                setEnabledRecursive(child, enabled);
+            }
+        }
+    }
+
     public void goToTrangChuFromPanel() {
         updateActivePanel(panelTrangChu);
         lblTenTrang.setText("TRANG CHỦ");
@@ -230,8 +264,6 @@ public class MainForm extends javax.swing.JFrame {
         openPanelDatMon(null);
     }
 
-
-    
     public void openPanelDatMon(String maBanContext) {
         if (panelDatMon == null) {
             panelDatMon = new PanelDatMon();
@@ -425,10 +457,10 @@ public class MainForm extends javax.swing.JFrame {
             public void mouseClicked(MouseEvent e) {
                 if (JOptionPane.showConfirmDialog(null, "Xác nhận đăng xuất?", "Xác nhận",
                         JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                    dispose();
-                    java.awt.EventQueue.invokeLater(() -> {
-                        new LoginForm().setVisible(true);
-                    });
+                    setMenuEnabled(true);
+                    updateActivePanel(panelDangXuat);
+                    lblTenTrang.setText("KẾT CA");
+                    showPanel(new PanelKetCa());
                 }
             }
 
@@ -648,7 +680,7 @@ public class MainForm extends javax.swing.JFrame {
         lblTenNhanVien = new javax.swing.JLabel();
         lblPhanQuyen = new javax.swing.JLabel();
         panelBody = new javax.swing.JPanel();
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         panelMenu.setBackground(new java.awt.Color(142, 128, 106));
         panelMenu.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 5, 10, 5));
         panelMenu.setMaximumSize(new java.awt.Dimension(200, 32767));
@@ -1155,31 +1187,31 @@ public class MainForm extends javax.swing.JFrame {
     }
 
     public void startEditBanFromQuanLyDatTruoc() {
-        // Chỉ gọi hàm showPanel để hiển thị UI, TUYỆT ĐỐI KHÔNG simulate click menu (để tránh bị gọi refreshData)
+        // Chỉ gọi hàm showPanel để hiển thị UI, TUYỆT ĐỐI KHÔNG simulate click menu (để
+        // tránh bị gọi refreshData)
         if (panelDatBan != null) {
             showPanel(panelDatBan);
             lblTenTrang.setText("ĐỔI BÀN"); // Cập nhật lại tiêu đề trang cho đúng ngữ cảnh
         }
     }
-    
+
     public void startEditBanFromDatMon(Set<String> oldTables, PanelDatMon sourcePanel) {
         // 🌟 FIX LỖI 2B: Truyền dữ liệu setup TRƯỚC
         panelDatBan.setFlowOrigin("DAT_MON");
         panelDatBan.setPanelDatMon(sourcePanel);
-        panelDatBan.setSelectedTablesForEdit(oldTables, null); 
-        
+        panelDatBan.setSelectedTablesForEdit(oldTables, null);
+
         showPanel(panelDatBan);
         lblTenTrang.setText("ĐỔI BÀN");
     }
 
     public void startGopBanFlow(Set<String> currentTables, PanelDatMon sourcePanel) {
         panelDatBan.setMergingMode(currentTables, sourcePanel);
-        
+
         showPanel(panelDatBan);
         lblTenTrang.setText("GỘP BÀN");
     }
-    
-    
+
     public void goBackToPanelDatMon() {
         showPanel(panelDatMon);
         if (panelDatBan != null) {

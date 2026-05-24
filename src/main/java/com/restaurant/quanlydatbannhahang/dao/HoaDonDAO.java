@@ -1,4 +1,5 @@
 package com.restaurant.quanlydatbannhahang.dao;
+
 import com.restaurant.quanlydatbannhahang.connectDB.DatabaseConnection;
 import com.restaurant.quanlydatbannhahang.entity.HoaDon;
 import com.restaurant.quanlydatbannhahang.entity.PhieuDatBan;
@@ -13,20 +14,24 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+
 public class HoaDonDAO {
     private PhieuDatBanDAO phieuDatBanDAO;
     private NhanVienDAO nhanVienDAO;
     private KhuyenMaiDAO khuyenMaiDAO;
     private ThueDAO thueDAO;
+
     public HoaDonDAO() {
         this.phieuDatBanDAO = new PhieuDatBanDAO();
         this.nhanVienDAO = new NhanVienDAO();
         this.khuyenMaiDAO = new KhuyenMaiDAO();
         this.thueDAO = new ThueDAO();
     }
+
     public String getLastHoaDonID() {
         return IDQueryHelper.getLastID("HoaDon", "maHD");
     }
+
     private HoaDon buildHoaDonFromResultSet(ResultSet rs) {
         try {
             String maHD = rs.getString("maHD");
@@ -86,6 +91,7 @@ public class HoaDonDAO {
             return null;
         }
     }
+
     public boolean themHoaDon(HoaDon hd) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "insert into HoaDon (maHD, maPhieuDat, maNV, maKM, maThue, thueSuat, tienThue, tyLePhiDV, tienPhiDV, ngayTao, gioVao, gioRa, tongTienGoc, tienGiamGia, tongThanhToan, phuongThucTT, trangThaiThanhToan) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
@@ -114,6 +120,7 @@ public class HoaDonDAO {
         }
         return false;
     }
+
     public HoaDon getHoaDonTheoMa(String maHD) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from HoaDon where maHD = ?";
@@ -129,6 +136,7 @@ public class HoaDonDAO {
         }
         return null;
     }
+
     public List<HoaDon> getAllHoaDon() {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from HoaDon";
@@ -147,6 +155,7 @@ public class HoaDonDAO {
         }
         return dsHoaDon;
     }
+
     public List<HoaDon> getHoaDonTheoNgay(LocalDate ngay) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from HoaDon where convert(date, ngayTao) = ?";
@@ -166,6 +175,7 @@ public class HoaDonDAO {
         }
         return dsHoaDon;
     }
+
     public List<HoaDon> getHoaDonTrongKhoangThoi(LocalDate tuNgay, LocalDate denNgay) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from HoaDon where convert(date, ngayTao) between ? and ?";
@@ -186,6 +196,7 @@ public class HoaDonDAO {
         }
         return dsHoaDon;
     }
+
     public List<HoaDon> getHoaDonTheoNhanVien(String maNV) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from HoaDon where maNV = ?";
@@ -205,9 +216,11 @@ public class HoaDonDAO {
         }
         return dsHoaDon;
     }
+
     public List<HoaDon> getHoaDonTheoKhachHang(String maKH) {
         return new ArrayList<>();
     }
+
     public boolean capNhatHoaDon(HoaDon hd) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "update HoaDon set maPhieuDat = ?, maNV = ?, maKM = ?, maThue = ?, thueSuat = ?, tienThue = ?, tyLePhiDV = ?, tienPhiDV = ?, ngayTao = ?, gioVao = ?, gioRa = ?, tongTienGoc = ?, tienGiamGia = ?, tongThanhToan = ?, phuongThucTT = ?, trangThaiThanhToan = ? where maHD = ?";
@@ -236,11 +249,12 @@ public class HoaDonDAO {
         }
         return false;
     }
+
     public double getTongDoanhThuTheoNgay(LocalDate ngay) {
         String sql = "SELECT SUM(tongThanhToan) FROM HoaDon " +
-                     "WHERE CAST(ngayTao AS DATE) = ? AND trangThaiThanhToan = N'DA_THANH_TOAN'";
+                "WHERE CAST(ngayTao AS DATE) = ? AND trangThaiThanhToan = N'DA_THANH_TOAN'";
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement pstm = conn.prepareStatement(sql)) {
+                PreparedStatement pstm = conn.prepareStatement(sql)) {
             pstm.setDate(1, java.sql.Date.valueOf(ngay));
             ResultSet rs = pstm.executeQuery();
             if (rs.next()) {
@@ -251,6 +265,27 @@ public class HoaDonDAO {
         }
         return 0;
     }
+
+    public double getTongDoanhThuTienMatTheoCa(LocalDateTime thoiGianVaoCa) {
+        if (thoiGianVaoCa == null) {
+            throw new IllegalArgumentException("Thời gian bắt đầu ca không được để trống");
+        }
+        String sql = "SELECT SUM(tongThanhToan) FROM HoaDon " +
+                "WHERE ngayTao >= ? AND trangThaiThanhToan = N'DA_THANH_TOAN' " +
+                "AND phuongThucTT = N'TIEN_MAT'";
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement pstm = conn.prepareStatement(sql)) {
+            pstm.setTimestamp(1, java.sql.Timestamp.valueOf(thoiGianVaoCa));
+            ResultSet rs = pstm.executeQuery();
+            if (rs.next()) {
+                return rs.getDouble(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
     public boolean xoaHoaDon(String maHD) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "delete from HoaDon where maHD = ?";
@@ -263,6 +298,7 @@ public class HoaDonDAO {
         }
         return false;
     }
+
     public double tinhTongDoanhThu() {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "select sum(tongThanhToan) from HoaDon where trangThaiThanhToan = ?";
@@ -278,6 +314,7 @@ public class HoaDonDAO {
         }
         return 0;
     }
+
     public double tinhTongDoanhThuTheoNgay(LocalDate ngay) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "select sum(tongThanhToan) from HoaDon where convert(date, ngayTao) = ? and trangThaiThanhToan = ?";
@@ -294,6 +331,7 @@ public class HoaDonDAO {
         }
         return 0;
     }
+
     public double tinhTongDoanhThuTheoGian(LocalDate tuNgay, LocalDate denNgay) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "select sum(tongThanhToan) from HoaDon where convert(date, ngayTao) between ? and ? and trangThaiThanhToan = ?";
@@ -311,6 +349,7 @@ public class HoaDonDAO {
         }
         return 0;
     }
+
     public List<HoaDon> getHoaDonTheoMaBan(String maBan) {
         Connection connection = DatabaseConnection.getConnection();
         String normalized = maBan != null ? maBan.trim() : "";
@@ -344,6 +383,7 @@ public class HoaDonDAO {
         }
         return dsHoaDon;
     }
+
     public List<HoaDon> getHoaDonTheoTrangThai(TrangThaiHoaDon trangThai) {
         String sql = "select * from HoaDon where trangThaiThanhToan = ?";
         Connection connection = DatabaseConnection.getConnection();
@@ -363,52 +403,51 @@ public class HoaDonDAO {
         }
         return dsHoaDon;
     }
-    
-	public boolean capNhatGioVao(String maHD, LocalDateTime gioVao) {
-	    String sql = "UPDATE HoaDon SET gioVao = ? WHERE maHD = ?";
-	    try (Connection con = DatabaseConnection.getConnection();
-	         PreparedStatement pstm = con.prepareStatement(sql)) {
-	        
-	        pstm.setTimestamp(1, java.sql.Timestamp.valueOf(gioVao));
-	        pstm.setString(2, maHD);
-	        
-	        return pstm.executeUpdate() > 0;
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
-	    return false;
-	}
 
-	public boolean capNhatGioRa(String maHD, LocalDateTime gioRa) {
-	    String sql = "UPDATE HoaDon SET gioRa = ? WHERE maHD = ?";
-	    try (Connection con = DatabaseConnection.getConnection();
-	         PreparedStatement pstm = con.prepareStatement(sql)) {
-	        
-	        pstm.setTimestamp(1, java.sql.Timestamp.valueOf(gioRa));
-	        pstm.setString(2, maHD);
-	        
-	        return pstm.executeUpdate() > 0;
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
-	    return false;
-	}
+    public boolean capNhatGioVao(String maHD, LocalDateTime gioVao) {
+        String sql = "UPDATE HoaDon SET gioVao = ? WHERE maHD = ?";
+        try (Connection con = DatabaseConnection.getConnection();
+                PreparedStatement pstm = con.prepareStatement(sql)) {
 
-	
-	public HoaDon getHoaDonTheoMaPDB(String maPhieuDat) {
-	    String sql = "SELECT * FROM HoaDon WHERE maPhieuDat = ? AND trangThaiThanhToan = 'CHUA_THANH_TOAN'";
-	    try (Connection con = DatabaseConnection.getConnection();
-	         PreparedStatement pstm = con.prepareStatement(sql)) {
-	        
-	        pstm.setString(1, maPhieuDat);
-	        try (ResultSet rs = pstm.executeQuery()) {
-	            if (rs.next()) {
-	                return buildHoaDonFromResultSet(rs); 
-	            }
-	        }
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
-	    return null;
-	}
+            pstm.setTimestamp(1, java.sql.Timestamp.valueOf(gioVao));
+            pstm.setString(2, maHD);
+
+            return pstm.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean capNhatGioRa(String maHD, LocalDateTime gioRa) {
+        String sql = "UPDATE HoaDon SET gioRa = ? WHERE maHD = ?";
+        try (Connection con = DatabaseConnection.getConnection();
+                PreparedStatement pstm = con.prepareStatement(sql)) {
+
+            pstm.setTimestamp(1, java.sql.Timestamp.valueOf(gioRa));
+            pstm.setString(2, maHD);
+
+            return pstm.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public HoaDon getHoaDonTheoMaPDB(String maPhieuDat) {
+        String sql = "SELECT * FROM HoaDon WHERE maPhieuDat = ? AND trangThaiThanhToan = 'CHUA_THANH_TOAN'";
+        try (Connection con = DatabaseConnection.getConnection();
+                PreparedStatement pstm = con.prepareStatement(sql)) {
+
+            pstm.setString(1, maPhieuDat);
+            try (ResultSet rs = pstm.executeQuery()) {
+                if (rs.next()) {
+                    return buildHoaDonFromResultSet(rs);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

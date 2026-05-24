@@ -1,4 +1,5 @@
 package com.restaurant.quanlydatbannhahang.service;
+
 import com.restaurant.quanlydatbannhahang.dao.HoaDonDAO;
 import com.restaurant.quanlydatbannhahang.dao.ChiTietHoaDonDAO;
 import com.restaurant.quanlydatbannhahang.entity.HoaDon;
@@ -9,6 +10,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.regex.Pattern;
+
 public class HoaDonService {
     private HoaDonDAO hoaDonDAO;
     private ChiTietHoaDonDAO chiTietHoaDonDAO;
@@ -20,10 +22,12 @@ public class HoaDonService {
     private static final Pattern maPhieuDatPattern = Pattern.compile(MAPHIEUDAT_PATTERN);
     private static final Pattern maBanPattern = Pattern.compile(MABAN_PATTERN);
     private static final Pattern maMonPattern = Pattern.compile(MAMON_PATTERN);
+
     public HoaDonService() {
         this.hoaDonDAO = new HoaDonDAO();
         this.chiTietHoaDonDAO = new ChiTietHoaDonDAO();
     }
+
     public void validateHoaDon(HoaDon hoaDon) {
         if (hoaDon == null) {
             throw new IllegalArgumentException("Đối tượng hóa đơn không được để trống");
@@ -45,6 +49,7 @@ public class HoaDonService {
             throw new IllegalArgumentException("Trạng thái thanh toán không được để trống");
         }
     }
+
     public HoaDon getHoaDonTheoMa(String maHD) {
         if (maHD == null || maHD.isBlank()) {
             throw new IllegalArgumentException("Mã hóa đơn không được để trống");
@@ -58,6 +63,7 @@ public class HoaDonService {
         }
         return hoaDon;
     }
+
     public HoaDon findHoaDonTheoMa(String maHD) {
         if (maHD == null || maHD.isBlank()) {
             throw new IllegalArgumentException("Mã hóa đơn không được để trống");
@@ -67,24 +73,36 @@ public class HoaDonService {
         }
         return hoaDonDAO.getHoaDonTheoMa(maHD);
     }
+
     public double tinhDoanhThuHomNay() {
         return hoaDonDAO.getTongDoanhThuTheoNgay(LocalDate.now());
     }
+
+    public double getTongDoanhThuTienMatTheoCa(LocalDateTime thoiGianVaoCa) {
+        if (thoiGianVaoCa == null) {
+            throw new IllegalArgumentException("Thời gian bắt đầu ca không được để trống");
+        }
+        return hoaDonDAO.getTongDoanhThuTienMatTheoCa(thoiGianVaoCa);
+    }
+
     public List<HoaDon> getAllHoaDon() {
         return hoaDonDAO.getAllHoaDon();
     }
+
     public void themHoaDon(HoaDon hoaDon) {
         validateHoaDon(hoaDon);
         if (!hoaDonDAO.themHoaDon(hoaDon)) {
             throw new RuntimeException("Thêm hóa đơn thất bại");
         }
     }
+
     public void capNhatHoaDon(HoaDon hoaDon) {
         validateHoaDon(hoaDon);
         if (!hoaDonDAO.capNhatHoaDon(hoaDon)) {
             throw new RuntimeException("Cập nhật hóa đơn thất bại");
         }
     }
+
     public void xoaHoaDon(String maHD) {
         if (maHD == null || maHD.isBlank()) {
             throw new IllegalArgumentException("Mã hóa đơn không được để trống");
@@ -96,6 +114,7 @@ public class HoaDonService {
             throw new RuntimeException("Xóa hóa đơn thất bại");
         }
     }
+
     public List<HoaDon> getHoaDonTheoMaBan(String maBan) {
         if (maBan == null || maBan.isBlank()) {
             throw new IllegalArgumentException("Mã bàn không được để trống");
@@ -105,13 +124,16 @@ public class HoaDonService {
         }
         return hoaDonDAO.getHoaDonTheoMaBan(maBan);
     }
+
     public void capNhatBanChoHoaDonDraft(String maHD, String maBanMoi) {
         throw new UnsupportedOperationException(
                 "Cập nhật bàn cho hóa đơn không còn trực tiếp lưu trong HoaDon. Vui lòng cập nhật thông qua PhieuDatBan hoặc ChiTietPhieuDatBan.");
     }
+
     public void chuyenMaBanChoHoaDonDraft(String oldMaBan, String newMaBan) {
         chuyenBanChoHoaDonDraft(oldMaBan, newMaBan);
     }
+
     public void chuyenBanChoHoaDonDraft(String oldMaBan, String newMaBan) {
         if (oldMaBan == null || oldMaBan.isBlank()) {
             throw new IllegalArgumentException("Mã bàn cũ không được để trống");
@@ -132,12 +154,14 @@ public class HoaDonService {
         if (hDraft != null) {
         }
     }
+
     public List<HoaDon> getHoaDonTheoTrangThai(TrangThaiHoaDon trangThai) {
         if (trangThai == null) {
             throw new IllegalArgumentException("Trạng thái không được để trống");
         }
         return hoaDonDAO.getHoaDonTheoTrangThai(trangThai);
     }
+
     public void capNhatTrangThaiHoaDon(String maHD, TrangThaiHoaDon trangThai) {
         if (maHD == null || maHD.isBlank()) {
             throw new IllegalArgumentException("Mã hóa đơn không được để trống");
@@ -154,6 +178,7 @@ public class HoaDonService {
             capNhatHoaDon(hoaDon);
         }
     }
+
     public void themChiTietHoaDon(ChiTietHoaDon chiTiet) {
         if (chiTiet == null) {
             throw new IllegalArgumentException("Chi tiết hóa đơn không được để trống");
@@ -180,6 +205,7 @@ public class HoaDonService {
             throw new RuntimeException("Thêm chi tiết hóa đơn thất bại");
         }
     }
+
     public List<ChiTietHoaDon> getChiTietHoaDon(String maHD) {
         if (maHD == null || maHD.isBlank()) {
             throw new IllegalArgumentException("Mã hóa đơn không được để trống");
@@ -189,6 +215,7 @@ public class HoaDonService {
         }
         return chiTietHoaDonDAO.getChiTietByMaHD(maHD);
     }
+
     public double getTongTienHoaDon(String maHD) {
         if (maHD == null || maHD.isBlank()) {
             throw new IllegalArgumentException("Mã hóa đơn không được để trống");
@@ -198,6 +225,7 @@ public class HoaDonService {
         }
         return chiTietHoaDonDAO.getTongTienHoaDon(maHD);
     }
+
     public void xoaChiTietHoaDon(String maHD, String maMon) {
         if (maHD == null || maHD.isBlank()) {
             throw new IllegalArgumentException("Mã hóa đơn không được để trống");
@@ -215,22 +243,25 @@ public class HoaDonService {
             throw new RuntimeException("Xóa chi tiết hóa đơn thất bại");
         }
     }
+
     public void thanhToanHoaDon(String maHD) {
         capNhatTrangThaiHoaDon(maHD, TrangThaiHoaDon.DA_THANH_TOAN);
     }
+
     public int getTotalHoaDon() {
         List<HoaDon> list = getAllHoaDon();
         return list != null ? list.size() : 0;
     }
+
     public String getLastHoaDonID() {
         return hoaDonDAO.getLastHoaDonID();
     }
-    
+
     public void capNhatGioVao(String maHD, LocalDateTime now) {
         if (maHD == null || maHD.isBlank()) {
             throw new IllegalArgumentException("Mã hóa đơn không được để trống khi cập nhật giờ vào.");
         }
-        
+
         boolean success = hoaDonDAO.capNhatGioVao(maHD, now);
         if (!success) {
             throw new RuntimeException("Cập nhật giờ vào thất bại cho phiếu: " + maHD);
@@ -241,16 +272,16 @@ public class HoaDonService {
         if (maHD == null || maHD.isBlank()) {
             throw new IllegalArgumentException("Mã phiếu đặt không được để trống khi cập nhật giờ ra.");
         }
-        
-
 
         boolean success = hoaDonDAO.capNhatGioRa(maHD, now);
         if (!success) {
             throw new RuntimeException("Cập nhật giờ ra thất bại cho phiếu: " + maHD);
         }
     }
-	public HoaDon getHoaDonTheoMaPDB(String currentMaPhieuDatContext) {
-		if (currentMaPhieuDatContext == null || currentMaPhieuDatContext.isBlank()) return null;
-	    return hoaDonDAO.getHoaDonTheoMaPDB(currentMaPhieuDatContext);
-	}
+
+    public HoaDon getHoaDonTheoMaPDB(String currentMaPhieuDatContext) {
+        if (currentMaPhieuDatContext == null || currentMaPhieuDatContext.isBlank())
+            return null;
+        return hoaDonDAO.getHoaDonTheoMaPDB(currentMaPhieuDatContext);
+    }
 }
