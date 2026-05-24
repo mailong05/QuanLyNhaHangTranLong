@@ -1163,10 +1163,13 @@ public class MainForm extends javax.swing.JFrame {
     }
     
     public void startEditBanFromDatMon(Set<String> oldTables, PanelDatMon sourcePanel) {
-        showPanel(panelDatBan);
+        // 🌟 FIX LỖI 2B: Truyền dữ liệu setup TRƯỚC
         panelDatBan.setFlowOrigin("DAT_MON");
         panelDatBan.setPanelDatMon(sourcePanel);
-        panelDatBan.setSelectedTablesForEdit(oldTables, null); // Null cho ngày hôm nay (DAT_MON không có thoiGianPhieu)
+        panelDatBan.setSelectedTablesForEdit(oldTables, null); 
+        
+        showPanel(panelDatBan);
+        lblTenTrang.setText("ĐỔI BÀN");
     }
 
     public void startGopBanFlow(Set<String> currentTables, PanelDatMon sourcePanel) {

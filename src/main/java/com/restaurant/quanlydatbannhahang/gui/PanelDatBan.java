@@ -50,6 +50,7 @@ public class PanelDatBan extends javax.swing.JPanel {
     private BanService banService;
     private Set<String> lockedOriginTables = new HashSet<>();
 
+
     public PanelDatBan() {
         selectedTables = new HashSet<>();
         originalTablesForEdit = new HashSet<>();
@@ -97,28 +98,21 @@ public class PanelDatBan extends javax.swing.JPanel {
                 }
             }
 
-            // private void isEnableBtnGopBan() {
-            // // TODO Auto-generated method stub
-            // if (flowOrigin.isBlank()) {
-            // return;
-            // }
-            // if (flowOrigin.equals("GOP_BAN")) {
-            // btnDoiBan.setEnabled(true);
-            // }
-            // }
+            
         });
 
     }
 
     private void syncButtonVisibilityAndState() {
-        System.out.println(flowOrigin);
-        if (flowOrigin.equals("DAT_MON") || flowOrigin.equals("GOP_BAN")) {
+        if (flowOrigin.equals("GOP_BAN")) {
             btnGopBan.setEnabled(true);
             btnDoiBan.setEnabled(false);
-        } else if (flowOrigin.equals("QUAN_LY_DAT_TRUOC")) {
-            btnDoiBan.setEnabled(true);
+        } 
+        else if(editMode) {
+        	btnDoiBan.setEnabled(true);
             btnGopBan.setEnabled(false);
-        } else {
+        }
+        else {
             btnDoiBan.setEnabled(false);
             btnGopBan.setEnabled(false);
         }
@@ -137,13 +131,10 @@ public class PanelDatBan extends javax.swing.JPanel {
         this.lockedOriginTables = new HashSet<>(currentTables); // Dùng để cấm bỏ chọn
         this.originalTablesForEdit = new HashSet<>(currentTables); // Dùng để TÔ MÀU XANH DƯƠNG
         this.selectedTables = new HashSet<>(currentTables); // Dùng để lưu các bàn đang tick
+        loadSoDoBanFromDatabase();
         updateAllTableStatusFromDatabase();
-        this.panelSoDoBan.revalidate();
-        this.panelSoDoBan.repaint();
-        // Giả sử ông có 1 hàm hiển thị thanh xác nhận bên dưới (giống như đặt trước)
-        // btnXacNhan.setVisible(true);
-        System.out.println("PanelDatBan: Callback đã được gán: " + (this.panelDatMon != null));
-        System.out.println("PanelDatBan: Đã setup xong Gộp bàn với " + selectedTables.size() + " bàn.");
+
+        repaintAllUI();
     }
 
     /**
@@ -198,11 +189,7 @@ public class PanelDatBan extends javax.swing.JPanel {
             this.selectedTables.addAll(tablesToSelect);
         }
 
-        if (btnDoiBan != null)
-            btnDoiBan.setEnabled(true);
-
-        if (btnGopBan != null)
-            btnGopBan.setEnabled(true);
+       syncButtonVisibilityAndState();
 
         loadSoDoBanFromDatabase();
     }
@@ -802,7 +789,7 @@ public class PanelDatBan extends javax.swing.JPanel {
 
     private void setTableCardBackground(String maBan, JPanel card, TrangThaiBan trangThai) {
         // *** HIỂN THỊ KHÁC BIỆT KHI MERGE VS SWITCH ***
-        if (isMerging) {
+    	if (isMerging) {
             if (selectedTables.contains(maBan)) {
                 if (originalTablesForEdit.contains(maBan)) {
                     // Bàn gốc: Xanh dương, viền dày đặc
@@ -818,13 +805,9 @@ public class PanelDatBan extends javax.swing.JPanel {
                             BorderFactory.createEmptyBorder(10, 10, 10, 10)));
                 }
             } else {
-                // Bàn khác: Xám nhạt, không thể chọn
-                card.setBackground(new Color(240, 240, 240));
-                card.setBorder(BorderFactory.createCompoundBorder(
-                        BorderFactory.createLineBorder(new Color(200, 200, 200), 1, true),
-                        BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+                  applyDefaultStatusColor(card, trangThai);
             }
-            return;
+            return; 
         }
 
         if (isSwitching) {
@@ -1210,122 +1193,101 @@ public class PanelDatBan extends javax.swing.JPanel {
      * Thực hiện logic GỘP BÀN: Chỉ THÊM bàn mới, KHÔNG xóa bàn cũ
      */
     private void executeMergeTableFlow() {
-        if (panelDatMon == null && panelQuanLyDatBanTruoc == null) {
-            JOptionPane.showMessageDialog(this, "Không tìm thấy panel callback cho gộp bàn.",
-                    "Lỗi", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
         String currentMaPhieuDat = HoaDonDraftSession.getCurrentMaPhieuDatContext();
         if (currentMaPhieuDat == null || currentMaPhieuDat.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Không tìm thấy phiếu đặt hiện tại.",
-                    "Lỗi", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Không tìm thấy phiếu đặt hiện tại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         try {
-            // Xác định bàn mới: Bàn có trong selectedTables nhưng KHÔNG nằm trong
-            // originalTablesForEdit
             Set<String> newTables = new HashSet<>(selectedTables);
-            newTables.removeAll(originalTablesForEdit);
+            newTables.removeAll(lockedOriginTables); // Dùng lockedOriginTables thay vì originalTablesForEdit
 
-            if (newTables.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Vui lòng chọn bàn mới để gộp.",
-                        "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-                return;
-            }
-
-            // CHỈ THÊM bàn mới vào phiếu (KHÔNG XÓA)
             ChiTietPhieuDatBanService ctpService = new ChiTietPhieuDatBanService();
             BanService banService = new BanService();
             PhieuDatBanService pService = new PhieuDatBanService();
+            PhieuDatBan masterPhieu = pService.getPhieuDatBanTheoMa(currentMaPhieuDat);
 
-            // Lấy danh sách bàn đã tồn tại trong phiếu để tránh insert duplicate key
             Set<String> existingBans = new HashSet<>();
-            try {
-                List<ChiTietPhieuDatBan> existingChiTiets = ctpService.getChiTietByMaPhieuDat(currentMaPhieuDat);
-                if (existingChiTiets != null) {
-                    for (ChiTietPhieuDatBan ct : existingChiTiets) {
-                        if (ct != null && ct.getBan() != null && ct.getBan().getMaBan() != null) {
-                            existingBans.add(ct.getBan().getMaBan());
-                        }
+            List<ChiTietPhieuDatBan> list = ctpService.getChiTietByMaPhieuDat(currentMaPhieuDat);
+            for(ChiTietPhieuDatBan ct : list) {
+                existingBans.add(ct.getBan().getMaBan());
+            }
+            // 1. XỬ LÝ DATABASE: Gộp các bàn mới vào phiếu master
+            boolean needUpdateMaster = false; // Cờ kiểm tra xem có cần update phiếu Master không
+            for (String maBan : newTables) {
+                // Kiểm tra xem bàn mới có đang thuộc phiếu nào khác không
+            	if (existingBans.contains(maBan)) {
+                    continue; 
+                }
+            	PhieuDatBan pKhac = pService.getActivePhieuDatByBan(maBan);
+                if (pKhac != null && !pKhac.getMaPhieuDat().equals(currentMaPhieuDat)) {
+                    // Nếu bàn đó đang thuộc phiếu khác -> Hủy phiếu cũ đó để sáp nhập
+                	if (masterPhieu.getKhachHang() == null && pKhac.getKhachHang() != null) {
+                        masterPhieu.setKhachHang(pKhac.getKhachHang());
+                        needUpdateMaster = true;
                     }
+                    // b. Nếu phiếu bị hủy có Tiền Đặt Cọc -> Cộng dồn tiền cọc sang Master
+                    if (pKhac.getTienDatCoc() > 0) {
+                        masterPhieu.setTienDatCoc(masterPhieu.getTienDatCoc() + pKhac.getTienDatCoc());
+                        needUpdateMaster = true;
+                    }
+                	pService.capNhatTrangThaiPhieu(pKhac.getMaPhieuDat(), TrangThaiPhieuDat.DA_HUY);
                 }
-            } catch (Exception ex) {
-                // ignore and proceed; existingBans may be empty
+
+                // Thêm chi tiết bàn vào phiếu master
+                ChiTietPhieuDatBan ct = new ChiTietPhieuDatBan();
+                ct.setPhieuDatBan(masterPhieu);
+                ct.setBan(banService.getBanTheoMa(maBan));
+                ctpService.themChiTietPhieuDatBan(ct);
+                
+                // Cập nhật trạng thái
+                banService.capNhatTrangThaiBan(maBan, TrangThaiBan.DANG_DUNG);
+                existingBans.add(maBan); 
+            }
+            
+            if (needUpdateMaster) {
+                pService.capNhatPhieuDatBan(masterPhieu);
             }
 
-            for (String newBan : newTables) {
-                if (existingBans.contains(newBan)) {
-                    // Đã tồn tại chi tiết cho bàn này trong phiếu, bỏ qua
-                    continue;
-                }
-                Ban ban = banService.getBanTheoMa(newBan);
-                PhieuDatBan phieu = pService.getPhieuDatBanTheoMa(currentMaPhieuDat);
-
-                if (ban != null && phieu != null) {
-                    ChiTietPhieuDatBan newChiTiet = new ChiTietPhieuDatBan();
-                    newChiTiet.setPhieuDatBan(phieu);
-                    newChiTiet.setBan(ban);
-                    ctpService.themChiTietPhieuDatBan(newChiTiet);
-
-                    // Cập nhật trạng thái bàn mới thành DANG_DUNG (phục vụ)
-                    banService.capNhatTrangThaiBan(newBan, TrangThaiBan.DANG_DUNG);
-
-                    // Thêm vào existingBans để tránh duplicate khi loop tiếp
-                    existingBans.add(newBan);
-                }
-            }
-
-            // Cập nhật context
-            String newContext = HoaDonDraftSession
-                    .resolveMaBanContext(String.join(",", selectedTables));
-            // Gom các context nguồn (các bàn hiện tại và bàn mới) để merge dữ liệu draft
-            // (món, metadata)
+            // 2. XỬ LÝ RAM (HoaDonDraftSession)
+            String newContext = HoaDonDraftSession.normalizeMaBanContext(String.join(",", selectedTables));
             Set<String> sourceContexts = new HashSet<>();
             for (String tb : selectedTables) {
                 String src = HoaDonDraftSession.resolveMaBanContext(tb);
-                if (src != null && !src.isEmpty()) {
-                    sourceContexts.add(src);
-                }
+                if (src != null && !src.isEmpty()) sourceContexts.add(src);
             }
-            if (!sourceContexts.isEmpty()) {
-                HoaDonDraftSession.mergeContexts(sourceContexts, newContext);
-            }
+            
+           
+            HoaDonDraftSession.mergeContexts(sourceContexts, newContext);
             HoaDonDraftSession.setCurrentMaBanContext(newContext);
 
-            // Cập nhật UI và quay lại
+            // 3. CẬP NHẬT UI
             if (panelDatMon != null) {
+                panelDatMon.setDatMonContext(newContext); // ÉP load lại món
                 panelDatMon.updateMaBanContextForEdit(new HashSet<>(selectedTables));
-            } else if (panelQuanLyDatBanTruoc != null) {
-                panelQuanLyDatBanTruoc.updateMaBanForEdit(new HashSet<>(selectedTables));
             }
 
             this.updateAllTableStatusFromDatabase();
-            resetAllTablesUI();
             repaintAllUI();
 
+            // 4. QUAY VỀ PANEL TRƯỚC
             java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
             if (parentFrame instanceof MainForm) {
-                if (panelDatMon != null) {
-                    ((MainForm) parentFrame).goBackToPanelDatMon();
-                } else {
-                    ((MainForm) parentFrame).switchToQuanLyDatBanTruocTab();
-                }
+                if (panelDatMon != null) ((MainForm) parentFrame).goBackToPanelDatMon();
+                else ((MainForm) parentFrame).switchToQuanLyDatBanTruocTab();
             }
 
-            JOptionPane.showMessageDialog(this, "Gộp bàn thành công!",
-                    "Thành công", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Gộp bàn thành công!");
+
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Lỗi gộp bàn: " + ex.getMessage(),
-                    "Lỗi", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Lỗi gộp bàn: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
         } finally {
-            this.editMode = false;
             this.isMerging = false;
         }
     }
-
+    
     /**
      * Thực hiện logic ĐỔI BÀN: XÓA bàn cũ + THÊM bàn mới
      */
