@@ -1015,7 +1015,7 @@ public class MainForm extends javax.swing.JFrame {
         lblMenuDangXuat.setFont(new java.awt.Font("Segoe UI", 0, 18));
         lblMenuDangXuat.setForeground(new java.awt.Color(255, 255, 255));
         lblMenuDangXuat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icon_dangxuat.png")));
-        lblMenuDangXuat.setText("Đăng xuất");
+        lblMenuDangXuat.setText("Đăng xuất/Kết ca");
         panelDangXuat.add(lblMenuDangXuat);
         panelMenu.add(panelDangXuat);
         getContentPane().add(panelMenu, java.awt.BorderLayout.WEST);
