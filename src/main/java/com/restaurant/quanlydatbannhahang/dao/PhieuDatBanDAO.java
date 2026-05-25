@@ -215,18 +215,15 @@ public class PhieuDatBanDAO {
         List<String> dsBanTrong = new ArrayList<>();
         Connection connection = DatabaseConnection.getConnection();
         
-        // Logic: Lấy TẤT CẢ mã bàn NGOẠI TRỪ những bàn đang bận (DANG_DUNG) 
-        // và những bàn có phiếu đặt (DANG_CHO) trùng vào ngày 'targetTime'
         String sql = "SELECT maBan FROM BanAn WHERE maBan NOT IN (" +
                      "    SELECT ctpdb.maBan FROM ChiTietPhieuDatBan ctpdb " +
                      "    INNER JOIN PhieuDatBan pdb ON ctpdb.maPhieuDat = pdb.maPhieuDat " +
                      "    WHERE CONVERT(date, pdb.thoiGianDen) = ? " +
-                     "    AND pdb.trangThai = N'DANG_CHO'" + // Lưu ý: sửa lại value string cho khớp DB của ông
+                     "    AND pdb.trangThai = N'DANG_CHO'" +
                      ") AND trangThai != N'DANG_SU_DUNG'"; 
                      
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
-            // Lấy ngày từ targetTime để so sánh
             pstm.setDate(1, java.sql.Date.valueOf(targetTime.toLocalDate()));
             ResultSet rs = pstm.executeQuery();
             
@@ -249,7 +246,6 @@ public class PhieuDatBanDAO {
             while (rs.next()) {
                 Ban ban = new Ban();
                 ban.setMaBan(rs.getString("maBan"));
-                // additional Ban fields may be populated elsewhere
                 dsBan.add(ban);
             }
         } catch (Exception e) {
@@ -336,16 +332,13 @@ public class PhieuDatBanDAO {
 				pstm.setString(2, maPhieu);
 				return pstm.executeUpdate() > 0;
 			} catch (Exception e) {
-				// TODO: handle exceptione
 				e.printStackTrace();
 			}
     	}
         return false;
     }
     
- // Trong PhieuDatBanDAO.java
     public boolean hasReservationToday(String maBan) {
-        // Chỉ check những phiếu có thoiGianDen thuộc NGÀY HÔM NAY
         String sql = "SELECT COUNT(*) FROM PhieuDatBan pdb " +
                      "JOIN ChiTietPhieuDatBan ct ON pdb.maPhieuDat = ct.maPhieuDat " +
                      "WHERE ct.maBan = ? AND pdb.trangThai = 'DANG_CHO' " +
@@ -383,7 +376,6 @@ public class PhieuDatBanDAO {
                     banService.capNhatTrangThaiBanTrongChiTietPDB(chiTietList, TrangThaiBan.TRONG);
                     
                     coPhieuBiHuy = true;
-                    System.out.println("Hệ thống tự động hủy phiếu quá hạn: " + phieu.getMaPhieuDat());
                 }
             }
         } catch (Exception e) {
@@ -417,5 +409,26 @@ public class PhieuDatBanDAO {
         return dsPhieu;
     }
 
+    
+    public boolean kiemTraBanDaDuocDatTrongNgay(String maBan, LocalDate ngay, String maPhieuDatNgoaiLe) {
+        String sql = "SELECT COUNT(*) FROM PhieuDatBan pdb " +
+                     "JOIN ChiTietPhieuDatBan ct ON pdb.maPhieuDat = ct.maPhieuDat " +
+                     "WHERE ct.maBan = ? AND CAST(pdb.thoiGianDen AS DATE) = ? " +
+                     "AND pdb.trangThai = 'DANG_CHO' AND pdb.maPhieuDat != ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, maBan);
+            stmt.setDate(2, java.sql.Date.valueOf(ngay));
+            stmt.setString(3, maPhieuDatNgoaiLe);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0; 
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 	
 }

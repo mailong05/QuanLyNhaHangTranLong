@@ -271,17 +271,17 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
         pnlHeader.setOpaque(false);
         pnlHeader.setLayout(new java.awt.BorderLayout(0, 15));
 
-        lblTitle.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        lblTitle.setFont(new java.awt.Font("Segoe UI", 0, 18));
         lblTitle.setText("Quản lý thông tin bàn ăn trong nhà hàng");
         pnlHeader.add(lblTitle, java.awt.BorderLayout.WEST);
 
         pnlThongTinBan.setBackground(new java.awt.Color(255, 251, 233));
 
         lblMaPhieuDat.setText("Mã phiếu đặt:");
-        lblMaPhieuDat.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblMaPhieuDat.setFont(new java.awt.Font("Segoe UI", 0, 14));
 
         txtMaPhieuDat.setEditable(false);
-        txtMaPhieuDat.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtMaPhieuDat.setFont(new java.awt.Font("Segoe UI", 0, 14));
         txtMaPhieuDat.setFocusable(false);
         txtMaPhieuDat.setPreferredSize(new java.awt.Dimension(0, 35));
         txtMaPhieuDat.addActionListener(new java.awt.event.ActionListener() {
@@ -291,26 +291,26 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
         });
 
         lblMaKhachHang.setText("Số điện thoại");
-        lblMaKhachHang.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblMaKhachHang.setFont(new java.awt.Font("Segoe UI", 0, 14));
 
-        txtSoDienThoai.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtSoDienThoai.setFont(new java.awt.Font("Segoe UI", 0, 14));
         txtSoDienThoai.setPreferredSize(new java.awt.Dimension(0, 35));
 
         lblThoiGianDen.setText("Thời gian đến:");
-        lblThoiGianDen.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblThoiGianDen.setFont(new java.awt.Font("Segoe UI", 0, 14));
 
         lblGhiChu.setText("Trạng thái:");
-        lblGhiChu.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblGhiChu.setFont(new java.awt.Font("Segoe UI", 0, 14));
 
         lblMaNhanVien.setText("Mã nhân viên:");
-        lblMaNhanVien.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblMaNhanVien.setFont(new java.awt.Font("Segoe UI", 0, 14));
 
         txtMaNhanVien.setEditable(false);
-        txtMaNhanVien.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtMaNhanVien.setFont(new java.awt.Font("Segoe UI", 0, 14));
         txtMaNhanVien.setFocusable(false);
         txtMaNhanVien.setPreferredSize(new java.awt.Dimension(0, 35));
 
-        txtTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14));
         txtTimKiem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtTimKiemActionPerformed(evt);
@@ -318,7 +318,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
         });
 
         btnTimKiem.setText("Tìm kiếm");
-        btnTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14));
         btnTimKiem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTimKiemActionPerformed(evt);
@@ -326,7 +326,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
         });
 
         lblTienDatCoc.setText("Tiền đặt cọc:");
-        lblTienDatCoc.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblTienDatCoc.setFont(new java.awt.Font("Segoe UI", 0, 14));
 
         dtpThoiGianDen.setPreferredSize(new java.awt.Dimension(228, 35));
 
@@ -342,7 +342,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
         });
 
         lblMaBan.setText("Mã bàn:");
-        lblMaBan.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblMaBan.setFont(new java.awt.Font("Segoe UI", 0, 14));
 
         cbFilterTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cbFilterTrangThai.addActionListener(new java.awt.event.ActionListener() {
@@ -352,7 +352,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
         });
 
         lblSoLuong.setText("Số người:");
-        lblSoLuong.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblSoLuong.setFont(new java.awt.Font("Segoe UI", 0, 14));
 
         txtTienDatCoc.setEditable(false);
         txtTienDatCoc.setEnabled(false);
@@ -487,14 +487,14 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
         pnlButton.setLayout(new java.awt.BorderLayout(0, 5));
 
         btnTrangChu.setText("Trang Chủ");
-        btnTrangChu.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnTrangChu.setFont(new java.awt.Font("Segoe UI", 0, 14));
         btnTrangChu.setPreferredSize(new java.awt.Dimension(100, 27));
         pnlButton.add(btnTrangChu, java.awt.BorderLayout.WEST);
 
         pnlRightButtons.setBackground(new java.awt.Color(255, 251, 233));
         pnlRightButtons.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 15, 0));
 
-        btnXoaTrang.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnXoaTrang.setFont(new java.awt.Font("Segoe UI", 0, 14));
         btnXoaTrang.setText("Xóa trắng");
         btnXoaTrang.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -504,7 +504,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
         pnlRightButtons.add(btnXoaTrang);
 
         btnCapNhat.setText("Cập nhật");
-        btnCapNhat.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnCapNhat.setFont(new java.awt.Font("Segoe UI", 0, 14));
         btnCapNhat.setPreferredSize(new java.awt.Dimension(90, 27));
         btnCapNhat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -514,7 +514,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
         pnlRightButtons.add(btnCapNhat);
 
         btnXoa.setText("Xóa");
-        btnXoa.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnXoa.setFont(new java.awt.Font("Segoe UI", 0, 14));
         btnXoa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnXoaActionPerformed(evt);
@@ -523,7 +523,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
         pnlRightButtons.add(btnXoa);
 
         btnChonMon.setText("Chọn món");
-        btnChonMon.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnChonMon.setFont(new java.awt.Font("Segoe UI", 0, 14));
         btnChonMon.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnChonMonActionPerformed(evt);
@@ -532,7 +532,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
         pnlRightButtons.add(btnChonMon);
 
         btnDoiBan.setText("Đổi bàn");
-        btnDoiBan.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnDoiBan.setFont(new java.awt.Font("Segoe UI", 0, 14));
         btnDoiBan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDoiBanActionPerformed(evt);
@@ -578,11 +578,11 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
             }
         }
         
-        private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaTrangActionPerformed
+        private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {
                 refreshData();
                 cbFilterTrangThai.setSelectedIndex(0);
                 setupPlaceholder(txtTimKiem, "Nhập mã đặt bàn hoặc SĐT khách");
-        }// GEN-LAST:event_btnXoaTrangActionPerformed
+        }
 
         private void btnDoiBanActionPerformed(java.awt.event.ActionEvent evt) {
             try {
@@ -599,23 +599,19 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                 
                 Set<String> oldBanSet = getTableSetFromDB(maPDB);
 
-                // 1. HỎI Ý KIẾN NGƯỜI DÙNG TRƯỚC
                 int response = JOptionPane.showConfirmDialog(this,
                         "Bạn chắn chắc muốn chọn lại bàn?", "Nhắc nhở",
                         JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
 
-                // 2. CHỈ KHI BẤM YES MỚI ĐẨY DỮ LIỆU VÀ CHUYỂN TRANG
                 if (response == JOptionPane.YES_OPTION) {
                     if (panelDatBan != null) {
                         panelDatBan.setPanelQuanLyDatBanTruoc(this);
                         panelDatBan.setFlowOrigin("QUAN_LY_DAT_TRUOC");
-                        // Truyền dữ liệu bàn và thời gian
                         panelDatBan.setSelectedTablesForEdit(oldBanSet, phieu.getThoiGianDen());
                         storeMaPDBForEditMode(maPDB);
                         
                         MainForm mainForm = (MainForm) SwingUtilities.getWindowAncestor(this);
                         if (mainForm != null) {
-                            // 3. GỌI HÀM CHUYÊN DỤNG VỪA TẠO BÊN MAIN FORM
                             mainForm.startEditBanFromQuanLyDatTruoc();
                         }
                     } else {
@@ -701,9 +697,9 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                                 JOptionPane.INFORMATION_MESSAGE);
         }
 
-        private void cbFilterTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterTrangThaiActionPerformed
+        private void cbFilterTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {
                 filterAction();
-        }// GEN-LAST:event_cbFilterTrangThaiActionPerformed
+        }
 
         @SuppressWarnings("unchecked")
         private void filterAction() {
@@ -722,89 +718,115 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                 }
         }
 
-        private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCapNhatActionPerformed
-                try {
-                        String maPDB = txtMaPhieuDat.getText().trim();
-                        if (maPDB.isEmpty()) {
-                                JOptionPane.showMessageDialog(this, "Vui lòng chọn phiếu đặt bàn để cập nhật",
-                                                "Thông báo", JOptionPane.WARNING_MESSAGE);
-                                return;
-                        }
-                        PhieuDatBan phieu = pdbService.getPhieuDatBanTheoMa(maPDB);
-                        if (phieu == null) {
-                                JOptionPane.showMessageDialog(this, "Không tìm thấy phiếu đặt bàn", "Lỗi",
-                                                JOptionPane.ERROR_MESSAGE);
-                                return;
-                        }
-                        phieu.setSoLuongNguoi((Integer) spSoNguoi.getValue());
-                        phieu.setThoiGianDen(dtpThoiGianDen.getDateTimeStrict());
-                        String trangThaiStr = (String) cbTrangThai.getSelectedItem();
-                        TrangThaiPhieuDat trangThai = TrangThaiPhieuDat.fromDisplayName(trangThaiStr);
-                        phieu.setTrangThai(trangThai);
-                        double tienDatCoc = CurrencyUtility
-                                        .parseVND(txtTienDatCoc.getText().trim());
-                        phieu.setTienDatCoc(tienDatCoc);
-                        pdbService.capNhatPhieuDatBan(phieu);
-                        Set<String> newBanSet = null;
-                        if (newSelectedTablesForEdit != null && !newSelectedTablesForEdit.isEmpty()) {
-                                newBanSet = new HashSet<>(newSelectedTablesForEdit);
-                                newSelectedTablesForEdit = null;
-                        } else {
-                                String maBanText = txtMaBan.getText().trim();
-                                if (!maBanText.isEmpty()) {
-                                        newBanSet = new HashSet<>();
-                                        for (String ban : maBanText.split(",")) {
-                                                String banTrim = ban.trim();
-                                                if (!banTrim.isEmpty()) {
-                                                        newBanSet.add(banTrim);
-                                                }
-                                        }
-                                }
-                        }
-                        if (newBanSet != null && !newBanSet.isEmpty()) {
-                                Set<String> oldBanSet = getTableSetFromDB(maPDB);
-                                if (!oldBanSet.equals(newBanSet)) {
-                                        String oldContext = HoaDonDraftSession
-                                                        .normalizeMaBanContext(String.join(",", oldBanSet));
-                                        String newContext = HoaDonDraftSession
-                                                        .normalizeMaBanContext(String.join(",", newBanSet));
-                                        if (!oldContext.isEmpty() && !newContext.isEmpty()
-                                                        && !oldContext.equals(newContext)
-                                                        && HoaDonDraftSession.hasDraft(oldContext)) {
-                                                updateChiTietPhieuDatBan(maPDB, oldBanSet, newBanSet);
-                                                HoaDonDraftSession.migrateContext(oldContext, newContext);
-                                        } else {
-                                                updateChiTietPhieuDatBan(maPDB, oldBanSet, newBanSet);
-                                        }
-                                        Set<String> banCanThem = new HashSet<>(newBanSet);
-                                        banCanThem.removeAll(oldBanSet);
-                                        Set<String> banCanXoa = new HashSet<>(oldBanSet);
-                                        banCanXoa.removeAll(newBanSet);
-                                        for (String maBan : banCanXoa) {
-                                            capNhatTrangThaiBanThongMinh(maBan); 
-                                        }
-                                        for (String maBan : banCanThem) {
-                                            capNhatTrangThaiBanThongMinh(maBan);
-                                        }
-                                }
-                        }
-                        if (panelDatBan != null) {
-                                panelDatBan.refreshData();
-                        }
-                        JOptionPane.showMessageDialog(this, "Cập nhật phiếu đặt bàn thành công", "Thành công",
-                                        JOptionPane.INFORMATION_MESSAGE);
-                        refreshData();
-                } catch (Exception e) {
-                        JOptionPane.showMessageDialog(this, "Lỗi khi cập nhật: " + e.getMessage(), "Lỗi",
-                                        JOptionPane.ERROR_MESSAGE);
-                        e.printStackTrace();
-                }
-        }
+        private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {
+            try {
+                    String maPDB = txtMaPhieuDat.getText().trim();
+                    if (maPDB.isEmpty()) {
+                            JOptionPane.showMessageDialog(this, "Vui lòng chọn phiếu đặt bàn để cập nhật",
+                                            "Thông báo", JOptionPane.WARNING_MESSAGE);
+                            return;
+                    }
+                    PhieuDatBan phieu = pdbService.getPhieuDatBanTheoMa(maPDB);
+                    if (phieu == null) {
+                            JOptionPane.showMessageDialog(this, "Không tìm thấy phiếu đặt bàn", "Lỗi",
+                                            JOptionPane.ERROR_MESSAGE);
+                            return;
+                    }
 
+                    Set<String> newBanSet = null;
+                    if (newSelectedTablesForEdit != null && !newSelectedTablesForEdit.isEmpty()) {
+                            newBanSet = new HashSet<>(newSelectedTablesForEdit);
+                    } else {
+                            String maBanText = txtMaBan.getText().trim();
+                            if (!maBanText.isEmpty()) {
+                                    newBanSet = new HashSet<>();
+                                    for (String ban : maBanText.split(",")) {
+                                            String banTrim = ban.trim();
+                                            if (!banTrim.isEmpty()) {
+                                                    newBanSet.add(banTrim);
+                                            }
+                                    }
+                            }
+                    }
+
+                    java.time.LocalDateTime newThoiGianDen = dtpThoiGianDen.getDateTimeStrict();
+                    String trangThaiStr = (String) cbTrangThai.getSelectedItem();
+                    TrangThaiPhieuDat trangThaiMoi = TrangThaiPhieuDat.fromDisplayName(trangThaiStr);
+
+                    if (newBanSet != null && !newBanSet.isEmpty() && trangThaiMoi == TrangThaiPhieuDat.DANG_CHO) {
+                            java.time.LocalDate targetDate = newThoiGianDen.toLocalDate();
+                            java.util.List<String> banTrung = new java.util.ArrayList<>();
+                            
+                            for (String maBan : newBanSet) {
+                                    if (pdbService.kiemTraBanDaDuocDatTrongNgay(maBan, targetDate, maPDB)) {
+                                            banTrung.add(maBan);
+                                    }
+                            }
+
+                            if (!banTrung.isEmpty()) {
+                                    java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                                    JOptionPane.showMessageDialog(this,
+                                        "Các bàn sau đã có khách đặt vào ngày " + targetDate.format(formatter) + 
+                                        ":\n" + String.join(", ", banTrung) + "\n\nVui lòng chọn ngày khác hoặc đổi bàn!",
+                                        "Trùng lịch đặt bàn", JOptionPane.WARNING_MESSAGE);
+                                    return; 
+                            }
+                    }
+
+                    phieu.setSoLuongNguoi((Integer) spSoNguoi.getValue());
+                    phieu.setThoiGianDen(newThoiGianDen);
+                    phieu.setTrangThai(trangThaiMoi);
+                    double tienDatCoc = CurrencyUtility.parseVND(txtTienDatCoc.getText().trim());
+                    phieu.setTienDatCoc(tienDatCoc);
+                    
+                    pdbService.capNhatPhieuDatBan(phieu);
+
+                    if (newSelectedTablesForEdit != null && !newSelectedTablesForEdit.isEmpty()) {
+                            newSelectedTablesForEdit = null;
+                    }
+
+                    if (newBanSet != null && !newBanSet.isEmpty()) {
+                            Set<String> oldBanSet = getTableSetFromDB(maPDB);
+                            if (!oldBanSet.equals(newBanSet)) {
+                                    String oldContext = HoaDonDraftSession
+                                                    .normalizeMaBanContext(String.join(",", oldBanSet));
+                                    String newContext = HoaDonDraftSession
+                                                    .normalizeMaBanContext(String.join(",", newBanSet));
+                                    if (!oldContext.isEmpty() && !newContext.isEmpty()
+                                                    && !oldContext.equals(newContext)
+                                                    && HoaDonDraftSession.hasDraft(oldContext)) {
+                                            updateChiTietPhieuDatBan(maPDB, oldBanSet, newBanSet);
+                                            HoaDonDraftSession.migrateContext(oldContext, newContext);
+                                    } else {
+                                            updateChiTietPhieuDatBan(maPDB, oldBanSet, newBanSet);
+                                    }
+                                    Set<String> banCanThem = new HashSet<>(newBanSet);
+                                    banCanThem.removeAll(oldBanSet);
+                                    Set<String> banCanXoa = new HashSet<>(oldBanSet);
+                                    banCanXoa.removeAll(newBanSet);
+                                    for (String maBan : banCanXoa) {
+                                        capNhatTrangThaiBanThongMinh(maBan); 
+                                    }
+                                    for (String maBan : banCanThem) {
+                                        capNhatTrangThaiBanThongMinh(maBan);
+                                    }
+                            }
+                    }
+                    if (panelDatBan != null) {
+                            panelDatBan.refreshData();
+                    }
+                    JOptionPane.showMessageDialog(this, "Cập nhật phiếu đặt bàn thành công", "Thành công",
+                                    JOptionPane.INFORMATION_MESSAGE);
+                    refreshData();
+            } catch (Exception e) {
+                    JOptionPane.showMessageDialog(this, "Lỗi khi cập nhật: " + e.getMessage(), "Lỗi",
+                                    JOptionPane.ERROR_MESSAGE);
+                    e.printStackTrace();
+            }
+    }
         
         
-        // GEN-LAST:event_btnCapNhatActionPerformed
-        private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaActionPerformed
+        private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {
                 try {
                         String maPDB = txtMaPhieuDat.getText().trim();
                         if (maPDB.isEmpty()) {
@@ -833,12 +855,12 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                                         JOptionPane.ERROR_MESSAGE);
                         e.printStackTrace();
                 }
-        }// GEN-LAST:event_btnXoaActionPerformed
+        }
 
-        private void txtMaPhieuDatActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtMaPhieuDatActionPerformed
-        }// GEN-LAST:event_txtMaPhieuDatActionPerformed
+        private void txtMaPhieuDatActionPerformed(java.awt.event.ActionEvent evt) {
+        }
 
-        private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTimKiemActionPerformed
+        private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {
                 try {
                         String searchText = txtTimKiem.getText().trim();
                         if (searchText.isEmpty() || searchText.equals("Nhập mã đặt bàn hoặc SĐT khách")) {
@@ -868,14 +890,14 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                                         JOptionPane.ERROR_MESSAGE);
                         e.printStackTrace();
                 }
-        }// GEN-LAST:event_btnTimKiemActionPerformed
+        }
 
-        private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtTimKiemActionPerformed
-        }// GEN-LAST:event_txtTimKiemActionPerformed
+        private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {
+        }
 
-        private void btnChonMonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnChonMonActionPerformed
+        private void btnChonMonActionPerformed(java.awt.event.ActionEvent evt) {
                 chonMonAction();
-        }// GEN-LAST:event_btnChonMonActionPerformed
+        }
 
         private void chonMonAction() {
                 int rowSelected = tableBan.getSelectedRow();
@@ -919,8 +941,8 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                 txtTienDatCoc.setText(com.restaurant.quanlydatbannhahang.util.CurrencyUtility.formatVND(tienDatCoc));
         }
 
-        private void txtMaBanActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtMaBanActionPerformed
-        }// GEN-LAST:event_txtMaBanActionPerformed
+        private void txtMaBanActionPerformed(java.awt.event.ActionEvent evt) {
+        }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCapNhat;
     private javax.swing.JButton btnChonMon;
