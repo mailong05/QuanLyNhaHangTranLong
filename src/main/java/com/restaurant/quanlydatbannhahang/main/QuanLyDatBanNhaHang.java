@@ -1,31 +1,23 @@
 package com.restaurant.quanlydatbannhahang.main;
-
 import com.restaurant.quanlydatbannhahang.connectDB.DatabaseConnection;
 import javax.swing.JOptionPane;
 import com.restaurant.quanlydatbannhahang.gui.LoadingScreen;
 import com.restaurant.quanlydatbannhahang.gui.LoginForm;
 import com.restaurant.quanlydatbannhahang.gui.UIConfiguration;
-
 public class QuanLyDatBanNhaHang {
-
     public static void main(String[] args) {
         UIConfiguration.setupUI();
-
-
         LoadingScreen sp = new LoadingScreen();
-        sp.setLocationRelativeTo(null); 
+        sp.setLocationRelativeTo(null);
         sp.setVisible(true);
-
         new Thread(() -> {
             try {
                 for (int i = 0; i <= 100; i++) {
                     Thread.sleep(30);
                     final int p = i;
-
                     java.awt.EventQueue.invokeLater(() -> {
                         sp.prgLoading.setValue(p);
                         sp.lblPercentage.setText(p + "%");
-
                         if (p == 10) {
                             sp.lblStatus.setText("Turning on Modules...");
                         }
@@ -34,7 +26,6 @@ public class QuanLyDatBanNhaHang {
                         }
                         if (p == 50) {
                             sp.lblStatus.setText("Connecting to Database...");
-
                             if (DatabaseConnection.getConnection() == null) {
                                 sp.dispose();
                                 JOptionPane.showMessageDialog(null,
@@ -55,7 +46,6 @@ public class QuanLyDatBanNhaHang {
                         if (p == 80) {
                             sp.lblStatus.setText("Launching Application...");
                         }
-
                         if (p == 100) {
                             sp.dispose();
                             new LoginForm().setVisible(true);

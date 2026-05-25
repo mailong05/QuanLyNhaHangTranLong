@@ -1,5 +1,4 @@
 package com.restaurant.quanlydatbannhahang.gui;
-
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -11,23 +10,13 @@ import java.util.List;
 import java.util.ArrayList;
 import java.awt.event.ActionListener;
 import com.restaurant.quanlydatbannhahang.entity.MonAn;
-
-/**
- *
- * @author nguye
- */
 public class PanelDanhSachMonAn extends javax.swing.JPanel {
     private static final int TABLE_IMAGE_SIZE = 72;
     private static final int TABLE_IMAGE_ROW_HEIGHT = 84;
     private static final int TABLE_IMAGE_VERTICAL_PADDING = 4;
-
     private MonAnService monAnService;
     private List<MonAn> allMonAn;
     private boolean imagePreloadStarted;
-
-    /**
-     * Creates new form PanelQuanLyMonAn
-     */
     public PanelDanhSachMonAn() {
         initComponents();
         monAnService = new MonAnService();
@@ -35,14 +24,12 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
         loadDataToComboBoxes();
         loadDataToTable();
     }
-
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
     // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
         pnlHeader = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         pnlThongTinKhuyenMai = new javax.swing.JPanel();
@@ -55,35 +42,28 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
         pnlButton = new javax.swing.JPanel();
         btnTrangChu = new javax.swing.JButton();
         btnXoaTrang = new javax.swing.JButton();
-
         setBackground(new java.awt.Color(255, 251, 233));
         setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 60, 20, 60));
         setLayout(new java.awt.BorderLayout(0, 15));
-
         pnlHeader.setOpaque(false);
         pnlHeader.setLayout(new java.awt.BorderLayout(0, 15));
-
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18));
         jLabel1.setText("Quản lý thông tin món ăn ");
         pnlHeader.add(jLabel1, java.awt.BorderLayout.WEST);
-
         pnlThongTinKhuyenMai.setBackground(new java.awt.Color(255, 251, 233));
-
-        txtTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14));
         txtTimKiem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtTimKiemActionPerformed(evt);
             }
         });
-
-        btnTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14));
         btnTimKiem.setText("Tìm kiếm");
         btnTimKiem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTimKiemActionPerformed(evt);
             }
         });
-
         cbFilterLoaiMonAn.setModel(
                 new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cbFilterLoaiMonAn.addActionListener(new java.awt.event.ActionListener() {
@@ -91,7 +71,6 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
                 cbFilterLoaiMonAnActionPerformed(evt);
             }
         });
-
         cbFilterTrangThai.setModel(
                 new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cbFilterTrangThai.addActionListener(new java.awt.event.ActionListener() {
@@ -99,7 +78,6 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
                 cbFilterTrangThaiActionPerformed(evt);
             }
         });
-
         javax.swing.GroupLayout pnlThongTinKhuyenMaiLayout = new javax.swing.GroupLayout(pnlThongTinKhuyenMai);
         pnlThongTinKhuyenMai.setLayout(pnlThongTinKhuyenMaiLayout);
         pnlThongTinKhuyenMaiLayout.setHorizontalGroup(
@@ -135,20 +113,15 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
                                                 .addComponent(cbFilterLoaiMonAn))
                                         .addComponent(cbFilterTrangThai))
                                 .addContainerGap()));
-
         pnlHeader.add(pnlThongTinKhuyenMai, java.awt.BorderLayout.PAGE_END);
-
         add(pnlHeader, java.awt.BorderLayout.PAGE_START);
-
         scrTableMonAn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 scrTableMonAnMouseClicked(evt);
             }
         });
-
         tableMonAn.setModel(new javax.swing.table.DefaultTableModel(
                 new Object[][] {
-
                 },
                 new String[] {
                         "Hình ảnh", "Mã món", "Tên món", "Đơn giá", "Đơn vị tính", "Loại món ăn", "Trạng thái"
@@ -156,24 +129,19 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
             boolean[] canEdit = new boolean[] {
                     false, false, false, false, false, false, false
             };
-
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit[columnIndex];
             }
         });
         tableMonAn.setRowHeight(35);
         scrTableMonAn.setViewportView(tableMonAn);
-
         add(scrTableMonAn, java.awt.BorderLayout.CENTER);
-
         pnlButton.setBackground(new java.awt.Color(255, 251, 233));
         pnlButton.setLayout(new java.awt.BorderLayout());
-
-        btnTrangChu.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnTrangChu.setFont(new java.awt.Font("Segoe UI", 0, 14));
         btnTrangChu.setText("Trang Chủ");
         pnlButton.add(btnTrangChu, java.awt.BorderLayout.WEST);
-
-        btnXoaTrang.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnXoaTrang.setFont(new java.awt.Font("Segoe UI", 0, 14));
         btnXoaTrang.setText("Xóa trắng");
         btnXoaTrang.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -181,23 +149,16 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
             }
         });
         pnlButton.add(btnXoaTrang, java.awt.BorderLayout.EAST);
-
         add(pnlButton, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtTimKiemActionPerformed
-        // TODO add your handling code here:
+    private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {
         searchAndFilter();
-    }// GEN-LAST:event_txtTimKiemActionPerformed
-
-    private void cbFilterTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterTrangThaiActionPerformed
+    }
+    private void cbFilterTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {
         filterTable();
-    }// GEN-LAST:event_cbFilterTrangThaiActionPerformed
-
+    }
     private void customUI() {
-        // Placeholder cho txtTimKiem
         setupPlaceholder(txtTimKiem, "Nhập tên món ăn");
-
         this.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mousePressed(java.awt.event.MouseEvent evt) {
@@ -207,8 +168,6 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
                 }
             }
         });
-
-        // Renderer cho cột Lương (Index 5)
         tableMonAn.getColumnModel().getColumn(3).setCellRenderer(new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
@@ -217,43 +176,31 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
                     value = com.restaurant.quanlydatbannhahang.util.CurrencyUtility
                             .formatVND(((Number) value).doubleValue());
                 }
-                // Vừa format tiền, vừa căn GIỮA (hoặc PHẢI tùy ông chọn)
                 setHorizontalAlignment(JLabel.CENTER);
                 return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
             }
         });
-
-        // Gắn sự kiện quay về Trang Chủ
         MainForm.attachGoHomeListener(btnTrangChu, this);
     }
-
     private void loadDataToComboBoxes() {
         try {
-            // Load LoaiMonAn enum
             ActionListener[] loaiMonAnListener = cbFilterLoaiMonAn.getActionListeners();
             ActionListener[] trangThaiListener = cbFilterTrangThai.getActionListeners();
-
-            // Remove listeners
             for (ActionListener listener : loaiMonAnListener) {
                 cbFilterLoaiMonAn.removeActionListener(listener);
             }
-
             for (ActionListener listener : trangThaiListener) {
                 cbFilterTrangThai.removeActionListener(listener);
             }
-
             cbFilterTrangThai.removeAllItems();
             cbFilterTrangThai.addItem("Trạng thái");
             ComboBoxEnumLoader.loadTrangThaiMonAnToComboBox(cbFilterTrangThai);
-
             cbFilterLoaiMonAn.removeAllItems();
             cbFilterLoaiMonAn.addItem("Loại món ăn");
             ComboBoxEnumLoader.loadLoaiMonAnToComboBox(cbFilterLoaiMonAn);
-
             for (java.awt.event.ActionListener listener : loaiMonAnListener) {
                 cbFilterLoaiMonAn.addActionListener(listener);
             }
-
             for (java.awt.event.ActionListener listener : trangThaiListener) {
                 cbFilterTrangThai.addActionListener(listener);
             }
@@ -262,58 +209,41 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Lỗi load dữ liệu filter: " + e.getMessage());
         }
     }
-
     private List<MonAn> ensureMonAnDataLoaded() {
         if (allMonAn == null) {
             allMonAn = monAnService.getAllMonAn();
         }
         return allMonAn;
     }
-
     private void preloadImagesInBackground(List<MonAn> monAnList) {
         if (imagePreloadStarted || monAnList == null || monAnList.isEmpty()) {
             return;
         }
-
         List<String> imagePaths = new ArrayList<>();
         for (MonAn monAn : monAnList) {
             if (monAn != null && monAn.getUrlHinhAnh() != null && !monAn.getUrlHinhAnh().trim().isEmpty()) {
                 imagePaths.add(monAn.getUrlHinhAnh());
             }
         }
-
-        // Warm-up một phần ảnh đầu tiên để giảm delay render lần đầu.
         ImageUtil.preloadFirstN(imagePaths, TABLE_IMAGE_SIZE, 20);
         ImageUtil.preloadImagesAsync(imagePaths, TABLE_IMAGE_SIZE);
         imagePreloadStarted = true;
     }
-
-    /**
-     * Tao placeholder cho TextField
-     * Khi focus vao, placeholder bien mat
-     * Khi focus out va trong, placeholder xuat hien lai
-     */
     private void setupPlaceholder(JTextField textField, String placeholder) {
         Color placeholderColor = new Color(153, 153, 153);
         Color textColor = new Color(0, 0, 0);
-
-        // Set text mac dinh va mau
         textField.setText(placeholder);
         textField.setForeground(placeholderColor);
-
         textField.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusGained(java.awt.event.FocusEvent evt) {
-                // Khi focus vao, neu la placeholder thi xoa
                 if (textField.getText().equals(placeholder)) {
                     textField.setText("");
                     textField.setForeground(textColor);
                 }
             }
-
             @Override
             public void focusLost(java.awt.event.FocusEvent evt) {
-                // Khi focus out, neu trong thi hien thi placeholder
                 if (textField.getText().isEmpty()) {
                     textField.setText(placeholder);
                     textField.setForeground(placeholderColor);
@@ -321,7 +251,6 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
             }
         });
     }
-
     private void applyCardStyle(JPanel panel, int radius) {
         panel.setOpaque(false);
         panel.setUI(new javax.swing.plaf.PanelUI() {
@@ -335,14 +264,12 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
             }
         });
     }
-
     private void loadDataToTable() {
         try {
             List<MonAn> monAnList = ensureMonAnDataLoaded();
             preloadImagesInBackground(monAnList);
             DefaultTableModel model = (DefaultTableModel) tableMonAn.getModel();
             model.setRowCount(0);
-
             for (MonAn monAn : monAnList) {
                 model.addRow(new Object[] {
                         ImageUtil.loadImageIcon(monAn.getUrlHinhAnh(), TABLE_IMAGE_SIZE),
@@ -359,31 +286,23 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
             e.printStackTrace();
         }
     }
-
     private void centerTableColumns(JTable table) {
-        // Column 0 là hình ảnh - dùng ImageRenderer
         ImageRenderer imageRenderer = new ImageRenderer();
         table.getColumnModel().getColumn(0).setCellRenderer(imageRenderer);
         table.getColumnModel().getColumn(0).setPreferredWidth(100);
         table.setRowHeight(TABLE_IMAGE_ROW_HEIGHT);
-
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        // Chỉ căn giữa các cột trừ cột ảnh và cột đơn giá vì đã có renderer riêng
         for (int i = 0; i < table.getColumnCount(); i++) {
             if (i != 0 && i != 3) {
                 table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
             }
         }
     }
-
-    // Image loading is now handled by ImageUtil class
     @Deprecated
     private ImageIcon loadImageIcon(String imagePath) {
         return ImageUtil.loadImageIcon(imagePath, TABLE_IMAGE_SIZE);
     }
-
-    // Custom renderer for displaying images in table cells
     private static class ImageRenderer extends DefaultTableCellRenderer {
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value,
@@ -401,30 +320,23 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
             return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
         }
     }
-
     private void filterTable() {
         List<MonAn> monAnList = ensureMonAnDataLoaded();
         DefaultTableModel model = (DefaultTableModel) tableMonAn.getModel();
         model.setRowCount(0);
-
         String selectedLoaiMonAn = (String) cbFilterLoaiMonAn.getSelectedItem();
         String selectedTrangThai = (String) cbFilterTrangThai.getSelectedItem();
-
         for (MonAn monAn : monAnList) {
-            // Check LoaiMonAn filter
             if (selectedLoaiMonAn != null && !selectedLoaiMonAn.isEmpty() && !selectedLoaiMonAn.equals("Loại món ăn")) {
                 if (monAn.getTenLoai() == null || !monAn.getTenLoai().getDisplayName().equals(selectedLoaiMonAn)) {
                     continue;
                 }
             }
-
-            // Check TrangThai filter
             if (selectedTrangThai != null && !selectedTrangThai.isEmpty() && !selectedTrangThai.equals("Trạng thái")) {
                 if (monAn.getTrangThai() == null || !monAn.getTrangThai().getDisplayName().equals(selectedTrangThai)) {
                     continue;
                 }
             }
-
             model.addRow(new Object[] {
                     ImageUtil.loadImageIcon(monAn.getUrlHinhAnh(), TABLE_IMAGE_SIZE),
                     monAn.getMaMon(),
@@ -437,7 +349,6 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
         }
         centerTableColumns(tableMonAn);
     }
-
     private void searchAndFilter() {
         List<MonAn> monAnList = ensureMonAnDataLoaded();
         DefaultTableModel model = (DefaultTableModel) tableMonAn.getModel();
@@ -445,23 +356,17 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
         String searchText = txtTimKiem.getText().trim().toLowerCase();
         String selectedLoaiMonAn = (String) cbFilterLoaiMonAn.getSelectedItem();
         String selectedTrangThai = (String) cbFilterTrangThai.getSelectedItem();
-
         for (MonAn monAn : monAnList) {
-            // Check LoaiMonAn filter
             if (selectedLoaiMonAn != null && !selectedLoaiMonAn.isEmpty() && !selectedLoaiMonAn.equals("Loại món ăn")) {
                 if (monAn.getTenLoai() == null || !monAn.getTenLoai().getDisplayName().equals(selectedLoaiMonAn)) {
                     continue;
                 }
             }
-
-            // Check TrangThai filter
             if (selectedTrangThai != null && !selectedTrangThai.isEmpty() && !selectedTrangThai.equals("Trạng thái")) {
                 if (monAn.getTrangThai() == null || !monAn.getTrangThai().getDisplayName().equals(selectedTrangThai)) {
                     continue;
                 }
             }
-
-            // Check search text
             if (!searchText.isEmpty()) {
                 String tenMonAn = monAn.getTenMon() != null ? monAn.getTenMon().toLowerCase() : "";
                 String maMon = monAn.getMaMon() != null ? monAn.getMaMon().toLowerCase() : "";
@@ -469,7 +374,6 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
                     continue;
                 }
             }
-
             model.addRow(new Object[] {
                     ImageUtil.loadImageIcon(monAn.getUrlHinhAnh(), TABLE_IMAGE_SIZE),
                     monAn.getMaMon(),
@@ -482,43 +386,34 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
         }
         centerTableColumns(tableMonAn);
     }
-
     public void refreshData() {
         cbFilterLoaiMonAn.setSelectedIndex(0);
         resetPlaceholder(txtTimKiem, "Nhập tên món ăn");
         loadDataToComboBoxes();
         loadDataToTable();
     }
-
     private void resetPlaceholder(JTextField textField, String placeholder) {
         Color placeholderColor = new Color(153, 153, 153);
         textField.setText(placeholder);
         textField.setForeground(placeholderColor);
     }
-
     private boolean isMouseOverTable(java.awt.event.MouseEvent evt) {
         java.awt.Point p = evt.getPoint();
         java.awt.Point tablePoint = SwingUtilities.convertPoint(this, p, tableMonAn);
         return tableMonAn.getBounds().contains(tablePoint);
     }
-
-    private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaTrangActionPerformed
+    private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {
         refreshData();
         resetPlaceholder(txtTimKiem, "Nhập tên món ăn");
-    }// GEN-LAST:event_btnXoaTrangActionPerformed
-
-    private void cbFilterLoaiMonAnActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterLoaiMonAnActionPerformed
+    }
+    private void cbFilterLoaiMonAnActionPerformed(java.awt.event.ActionEvent evt) {
         filterTable();
-    }// GEN-LAST:event_cbFilterLoaiMonAnActionPerformed
-
-    private void scrTableMonAnMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_scrTableMonAnMouseClicked
-        // TODO add your handling code here:
-    }// GEN-LAST:event_scrTableMonAnMouseClicked
-
-    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTimKiemActionPerformed
+    }
+    private void scrTableMonAnMouseClicked(java.awt.event.MouseEvent evt) {
+    }
+    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {
         searchAndFilter();
-    }// GEN-LAST:event_btnTimKiemActionPerformed
-
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnTimKiem;
     private javax.swing.JButton btnTrangChu;

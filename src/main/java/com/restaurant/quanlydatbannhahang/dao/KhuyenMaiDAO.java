@@ -1,5 +1,4 @@
 package com.restaurant.quanlydatbannhahang.dao;
-
 import com.restaurant.quanlydatbannhahang.connectDB.DatabaseConnection;
 import com.restaurant.quanlydatbannhahang.entity.KhuyenMai;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiKhuyenMai;
@@ -10,21 +9,12 @@ import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
 public class KhuyenMaiDAO {
-
     public KhuyenMaiDAO() {
     }
-
-    /**
-     * Lấy mã khuyến mãi cuối cùng
-     * 
-     * @return Mã khuyến mãi cuối cùng (VD: KM012) hoặc null
-     */
     public String getLastKhuyenMaiID() {
         return IDQueryHelper.getLastID("KhuyenMai", "maKM");
     }
-
     private KhuyenMai buildKhuyenMaiFromResultSet(ResultSet rs) {
         try {
             String maKM = rs.getString("maKM");
@@ -34,16 +24,13 @@ public class KhuyenMaiDAO {
             LocalDate ngayKetThuc = rs.getDate("ngayKetThuc").toLocalDate();
             double dieuKienToiThieu = rs.getDouble("dieuKienToiThieu");
             String trangThaiStr = rs.getString("trangThai");
-
             TrangThaiKhuyenMai trangThai = TrangThaiKhuyenMai.valueOf(trangThaiStr);
-
             return new KhuyenMai(maKM, tenKM, giaTriGiam, ngayBatDau, ngayKetThuc, dieuKienToiThieu, trangThai);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
-
     public boolean themKhuyenMai(KhuyenMai km) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "insert into KhuyenMai (maKM, tenKM, giaTriGiam, ngayBatDau, ngayKetThuc, dieuKienToiThieu, trangThai) values (?,?,?,?,?,?,?)";
@@ -62,7 +49,6 @@ public class KhuyenMaiDAO {
         }
         return false;
     }
-
     public KhuyenMai getKhuyenMaiTheoMa(String maKM) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from KhuyenMai where maKM = ?";
@@ -78,7 +64,6 @@ public class KhuyenMaiDAO {
         }
         return null;
     }
-
     public List<KhuyenMai> getAllKhuyenMai() {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from KhuyenMai";
@@ -97,7 +82,6 @@ public class KhuyenMaiDAO {
         }
         return dsKhuyenMai;
     }
-
     public List<KhuyenMai> getKhuyenMaiConHieuLuc() {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from KhuyenMai where trangThai = ? and ngayBatDau <= getdate() and ngayKetThuc >= getdate()";
@@ -117,7 +101,6 @@ public class KhuyenMaiDAO {
         }
         return dsKhuyenMai;
     }
-
     public List<KhuyenMai> getKhuyenMaiConHieuLuc(LocalDate ngay) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from KhuyenMai where trangThai = ? and ngayBatDau <= ? and ngayKetThuc >= ?";
@@ -139,7 +122,6 @@ public class KhuyenMaiDAO {
         }
         return dsKhuyenMai;
     }
-
     public boolean capNhatKhuyenMai(KhuyenMai km) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "update KhuyenMai set tenKM = ?, giaTriGiam = ?, ngayBatDau = ?, ngayKetThuc = ?, dieuKienToiThieu = ?, trangThai = ? where maKM = ?";
@@ -158,7 +140,6 @@ public class KhuyenMaiDAO {
         }
         return false;
     }
-
     public boolean xoaKhuyenMai(String maKM) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "update KhuyenMai set trangThai = ? where maKM = ?";
@@ -172,7 +153,6 @@ public class KhuyenMaiDAO {
         }
         return false;
     }
-
     public List<KhuyenMai> timKhuyenMaiTheoTen(String tenKM) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from KhuyenMai where tenKM like ?";
@@ -192,7 +172,6 @@ public class KhuyenMaiDAO {
         }
         return dsKhuyenMai;
     }
-
     public List<KhuyenMai> getKhuyenMaiTheoTrangThai(TrangThaiKhuyenMai trangThai) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from KhuyenMai where trangThai = ?";
@@ -212,7 +191,6 @@ public class KhuyenMaiDAO {
         }
         return dsKhuyenMai;
     }
-
     public List<KhuyenMai> getKhuyenMaiTheoNgay(LocalDate ngayBatDau, LocalDate ngayKetThuc) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from KhuyenMai where (ngayBatDau between ? and ?) or (ngayKetThuc between ? and ?)";

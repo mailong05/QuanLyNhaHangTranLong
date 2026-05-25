@@ -1,49 +1,39 @@
 package com.restaurant.quanlydatbannhahang.gui;
 
-// UIConfiguration để setup FlatLaf L&F
-import com.restaurant.quanlydatbannhahang.gui.UIConfiguration;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.Set;
-
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-
 import com.restaurant.quanlydatbannhahang.service.PhieuDatBanService;
+import com.restaurant.quanlydatbannhahang.session.ReservationSession;
+import com.restaurant.quanlydatbannhahang.util.CurrencyUtility;
 import com.restaurant.quanlydatbannhahang.util.IDGeneratorHelper;
 import com.restaurant.quanlydatbannhahang.util.IDQueryHelper;
 
 public class DatBanTruocDialog extends javax.swing.JDialog {
-
-    /**
-     * Creates new form TaiKhoanDialog
-     */
     private boolean datBanThanhCong = false;
     private IDGeneratorHelper helper;
     private PhieuDatBanService pdbService;
-    private Set<String> selectedTables; // ← Lưu các bàn đã chọn (không static)
-    private PanelDatBan panelDatBan; // ← Lưu reference PanelDatBan để update UI
-    private PanelQuanLyDatBanTruoc panelQuanLyDatBanTruoc; // ← Lưu reference để refresh data
+    private Set<String> selectedTables;
+    private PanelDatBan panelDatBan;
+    private PanelQuanLyDatBanTruoc panelQuanLyDatBanTruoc;
 
     public DatBanTruocDialog(java.awt.Frame parent, boolean modal, Set<String> selectedTables,
             PanelDatBan panelDatBan, PanelQuanLyDatBanTruoc panelQuanLyDatBanTruoc) {
         super(parent, modal);
-        this.selectedTables = selectedTables; // ← Nhận selectedTables từ LuaChonDatBanDialog
-        this.panelDatBan = panelDatBan; // ← Nhận PanelDatBan để update UI
-        this.panelQuanLyDatBanTruoc = panelQuanLyDatBanTruoc; // ← Nhận PanelQuanLyDatBanTruoc để refresh
+        this.selectedTables = selectedTables;
+        this.panelDatBan = panelDatBan;
+        this.panelQuanLyDatBanTruoc = panelQuanLyDatBanTruoc;
         helper = new IDGeneratorHelper();
         pdbService = new PhieuDatBanService();
         initComponents();
         this.setLocationRelativeTo(parent);
-
         if (dtpThoiGianDen != null) {
             dtpThoiGianDen.setDateTimeStrict(LocalDateTime.now());
         }
-
+        dtpThoiGianDen.setEnabled(false);
         fillMaPhieuDat(txtMaPhieuDat);
-        // Tự động set tiền cọc dựa vào số lượng bàn
+        fillThoiGianDen();
         updateTienDatCoc();
     }
 
@@ -60,7 +50,6 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated
     // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         lblMaPhieuDat = new javax.swing.JLabel();
@@ -79,23 +68,18 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
         lblTenKhachHang = new javax.swing.JLabel();
         lblTienDatCoc = new javax.swing.JLabel();
         txtTienDatCoc = new javax.swing.JTextField();
-
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18));
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("THÔNG TIN ĐẶT BÀN TRƯỚC");
         jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(93, 5, -1, -1));
-
-        lblMaPhieuDat.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblMaPhieuDat.setFont(new java.awt.Font("Segoe UI", 1, 12));
         lblMaPhieuDat.setForeground(new java.awt.Color(0, 0, 0));
         lblMaPhieuDat.setText("Mã phiếu đặt:");
         jPanel2.add(lblMaPhieuDat, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 40, -1, 20));
-
         txtMaPhieuDat.setEditable(false);
         txtMaPhieuDat.setBackground(new java.awt.Color(255, 255, 255));
         txtMaPhieuDat.setFocusable(false);
@@ -106,35 +90,29 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
             }
         });
         jPanel2.add(txtMaPhieuDat, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 40, 230, -1));
-
         txtSoDienThoai.setBackground(new java.awt.Color(255, 255, 255));
         txtSoDienThoai.setForeground(new java.awt.Color(0, 0, 0));
         jPanel2.add(txtSoDienThoai, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 120, 230, -1));
-
-        lblSoDienThoai.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblSoDienThoai.setFont(new java.awt.Font("Segoe UI", 1, 12));
         lblSoDienThoai.setForeground(new java.awt.Color(0, 0, 0));
         lblSoDienThoai.setText("Số điện thoại:");
         jPanel2.add(lblSoDienThoai, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 120, -1, 20));
-
-        lblThoiGianDen.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblThoiGianDen.setFont(new java.awt.Font("Segoe UI", 1, 12));
         lblThoiGianDen.setForeground(new java.awt.Color(0, 0, 0));
         lblThoiGianDen.setText("Thời gian đến:");
         jPanel2.add(lblThoiGianDen, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 160, -1, -1));
         jPanel2.add(dtpThoiGianDen, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 160, 230, -1));
-
-        lblSoLuongNguoi.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblSoLuongNguoi.setFont(new java.awt.Font("Segoe UI", 1, 12));
         lblSoLuongNguoi.setForeground(new java.awt.Color(0, 0, 0));
         lblSoLuongNguoi.setText("Số lượng người:");
         jPanel2.add(lblSoLuongNguoi, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 200, -1, -1));
-
-        lblGhiChu.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblGhiChu.setFont(new java.awt.Font("Segoe UI", 1, 12));
         lblGhiChu.setForeground(new java.awt.Color(0, 0, 0));
         lblGhiChu.setText("Ghi chú:");
         jPanel2.add(lblGhiChu, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 270, -1, -1));
-
         btnDatBan.setText("Đặt bàn");
         btnDatBan.setBackground(new java.awt.Color(204, 204, 204));
-        btnDatBan.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnDatBan.setFont(new java.awt.Font("Segoe UI", 1, 14));
         btnDatBan.setForeground(new java.awt.Color(0, 0, 0));
         btnDatBan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -143,14 +121,11 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
         });
         jPanel2.add(btnDatBan, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 380, 330, 40));
         jPanel2.add(spSoLuong, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 200, 230, -1));
-
         txtGhiChu.setColumns(20);
         txtGhiChu.setRows(5);
         txtGhiChu.setBackground(new java.awt.Color(255, 255, 255));
         jScrollPane1.setViewportView(txtGhiChu);
-
         jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 280, -1, -1));
-
         txtTenKhachHang.setBackground(new java.awt.Color(255, 255, 255));
         txtTenKhachHang.setForeground(new java.awt.Color(0, 0, 0));
         txtTenKhachHang.addActionListener(new java.awt.event.ActionListener() {
@@ -159,65 +134,70 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
             }
         });
         jPanel2.add(txtTenKhachHang, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 80, 230, -1));
-
-        lblTenKhachHang.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblTenKhachHang.setFont(new java.awt.Font("Segoe UI", 1, 12));
         lblTenKhachHang.setForeground(new java.awt.Color(0, 0, 0));
         lblTenKhachHang.setText("Tên khách hàng:");
         jPanel2.add(lblTenKhachHang, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 80, -1, -1));
-
         lblTienDatCoc.setText("Tiền đặt cọc: ");
-        lblTienDatCoc.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblTienDatCoc.setFont(new java.awt.Font("Segoe UI", 1, 12));
         lblTienDatCoc.setForeground(new java.awt.Color(0, 0, 0));
         jPanel2.add(lblTienDatCoc, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 240, -1, -1));
         jPanel2.add(txtTienDatCoc, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 240, 230, -1));
-
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 480, 430));
-
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtTenKhachHangActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtTenKhachHangActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_txtTenKhachHangActionPerformed
+    private void txtTenKhachHangActionPerformed(java.awt.event.ActionEvent evt) {
+    }
 
     private void fillMaPhieuDat(JTextField txtMaKhuVuc) {
-        // TODO Auto-generated method stub
         String lastID = IDQueryHelper.getLastID("PhieuDatBan", "maPhieuDat");
         String maPDBNew = (lastID == null || lastID.isEmpty()) ? IDGeneratorHelper.generateDefaultID("PD")
                 : IDGeneratorHelper.generateNextIDFromFullID(lastID);
         txtMaPhieuDat.setText(maPDBNew);
     }
+    
+    private void fillThoiGianDen() {
+		dtpThoiGianDen.setDateTimeStrict(ReservationSession.getTempSelectedDateTime());
+	}
 
-    private void btnDatBanActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnDatBanActionPerformed
+    private void btnDatBanActionPerformed(java.awt.event.ActionEvent evt) {
         try {
             String maPDB = txtMaPhieuDat.getText().trim();
             String soDienThoai = txtSoDienThoai.getText().trim();
             String tenKhachHang = txtTenKhachHang.getText().trim();
+            String ghiChu = txtGhiChu.getText().trim();
             int soLuongNguoi = (int) spSoLuong.getValue();
             LocalDateTime thoiGianDen = dtpThoiGianDen.getDateTimeStrict();
-            String ghiChu = txtGhiChu.getText().trim();
-
+            java.util.Set<String> invalidTables = new java.util.HashSet<>();
+            java.util.List<String> availableTables = pdbService.getDanhSachBanTrongTheoThoiGian(thoiGianDen);
+            for (String maBan : selectedTables) {
+                if (!availableTables.contains(maBan)) {
+                    invalidTables.add(maBan);
+                }
+            }
+            if (!invalidTables.isEmpty()) {
+                JOptionPane.showMessageDialog(this,
+                        "Không thể đặt trước các bàn sau vào ngày đã chọn: "
+                                + String.join(", ", invalidTables)
+                                + "\nVui lòng chọn lại bàn khác hoặc ngày khác.",
+                        "Xung đột đặt bàn",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             String maPhieuDat = pdbService.themPhieuDatBan(maPDB, tenKhachHang, soDienThoai, soLuongNguoi,
-                    thoiGianDen, ghiChu, selectedTables); // ← Truyền selectedTables
-
-            // 🎯 SAU KHI SUCCESS, cập nhật UI tất cả bàn từ DB
+                    thoiGianDen, ghiChu, selectedTables);
             if (panelDatBan != null) {
                 panelDatBan.updateAllTableStatusFromDatabase();
             }
-
-            // Refresh data ở PanelQuanLyDatBanTruoc (update table phiếu đặt bàn)
             if (panelQuanLyDatBanTruoc != null) {
                 panelQuanLyDatBanTruoc.refreshData();
             }
-
             datBanThanhCong = true;
-
             JOptionPane.showMessageDialog(this,
                     "Đặt bàn thành công!\nMã phiếu: " + maPhieuDat, "Thành công",
                     JOptionPane.INFORMATION_MESSAGE);
-
             this.dispose();
-
         } catch (IllegalArgumentException e) {
             JOptionPane.showMessageDialog(this,
                     e.getMessage(), "Lỗi xác thực",
@@ -228,33 +208,18 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
                     JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
-    }// GEN-LAST:event_btnDatBanActionPerformed
+    }
 
-    private void txtMaPhieuDatActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtMaPhieuDatActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_txtMaPhieuDatActionPerformed
+    private void txtMaPhieuDatActionPerformed(java.awt.event.ActionEvent evt) {
+    }
 
-    /**
-     * @param args the command line arguments
-     */
-    /**
-     * @param args the command line arguments
-     * 
-     *             NOTE: Main method chỉ dùng cho testing. Trong thực tế, dialog
-     *             được gọi từ LuaChonDatBanDialog
-     */
     public static void main(String args[]) {
-        // ========== SETUP UI (FlatLaf) TRƯỚC TIÊN ==========
         UIConfiguration.setupUI();
-
-        // ========== SAU ĐÓ MỚI KHỞI TẠO DIALOG ==========
-        /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 java.util.Set<String> testTables = new java.util.HashSet<>();
                 testTables.add("B001");
                 testTables.add("B002");
-
                 DatBanTruocDialog dialog = new DatBanTruocDialog(new javax.swing.JFrame(), true, testTables, null,
                         null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -287,15 +252,13 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
     private javax.swing.JTextField txtSoDienThoai;
     private javax.swing.JTextField txtTenKhachHang;
     private javax.swing.JTextField txtTienDatCoc;
-    // End of variables declaration//GEN-END:variables
 
-    // Tự động tính toán tiền cọc: 100.000 VNĐ/bàn
+    // End of variables declaration//GEN-END:variables
     private void updateTienDatCoc() {
         if (selectedTables != null && !selectedTables.isEmpty()) {
             double tienDatCoc = 100000.0 * selectedTables.size();
-            // Format tiền thành dạng xxx.xxx.xxx VNĐ
-            txtTienDatCoc.setText(com.restaurant.quanlydatbannhahang.util.CurrencyUtility.formatVND(tienDatCoc));
-            txtTienDatCoc.setEditable(false); // Prevent manual editing
+            txtTienDatCoc.setText(CurrencyUtility.formatVND(tienDatCoc));
+            txtTienDatCoc.setEditable(false);
         } else {
             txtTienDatCoc.setText("0");
             txtTienDatCoc.setEditable(false);

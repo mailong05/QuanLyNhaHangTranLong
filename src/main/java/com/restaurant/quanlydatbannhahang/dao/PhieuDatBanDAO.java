@@ -1,8 +1,14 @@
 package com.restaurant.quanlydatbannhahang.dao;
 
 import com.restaurant.quanlydatbannhahang.connectDB.DatabaseConnection;
+import com.restaurant.quanlydatbannhahang.entity.Ban;
+import com.restaurant.quanlydatbannhahang.entity.ChiTietPhieuDatBan;
+import com.restaurant.quanlydatbannhahang.entity.KhachHang;
 import com.restaurant.quanlydatbannhahang.entity.PhieuDatBan;
+import com.restaurant.quanlydatbannhahang.entity.TrangThaiBan;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiPhieuDat;
+import com.restaurant.quanlydatbannhahang.service.BanService;
+import com.restaurant.quanlydatbannhahang.service.ChiTietPhieuDatBanService;
 import com.restaurant.quanlydatbannhahang.util.IDQueryHelper;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -21,11 +27,6 @@ public class PhieuDatBanDAO {
         this.nhanVienDAO = new NhanVienDAO();
     }
 
-    /**
-     * Lấy mã phiếu đặt bàn cuối cùng
-     * 
-     * @return Mã phiếu đặt bàn cuối cùng (VD: PDB010) hoặc null
-     */
     public String getLastPhieuDatBanID() {
         return IDQueryHelper.getLastID("PhieuDatBan", "maPhieuDat");
     }
@@ -41,7 +42,6 @@ public class PhieuDatBanDAO {
             String ghiChu = rs.getString("ghiChu");
             String trangThaiStr = rs.getString("trangThai");
             double tienDatCoc = rs.getDouble("tienDatCoc");
-
             PhieuDatBan phieu = new PhieuDatBan();
             phieu.setMaPhieuDat(maPhieuDat);
             if (maKH != null && !maKH.isBlank()) {
@@ -54,7 +54,6 @@ public class PhieuDatBanDAO {
             phieu.setGhiChu(ghiChu);
             phieu.setTrangThai(TrangThaiPhieuDat.valueOf(trangThaiStr));
             phieu.setTienDatCoc(tienDatCoc);
-
             return phieu;
         } catch (Exception e) {
             e.printStackTrace();
@@ -66,12 +65,10 @@ public class PhieuDatBanDAO {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "insert into PhieuDatBan (maPhieuDat, maKH, maNV, ngayLapPhieu, thoiGianDen, soLuongNguoi, ghiChu, trangThai, tienDatCoc) values (?,?,?,?,?,?,?,?,?)";
         try {
-            // Kiểm tra nhân viên tồn tại
             if (phieu.getNhanVien() == null || phieu.getNhanVien().getMaNV() == null) {
                 System.err.println("Lỗi: Mã nhân viên không được NULL");
                 return false;
             }
-
             PreparedStatement pstm = connection.prepareStatement(sql);
             pstm.setString(1, phieu.getMaPhieuDat());
             if (phieu.getKhachHang() == null || phieu.getKhachHang().getMaKH() == null) {
@@ -138,8 +135,8 @@ public class PhieuDatBanDAO {
         List<PhieuDatBan> list = new ArrayList<>();
         Connection con = DatabaseConnection.getConnection();
         String sql = "SELECT * FROM PhieuDatBan " +
-                     "WHERE CAST(ngayLapPhieu AS DATE) = CAST(GETDATE() AS DATE) " +
-                     "ORDER BY ngayLapPhieu DESC";
+                "WHERE CAST(ngayLapPhieu AS DATE) = CAST(GETDATE() AS DATE) " +
+                "ORDER BY ngayLapPhieu DESC";
         try {
             PreparedStatement pstm = con.prepareStatement(sql);
             ResultSet rs = pstm.executeQuery();
@@ -148,7 +145,6 @@ public class PhieuDatBanDAO {
                 list.add(pdb);
             }
         } catch (Exception e) {
-            // TODO: handle exception
         }
         return list;
     }
@@ -215,27 +211,47 @@ public class PhieuDatBanDAO {
         return dsPhieu;
     }
 
-    public List<PhieuDatBan> getPhieuDatBanTheoBan(String maBan, LocalDate ngay) {
+    public List<String> getDanhSachBanTrongTheoThoiGian(LocalDateTime targetTime) {
+        List<String> dsBanTrong = new ArrayList<>();
         Connection connection = DatabaseConnection.getConnection();
-        String sql = "select pdb.* from PhieuDatBan pdb " +
-                "inner join ChiTietPhieuDatBan ctpdb on pdb.maPhieuDat = ctpdb.maPhieuDat " +
-                "where ctpdb.maBan = ? and convert(date, pdb.thoiGianDen) = ?";
-        ArrayList<PhieuDatBan> dsPhieu = new ArrayList<>();
+        
+        String sql = "SELECT maBan FROM BanAn WHERE maBan NOT IN (" +
+                     "    SELECT ctpdb.maBan FROM ChiTietPhieuDatBan ctpdb " +
+                     "    INNER JOIN PhieuDatBan pdb ON ctpdb.maPhieuDat = pdb.maPhieuDat " +
+                     "    WHERE CONVERT(date, pdb.thoiGianDen) = ? " +
+                     "    AND pdb.trangThai = N'DANG_CHO'" +
+                     ") AND trangThai != N'DANG_SU_DUNG'"; 
+                     
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
-            pstm.setString(1, maBan);
-            pstm.setDate(2, java.sql.Date.valueOf(ngay));
+            pstm.setDate(1, java.sql.Date.valueOf(targetTime.toLocalDate()));
             ResultSet rs = pstm.executeQuery();
+            
             while (rs.next()) {
-                PhieuDatBan phieu = buildPhieuDatBanFromResultSet(rs);
-                if (phieu != null) {
-                    dsPhieu.add(phieu);
-                }
+                dsBanTrong.add(rs.getString("maBan"));
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return dsPhieu;
+        return dsBanTrong;
+    }
+
+    public List<Ban> getAllBan() {
+        Connection connection = DatabaseConnection.getConnection();
+        String sql = "select * from Ban";
+        ArrayList<Ban> dsBan = new ArrayList<>();
+        try {
+            PreparedStatement pstm = connection.prepareStatement(sql);
+            ResultSet rs = pstm.executeQuery();
+            while (rs.next()) {
+                Ban ban = new Ban();
+                ban.setMaBan(rs.getString("maBan"));
+                dsBan.add(ban);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return dsBan;
     }
 
     public boolean capNhatPhieuDatBan(PhieuDatBan phieu) {
@@ -306,8 +322,113 @@ public class PhieuDatBanDAO {
     }
 
     public boolean capNhatKhachHangChoPhieu(String maPhieu, String maKH) {
-        // TODO Auto-generated method stub
+    	String sql = "update PhieuDatBan set maKH = ? where maPhieuDat = ?";
+    	KhachHang kh = khachHangDAO.getKhachHangTheoMa(maKH);
+    	Connection con = DatabaseConnection.getConnection();
+    	if(kh!= null) {
+    		try {
+				PreparedStatement pstm = con.prepareStatement(sql);
+				pstm.setString(1, maKH);
+				pstm.setString(2, maPhieu);
+				return pstm.executeUpdate() > 0;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+    	}
         return false;
     }
+    
+    public boolean hasReservationToday(String maBan) {
+        String sql = "SELECT COUNT(*) FROM PhieuDatBan pdb " +
+                     "JOIN ChiTietPhieuDatBan ct ON pdb.maPhieuDat = ct.maPhieuDat " +
+                     "WHERE ct.maBan = ? AND pdb.trangThai = 'DANG_CHO' " +
+                     "AND CAST(pdb.thoiGianDen AS DATE) = CAST(GETDATE() AS DATE)";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, maBan);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+    public boolean tuDongHuyPhieuQuaHan() {
+        boolean coPhieuBiHuy = false;
+        try {
+            List<PhieuDatBan> danhSachCho = getDanhSachPhieuDatBanTheoTrangThai(TrangThaiPhieuDat.DANG_CHO);
+            LocalDateTime now = LocalDateTime.now();
 
+            BanService banService = new BanService();
+            ChiTietPhieuDatBanService ctpdbService = new ChiTietPhieuDatBanService();
+
+            for (PhieuDatBan phieu : danhSachCho) {
+                LocalDateTime thoiGianHetHan = phieu.getThoiGianDen().plusMinutes(30);
+
+                if (now.isAfter(thoiGianHetHan)) {
+                    capNhatTrangThaiPhieu(phieu.getMaPhieuDat(), TrangThaiPhieuDat.DA_HUY);
+
+                    List<ChiTietPhieuDatBan> chiTietList = ctpdbService.getChiTietByMaPhieuDat(phieu.getMaPhieuDat());
+                    banService.capNhatTrangThaiBanTrongChiTietPDB(chiTietList, TrangThaiBan.TRONG);
+                    
+                    coPhieuBiHuy = true;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return coPhieuBiHuy; 
+    }
+    
+
+    public List<PhieuDatBan> getDanhSachPhieuDatBanTheoTrangThai(TrangThaiPhieuDat trangThai) {
+        List<PhieuDatBan> dsPhieu = new ArrayList<>();
+        Connection connection = DatabaseConnection.getConnection();
+
+        String sql = "SELECT * FROM PhieuDatBan WHERE trangThai = ?";
+        
+        try {
+            PreparedStatement pstm = connection.prepareStatement(sql);
+            
+             pstm.setString(1, trangThai.name()); 
+             ResultSet rs = pstm.executeQuery();
+            
+            while (rs.next()) {
+                PhieuDatBan phieu = buildPhieuDatBanFromResultSet(rs);
+                if (phieu != null) {
+                    dsPhieu.add(phieu);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return dsPhieu;
+    }
+
+    
+    public boolean kiemTraBanDaDuocDatTrongNgay(String maBan, LocalDate ngay, String maPhieuDatNgoaiLe) {
+        String sql = "SELECT COUNT(*) FROM PhieuDatBan pdb " +
+                     "JOIN ChiTietPhieuDatBan ct ON pdb.maPhieuDat = ct.maPhieuDat " +
+                     "WHERE ct.maBan = ? AND CAST(pdb.thoiGianDen AS DATE) = ? " +
+                     "AND pdb.trangThai = 'DANG_CHO' AND pdb.maPhieuDat != ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, maBan);
+            stmt.setDate(2, java.sql.Date.valueOf(ngay));
+            stmt.setString(3, maPhieuDatNgoaiLe);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0; 
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+	
 }

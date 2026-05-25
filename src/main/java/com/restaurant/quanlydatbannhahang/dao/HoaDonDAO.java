@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,11 +28,6 @@ public class HoaDonDAO {
         this.thueDAO = new ThueDAO();
     }
 
-    /**
-     * Lấy mã hóa đơn cuối cùng
-     * 
-     * @return Mã hóa đơn cuối cùng (VD: HD050) hoặc null
-     */
     public String getLastHoaDonID() {
         return IDQueryHelper.getLastID("HoaDon", "maHD");
     }
@@ -47,7 +43,7 @@ public class HoaDonDAO {
             double tienThue = rs.getDouble("tienThue");
             double tyLePhiDV = rs.getDouble("tyLePhiDV");
             double tienPhiDV = rs.getDouble("tienPhiDV");
-            LocalDate ngayTao = rs.getDate("ngayTao").toLocalDate();
+            LocalDateTime ngayTao = rs.getTimestamp("ngayTao") != null ? rs.getTimestamp("ngayTao").toLocalDateTime() : null;
             LocalTime gioVao = rs.getTime("gioVao") != null ? rs.getTime("gioVao").toLocalTime() : null;
             LocalTime gioRa = rs.getTime("gioRa") != null ? rs.getTime("gioRa").toLocalTime() : null;
             double tongTienGoc = rs.getDouble("tongTienGoc");
@@ -55,7 +51,6 @@ public class HoaDonDAO {
             double tongThanhToan = rs.getDouble("tongThanhToan");
             String phuongThucTTStr = rs.getString("phuongThucTT");
             String trangThaiStr = rs.getString("trangThaiThanhToan");
-
             com.restaurant.quanlydatbannhahang.entity.PhuongThucTT phuongThucTT = null;
             if (phuongThucTTStr != null) {
                 phuongThucTT = com.restaurant.quanlydatbannhahang.entity.PhuongThucTT.fromDisplayName(phuongThucTTStr);
@@ -67,13 +62,11 @@ public class HoaDonDAO {
                     }
                 }
             }
-
             PhieuDatBan phieuDatBan = phieuDatBanDAO.getPhieuDatBanTheoMa(maPhieuDat);
             if (phieuDatBan == null) {
                 phieuDatBan = new PhieuDatBan();
                 phieuDatBan.setMaPhieuDat(maPhieuDat);
             }
-
             HoaDon hoaDon = new HoaDon(
                     maHD,
                     phieuDatBan,
@@ -92,7 +85,6 @@ public class HoaDonDAO {
                     tongThanhToan,
                     phuongThucTT,
                     TrangThaiHoaDon.valueOf(trangThaiStr));
-
             return hoaDon;
         } catch (Exception e) {
             e.printStackTrace();
@@ -114,7 +106,7 @@ public class HoaDonDAO {
             pstm.setDouble(7, hd.getTienThue());
             pstm.setDouble(8, hd.getTyLePhiDV());
             pstm.setDouble(9, hd.getTienPhiDV());
-            pstm.setDate(10, java.sql.Date.valueOf(hd.getNgayTao()));
+            pstm.setTimestamp(10, java.sql.Timestamp.valueOf(hd.getNgayTao()));
             pstm.setTime(11, hd.getGioVao() != null ? java.sql.Time.valueOf(hd.getGioVao()) : null);
             pstm.setTime(12, hd.getGioRa() != null ? java.sql.Time.valueOf(hd.getGioRa()) : null);
             pstm.setDouble(13, hd.getTongTienGoc());
@@ -226,8 +218,6 @@ public class HoaDonDAO {
     }
 
     public List<HoaDon> getHoaDonTheoKhachHang(String maKH) {
-        // This would require joining with PhieuDatBan or other related tables
-        // For now, returning empty list
         return new ArrayList<>();
     }
 
@@ -244,7 +234,7 @@ public class HoaDonDAO {
             pstm.setDouble(6, hd.getTienThue());
             pstm.setDouble(7, hd.getTyLePhiDV());
             pstm.setDouble(8, hd.getTienPhiDV());
-            pstm.setDate(9, java.sql.Date.valueOf(hd.getNgayTao()));
+            pstm.setTimestamp(9, java.sql.Timestamp.valueOf(hd.getNgayTao()));
             pstm.setTime(10, hd.getGioVao() != null ? java.sql.Time.valueOf(hd.getGioVao()) : null);
             pstm.setTime(11, hd.getGioRa() != null ? java.sql.Time.valueOf(hd.getGioRa()) : null);
             pstm.setDouble(12, hd.getTongTienGoc());
@@ -262,21 +252,38 @@ public class HoaDonDAO {
 
     public double getTongDoanhThuTheoNgay(LocalDate ngay) {
         String sql = "SELECT SUM(tongThanhToan) FROM HoaDon " +
-                     "WHERE CAST(ngayTao AS DATE) = ? AND trangThaiThanhToan = N'DA_THANH_TOAN'";
+                "WHERE CAST(ngayTao AS DATE) = ? AND trangThaiThanhToan = N'DA_THANH_TOAN'";
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement pstm = conn.prepareStatement(sql)) {
-            
+                PreparedStatement pstm = conn.prepareStatement(sql)) {
             pstm.setDate(1, java.sql.Date.valueOf(ngay));
             ResultSet rs = pstm.executeQuery();
             if (rs.next()) {
-                return rs.getDouble(1); // Trả về tổng con số SQL đã tính xong
+                return rs.getDouble(1);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return 0;
     }
-    
+
+    public double getTongDoanhThuTienMatTheoCa(LocalDateTime thoiGianVaoCa) {
+        String sql = "SELECT SUM(tongThanhToan) FROM HoaDon " +
+                "WHERE ngayTao >= ? AND trangThaiThanhToan = N'DA_THANH_TOAN' " +
+                "AND phuongThucTT = N'TIEN_MAT'";
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement pstm = conn.prepareStatement(sql)) {
+            pstm.setTimestamp(1, java.sql.Timestamp.valueOf(thoiGianVaoCa));
+            ResultSet rs = pstm.executeQuery();
+            if (rs.next()) {
+                return rs.getDouble(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+
     public boolean xoaHoaDon(String maHD) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "delete from HoaDon where maHD = ?";
@@ -347,7 +354,6 @@ public class HoaDonDAO {
         if (normalized.isEmpty()) {
             return new ArrayList<>();
         }
-
         String[] parts = normalized.split(",");
         StringBuilder sqlBuilder = new StringBuilder(
                 "select distinct h.* from HoaDon h inner join ChiTietPhieuDatBan c on h.maPhieuDat = c.maPhieuDat where ");
@@ -357,7 +363,6 @@ public class HoaDonDAO {
             }
             sqlBuilder.append("c.maBan = ?");
         }
-
         ArrayList<HoaDon> dsHoaDon = new ArrayList<>();
         try {
             PreparedStatement pstm = connection.prepareStatement(sqlBuilder.toString());
@@ -380,7 +385,6 @@ public class HoaDonDAO {
     public List<HoaDon> getHoaDonTheoTrangThai(TrangThaiHoaDon trangThai) {
         String sql = "select * from HoaDon where trangThaiThanhToan = ?";
         Connection connection = DatabaseConnection.getConnection();
-
         ArrayList<HoaDon> dsHoaDon = new ArrayList<>();
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
@@ -396,5 +400,52 @@ public class HoaDonDAO {
             e.printStackTrace();
         }
         return dsHoaDon;
+    }
+
+    public boolean capNhatGioVao(String maHD, LocalDateTime gioVao) {
+        String sql = "UPDATE HoaDon SET gioVao = ? WHERE maHD = ?";
+        try (Connection con = DatabaseConnection.getConnection();
+                PreparedStatement pstm = con.prepareStatement(sql)) {
+
+            pstm.setTimestamp(1, java.sql.Timestamp.valueOf(gioVao));
+            pstm.setString(2, maHD);
+
+            return pstm.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean capNhatGioRa(String maHD, LocalDateTime gioRa) {
+        String sql = "UPDATE HoaDon SET gioRa = ? WHERE maHD = ?";
+        try (Connection con = DatabaseConnection.getConnection();
+                PreparedStatement pstm = con.prepareStatement(sql)) {
+
+            pstm.setTimestamp(1, java.sql.Timestamp.valueOf(gioRa));
+            pstm.setString(2, maHD);
+
+            return pstm.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public HoaDon getHoaDonTheoMaPDB(String maPhieuDat) {
+        String sql = "SELECT * FROM HoaDon WHERE maPhieuDat = ? AND trangThaiThanhToan = 'CHUA_THANH_TOAN'";
+        try (Connection con = DatabaseConnection.getConnection();
+                PreparedStatement pstm = con.prepareStatement(sql)) {
+
+            pstm.setString(1, maPhieuDat);
+            try (ResultSet rs = pstm.executeQuery()) {
+                if (rs.next()) {
+                    return buildHoaDonFromResultSet(rs);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

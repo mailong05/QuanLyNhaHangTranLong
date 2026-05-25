@@ -1,10 +1,8 @@
 package com.restaurant.quanlydatbannhahang.gui;
-
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -13,9 +11,7 @@ import com.restaurant.quanlydatbannhahang.util.ComboBoxEnumLoader;
 import com.restaurant.quanlydatbannhahang.entity.QuyenHan;
 import com.restaurant.quanlydatbannhahang.entity.TaiKhoan;
 import java.util.List;
-
 public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseListener {
-
         private JButton btnTrangChu = new JButton();
         private JPanel pnlButton = new JPanel();
         private JPanel pnlRightButtons = new JPanel();
@@ -27,7 +23,6 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
         private TaiKhoanService taiKhoanService;
         private List<TaiKhoan> allTaiKhoan;
         private ComboBoxEnumLoader cbEnumLoader;
-
         public PanelQuanLyTaiKhoan() {
                 initComponents();
                 taiKhoanService = new TaiKhoanService();
@@ -35,14 +30,9 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
                 customUI();
                 loadDataToComboBoxes();
                 loadDataToTable();
-
         }
-
         private void customUI() {
-                // Placeholder cho txtTimKiem
                 setupPlaceholder(txtTimKiem, "Nhập tên hoặc mã nhân viên ");
-
-                // ========== DESELECT WHEN CLICK OUTSIDE TABLE ==========
                 this.addMouseListener(new java.awt.event.MouseAdapter() {
                         @Override
                         public void mousePressed(java.awt.event.MouseEvent evt) {
@@ -52,8 +42,6 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
                                 }
                         }
                 });
-
-                // Register mouse listener để populate fields khi click vào row
                 tableTaiKhoan.addMouseListener(this);
                 tableTaiKhoan.getSelectionModel().addListSelectionListener(e -> {
                         if (!e.getValueIsAdjusting()) {
@@ -64,25 +52,14 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
                                 syncEditStateBySelection();
                         }
                 });
-
-                // 1. Tùy chỉnh ScrollPane và Viền bảng
                 scrTableTaiKhoan.setBorder(BorderFactory.createLineBorder(new Color(200, 190, 170), 1));
                 scrTableTaiKhoan.setViewportBorder(null);
-
-                // 2. Tùy chỉnh Table (Bảng Tài Khoản)
                 tableTaiKhoan.setRowHeight(35);
-
-                // Căn giữa nội dung các cột trong bảng
                 centerTableColumns(tableTaiKhoan);
-
-                // Hiệu ứng chuột cho nút bấm
                 btnTimKiem.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-                // Gắn sự kiện quay về Trang Chủ
                 MainForm.attachGoHomeListener(btnTrangChu, this);
                 syncEditStateBySelection();
         }
-
         @SuppressWarnings("unchecked")
         // <editor-fold defaultstate="collapsed" desc="Generated
         // <editor-fold defaultstate="collapsed" desc="Generated
@@ -94,7 +71,6 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
         // <editor-fold defaultstate="collapsed" desc="Generated
         // Code">//GEN-BEGIN:initComponents
         private void initComponents() {
-
                 jPanel2 = new javax.swing.JPanel();
                 jPanel1 = new javax.swing.JPanel();
                 lblTenTaiKhoan = new javax.swing.JLabel();
@@ -112,7 +88,6 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
                 scrTableTaiKhoan = new javax.swing.JScrollPane();
                 tableTaiKhoan = new javax.swing.JTable();
                 jPanel3 = new javax.swing.JPanel();
-
                 javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
                 jPanel2.setLayout(jPanel2Layout);
                 jPanel2Layout.setHorizontalGroup(
@@ -121,22 +96,16 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
                 jPanel2Layout.setVerticalGroup(
                                 jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                 .addGap(0, 100, Short.MAX_VALUE));
-
                 setBackground(new java.awt.Color(255, 251, 233));
                 setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 60, 20, 60));
                 setLayout(new java.awt.BorderLayout());
-
                 jPanel1.setBackground(new java.awt.Color(255, 251, 233));
                 jPanel1.setPreferredSize(new java.awt.Dimension(1002, 130));
-
-                lblTenTaiKhoan.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+                lblTenTaiKhoan.setFont(new java.awt.Font("Segoe UI", 0, 14));
                 lblTenTaiKhoan.setText("Tên tài khoản:");
-
                 txtTenTaiKhoan.setPreferredSize(new java.awt.Dimension(64, 30));
-
-                jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+                jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14));
                 jLabel2.setText("Mật khẩu:");
-
                 txtMatKhau.setBackground(new java.awt.Color(255, 255, 255));
                 txtMatKhau.setPreferredSize(new java.awt.Dimension(64, 30));
                 txtMatKhau.addActionListener(new java.awt.event.ActionListener() {
@@ -144,15 +113,11 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
                                 txtMatKhauActionPerformed(evt);
                         }
                 });
-
-                jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+                jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14));
                 jLabel3.setText("Quyền hạn:");
-
                 cbQuyenHan.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nhân Viên", "Quản Lý" }));
                 cbQuyenHan.setPreferredSize(new java.awt.Dimension(64, 30));
-
                 txtTimKiem.setPreferredSize(new java.awt.Dimension(0, 30));
-
                 btnTimKiem.setText("Tìm Kiếm");
                 btnTimKiem.setPreferredSize(new java.awt.Dimension(0, 30));
                 btnTimKiem.addActionListener(new java.awt.event.ActionListener() {
@@ -160,7 +125,6 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
                                 btnTimKiemActionPerformed(evt);
                         }
                 });
-
                 cbFilterQuyenHan.setModel(new javax.swing.DefaultComboBoxModel<>(
                                 new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
                 cbFilterQuyenHan.addActionListener(new java.awt.event.ActionListener() {
@@ -168,17 +132,14 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
                                 cbFilterQuyenHanActionPerformed(evt);
                         }
                 });
-
                 btnResetPassword.setText("Reset");
                 btnResetPassword.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
                                 btnResetPasswordActionPerformed(evt);
                         }
                 });
-
-                lblMaNhanVien.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+                lblMaNhanVien.setFont(new java.awt.Font("Segoe UI", 0, 14));
                 lblMaNhanVien.setText("Mã nhân viên:");
-
                 javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
                 jPanel1.setLayout(jPanel1Layout);
                 jPanel1Layout.setHorizontalGroup(
@@ -320,12 +281,9 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
                                                                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
                                                                                                 Short.MAX_VALUE))
                                                                 .addGap(10, 10, 10)));
-
                 add(jPanel1, java.awt.BorderLayout.PAGE_START);
-
                 tableTaiKhoan.setModel(new javax.swing.table.DefaultTableModel(
                                 new Object[][] {
-
                                 },
                                 new String[] {
                                                 "Tên tài khoản", "Mã nhân viên", "Quyền hạn"
@@ -336,84 +294,69 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
                         boolean[] canEdit = new boolean[] {
                                         false, false, false
                         };
-
                         public Class getColumnClass(int columnIndex) {
                                 return types[columnIndex];
                         }
-
                         public boolean isCellEditable(int rowIndex, int columnIndex) {
                                 return canEdit[columnIndex];
                         }
                 });
                 scrTableTaiKhoan.setViewportView(tableTaiKhoan);
-
                 add(scrTableTaiKhoan, java.awt.BorderLayout.CENTER);
-
                 pnlButton.setBackground(new java.awt.Color(255, 251, 233));
                 pnlButton.setLayout(new java.awt.BorderLayout());
-
                 btnTrangChu.setText("Trang Chủ");
-                btnTrangChu.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+                btnTrangChu.setFont(new java.awt.Font("Segoe UI", 0, 14));
                 pnlButton.add(btnTrangChu, java.awt.BorderLayout.WEST);
-
                 pnlRightButtons.setBackground(new java.awt.Color(255, 251, 233));
                 pnlRightButtons.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 15, 0));
-
                 btnXoaTrang.setText("Xóa trắng");
-                btnXoaTrang.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+                btnXoaTrang.setFont(new java.awt.Font("Segoe UI", 0, 14));
                 btnXoaTrang.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
                                 btnXoaTrangActionPerformed(evt);
                         }
                 });
                 pnlRightButtons.add(btnXoaTrang);
-
                 btnCapNhat.setText("Cập nhật");
-                btnCapNhat.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+                btnCapNhat.setFont(new java.awt.Font("Segoe UI", 0, 14));
                 btnCapNhat.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
                                 btnCapNhatActionPerformed(evt);
                         }
                 });
                 pnlRightButtons.add(btnCapNhat);
-
                 btnXoa.setText("Xóa");
-                btnXoa.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+                btnXoa.setFont(new java.awt.Font("Segoe UI", 0, 14));
                 btnXoa.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
                                 btnXoaActionPerformed(evt);
                         }
                 });
                 pnlRightButtons.add(btnXoa);
-
                 btnThem.setText("Thêm");
-                btnThem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+                btnThem.setFont(new java.awt.Font("Segoe UI", 0, 14));
                 btnThem.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
                                 btnThemActionPerformed(evt);
                         }
                 });
                 pnlRightButtons.add(btnThem);
-
                 pnlButton.add(pnlRightButtons, java.awt.BorderLayout.EAST);
-
                 add(pnlButton, java.awt.BorderLayout.PAGE_END);
         }// </editor-fold>//GEN-END:initComponents
-
-        private void btnResetPasswordActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnResetPasswordActionPerformed
+        private void btnResetPasswordActionPerformed(java.awt.event.ActionEvent evt) {
                 String username = txtTenTaiKhoan.getText().trim();
                 if (username.isEmpty()) {
                         JOptionPane.showMessageDialog(this, "Vui lòng chọn tài khoản cần reset mật khẩu.");
                         return;
                 }
-
                 int choice = JOptionPane.showConfirmDialog(this,
                                 "Reset mật khẩu tài khoản này về mặc định 123456?",
                                 "Xác nhận reset mật khẩu", JOptionPane.YES_NO_OPTION);
                 if (choice != JOptionPane.YES_OPTION) {
                         return;
                 }
-
                 try {
                         boolean ok = taiKhoanService.resetMatKhauMacDinh(username);
                         if (ok) {
@@ -425,24 +368,19 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
                 } catch (Exception ex) {
                         JOptionPane.showMessageDialog(this, "Reset mật khẩu thất bại: " + ex.getMessage());
                 }
-        }// GEN-LAST:event_btnResetPasswordActionPerformed
-
-        private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaTrangActionPerformed
-                // TODO add your handling code here:
+        }
+        private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {
                 refreshData();
-        }// GEN-LAST:event_btnXoaTrangActionPerformed
-
-        private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCapNhatActionPerformed
+        }
+        private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {
                 String username = txtTenTaiKhoan.getText().trim();
                 String maNV = txtMaNhanVien.getText().trim();
                 String quyenHanDisplay = (String) cbQuyenHan.getSelectedItem();
                 QuyenHan quyenHan = ComboBoxEnumLoader.getQuyenHanFromDisplay(quyenHanDisplay);
-
                 if (username.isEmpty() || maNV.isEmpty() || quyenHan == null) {
                         JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin tài khoản.");
                         return;
                 }
-
                 try {
                         boolean ok = taiKhoanService.capNhatTaiKhoan(username, maNV, quyenHan);
                         if (ok) {
@@ -454,22 +392,19 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
                 } catch (Exception ex) {
                         JOptionPane.showMessageDialog(this, "Cập nhật tài khoản thất bại: " + ex.getMessage());
                 }
-        }// GEN-LAST:event_btnCapNhatActionPerformed
-
-        private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaActionPerformed
+        }
+        private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {
                 String username = txtTenTaiKhoan.getText().trim();
                 if (username.isEmpty()) {
                         JOptionPane.showMessageDialog(this, "Vui lòng chọn tài khoản cần xóa.");
                         return;
                 }
-
                 int choice = JOptionPane.showConfirmDialog(this,
                                 "Bạn có chắc muốn xóa tài khoản này không?",
                                 "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
                 if (choice != JOptionPane.YES_OPTION) {
                         return;
                 }
-
                 try {
                         boolean ok = taiKhoanService.xoaTaiKhoan(username);
                         if (ok) {
@@ -481,20 +416,17 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
                 } catch (Exception ex) {
                         JOptionPane.showMessageDialog(this, "Xóa tài khoản thất bại: " + ex.getMessage());
                 }
-        }// GEN-LAST:event_btnXoaActionPerformed
-
-        private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnThemActionPerformed
+        }
+        private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {
                 String username = txtTenTaiKhoan.getText().trim();
                 String maNV = txtMaNhanVien.getText().trim();
                 String password = new String(txtMatKhau.getPassword()).trim();
                 String quyenHanDisplay = (String) cbQuyenHan.getSelectedItem();
                 QuyenHan quyenHan = ComboBoxEnumLoader.getQuyenHanFromDisplay(quyenHanDisplay);
-
                 if (username.isEmpty() || maNV.isEmpty() || password.isEmpty() || quyenHan == null) {
                         JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin tài khoản.");
                         return;
                 }
-
                 try {
                         boolean ok = taiKhoanService.themTaiKhoan(username, password, maNV, quyenHan);
                         if (ok) {
@@ -506,36 +438,26 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
                 } catch (Exception ex) {
                         JOptionPane.showMessageDialog(this, "Thêm tài khoản thất bại: " + ex.getMessage());
                 }
-        }// GEN-LAST:event_btnThemActionPerformed
-
+        }
         private void resetPlaceholder(JTextField textField, String placeholder) {
                 Color placeholderColor = new Color(153, 153, 153);
                 textField.setText(placeholder);
                 textField.setForeground(placeholderColor);
         }
-
         private void loadDataToTable() {
                 loadFilteredData();
         }
-
         private void loadDataToComboBoxes() {
                 try {
-                        // Save listeners
                         ActionListener[] filterListeners = cbFilterQuyenHan.getActionListeners();
-
-                        // Remove listeners
                         for (ActionListener listener : filterListeners) {
                                 cbFilterQuyenHan.removeActionListener(listener);
                         }
-
-                        // Load QuyenHan to both comboboxes
                         cbFilterQuyenHan.removeAllItems();
                         cbFilterQuyenHan.addItem("Quyền hạn");
                         cbEnumLoader.loadQuyenHanToComboBox(cbFilterQuyenHan);
-
                         cbQuyenHan.removeAllItems();
                         cbEnumLoader.loadQuyenHanToComboBox(cbQuyenHan);
-                        // Re-add listeners
                         for (ActionListener listener : filterListeners) {
                                 cbFilterQuyenHan.addActionListener(listener);
                         }
@@ -544,17 +466,13 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
                         JOptionPane.showMessageDialog(this, "Lỗi load dữ liệu filter: " + e.getMessage());
                 }
         }
-
         private void loadFilteredData() {
                 try {
                         allTaiKhoan = taiKhoanService.getAllTaiKhoan();
                         String selectedQuyenHan = (String) cbFilterQuyenHan.getSelectedItem();
-
                         DefaultTableModel model = (DefaultTableModel) tableTaiKhoan.getModel();
                         model.setRowCount(0);
-
                         for (TaiKhoan tk : allTaiKhoan) {
-                                // Apply QuyenHan filter
                                 if (selectedQuyenHan != null && !selectedQuyenHan.equals("Quyền hạn")) {
                                         if (tk.getQuyenHan() == null
                                                         || !tk.getQuyenHan().getDisplayName()
@@ -562,7 +480,6 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
                                                 continue;
                                         }
                                 }
-
                                 model.addRow(new Object[] {
                                                 tk.getUsername(),
                                                 tk.getNhanVien() != null ? tk.getNhanVien().getMaNV() : "",
@@ -575,17 +492,13 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
                         JOptionPane.showMessageDialog(this, "Lỗi load dữ liệu: " + e.getMessage());
                 }
         }
-
         private void searchByText() {
                 try {
                         String searchText = txtTimKiem.getText().trim().toLowerCase();
                         String selectedQuyenHan = (String) cbFilterQuyenHan.getSelectedItem();
-
                         DefaultTableModel model = (DefaultTableModel) tableTaiKhoan.getModel();
                         model.setRowCount(0);
-
                         for (TaiKhoan tk : allTaiKhoan) {
-                                // Apply QuyenHan filter
                                 if (selectedQuyenHan != null && !selectedQuyenHan.equals("Quyền hạn")) {
                                         if (tk.getQuyenHan() == null
                                                         || !tk.getQuyenHan().getDisplayName()
@@ -593,8 +506,6 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
                                                 continue;
                                         }
                                 }
-
-                                // Apply search text filter
                                 if (!searchText.isEmpty()) {
                                         String username = tk.getUsername() != null ? tk.getUsername().toLowerCase()
                                                         : "";
@@ -602,7 +513,6 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
                                                 continue;
                                         }
                                 }
-
                                 model.addRow(new Object[] {
                                                 tk.getUsername(),
                                                 tk.getNhanVien() != null ? tk.getNhanVien().getMaNV() : "",
@@ -615,14 +525,12 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
                         JOptionPane.showMessageDialog(this, "Lỗi tìm kiếm dữ liệu: " + e.getMessage());
                 }
         }
-
         private void loadDataFromRow(int rowIndex) {
                 try {
                         String username = (String) tableTaiKhoan.getValueAt(rowIndex, 0);
                         String maNhanVien = (String) tableTaiKhoan.getValueAt(rowIndex, 1);
                         String password = (String) taiKhoanService.getPasswordByUsername(username, maNhanVien);
                         String quyenHan = (String) tableTaiKhoan.getValueAt(rowIndex, 2);
-
                         txtTenTaiKhoan.setText(username);
                         cbQuyenHan.setSelectedItem(quyenHan);
                         txtMaNhanVien.setText(maNhanVien);
@@ -632,7 +540,6 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
                         JOptionPane.showMessageDialog(this, "Lỗi khi load dữ liệu từ row: " + e.getMessage());
                 }
         }
-
         private void clearFields() {
                 txtTenTaiKhoan.setText("");
                 cbQuyenHan.setSelectedIndex(0);
@@ -640,7 +547,6 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
                 txtMatKhau.setText("");
                 txtTimKiem.setText("");
         }
-
         private void syncEditStateBySelection() {
                 boolean hasSelection = tableTaiKhoan.getSelectedRow() >= 0;
                 btnCapNhat.setEnabled(hasSelection);
@@ -648,8 +554,8 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
                 txtMaNhanVien.setEditable(!hasSelection);
                 txtMatKhau.setEditable(!hasSelection);
                 btnXoa.setEnabled(hasSelection);
+                btnThem.setEnabled(!hasSelection);
         }
-
         public void refreshData() {
                 clearFields();
                 resetPlaceholder(txtTimKiem, "Nhập tên hoặc mã nhân viên");
@@ -658,15 +564,12 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
                 loadDataToTable();
                 tableTaiKhoan.clearSelection();
                 syncEditStateBySelection();
-
         }
-
         private boolean isMouseOverTable(java.awt.event.MouseEvent evt) {
                 java.awt.Point p = evt.getPoint();
                 java.awt.Point tablePoint = SwingUtilities.convertPoint(this, p, tableTaiKhoan);
                 return tableTaiKhoan.getBounds().contains(tablePoint);
         }
-
         private void centerTableColumns(JTable table) {
                 DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
                 centerRenderer.setHorizontalAlignment(JLabel.CENTER);
@@ -674,52 +577,35 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
                         table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
                 }
         }
-
-        private void btnTrangChuActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTrangChuActionPerformed
+        private void btnTrangChuActionPerformed(java.awt.event.ActionEvent evt) {
                 java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
                 if (parentFrame instanceof MainForm) {
                         ((MainForm) parentFrame).goToTrangChuFromPanel();
                 }
-        }// GEN-LAST:event_btnTrangChuActionPerformed
-
-        private void txtMatKhauActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtMatKhauActionPerformed
-                // TODO add your handling code here:
-        }// GEN-LAST:event_txtMatKhauActionPerformed
-
-        private void cbFilterQuyenHanActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterQuyenHanActionPerformed
+        }
+        private void txtMatKhauActionPerformed(java.awt.event.ActionEvent evt) {
+        }
+        private void cbFilterQuyenHanActionPerformed(java.awt.event.ActionEvent evt) {
                 loadFilteredData();
-        }// GEN-LAST:event_cbFilterQuyenHanActionPerformed
-
-        private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTimKiemActionPerformed
+        }
+        private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {
                 searchByText();
-        }// GEN-LAST:event_btnTimKiemActionPerformed
-
-        /**
-         * Tao placeholder cho TextField
-         * Khi focus vao, placeholder bien mat
-         * Khi focus out va trong, placeholder xuat hien lai
-         */
+        }
         private void setupPlaceholder(JTextField textField, String placeholder) {
                 Color placeholderColor = new Color(153, 153, 153);
                 Color textColor = new Color(0, 0, 0);
-
-                // Set text mac dinh va mau
                 textField.setText(placeholder);
                 textField.setForeground(placeholderColor);
-
                 textField.addFocusListener(new java.awt.event.FocusAdapter() {
                         @Override
                         public void focusGained(java.awt.event.FocusEvent evt) {
-                                // Khi focus vao, neu la placeholder thi xoa
                                 if (textField.getText().equals(placeholder)) {
                                         textField.setText("");
                                         textField.setForeground(textColor);
                                 }
                         }
-
                         @Override
                         public void focusLost(java.awt.event.FocusEvent evt) {
-                                // Khi focus out, neu trong thi hien thi placeholder
                                 if (textField.getText().isEmpty()) {
                                         textField.setText(placeholder);
                                         textField.setForeground(placeholderColor);
@@ -727,7 +613,6 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
                         }
                 });
         }
-
         // Variables declaration - do not modify//GEN-BEGIN:variables
         private javax.swing.JButton btnResetPassword;
         private javax.swing.JButton btnTimKiem;
@@ -747,33 +632,19 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
         private javax.swing.JTextField txtTenTaiKhoan;
         private javax.swing.JTextField txtTimKiem;
         // End of variables declaration//GEN-END:variables
-
         @Override
         public void mouseClicked(MouseEvent e) {
-                // Được xử lý tập trung trong selection listener của bảng
         }
-
         @Override
         public void mousePressed(MouseEvent e) {
-                // TODO Auto-generated method stub
-
         }
-
         @Override
         public void mouseReleased(MouseEvent e) {
-                // TODO Auto-generated method stub
-
         }
-
         @Override
         public void mouseEntered(MouseEvent e) {
-                // TODO Auto-generated method stub
-
         }
-
         @Override
         public void mouseExited(MouseEvent e) {
-                // TODO Auto-generated method stub
-
         }
 }

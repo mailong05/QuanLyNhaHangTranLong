@@ -171,7 +171,23 @@ CREATE TABLE HoaDon (
 );
 
 -- =========================================================
--- 9. CHI TIẾT HÓA ĐƠN
+-- 9. CA LÀM VIỆC
+-- =========================================================
+CREATE TABLE CaLamViec (
+    maCa VARCHAR(20) PRIMARY KEY,
+    maNV VARCHAR(20) NOT NULL,
+    thoiGianVaoCa DATETIME NOT NULL,
+    thoiGianKetCa DATETIME NULL,
+    tienDauCa FLOAT NOT NULL,
+    tienKetCa FLOAT NULL,
+    trangThai VARCHAR(50) NOT NULL
+        CHECK (trangThai IN (N'DANG_LAM_VIEC', N'DA_KET_CA')),
+    ghiChu NVARCHAR(255) NULL,
+    CONSTRAINT FK_CaLamViec_NhanVien FOREIGN KEY (maNV) REFERENCES NhanVien(maNV) ON DELETE NO ACTION
+);
+
+-- =========================================================
+-- 10. CHI TIẾT HÓA ĐƠN
 -- =========================================================
 CREATE TABLE ChiTietHoaDon (
     maHD VARCHAR(20) NOT NULL,

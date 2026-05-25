@@ -1,32 +1,21 @@
 package com.restaurant.quanlydatbannhahang.dao;
-
 import com.restaurant.quanlydatbannhahang.connectDB.DatabaseConnection;
 import com.restaurant.quanlydatbannhahang.entity.Ban;
 import com.restaurant.quanlydatbannhahang.entity.KhuVuc;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiBan;
+import com.restaurant.quanlydatbannhahang.service.PhieuDatBanService;
 import com.restaurant.quanlydatbannhahang.util.IDQueryHelper;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-
 public class BanDAO {
-
     public BanDAO() {
     }
-
-    /**
-     * Lấy mã bàn cuối cùng trong database
-     * Dùng để sinh mã bàn tiếp theo
-     * 
-     * @return Mã bàn cuối cùng (VD: B005) hoặc null nếu bảng rỗng
-     */
     public String getLastBanID() {
         return IDQueryHelper.getLastID("Ban", "maBan");
     }
-
     private Ban buildBanFromResultSet(ResultSet rs) {
         try {
             String maBan = rs.getString("maBan");
@@ -34,26 +23,19 @@ public class BanDAO {
             String viTri = rs.getString("viTri");
             String maKhuVuc = rs.getString("maKhuVuc");
             String trangThaiStr = rs.getString("trangThai");
-
-            // Tạo KhuVuc
             KhuVuc khuVuc = new KhuVuc(maKhuVuc, "");
-
-            // Tạo TrangThaiBan enum
             TrangThaiBan trangThai = TrangThaiBan.valueOf(trangThaiStr);
-
             return new Ban(maBan, soGhe, viTri, khuVuc, trangThai);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
-
     private Ban buildBan(String maBan, int soGhe, String maKV, String trangThai) {
         KhuVuc khuVuc = new KhuVuc(maKV, "");
         TrangThaiBan status = TrangThaiBan.valueOf(trangThai);
         return new Ban(maBan, soGhe, "", khuVuc, status);
     }
-
     public boolean themBan(Ban ban) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "insert into BanAn (maBan, soGhe, viTri, maKhuVuc, trangThai) values (?,?,?,?,?)";
@@ -65,13 +47,11 @@ public class BanDAO {
             pstm.setString(4, ban.getKhuVuc().getMaKhuVuc());
             pstm.setString(5, ban.getTrangThai().name());
             return pstm.executeUpdate() > 0;
-
         } catch (Exception e) {
             e.printStackTrace();
         }
         return false;
     }
-
     public Ban getBanTheoMa(String maBan) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from BanAn where maBan = ?";
@@ -87,7 +67,6 @@ public class BanDAO {
         }
         return null;
     }
-
     public List<Ban> getAllBan() {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from BanAn";
@@ -106,7 +85,6 @@ public class BanDAO {
         }
         return dsBan;
     }
-
     public List<Ban> getBanTheoKhuVuc(String maKhuVuc) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from BanAn where maKhuVuc = ?";
@@ -126,7 +104,6 @@ public class BanDAO {
         }
         return dsBan;
     }
-
     public List<Ban> getBanTrong() {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from BanAn where trangThai = ?";
@@ -146,7 +123,6 @@ public class BanDAO {
         }
         return dsBan;
     }
-
     public List<Ban> getBanDangSuDung() {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "select * from BanAn where trangThai = ?";
@@ -166,7 +142,6 @@ public class BanDAO {
         }
         return dsBan;
     }
-
     public boolean capNhatBan(Ban ban) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "update BanAn set soGhe = ?, viTri = ?, maKhuVuc = ?, trangThai = ? where maBan = ?";
@@ -183,7 +158,6 @@ public class BanDAO {
         }
         return false;
     }
-
     public boolean xoaBan(String maBan) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "delete from BanAn where maBan = ?";
@@ -196,7 +170,6 @@ public class BanDAO {
         }
         return false;
     }
-
     public boolean capNhatTrangThaiBan(String maBan, String trangThai) {
         Connection connection = DatabaseConnection.getConnection();
         String sql = "update BanAn set trangThai = ? where maBan = ?";
@@ -210,15 +183,9 @@ public class BanDAO {
         }
         return false;
     }
-
-    /**
-     * Cập nhật trạng thái bàn (overload nhận TrangThaiBan enum)
-     * 
-     * @param maBan     Mã bàn
-     * @param trangThai TrangThaiBan enum
-     * @return true nếu cập nhật thành công
-     */
     public boolean capNhatTrangThaiBan(String maBan,TrangThaiBan trangThai) {
         return capNhatTrangThaiBan(maBan, trangThai.name());
     }
+    
 }
+

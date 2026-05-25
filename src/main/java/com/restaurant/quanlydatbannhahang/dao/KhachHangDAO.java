@@ -4,23 +4,18 @@ import com.restaurant.quanlydatbannhahang.connectDB.DatabaseConnection;
 import com.restaurant.quanlydatbannhahang.entity.KhachHang;
 import com.restaurant.quanlydatbannhahang.entity.LoaiThanhVien;
 import com.restaurant.quanlydatbannhahang.util.IDQueryHelper;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class KhachHangDAO {
-
     public KhachHangDAO() {
     }
 
-    /**
-     * Lấy mã khách hàng cuối cùng
-     * 
-     * @return Mã khách hàng cuối cùng (VD: KH025) hoặc null
-     */
     public String getLastKhachHangID() {
         return IDQueryHelper.getLastID("KhachHang", "maKH");
     }
@@ -32,7 +27,6 @@ public class KhachHangDAO {
             String sdt = rs.getString("sdt");
             int diemTichLuy = rs.getInt("diemTichLuy");
             String loaiThanhVien = rs.getString("loaiThanhVien");
-
             return new KhachHang(maKH, hoTen, sdt, diemTichLuy, LoaiThanhVien.valueOf(loaiThanhVien));
         } catch (Exception e) {
             e.printStackTrace();
@@ -176,5 +170,54 @@ public class KhachHangDAO {
             e.printStackTrace();
         }
         return dsKhachHang;
+    }
+
+    public List<Object[]> getTopKhachHangThongKe(LocalDate startDate) {
+        Connection connection = DatabaseConnection.getConnection();
+        ArrayList<Object[]> result = new ArrayList<>();
+        String sql;
+        
+        if (startDate == null) {
+            sql = "SELECT TOP 10 kh.maKH, kh.hoTen, kh.sdt, kh.diemTichLuy, kh.loaiThanhVien, " +
+                  "COUNT(hd.maHD) as soHoaDon, SUM(hd.tongThanhToan) as tongChi " +
+                  "FROM KhachHang kh " +
+                  "JOIN PhieuDatBan pdb ON kh.maKH = pdb.maKH " +
+                  "JOIN HoaDon hd ON pdb.maPhieuDat = hd.maPhieuDat AND hd.trangThaiThanhToan = 'DA_THANH_TOAN' " +
+                  "GROUP BY kh.maKH, kh.hoTen, kh.sdt, kh.diemTichLuy, kh.loaiThanhVien " +
+                  "ORDER BY tongChi DESC, soHoaDon DESC";
+        } else {
+            sql = "SELECT TOP 10 kh.maKH, kh.hoTen, kh.sdt, kh.diemTichLuy, kh.loaiThanhVien, " +
+                  "COUNT(hd.maHD) as soHoaDon, SUM(hd.tongThanhToan) as tongChi " +
+                  "FROM KhachHang kh " +
+                  "JOIN PhieuDatBan pdb ON kh.maKH = pdb.maKH " +
+                  "JOIN HoaDon hd ON pdb.maPhieuDat = hd.maPhieuDat " +
+                  "  AND hd.trangThaiThanhToan = 'DA_THANH_TOAN' " +
+                  "  AND CAST(hd.ngayTao AS DATE) >= ? " +
+                  "GROUP BY kh.maKH, kh.hoTen, kh.sdt, kh.diemTichLuy, kh.loaiThanhVien " +
+                  "ORDER BY tongChi DESC, soHoaDon DESC";
+        }
+
+        try {
+            PreparedStatement pstm = connection.prepareStatement(sql);
+            if (startDate != null) {
+                pstm.setDate(1, java.sql.Date.valueOf(startDate));
+            }
+            ResultSet rs = pstm.executeQuery();
+            while (rs.next()) {
+                KhachHang kh = buildKhachHangFromResultSet(rs);
+                Integer soHoaDon = rs.getInt("soHoaDon");
+                Double tongChi = rs.getDouble("tongChi");
+
+                if (rs.wasNull()) {
+                    tongChi = 0.0;
+                }
+
+                result.add(new Object[] { kh, soHoaDon, tongChi });
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
     }
 }

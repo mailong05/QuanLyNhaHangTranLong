@@ -1,8 +1,8 @@
 package com.restaurant.quanlydatbannhahang.entity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
-
 import com.restaurant.quanlydatbannhahang.entity.PhieuDatBan;
 
 public class HoaDon {
@@ -15,7 +15,7 @@ public class HoaDon {
     private double tienThue;
     private double tyLePhiDV;
     private double tienPhiDV;
-    private LocalDate ngayTao;
+    private LocalDateTime ngayTao;
     private LocalTime gioVao;
     private LocalTime gioRa;
     private double tongTienGoc;
@@ -24,13 +24,11 @@ public class HoaDon {
     private PhuongThucTT phuongThucTT;
     private TrangThaiHoaDon trangThaiThanhToan;
 
-    // Constructor không tham số
     public HoaDon() {
     }
 
-    // Constructor đầy đủ tham số
     public HoaDon(String maHD, PhieuDatBan phieuDatBan, NhanVien nhanVien, KhuyenMai khuyenMai, Thue thue,
-            LocalDate ngayTao, LocalTime gioVao, LocalTime gioRa,
+            LocalDateTime ngayTao, LocalTime gioVao, LocalTime gioRa,
             double tongTienGoc, double tienGiamGia, double tongThanhToan,
             PhuongThucTT phuongThucTT, TrangThaiHoaDon trangThaiThanhToan) {
         this.maHD = maHD;
@@ -54,7 +52,7 @@ public class HoaDon {
 
     public HoaDon(String maHD, PhieuDatBan phieuDatBan, NhanVien nhanVien, KhuyenMai khuyenMai, Thue thue,
             double thueSuat, double tienThue, double tyLePhiDV, double tienPhiDV,
-            LocalDate ngayTao, LocalTime gioVao, LocalTime gioRa,
+            LocalDateTime ngayTao, LocalTime gioVao, LocalTime gioRa,
             double tongTienGoc, double tienGiamGia, double tongThanhToan,
             PhuongThucTT phuongThucTT, TrangThaiHoaDon trangThaiThanhToan) {
         this(maHD, phieuDatBan, nhanVien, khuyenMai, thue,
@@ -67,7 +65,6 @@ public class HoaDon {
         this.tienPhiDV = tienPhiDV;
     }
 
-    // Getter và Setter
     public String getMaHD() {
         return maHD;
     }
@@ -140,11 +137,11 @@ public class HoaDon {
         this.tienPhiDV = tienPhiDV;
     }
 
-    public LocalDate getNgayTao() {
+    public LocalDateTime getNgayTao() {
         return ngayTao;
     }
 
-    public void setNgayTao(LocalDate ngayTao) {
+    public void setNgayTao(LocalDateTime ngayTao) {
         this.ngayTao = ngayTao;
     }
 
@@ -204,7 +201,6 @@ public class HoaDon {
         this.trangThaiThanhToan = trangThaiThanhToan;
     }
 
-    // Các phương thức cần thiết
     public double tinhTongThanhToan() {
         double thuePhaiTra = 0;
         if (thue != null) {
@@ -220,13 +216,9 @@ public class HoaDon {
     }
 
     public void inHoaDon() {
-        // Logic in hóa đơn
-        System.out.println("In hóa đơn: " + maHD);
     }
 
     public void luuDoanhThu() {
-        // Logic lưu doanh thu vào database
-        System.out.println("Lưu doanh thu cho hóa đơn: " + maHD);
     }
 
     @Override

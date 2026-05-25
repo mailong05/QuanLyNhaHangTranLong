@@ -1,17 +1,12 @@
 package com.restaurant.quanlydatbannhahang.entity;
-
 public class ChiTietHoaDon {
     private HoaDon hoaDon;
     private MonAn monAn;
     private int soLuong;
     private double donGiaLuuTru;
     private String ghiChu;
-
-    // Constructor không tham số
     public ChiTietHoaDon() {
     }
-
-    // Constructor đầy đủ
     public ChiTietHoaDon(HoaDon hoaDon, MonAn monAn, int soLuong, double donGiaLuuTru, String ghiChu) {
         this.hoaDon = hoaDon;
         this.monAn = monAn;
@@ -19,53 +14,39 @@ public class ChiTietHoaDon {
         this.donGiaLuuTru = donGiaLuuTru;
         this.ghiChu = ghiChu;
     }
-
-    // Getter và Setter
     public HoaDon getHoaDon() {
         return hoaDon;
     }
-
     public void setHoaDon(HoaDon hoaDon) {
         this.hoaDon = hoaDon;
     }
-
     public MonAn getMonAn() {
         return monAn;
     }
-
     public void setMonAn(MonAn monAn) {
         this.monAn = monAn;
     }
-
     public int getSoLuong() {
         return soLuong;
     }
-
     public void setSoLuong(int soLuong) {
         this.soLuong = soLuong;
     }
-
     public double getDonGiaLuuTru() {
         return donGiaLuuTru;
     }
-
     public void setDonGiaLuuTru(double donGiaLuuTru) {
         this.donGiaLuuTru = donGiaLuuTru;
     }
-
     public String getGhiChu() {
         return ghiChu;
     }
-
     public void setGhiChu(String ghiChu) {
         this.ghiChu = ghiChu;
     }
-
-    // Các phương thức cần thiết
     public double tinhThanhTien() {
         return soLuong * donGiaLuuTru;
     }
-
     public boolean tangSoLuong(int n) {
         if (n > 0) {
             this.soLuong += n;
@@ -73,7 +54,6 @@ public class ChiTietHoaDon {
         }
         return false;
     }
-
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -82,7 +62,6 @@ public class ChiTietHoaDon {
         result = prime * result + ((monAn == null) ? 0 : monAn.hashCode());
         return result;
     }
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -104,7 +83,6 @@ public class ChiTietHoaDon {
             return false;
         return true;
     }
-
     @Override
     public String toString() {
         return "ChiTietHoaDon{" +

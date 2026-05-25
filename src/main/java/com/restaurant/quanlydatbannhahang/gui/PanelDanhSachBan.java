@@ -1,23 +1,17 @@
 package com.restaurant.quanlydatbannhahang.gui;
-
 import java.awt.*;
 import javax.swing.*;
-
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import com.restaurant.quanlydatbannhahang.service.BanService;
 import com.restaurant.quanlydatbannhahang.service.KhuVucService;
-
 import com.restaurant.quanlydatbannhahang.entity.Ban;
 import com.restaurant.quanlydatbannhahang.entity.KhuVuc;
-
 import java.util.List;
-
 public class PanelDanhSachBan extends javax.swing.JPanel {
     private BanService banService;
     private List<Ban> allBans;
     private KhuVucService khuVucService;
-
     public PanelDanhSachBan() {
         initComponents();
         banService = new BanService();
@@ -26,85 +20,58 @@ public class PanelDanhSachBan extends javax.swing.JPanel {
         loadDataToComboBoxes();
         loadDataToTable();
     }
-
     private void customUI() {
-        // Placeholder cho txtTimKiem
         setupPlaceholder(txtTimKiem, "Nhập mã bàn hoặc mã khu vực");
-
-        // Gan su kien quay ve Trang Chu
         MainForm.attachGoHomeListener(btnTrangChu, this);
     }
-
     private void loadDataToComboBoxes() {
         try {
-            // Save listeners
             java.awt.event.ActionListener[] khuVucListeners = cbFilterKhuVuc.getActionListeners();
             java.awt.event.ActionListener[] trangThaiListeners = cbFilterTrangThai.getActionListeners();
-
-            // Remove listeners
             for (java.awt.event.ActionListener listener : khuVucListeners) {
                 cbFilterKhuVuc.removeActionListener(listener);
             }
             for (java.awt.event.ActionListener listener : trangThaiListeners) {
                 cbFilterTrangThai.removeActionListener(listener);
             }
-
-            // Load KhuVuc tu database
             cbFilterKhuVuc.removeAllItems();
             cbFilterKhuVuc.addItem("Khu vực");
             List<KhuVuc> dsKhuVuc = khuVucService.getAllKhuVuc();
             for (KhuVuc kv : dsKhuVuc) {
                 cbFilterKhuVuc.addItem(kv.getMaKhuVuc());
             }
-
-            // Load TrangThaiBan tu enum
             cbFilterTrangThai.removeAllItems();
             cbFilterTrangThai.addItem("Trạng thái");
             for (com.restaurant.quanlydatbannhahang.entity.TrangThaiBan trangThai : com.restaurant.quanlydatbannhahang.entity.TrangThaiBan
                     .values()) {
                 cbFilterTrangThai.addItem(trangThai.getDisplayName());
             }
-
-            // Re-add listeners
             for (java.awt.event.ActionListener listener : khuVucListeners) {
                 cbFilterKhuVuc.addActionListener(listener);
             }
             for (java.awt.event.ActionListener listener : trangThaiListeners) {
                 cbFilterTrangThai.addActionListener(listener);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Loi load du lieu filter: " + e.getMessage());
         }
     }
-
-    /**
-     * Tao placeholder cho TextField
-     * Khi focus vao, placeholder bien mat
-     * Khi focus out va trong, placeholder xuat hien lai
-     */
     private void setupPlaceholder(JTextField textField, String placeholder) {
         Color placeholderColor = new Color(153, 153, 153);
         Color textColor = new Color(0, 0, 0);
-
-        // Set text mac dinh va mau
         textField.setText(placeholder);
         textField.setForeground(placeholderColor);
-
         textField.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusGained(java.awt.event.FocusEvent evt) {
-                // Khi focus vao, neu la placeholder thi xoa
                 if (textField.getText().equals(placeholder)) {
                     textField.setText("");
                     textField.setForeground(textColor);
                 }
             }
-
             @Override
             public void focusLost(java.awt.event.FocusEvent evt) {
-                // Khi focus out, neu trong thi hien thi placeholder
                 if (textField.getText().isEmpty()) {
                     textField.setText(placeholder);
                     textField.setForeground(placeholderColor);
@@ -112,7 +79,6 @@ public class PanelDanhSachBan extends javax.swing.JPanel {
             }
         });
     }
-
     private void applyCardStyle(JPanel panel, int radius) {
         panel.setOpaque(false);
         panel.setUI(new javax.swing.plaf.PanelUI() {
@@ -126,19 +92,16 @@ public class PanelDanhSachBan extends javax.swing.JPanel {
             }
         });
     }
-
     private void resetPlaceholder(JTextField textField, String placeholder) {
         Color placeholderColor = new Color(153, 153, 153);
         textField.setText(placeholder);
         textField.setForeground(placeholderColor);
     }
-
     private void loadDataToTable() {
         try {
             allBans = banService.getAllBan();
             DefaultTableModel model = (DefaultTableModel) tableBan.getModel();
             model.setRowCount(0);
-
             for (Ban ban : allBans) {
                 model.addRow(new Object[] {
                         ban.getMaBan(),
@@ -153,7 +116,6 @@ public class PanelDanhSachBan extends javax.swing.JPanel {
             e.printStackTrace();
         }
     }
-
     private void centerTableColumns(JTable table) {
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
@@ -161,8 +123,6 @@ public class PanelDanhSachBan extends javax.swing.JPanel {
             table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
         }
     }
-
-    // Từ đây không chỉnh sửa bên dưới
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
@@ -170,7 +130,6 @@ public class PanelDanhSachBan extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated
     // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
         pnlHeader = new javax.swing.JPanel();
         pnlThongTinBan = new javax.swing.JPanel();
         txtTimKiem = new javax.swing.JTextField();
@@ -182,32 +141,26 @@ public class PanelDanhSachBan extends javax.swing.JPanel {
         pnlButton = new javax.swing.JPanel();
         btnTrangChu = new javax.swing.JButton();
         btnXoaTrang = new javax.swing.JButton();
-
         setBackground(new java.awt.Color(255, 251, 233));
         setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 60, 20, 60));
         setLayout(new java.awt.BorderLayout(0, 10));
-
         pnlHeader.setOpaque(false);
         pnlHeader.setLayout(new java.awt.BorderLayout(0, 15));
-
         pnlThongTinBan.setBackground(new java.awt.Color(255, 251, 233));
-
-        txtTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14));
         txtTimKiem.setPreferredSize(new java.awt.Dimension(64, 35));
         txtTimKiem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtTimKiemActionPerformed(evt);
             }
         });
-
-        btnTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14));
         btnTimKiem.setText("Tìm kiếm");
         btnTimKiem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTimKiemActionPerformed(evt);
             }
         });
-
         cbFilterKhuVuc.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {}));
         cbFilterKhuVuc.setPreferredSize(new java.awt.Dimension(72, 35));
         cbFilterKhuVuc.addActionListener(new java.awt.event.ActionListener() {
@@ -215,7 +168,6 @@ public class PanelDanhSachBan extends javax.swing.JPanel {
                 cbFilterKhuVucActionPerformed(evt);
             }
         });
-
         cbFilterTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {}));
         cbFilterTrangThai.setPreferredSize(new java.awt.Dimension(72, 35));
         cbFilterTrangThai.addActionListener(new java.awt.event.ActionListener() {
@@ -223,7 +175,6 @@ public class PanelDanhSachBan extends javax.swing.JPanel {
                 cbFilterTrangThaiActionPerformed(evt);
             }
         });
-
         javax.swing.GroupLayout pnlThongTinBanLayout = new javax.swing.GroupLayout(pnlThongTinBan);
         pnlThongTinBan.setLayout(pnlThongTinBanLayout);
         pnlThongTinBanLayout.setHorizontalGroup(
@@ -265,14 +216,10 @@ public class PanelDanhSachBan extends javax.swing.JPanel {
                                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
                                                                 javax.swing.GroupLayout.PREFERRED_SIZE))))
                                 .addContainerGap()));
-
         pnlHeader.add(pnlThongTinBan, java.awt.BorderLayout.PAGE_END);
-
         add(pnlHeader, java.awt.BorderLayout.PAGE_START);
-
         tableBan.setModel(new javax.swing.table.DefaultTableModel(
                 new Object[][] {
-
                 },
                 new String[] {
                         "Mã bàn", "Số ghế", "Vị trí", "Mã khu vực", "Trạng thái"
@@ -284,30 +231,24 @@ public class PanelDanhSachBan extends javax.swing.JPanel {
             boolean[] canEdit = new boolean[] {
                     false, false, false, false, false
             };
-
             public Class getColumnClass(int columnIndex) {
                 return types[columnIndex];
             }
-
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit[columnIndex];
             }
         });
         tableBan.setRowHeight(35);
         scrTableBan.setViewportView(tableBan);
-
         add(scrTableBan, java.awt.BorderLayout.CENTER);
-
         pnlButton.setBackground(new java.awt.Color(255, 251, 233));
         pnlButton.setPreferredSize(new java.awt.Dimension(100, 27));
         pnlButton.setLayout(new java.awt.BorderLayout(0, 5));
-
-        btnTrangChu.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnTrangChu.setFont(new java.awt.Font("Segoe UI", 0, 14));
         btnTrangChu.setText("Trang Chủ");
         btnTrangChu.setPreferredSize(new java.awt.Dimension(100, 27));
         pnlButton.add(btnTrangChu, java.awt.BorderLayout.WEST);
-
-        btnXoaTrang.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnXoaTrang.setFont(new java.awt.Font("Segoe UI", 0, 14));
         btnXoaTrang.setText("Xóa trắng");
         btnXoaTrang.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -315,53 +256,39 @@ public class PanelDanhSachBan extends javax.swing.JPanel {
             }
         });
         pnlButton.add(btnXoaTrang, java.awt.BorderLayout.EAST);
-
         add(pnlButton, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaTrangActionPerformed
-        // TODO add your handling code here:
+    private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {
         refreshData();
-    }// GEN-LAST:event_btnXoaTrangActionPerformed
-
-    private void cbFilterKhuVucActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterKhuVucActionPerformed
+    }
+    private void cbFilterKhuVucActionPerformed(java.awt.event.ActionEvent evt) {
         filterTable();
-    }// GEN-LAST:event_cbFilterKhuVucActionPerformed
-
-    private void cbFilterTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterTrangThaiActionPerformed
+    }
+    private void cbFilterTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {
         filterTable();
-    }// GEN-LAST:event_cbFilterTrangThaiActionPerformed
-
-    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTimKiemActionPerformed
+    }
+    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {
         searchByText();
-    }// GEN-LAST:event_btnTimKiemActionPerformed
-
-    private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtTimKiemActionPerformed
+    }
+    private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {
         searchByText();
-    }// GEN-LAST:event_txtTimKiemActionPerformed
-
+    }
     private void filterByComboBoxes() {
         DefaultTableModel model = (DefaultTableModel) tableBan.getModel();
         model.setRowCount(0);
         String selectedKhuVuc = (String) cbFilterKhuVuc.getSelectedItem();
         String selectedTrangThai = (String) cbFilterTrangThai.getSelectedItem();
-
         for (Ban ban : allBans) {
-            // Check KhuVuc filter
             if (selectedKhuVuc != null && !selectedKhuVuc.equals("Khu vực")) {
                 if (ban.getKhuVuc() == null || !ban.getKhuVuc().getMaKhuVuc().equals(selectedKhuVuc)) {
                     continue;
                 }
             }
-
-            // Check TrangThai filter
             if (selectedTrangThai != null && !selectedTrangThai.equals("Trạng thái")) {
                 if (ban.getTrangThai() == null || !ban.getTrangThai().getDisplayName().equals(selectedTrangThai)) {
                     continue;
                 }
             }
-
-            // Add to table
             model.addRow(new Object[] {
                     ban.getMaBan(),
                     ban.getSoGhe(),
@@ -372,36 +299,27 @@ public class PanelDanhSachBan extends javax.swing.JPanel {
         }
         centerTableColumns(tableBan);
     }
-
     private void searchByText() {
         DefaultTableModel model = (DefaultTableModel) tableBan.getModel();
         model.setRowCount(0);
         String searchText = txtTimKiem.getText().trim().toLowerCase();
         String selectedKhuVuc = (String) cbFilterKhuVuc.getSelectedItem();
         String selectedTrangThai = (String) cbFilterTrangThai.getSelectedItem();
-
         for (Ban ban : allBans) {
-            // Check KhuVuc filter
             if (selectedKhuVuc != null && !selectedKhuVuc.equals("Khu vực")) {
                 if (ban.getKhuVuc() == null || !ban.getKhuVuc().getMaKhuVuc().equals(selectedKhuVuc)) {
                     continue;
                 }
             }
-
-            // Check TrangThai filter
             if (selectedTrangThai != null && !selectedTrangThai.equals("Trạng thái")) {
                 if (ban.getTrangThai() == null || !ban.getTrangThai().getDisplayName().equals(selectedTrangThai)) {
                     continue;
                 }
             }
-
-            // Check search text
             String maBan = ban.getMaBan() != null ? ban.getMaBan().toLowerCase() : "";
             if (!searchText.isEmpty() && (!maBan.contains(searchText))) {
                 continue;
             }
-
-            // Add to table
             model.addRow(new Object[] {
                     ban.getMaBan(),
                     ban.getSoGhe(),
@@ -412,11 +330,9 @@ public class PanelDanhSachBan extends javax.swing.JPanel {
         }
         centerTableColumns(tableBan);
     }
-
     private void filterTable() {
         filterByComboBoxes();
     }
-
     public void refreshData() {
         resetPlaceholder(txtTimKiem, "Nhập mã bàn hoặc mã khu vực");
         cbFilterKhuVuc.setSelectedIndex(0);
@@ -424,7 +340,6 @@ public class PanelDanhSachBan extends javax.swing.JPanel {
         filterByComboBoxes();
         tableBan.clearSelection();
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnTimKiem;
     private javax.swing.JButton btnTrangChu;

@@ -1,26 +1,17 @@
 package com.restaurant.quanlydatbannhahang.service;
-
 import com.restaurant.quanlydatbannhahang.dao.BanDAO;
 import com.restaurant.quanlydatbannhahang.entity.Ban;
 import com.restaurant.quanlydatbannhahang.entity.ChiTietPhieuDatBan;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiBan;
-
 import java.util.List;
 import java.util.regex.Pattern;
-
 public class BanService {
     private BanDAO banDAO;
-
     private static final String MABAN_PATTERN = "^B\\d{3}$";
     private static final Pattern maBanPattern = Pattern.compile(MABAN_PATTERN);
-
     public BanService() {
         this.banDAO = new BanDAO();
     }
-
-    /**
-     * Validate đối tượng Ban
-     */
     public void validateBan(Ban ban) {
         if (ban == null) {
             throw new IllegalArgumentException("Đối tượng bàn không được để trống");
@@ -35,22 +26,12 @@ public class BanService {
             throw new IllegalArgumentException("Số ghế phải lớn hơn 0");
         }
     }
-
-    /**
-     * Thêm bàn mới
-     */
     public void themBan(Ban ban) {
         validateBan(ban);
         if (!banDAO.themBan(ban)) {
             throw new RuntimeException("Thêm bàn thất bại");
         }
     }
-
-    
-    
-    /**
-     * Lấy bàn theo mã
-     */
     public Ban getBanTheoMa(String maBan) {
         if (maBan == null || maBan.isBlank()) {
             throw new IllegalArgumentException("Mã bàn không được để trống");
@@ -64,51 +45,27 @@ public class BanService {
         }
         return ban;
     }
-
-    /**
-     * Lấy tất cả bàn
-     */
     public List<Ban> getAllBan() {
         return banDAO.getAllBan();
     }
-
-    /**
-     * Lấy bàn theo khu vực
-     */
     public List<Ban> getBanTheoKhuVuc(String maKhuVuc) {
         if (maKhuVuc == null || maKhuVuc.isBlank()) {
             throw new IllegalArgumentException("Mã khu vực không được để trống");
         }
         return banDAO.getBanTheoKhuVuc(maKhuVuc);
     }
-
-    /**
-     * Lấy bàn trống
-     */
     public List<Ban> getBanTrong() {
         return banDAO.getBanTrong();
     }
-
-    /**
-     * Lấy bàn đang sử dụng
-     */
     public List<Ban> getBanDangSuDung() {
         return banDAO.getBanDangSuDung();
     }
-
-    /**
-     * Cập nhật thông tin bàn
-     */
     public void capNhatBan(Ban ban) {
         validateBan(ban);
         if (!banDAO.capNhatBan(ban)) {
             throw new RuntimeException("Cập nhật bàn thất bại");
         }
     }
-
-    /**
-     * Xóa bàn
-     */
     public void xoaBan(String maBan) {
         if (maBan == null || maBan.isBlank()) {
             throw new IllegalArgumentException("Mã bàn không được để trống");
@@ -120,10 +77,6 @@ public class BanService {
             throw new RuntimeException("Xóa bàn thất bại");
         }
     }
-
-    /**
-     * Cập nhật trạng thái bàn
-     */
     public void capNhatTrangThaiBan(String maBan, TrangThaiBan trangThai) {
         if (maBan == null || maBan.isBlank()) {
             throw new IllegalArgumentException("Mã bàn không được để trống");
@@ -140,28 +93,16 @@ public class BanService {
             capNhatBan(ban);
         }
     }
-
-    /**
-     * Kiểm tra bàn trống
-     */
     public boolean isBanTrong(String maBan) {
         Ban ban = getBanTheoMa(maBan);
         return ban != null && ban.getTrangThai() == TrangThaiBan.TRONG;
     }
-
-    /**
-     * Đặt bàn (đổi trạng thái từ TRONG sang DA_DAT)
-     */
     public void datBan(String maBan) {
         if (!isBanTrong(maBan)) {
             throw new IllegalArgumentException("Bàn này không còn trống");
         }
         capNhatTrangThaiBan(maBan, TrangThaiBan.DA_DAT);
     }
-
-    /**
-     * Sử dụng bàn (đổi trạng thái từ DA_DAT sang DANG_DUNG)
-     */
     public void suDungBan(String maBan) {
         Ban ban = getBanTheoMa(maBan);
         if (ban == null || ban.getTrangThai() == TrangThaiBan.TRONG) {
@@ -169,17 +110,45 @@ public class BanService {
         }
         capNhatTrangThaiBan(maBan, TrangThaiBan.DANG_DUNG);
     }
-
-    /**
-     * Giải phóng bàn (đổi trạng thái về TRONG)
-     */
     public void giaiphongBan(String maBan) {
         capNhatTrangThaiBan(maBan, TrangThaiBan.TRONG);
     }
-    
     public void capNhatTrangThaiBanTrongChiTietPDB(List<ChiTietPhieuDatBan> list, TrangThaiBan trangThai) {
 		for(ChiTietPhieuDatBan ct: list) {
-			capNhatTrangThaiBan(ct.getBan().getMaBan(), trangThai);
+			capNhatTrangThaiThongMinh(ct.getBan().getMaBan());
 		}
 	}
+    
+    public void capNhatTrangThaiThongMinh(String maBan) {
+        if (maBan == null || maBan.isBlank()) return;
+        
+        try {
+            Ban ban = banDAO.getBanTheoMa(maBan);
+            if (ban == null) return;
+
+            if (ban.getTrangThai() == TrangThaiBan.DANG_DUNG) {
+                return; 
+            }
+
+            PhieuDatBanService pdb_service = new PhieuDatBanService();
+            boolean hasFutureReservation = pdb_service.hasReservationToday(maBan);
+
+            if (hasFutureReservation) {
+                banDAO.capNhatTrangThaiBan(maBan, TrangThaiBan.DA_DAT);
+            } else {
+                banDAO.capNhatTrangThaiBan(maBan, TrangThaiBan.TRONG);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Lỗi định đoạt trạng thái bàn " + maBan + ": " + e.getMessage());
+        }
+    }
+    
+    public void capNhatTrangThaiThongMinhChoChuoiContext(String maBanContext) {
+        if (maBanContext == null || maBanContext.isBlank()) return;
+        String[] danhSachMaBan = maBanContext.split(",");
+        for (String maBan : danhSachMaBan) {
+            capNhatTrangThaiThongMinh(maBan.trim());
+        }
+    }
 }

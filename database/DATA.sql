@@ -9,6 +9,7 @@ DELETE FROM ChiTietHoaDon;
 DELETE FROM HoaDon;
 DELETE FROM ChiTietPhieuDatBan;
 DELETE FROM PhieuDatBan;
+DELETE FROM CaLamViec;
 DELETE FROM KhachHang;
 DELETE FROM TaiKhoan;
 DELETE FROM NhanVien;
@@ -79,7 +80,12 @@ INSERT INTO TaiKhoan (username, password, maNV, quyenHan) VALUES
 ('chiennguyen', '222222', 'NV006', 'STAFF'),
 ('dodung', '123456', 'NV008', 'MANAGER');
 
--- 2.7. BẢNG MÓN ĂN (30 Món ăn)
+-- 2.7. BẢNG CA LÀM VIỆC
+INSERT INTO CaLamViec (maCa, maNV, thoiGianVaoCa, thoiGianKetCa, tienDauCa, tienKetCa, trangThai, ghiChu) VALUES
+('CA001', 'NV002', '2026-05-23 08:00:00', '2026-05-23 16:30:00', 1200000, 1500000, N'DA_KET_CA', N'Kết ca ca sáng'),
+('CA002', 'NV003', '2026-05-24 09:00:00', NULL, 1000000, NULL, N'DANG_LAM_VIEC', N'Ca hiện tại chưa kết');
+
+-- 2.8. BẢNG MÓN ĂN (30 Món ăn)
 INSERT INTO MonAn (maMon, tenMon, donGia, donViTinh, tenLoai, trangThai, urlHinhAnh) VALUES 
 ('MA001', N'Salad cá ngừ', 85000, N'Dĩa', N'KHAI_VI', N'CON', 'salad_ca_ngu.jpg'),
 ('MA002', N'Súp cua', 65000, N'Thố', N'KHAI_VI', N'CON', 'sup_cua.jpg'),

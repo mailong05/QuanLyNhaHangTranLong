@@ -1,46 +1,33 @@
 package com.restaurant.quanlydatbannhahang.entity;
-
 public class ChiTietPhieuDatBan {
     private PhieuDatBan phieuDatBan;
     private Ban ban;
     private String ghiChu;
-
-    // Constructor không tham số
     public ChiTietPhieuDatBan() {
     }
-
-    // Constructor đầy đủ
     public ChiTietPhieuDatBan(PhieuDatBan phieuDatBan, Ban ban, String ghiChu) {
         this.phieuDatBan = phieuDatBan;
         this.ban = ban;
         this.ghiChu = ghiChu;
     }
-
-    // Getter và Setter
     public PhieuDatBan getPhieuDatBan() {
         return phieuDatBan;
     }
-
     public void setPhieuDatBan(PhieuDatBan phieuDatBan) {
         this.phieuDatBan = phieuDatBan;
     }
-
     public Ban getBan() {
         return ban;
     }
-
     public void setBan(Ban ban) {
         this.ban = ban;
     }
-
     public String getGhiChu() {
         return ghiChu;
     }
-
     public void setGhiChu(String ghiChu) {
         this.ghiChu = ghiChu;
     }
-
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -49,7 +36,6 @@ public class ChiTietPhieuDatBan {
         result = prime * result + ((ban == null) ? 0 : ban.hashCode());
         return result;
     }
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -71,7 +57,6 @@ public class ChiTietPhieuDatBan {
             return false;
         return true;
     }
-
     @Override
     public String toString() {
         return "ChiTietPhieuDatBan{" +

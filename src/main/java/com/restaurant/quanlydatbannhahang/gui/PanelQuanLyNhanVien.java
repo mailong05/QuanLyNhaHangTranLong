@@ -1,16 +1,11 @@
 package com.restaurant.quanlydatbannhahang.gui;
-
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
 import javax.swing.*;
-
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.text.NumberFormatter;
-
 import com.restaurant.quanlydatbannhahang.service.NhanVienService;
 import com.restaurant.quanlydatbannhahang.util.ComboBoxEnumLoader;
 import com.restaurant.quanlydatbannhahang.util.CurrencyUtility;
@@ -21,29 +16,20 @@ import com.restaurant.quanlydatbannhahang.entity.NhanVien;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiNhanVien;
 import java.util.List;
 import java.time.LocalDate;
-
 public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseListener {
-
-
         public PanelQuanLyNhanVien() {
                 initComponents();
                 customUI();
                 loadDataToComboBoxes();
                 loadDataToTable();
         }
-
         private void customUI() {
-                // Placeholder cho txtTimKiem
                 setupPlaceholder(txtTimKiem, "Nhập tên hoặc số điện thoại");
                 fillTxtMaNhanVien();
                 MainForm.attachGoHomeListener(btnTrangChu, this);
-
-                // Set giá trị mặc định cho DatePicker (ngày hôm nay)
                 if (dpNgayVaoLam != null) {
                         dpNgayVaoLam.setDate(LocalDate.now());
                 }
-
-                // ========== DESELECT WHEN CLICK OUTSIDE TABLE ==========
                 this.addMouseListener(new java.awt.event.MouseAdapter() {
                         @Override
                         public void mousePressed(java.awt.event.MouseEvent evt) {
@@ -51,12 +37,10 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                                         tableNhanVien.clearSelection();
                                         clearFields();
                                         fillTxtMaNhanVien();
-                                        syncCapNhatButtonState();
+                                        syncButtonState();
                                 }
                         }
                 });
-
-                // Register mouse listener để populate fields khi click vào row
                 tableNhanVien.addMouseListener(this);
                 tableNhanVien.getSelectionModel().addListSelectionListener(e -> {
                         if (!e.getValueIsAdjusting()) {
@@ -64,10 +48,9 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                                 if (row >= 0) {
                                         loadDataFromRow(row);
                                 }
-                                syncCapNhatButtonState();
+                                syncButtonState();
                         }
                 });
-
                 tableNhanVien.getColumnModel().getColumn(5).setCellRenderer(new DefaultTableCellRenderer() {
                         @Override
                         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
@@ -76,26 +59,21 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                                         value = com.restaurant.quanlydatbannhahang.util.CurrencyUtility
                                                         .formatVND(((Number) value).doubleValue());
                                 }
-                                // Vừa format tiền, vừa căn GIỮA (hoặc PHẢI tùy ông chọn)
                                 setHorizontalAlignment(JLabel.CENTER);
                                 return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row,
                                                 column);
                         }
                 });
-
                 txtLuongCoBan.addFocusListener(new java.awt.event.FocusAdapter() {
                         @Override
                         public void focusGained(java.awt.event.FocusEvent evt) {
-                                // Khi click vào để nhập: xóa bỏ dấu phẩy để người dùng nhập số thuần
                                 String currentText = txtLuongCoBan.getText();
                                 if (!currentText.isEmpty()) {
                                         txtLuongCoBan.setText(currentText.replaceAll("[^\\d.]", ""));
                                 }
                         }
-
                         @Override
                         public void focusLost(java.awt.event.FocusEvent evt) {
-                                // Khi click ra ngoài: tự động format lại thành tiền tệ
                                 String text = txtLuongCoBan.getText();
                                 if (!text.isEmpty()) {
                                         double value = com.restaurant.quanlydatbannhahang.util.CurrencyUtility
@@ -105,29 +83,19 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                                 }
                         }
                 });
-                syncCapNhatButtonState();
+                syncButtonState();
         }
-
         private void loadDataToComboBoxes() {
                 try {
-                        // Save listeners
                         ActionListener[] chucVuListeners = cbFilterChucVu.getActionListeners();
-
-                        // Remove listeners
                         for (ActionListener listener : chucVuListeners) {
                                 cbFilterChucVu.removeActionListener(listener);
                         }
-
-                        // Load ChucVu
                         cbFilterChucVu.removeAllItems();
-
                         ComboBoxEnumLoader.loadChucVuToComboBox(cbFilterChucVu);
                         ComboBoxEnumLoader.loadTrangThaiNhanVienToComboBox(cbTrangThai);
-
                         cbChucVu.removeAllItems();
                         ComboBoxEnumLoader.loadChucVuToComboBox(cbChucVu);
-
-                        // Re-add listeners
                         for (ActionListener listener : chucVuListeners) {
                                 cbFilterChucVu.addActionListener(listener);
                         }
@@ -136,41 +104,32 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                         JOptionPane.showMessageDialog(this, "Lỗi load dữ liệu filter: " + e.getMessage());
                 }
         }
-
         private void loadDataToTable() {
                 loadFilteredData();
         }
-
         private void loadFilteredData() {
                 try {
                         NhanVienService service = new NhanVienService();
                         List<NhanVien> list = service.getAllNhanVien();
                         String selectedChucVu = (String) cbFilterChucVu.getSelectedItem();
-
                         DefaultTableModel model = (DefaultTableModel) tableNhanVien.getModel();
                         model.setRowCount(0);
-
                         for (NhanVien nv : list) {
-                                // Filter: Chỉ hiển thị nhân viên đang làm việc (Soft delete)
                                 if (nv.getTrangThai() != TrangThaiNhanVien.DANG_LAM_VIEC) {
                                         continue;
                                 }
-
-                                // Apply ChucVu filter
                                 if (selectedChucVu != null && !selectedChucVu.equals("Chức vụ")) {
                                         if (nv.getChucVu() == null
                                                         || !nv.getChucVu().getDisplayName().equals(selectedChucVu)) {
                                                 continue;
                                         }
                                 }
-
                                 model.addRow(new Object[] {
                                                 nv.getMaNV(),
                                                 nv.getHoTen(),
                                                 nv.getSdt(),
                                                 nv.getChucVu().getDisplayName(),
                                                 nv.getNgayVaoLam(),
-
                                                 nv.getLuongCoBan(),
                                                 nv.getTrangThai().getDisplayName()
                                 });
@@ -181,32 +140,24 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                         JOptionPane.showMessageDialog(this, "Lỗi load dữ liệu: " + e.getMessage());
                 }
         }
-
         private void searchByText() {
                 try {
                         NhanVienService service = new NhanVienService();
                         List<NhanVien> list = service.getAllNhanVien();
                         String searchText = txtTimKiem.getText().trim().toLowerCase();
                         String selectedChucVu = (String) cbFilterChucVu.getSelectedItem();
-
                         DefaultTableModel model = (DefaultTableModel) tableNhanVien.getModel();
                         model.setRowCount(0);
-
                         for (NhanVien nv : list) {
-                                // Filter: Chỉ hiển thị nhân viên đang làm việc (Soft delete)
                                 if (nv.getTrangThai() != TrangThaiNhanVien.DANG_LAM_VIEC) {
                                         continue;
                                 }
-
-                                // Apply ChucVu filter
                                 if (selectedChucVu != null && !selectedChucVu.equals("Chức vụ")) {
                                         if (nv.getChucVu() == null
                                                         || !nv.getChucVu().getDisplayName().equals(selectedChucVu)) {
                                                 continue;
                                         }
                                 }
-
-                                // Apply search text filter
                                 if (!searchText.isEmpty()) {
                                         String maNV = nv.getMaNV() != null ? nv.getMaNV().toLowerCase()
                                                         : "";
@@ -217,7 +168,6 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                                                 continue;
                                         }
                                 }
-
                                 model.addRow(new Object[] {
                                                 nv.getMaNV(),
                                                 nv.getHoTen(),
@@ -234,73 +184,32 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                         JOptionPane.showMessageDialog(this, "Lỗi tìm kiếm dữ liệu: " + e.getMessage());
                 }
         }
-
-        // private void loadDataFromRow(int rowIndex) {
-        // try {
-        // String maNhanVien = (String) tableNhanVien.getValueAt(rowIndex, 0);
-        // String hoTen = (String) tableNhanVien.getValueAt(rowIndex, 1);
-        // String sdt = (String) tableNhanVien.getValueAt(rowIndex, 2);
-        // String chucVu = (String) tableNhanVien.getValueAt(rowIndex, 3);
-        //
-        // Object ngayVaoLamStr = tableNhanVien.getValueAt(rowIndex, 4);
-        // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        // LocalDate ngayVaoLam = LocalDate.parse(ngayVaoLamStr.toString(), formatter);
-        // double luong = (double) tableNhanVien.getValueAt(rowIndex, 5);
-        // String trangThai = tableNhanVien.getValueAt(rowIndex, 6).toString();
-        //
-        // txtMaNhanVien.setText(maNhanVien);
-        // txtHoTen.setText(hoTen);
-        // cbChucVu.setSelectedItem(chucVu);
-        // txtSoDienThoai.setText(sdt);
-        // dpNgayVaoLam.setDate(ngayVaoLam);
-        // txtLuongCoBan.setText(com.restaurant.quanlydatbannhahang.util.CurrencyUtility.formatVND(luong));
-        // cbTrangThai.setSelectedItem(trangThai);
-        //
-        // } catch (Exception e) {
-        // e.printStackTrace();
-        // JOptionPane.showMessageDialog(this, "Lỗi khi load dữ liệu từ row: " +
-        // e.getMessage());
-        // }
-        // }
-
         private void loadDataFromRow(int rowIndex) {
                 try {
-                        // Lấy dữ liệu an toàn, tránh lỗi ép kiểu
                         String maNhanVien = tableNhanVien.getValueAt(rowIndex, 0).toString();
                         String hoTen = tableNhanVien.getValueAt(rowIndex, 1).toString();
                         String sdt = tableNhanVien.getValueAt(rowIndex, 2).toString();
                         String chucVu = tableNhanVien.getValueAt(rowIndex, 3).toString();
-
                         Object ngayVaoLamObj = tableNhanVien.getValueAt(rowIndex, 4);
                         LocalDate ngayVaoLam = LocalDate.parse(ngayVaoLamObj.toString());
-
-                        // Lấy lương từ Model (dạng Double) và format trước khi hiện lên Field
                         Object luongObj = tableNhanVien.getValueAt(rowIndex, 5);
                         double luong = 0;
                         if (luongObj instanceof Number) {
                                 luong = ((Number) luongObj).doubleValue();
                         }
-
                         String trangThai = tableNhanVien.getValueAt(rowIndex, 6).toString();
-
-                        // Đổ dữ liệu lên UI
                         txtMaNhanVien.setText(maNhanVien);
                         txtHoTen.setText(hoTen);
                         cbChucVu.setSelectedItem(chucVu);
                         txtSoDienThoai.setText(sdt);
                         dpNgayVaoLam.setDate(ngayVaoLam);
-
-                        // QUAN TRỌNG: Format lương trước khi setText
                         txtLuongCoBan.setText(CurrencyUtility.formatVND(luong));
                         cbTrangThai.setSelectedItem(trangThai);
-
                 } catch (Exception e) {
                         e.printStackTrace();
-                        // Không dùng JOptionPane ở đây để tránh hiện thông báo liên tục khi click dòng
                         System.err.println("Lỗi chọn dòng: " + e.getMessage());
                 }
         }
-
         private void clearFields() {
                 txtHoTen.setText("");
                 txtSoDienThoai.setText("");
@@ -310,16 +219,13 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                 if (dpNgayVaoLam != null) {
                         dpNgayVaoLam.setDate(LocalDate.now());
                 }
-
         }
-
         private void fillTxtMaNhanVien() {
                 String lastID = IDQueryHelper.getLastID("NhanVien", "maNV");
                 String maNVNew = (lastID == null || lastID.isEmpty()) ? IDGeneratorHelper.generateDefaultID("NV")
                                 : IDGeneratorHelper.generateNextIDFromFullID(lastID);
                 txtMaNhanVien.setText(maNVNew);
         }
-
         public void refreshData() {
                 clearFields();
                 fillTxtMaNhanVien();
@@ -328,47 +234,34 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                 loadDataToComboBoxes();
                 loadDataToTable();
                 tableNhanVien.clearSelection();
-                syncCapNhatButtonState();
-
+                syncButtonState();
         }
-
-        private void syncCapNhatButtonState() {
+        private void syncButtonState() {
                 btnCapNhat.setEnabled(tableNhanVien.getSelectedRow() >= 0);
                 btnXoa.setEnabled(tableNhanVien.getSelectedRow() >= 0);
-        }
+                btnThem.setEnabled(tableNhanVien.getSelectedRow() == -1);
 
+        }
         private boolean isMouseOverTable(java.awt.event.MouseEvent evt) {
                 java.awt.Point p = evt.getPoint();
                 java.awt.Point tablePoint = SwingUtilities.convertPoint(this, p, tableNhanVien);
                 return tableNhanVien.getBounds().contains(tablePoint);
         }
-
-        /**
-         * Tao placeholder cho TextField
-         * Khi focus vao, placeholder bien mat
-         * Khi focus out va trong, placeholder xuat hien lai
-         */
         private void setupPlaceholder(JTextField textField, String placeholder) {
                 Color placeholderColor = new Color(153, 153, 153);
                 Color textColor = new Color(0, 0, 0);
-
-                // Set text mac dinh va mau
                 textField.setText(placeholder);
                 textField.setForeground(placeholderColor);
-
                 textField.addFocusListener(new java.awt.event.FocusAdapter() {
                         @Override
                         public void focusGained(java.awt.event.FocusEvent evt) {
-                                // Khi focus vao, neu la placeholder thi xoa
                                 if (textField.getText().equals(placeholder)) {
                                         textField.setText("");
                                         textField.setForeground(textColor);
                                 }
                         }
-
                         @Override
                         public void focusLost(java.awt.event.FocusEvent evt) {
-                                // Khi focus out, neu trong thi hien thi placeholder
                                 if (textField.getText().isEmpty()) {
                                         textField.setText(placeholder);
                                         textField.setForeground(placeholderColor);
@@ -376,13 +269,11 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                         }
                 });
         }
-
         private void resetPlaceholder(JTextField textField, String placeholder) {
                 Color placeholderColor = new Color(153, 153, 153);
                 textField.setText(placeholder);
                 textField.setForeground(placeholderColor);
         }
-
         // <editor-fold defaultstate="collapsed" desc="Generated
         // <editor-fold defaultstate="collapsed" desc="Generated
         // <editor-fold defaultstate="collapsed" desc="Generated
@@ -391,7 +282,6 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
         // <editor-fold defaultstate="collapsed" desc="Generated
         // Code">//GEN-BEGIN:initComponents
         private void initComponents() {
-
                 pnlHeader = new javax.swing.JPanel();
                 lblTitle = new javax.swing.JLabel();
                 pnlThongTinNhanVien = new javax.swing.JPanel();
@@ -421,25 +311,19 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                 btnCapNhat = new javax.swing.JButton();
                 btnXoa = new javax.swing.JButton();
                 btnThem = new javax.swing.JButton();
-
                 setBackground(new java.awt.Color(255, 251, 233));
                 setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 60, 20, 60));
                 setLayout(new java.awt.BorderLayout(0, 10));
-
                 pnlHeader.setOpaque(false);
                 pnlHeader.setLayout(new java.awt.BorderLayout(0, 15));
-
-                lblTitle.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+                lblTitle.setFont(new java.awt.Font("Segoe UI", 0, 18));
                 lblTitle.setText("Quản lý thông tin nhân viên trong hệ thống");
                 pnlHeader.add(lblTitle, java.awt.BorderLayout.WEST);
-
                 pnlThongTinNhanVien.setBackground(new java.awt.Color(255, 251, 233));
-
                 lblMaNhanVien.setText("Mã nhân viên:");
-                lblMaNhanVien.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-
+                lblMaNhanVien.setFont(new java.awt.Font("Segoe UI", 0, 14));
                 txtMaNhanVien.setEditable(false);
-                txtMaNhanVien.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+                txtMaNhanVien.setFont(new java.awt.Font("Segoe UI", 0, 14));
                 txtMaNhanVien.setFocusable(false);
                 txtMaNhanVien.setPreferredSize(new java.awt.Dimension(64, 30));
                 txtMaNhanVien.addActionListener(new java.awt.event.ActionListener() {
@@ -447,57 +331,43 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                                 txtMaNhanVienActionPerformed(evt);
                         }
                 });
-
                 lblHoTen.setText("Họ tên:");
-                lblHoTen.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-
-                txtHoTen.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+                lblHoTen.setFont(new java.awt.Font("Segoe UI", 0, 14));
+                txtHoTen.setFont(new java.awt.Font("Segoe UI", 0, 14));
                 txtHoTen.setPreferredSize(new java.awt.Dimension(64, 30));
-
                 lblChucVu.setText("Chức vụ:");
-                lblChucVu.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-
+                lblChucVu.setFont(new java.awt.Font("Segoe UI", 0, 14));
                 lblNgayVaoLam.setText("Ngày vào làm:");
-                lblNgayVaoLam.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-
+                lblNgayVaoLam.setFont(new java.awt.Font("Segoe UI", 0, 14));
                 lblSoDienThoai.setText("Số điện thoại:");
-                lblSoDienThoai.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-
-                txtSoDienThoai.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+                lblSoDienThoai.setFont(new java.awt.Font("Segoe UI", 0, 14));
+                txtSoDienThoai.setFont(new java.awt.Font("Segoe UI", 0, 14));
                 txtSoDienThoai.setPreferredSize(new java.awt.Dimension(64, 30));
                 txtSoDienThoai.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
                                 txtSoDienThoaiActionPerformed(evt);
                         }
                 });
-
-                txtTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-
+                txtTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14));
                 btnTimKiem.setText("Tìm kiếm");
-                btnTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+                btnTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14));
                 btnTimKiem.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
                                 btnTimKiemActionPerformed(evt);
                         }
                 });
-
                 lblLuongCoBan.setText("Lương cơ bản:");
-                lblLuongCoBan.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-
-                txtLuongCoBan.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-
+                lblLuongCoBan.setFont(new java.awt.Font("Segoe UI", 0, 14));
+                txtLuongCoBan.setFont(new java.awt.Font("Segoe UI", 0, 14));
                 lblTrangThai.setText("Trạng thái:");
-                lblTrangThai.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-
+                lblTrangThai.setFont(new java.awt.Font("Segoe UI", 0, 14));
                 cbChucVu.setModel(new javax.swing.DefaultComboBoxModel<>(
                                 new String[] { "Quản lý", "Thu ngân", "Phục vụ", "Bếp", " " }));
                 cbChucVu.setPreferredSize(new java.awt.Dimension(72, 30));
-
                 cbTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Đang làm việc", " " }));
                 cbTrangThai.setMaximumSize(new java.awt.Dimension(32767, 30));
                 cbTrangThai.setMinimumSize(new java.awt.Dimension(72, 30));
                 cbTrangThai.setPreferredSize(new java.awt.Dimension(72, 30));
-
                 cbFilterChucVu.setModel(new javax.swing.DefaultComboBoxModel<>(
                                 new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
                 cbFilterChucVu.addActionListener(new java.awt.event.ActionListener() {
@@ -505,7 +375,6 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                                 cbFilterChucVuActionPerformed(evt);
                         }
                 });
-
                 javax.swing.GroupLayout pnlThongTinNhanVienLayout = new javax.swing.GroupLayout(pnlThongTinNhanVien);
                 pnlThongTinNhanVien.setLayout(pnlThongTinNhanVienLayout);
                 pnlThongTinNhanVienLayout.setHorizontalGroup(
@@ -694,14 +563,10 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                                                                                                 35,
                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE))
                                                                 .addContainerGap()));
-
                 pnlHeader.add(pnlThongTinNhanVien, java.awt.BorderLayout.PAGE_END);
-
                 add(pnlHeader, java.awt.BorderLayout.PAGE_START);
-
                 tableNhanVien.setModel(new javax.swing.table.DefaultTableModel(
                                 new Object[][] {
-
                                 },
                                 new String[] {
                                                 "Mã nhân viên", "Họ tên", "Số điện thoại", "Chức vụ", "Ngày vào làm",
@@ -715,100 +580,79 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                         boolean[] canEdit = new boolean[] {
                                         false, false, false, false, false, false, false
                         };
-
                         public Class getColumnClass(int columnIndex) {
                                 return types[columnIndex];
                         }
-
                         public boolean isCellEditable(int rowIndex, int columnIndex) {
                                 return canEdit[columnIndex];
                         }
                 });
                 tableNhanVien.setRowHeight(35);
                 scrNhanVien.setViewportView(tableNhanVien);
-
                 add(scrNhanVien, java.awt.BorderLayout.CENTER);
-
                 pnlButton.setBackground(new java.awt.Color(255, 251, 233));
                 pnlButton.setLayout(new java.awt.BorderLayout());
-
                 btnTrangChu.setText("Trang Chủ");
-                btnTrangChu.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+                btnTrangChu.setFont(new java.awt.Font("Segoe UI", 0, 14));
                 pnlButton.add(btnTrangChu, java.awt.BorderLayout.WEST);
-
                 pnlRightButtons.setBackground(new java.awt.Color(255, 251, 233));
                 pnlRightButtons.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 15, 0));
-
                 btnXoaTrang.setText("Xóa trắng");
-                btnXoaTrang.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+                btnXoaTrang.setFont(new java.awt.Font("Segoe UI", 0, 14));
                 btnXoaTrang.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
                                 btnXoaTrangActionPerformed(evt);
                         }
                 });
                 pnlRightButtons.add(btnXoaTrang);
-
                 btnCapNhat.setText("Cập nhật");
-                btnCapNhat.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+                btnCapNhat.setFont(new java.awt.Font("Segoe UI", 0, 14));
                 btnCapNhat.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
                                 btnCapNhatActionPerformed(evt);
                         }
                 });
                 pnlRightButtons.add(btnCapNhat);
-
                 btnXoa.setText("Xóa");
-                btnXoa.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+                btnXoa.setFont(new java.awt.Font("Segoe UI", 0, 14));
                 btnXoa.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
                                 btnXoaActionPerformed(evt);
                         }
                 });
                 pnlRightButtons.add(btnXoa);
-
                 btnThem.setText("Thêm");
-                btnThem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+                btnThem.setFont(new java.awt.Font("Segoe UI", 0, 14));
                 btnThem.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
                                 btnThemActionPerformed(evt);
                         }
                 });
                 pnlRightButtons.add(btnThem);
-
                 pnlButton.add(pnlRightButtons, java.awt.BorderLayout.EAST);
-
                 add(pnlButton, java.awt.BorderLayout.PAGE_END);
         }// </editor-fold>//GEN-END:initComponents
-
-        private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaTrangActionPerformed
-                // TODO add your handling code here:
+        private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {
                 refreshData();
-        }// GEN-LAST:event_btnXoaTrangActionPerformed
-
+        }
         private void centerTableColumns(JTable table) {
                 DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
                 centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-                // Chỉ căn giữa các cột từ 0 đến 4 và cột 6. Bỏ qua cột 5 (Lương) vì đã có
-                // Renderer riêng
                 for (int i = 0; i < table.getColumnCount(); i++) {
                         if (i != 5) {
                                 table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
                         }
                 }
         }
-
-        private void cbFilterChucVuActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterChucVuActionPerformed
+        private void cbFilterChucVuActionPerformed(java.awt.event.ActionEvent evt) {
                 loadFilteredData();
-        }// GEN-LAST:event_cbFilterChucVuActionPerformed
-
-        private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaActionPerformed
+        }
+        private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {
                 String maNV = txtMaNhanVien.getText().trim();
                 if (maNV.isEmpty()) {
                         JOptionPane.showMessageDialog(this, "Vui lòng chọn nhân viên để cho nghỉ việc.");
                         return;
                 }
-
-                // Kiểm tra không cho xóa chính mình
                 com.restaurant.quanlydatbannhahang.entity.NhanVien currentNhanVien = com.restaurant.quanlydatbannhahang.session.SessionManager
                                 .getCurrentNhanVien();
                 if (currentNhanVien != null && currentNhanVien.getMaNV().equals(maNV)) {
@@ -816,14 +660,12 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                                         "Cảnh báo", JOptionPane.WARNING_MESSAGE);
                         return;
                 }
-
                 int choice = JOptionPane.showConfirmDialog(this,
                                 "Bạn có chắc chắn muốn cho nhân viên này nghỉ việc không?",
                                 "Xác nhận", JOptionPane.YES_NO_OPTION);
                 if (choice != JOptionPane.YES_OPTION) {
                         return;
                 }
-
                 try {
                         NhanVienService service = new NhanVienService();
                         service.xoaNhanVien(maNV);
@@ -834,9 +676,8 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                         JOptionPane.showMessageDialog(this,
                                         "Cập nhật trạng thái nhân viên thất bại: " + ex.getMessage());
                 }
-        }// GEN-LAST:event_btnXoaActionPerformed
-
-        private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCapNhatActionPerformed
+        }
+        private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {
                 try {
                         String maNV = txtMaNhanVien.getText().trim();
                         String hoTen = txtHoTen.getText().trim();
@@ -845,18 +686,15 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                                         .parseVND(txtLuongCoBan.getText().trim());
                         String chucVuDisplay = (String) cbChucVu.getSelectedItem();
                         String trangThaiDisplay = (String) cbTrangThai.getSelectedItem();
-
                         ChucVu chucVu = ComboBoxEnumLoader.getChucVuFromDisplay(chucVuDisplay);
                         TrangThaiNhanVien trangThai = ComboBoxEnumLoader
                                         .getTrangThaiNhanVienFromDisplay(trangThaiDisplay);
                         LocalDate ngayVaoLam = dpNgayVaoLam != null ? dpNgayVaoLam.getDate() : LocalDate.now();
-
                         if (maNV.isEmpty() || hoTen.isEmpty() || sdt.isEmpty() || luongCoBan <= 0 || chucVu == null
                                         || trangThai == null || ngayVaoLam == null) {
                                 JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin nhân viên.");
                                 return;
                         }
-
                         NhanVien nhanVien = new NhanVien(maNV, hoTen, sdt, chucVu, ngayVaoLam, luongCoBan, trangThai);
                         NhanVienService service = new NhanVienService();
                         service.capNhatNhanVien(nhanVien);
@@ -867,9 +705,8 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                 } catch (Exception ex) {
                         JOptionPane.showMessageDialog(this, "Cập nhật nhân viên thất bại: " + ex.getMessage());
                 }
-        }// GEN-LAST:event_btnCapNhatActionPerformed
-
-        private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnThemActionPerformed
+        }
+        private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {
                 try {
                         String maNV = txtMaNhanVien.getText().trim();
                         String hoTen = txtHoTen.getText().trim();
@@ -892,24 +729,17 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                 } catch (Exception ex) {
                         JOptionPane.showMessageDialog(this, "Thêm nhân viên thất bại: " + ex.getMessage());
                 }
-        }// GEN-LAST:event_btnThemActionPerformed
-
-        private void txtMaNhanVienActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtMaNhanVienActionPerformed
-                // TODO add your handling code here:
-        }// GEN-LAST:event_txtMaNhanVienActionPerformed
-
-        private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTimKiemActionPerformed
+        }
+        private void txtMaNhanVienActionPerformed(java.awt.event.ActionEvent evt) {
+        }
+        private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {
                 searchByText();
-        }// GEN-LAST:event_btnTimKiemActionPerformed
-
-        private void txtSoDienThoaiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtSoDienThoaiActionPerformed
-                // TODO add your handling code here:
-        }// GEN-LAST:event_txtSoDienThoaiActionPerformed
-
+        }
+        private void txtSoDienThoaiActionPerformed(java.awt.event.ActionEvent evt) {
+        }
         private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {
                 searchByText();
         }
-
         // Variables declaration - do not modify//GEN-BEGIN:variables
         private javax.swing.JButton btnCapNhat;
         private javax.swing.JButton btnThem;
@@ -940,30 +770,20 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
         private javax.swing.JTextField txtMaNhanVien;
         private javax.swing.JTextField txtSoDienThoai;
         private javax.swing.JTextField txtTimKiem;
-
         // End of variables declaration//GEN-END:variables
         @Override
         public void mouseClicked(MouseEvent e) {
-                // Được xử lý tập trung trong selection listener của bảng
         }
-
         @Override
         public void mousePressed(MouseEvent e) {
-                // TODO Auto-generated method stub
         }
-
         @Override
         public void mouseReleased(MouseEvent e) {
-                // TODO Auto-generated method stub
         }
-
         @Override
         public void mouseEntered(MouseEvent e) {
-                // TODO Auto-generated method stub
         }
-
         @Override
         public void mouseExited(MouseEvent e) {
-                // TODO Auto-generated method stub
         }
 }
