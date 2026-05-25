@@ -1,5 +1,6 @@
 package com.restaurant.quanlydatbannhahang.entity;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 public class KhuyenMai {
     private String maKM;
     private String tenKM;
@@ -60,11 +61,12 @@ public class KhuyenMai {
     public void setTrangThai(TrangThaiKhuyenMai trangThai) {
         this.trangThai = trangThai;
     }
-    public boolean kiemTraHieuLuc(LocalDate ngayHienTai) {
+    public boolean kiemTraHieuLuc(LocalDateTime ngayHienTai) {
         if (trangThai != TrangThaiKhuyenMai.CON_AP_DUNG) {
             return false;
         }
-        return !ngayHienTai.isBefore(ngayBatDau) && !ngayHienTai.isAfter(ngayKetThuc);
+        java.time.LocalDate ngayHT = ngayHienTai.toLocalDate();
+        return !ngayHT.isBefore(ngayBatDau) && !ngayHT.isAfter(ngayKetThuc);
     }
     public double tinhSoTienGiam(double tongTien) {
         if (tongTien >= dieuKienToiThieu && trangThai == TrangThaiKhuyenMai.CON_AP_DUNG) {

@@ -43,7 +43,7 @@ public class HoaDonDAO {
             double tienThue = rs.getDouble("tienThue");
             double tyLePhiDV = rs.getDouble("tyLePhiDV");
             double tienPhiDV = rs.getDouble("tienPhiDV");
-            LocalDate ngayTao = rs.getDate("ngayTao").toLocalDate();
+            LocalDateTime ngayTao = rs.getTimestamp("ngayTao") != null ? rs.getTimestamp("ngayTao").toLocalDateTime() : null;
             LocalTime gioVao = rs.getTime("gioVao") != null ? rs.getTime("gioVao").toLocalTime() : null;
             LocalTime gioRa = rs.getTime("gioRa") != null ? rs.getTime("gioRa").toLocalTime() : null;
             double tongTienGoc = rs.getDouble("tongTienGoc");
@@ -106,7 +106,7 @@ public class HoaDonDAO {
             pstm.setDouble(7, hd.getTienThue());
             pstm.setDouble(8, hd.getTyLePhiDV());
             pstm.setDouble(9, hd.getTienPhiDV());
-            pstm.setDate(10, java.sql.Date.valueOf(hd.getNgayTao()));
+            pstm.setTimestamp(10, java.sql.Timestamp.valueOf(hd.getNgayTao()));
             pstm.setTime(11, hd.getGioVao() != null ? java.sql.Time.valueOf(hd.getGioVao()) : null);
             pstm.setTime(12, hd.getGioRa() != null ? java.sql.Time.valueOf(hd.getGioRa()) : null);
             pstm.setDouble(13, hd.getTongTienGoc());
@@ -234,7 +234,7 @@ public class HoaDonDAO {
             pstm.setDouble(6, hd.getTienThue());
             pstm.setDouble(7, hd.getTyLePhiDV());
             pstm.setDouble(8, hd.getTienPhiDV());
-            pstm.setDate(9, java.sql.Date.valueOf(hd.getNgayTao()));
+            pstm.setTimestamp(9, java.sql.Timestamp.valueOf(hd.getNgayTao()));
             pstm.setTime(10, hd.getGioVao() != null ? java.sql.Time.valueOf(hd.getGioVao()) : null);
             pstm.setTime(11, hd.getGioRa() != null ? java.sql.Time.valueOf(hd.getGioRa()) : null);
             pstm.setDouble(12, hd.getTongTienGoc());
@@ -267,9 +267,6 @@ public class HoaDonDAO {
     }
 
     public double getTongDoanhThuTienMatTheoCa(LocalDateTime thoiGianVaoCa) {
-        if (thoiGianVaoCa == null) {
-            throw new IllegalArgumentException("Thời gian bắt đầu ca không được để trống");
-        }
         String sql = "SELECT SUM(tongThanhToan) FROM HoaDon " +
                 "WHERE ngayTao >= ? AND trangThaiThanhToan = N'DA_THANH_TOAN' " +
                 "AND phuongThucTT = N'TIEN_MAT'";
@@ -285,6 +282,7 @@ public class HoaDonDAO {
         }
         return 0;
     }
+
 
     public boolean xoaHoaDon(String maHD) {
         Connection connection = DatabaseConnection.getConnection();

@@ -255,7 +255,8 @@ public class PanelLichSuHoaDon extends javax.swing.JPanel {
                 }
                 if (dpNgayTao != null && dpNgayTao.getDate() != null) {
                     LocalDate selectedDate = dpNgayTao.getDate();
-                    if (hd.getNgayTao() == null || !hd.getNgayTao().isEqual(selectedDate)) {
+                    
+                    if (hd.getNgayTao().toLocalDate() == null || !hd.getNgayTao().toLocalDate().isEqual(selectedDate)) {
                         continue;
                     }
                 }
@@ -294,7 +295,7 @@ public class PanelLichSuHoaDon extends javax.swing.JPanel {
                 }
                 if (dpNgayTao != null && dpNgayTao.getDate() != null) {
                     LocalDate selectedDate = dpNgayTao.getDate();
-                    if (hd.getNgayTao() == null || !hd.getNgayTao().isEqual(selectedDate)) {
+                    if (hd.getNgayTao() == null || !hd.getNgayTao().toLocalDate().isEqual(selectedDate)) {
                         continue;
                     }
                 }

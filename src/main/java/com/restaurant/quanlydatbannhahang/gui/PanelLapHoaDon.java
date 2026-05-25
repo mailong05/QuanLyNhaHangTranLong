@@ -618,16 +618,16 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
             txtMaHoaDon.setText(hdExisting.getMaHD());
             System.out.println("DEBUG: Phát hiện hóa đơn nháp tồn tại. Tái sử dụng mã HD: " + hdExisting.getMaHD());
         } else {
-        try {
-            String lastId = hoaDonService.getLastHoaDonID();
-            String newId = (lastId == null || lastId.isEmpty()) ? IDGeneratorHelper.generateDefaultID("HD")
-                    : IDGeneratorHelper.generateNextIDFromFullID(lastId);
-            txtMaHoaDon.setText(newId != null ? newId : IDGeneratorHelper.generateDefaultID("HD"));
-        } catch (Exception ex) {
-            txtMaHoaDon.setText(IDGeneratorHelper.generateDefaultID("HD"));
-        	}
+            try {
+                String lastId = hoaDonService.getLastHoaDonID();
+                String newId = (lastId == null || lastId.isEmpty()) ? IDGeneratorHelper.generateDefaultID("HD")
+                        : IDGeneratorHelper.generateNextIDFromFullID(lastId);
+                txtMaHoaDon.setText(newId != null ? newId : IDGeneratorHelper.generateDefaultID("HD"));
+            } catch (Exception ex) {
+                txtMaHoaDon.setText(IDGeneratorHelper.generateDefaultID("HD"));
+            }
         }
-   }
+    }
 
     private void loadHoaDonDraft() {
         DefaultTableModel model = (DefaultTableModel) tableThongTinHoaDon.getModel();
@@ -682,7 +682,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         if (maKH != null && !maKH.trim().isEmpty()) {
             try {
                 KhachHang khachHang = khachHangService.getKhachHangTheoMa(maKH);
-          
+
                 if (khachHang != null) {
                     selectedKhachHang = khachHang;
                     searchedKhachHang.add(khachHang);
@@ -993,14 +993,13 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
             String currentMaBan = txtMaBan.getText().trim();
             String currentMaPhieuDat = HoaDonDraftSession.getCurrentMaPhieuDatContext();
             String normalizedMaBan = HoaDonDraftSession.normalizeMaBanContext(currentMaBan);
-            if(selectedKhachHang != null) {
-            	System.out.println("PanelLapHoaDon: "+ selectedKhachHang.getMaKH());
-            	phieuDatBanService.capNhatKhachHangChoPhieu(currentMaPhieuDat, selectedKhachHang.getMaKH());
+            if (selectedKhachHang != null) {
+                System.out.println("PanelLapHoaDon: " + selectedKhachHang.getMaKH());
+                phieuDatBanService.capNhatKhachHangChoPhieu(currentMaPhieuDat, selectedKhachHang.getMaKH());
             }
             thucHienLuuHoaDon(TrangThaiHoaDon.DA_THANH_TOAN);
             capNhatTrangThaiBan(currentMaBan);
-            
-           
+
             if (!currentMaPhieuDat.isEmpty()) {
                 phieuDatBanService.capNhatTrangThaiPhieu(currentMaPhieuDat, TrangThaiPhieuDat.DA_SU_DUNG);
             }
@@ -1114,13 +1113,11 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
                     + ", chỉ lưu nháp vào RAM, không lưu vào Database.");
             return;
         }
-        
+
         LocalDateTime gioVaoCuaBan = HoaDonDraftSession.getGioVao(normalizedMaBan);
         LocalDateTime gioVao = (gioVaoCuaBan != null) ? gioVaoCuaBan : LocalDateTime.now();
         LocalDateTime gioRa = LocalDateTime.now();
 
-
-        
         HoaDon hoaDon = new HoaDon();
         hoaDon.setMaHD(maHD);
         hoaDon.setPhieuDatBan(phieuDatBan);
@@ -1131,7 +1128,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         hoaDon.setTienThue(tienThueVAT);
         hoaDon.setTyLePhiDV(thuePhiDV != null ? thuePhiDV.getThueSuat() : 0);
         hoaDon.setTienPhiDV(tienPhiDV);
-        hoaDon.setNgayTao(java.time.LocalDate.now());
+        hoaDon.setNgayTao(java.time.LocalDateTime.now());
         hoaDon.setGioVao(gioVao.toLocalTime());
         hoaDon.setGioRa(trangThai == TrangThaiHoaDon.DA_THANH_TOAN ? gioRa.toLocalTime() : null);
         hoaDon.setTongTienGoc(tongTien);

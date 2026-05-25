@@ -3,6 +3,7 @@ import com.restaurant.quanlydatbannhahang.dao.KhuyenMaiDAO;
 import com.restaurant.quanlydatbannhahang.entity.KhuyenMai;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiKhuyenMai;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.regex.Pattern;
 public class KhuyenMaiService {
@@ -108,7 +109,7 @@ public class KhuyenMaiService {
     public boolean existKhuyenMai(String maKM) {
         return getKhuyenMaiTheoMa(maKM) != null;
     }
-    public boolean isKhuyenMaiHieuLuc(String maKM, LocalDate ngayHienTai) {
+    public boolean isKhuyenMaiHieuLuc(String maKM, LocalDateTime ngayHienTai) {
         if (ngayHienTai == null) {
             throw new IllegalArgumentException("Ngày kiểm tra hiệu lực không được để trống");
         }

@@ -1,7 +1,10 @@
 package com.restaurant.quanlydatbannhahang.entity;
+
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import com.restaurant.quanlydatbannhahang.entity.PhieuDatBan;
+
 public class HoaDon {
     private String maHD;
     private PhieuDatBan phieuDatBan;
@@ -12,7 +15,7 @@ public class HoaDon {
     private double tienThue;
     private double tyLePhiDV;
     private double tienPhiDV;
-    private LocalDate ngayTao;
+    private LocalDateTime ngayTao;
     private LocalTime gioVao;
     private LocalTime gioRa;
     private double tongTienGoc;
@@ -20,10 +23,12 @@ public class HoaDon {
     private double tongThanhToan;
     private PhuongThucTT phuongThucTT;
     private TrangThaiHoaDon trangThaiThanhToan;
+
     public HoaDon() {
     }
+
     public HoaDon(String maHD, PhieuDatBan phieuDatBan, NhanVien nhanVien, KhuyenMai khuyenMai, Thue thue,
-            LocalDate ngayTao, LocalTime gioVao, LocalTime gioRa,
+            LocalDateTime ngayTao, LocalTime gioVao, LocalTime gioRa,
             double tongTienGoc, double tienGiamGia, double tongThanhToan,
             PhuongThucTT phuongThucTT, TrangThaiHoaDon trangThaiThanhToan) {
         this.maHD = maHD;
@@ -44,9 +49,10 @@ public class HoaDon {
         this.phuongThucTT = phuongThucTT;
         this.trangThaiThanhToan = trangThaiThanhToan;
     }
+
     public HoaDon(String maHD, PhieuDatBan phieuDatBan, NhanVien nhanVien, KhuyenMai khuyenMai, Thue thue,
             double thueSuat, double tienThue, double tyLePhiDV, double tienPhiDV,
-            LocalDate ngayTao, LocalTime gioVao, LocalTime gioRa,
+            LocalDateTime ngayTao, LocalTime gioVao, LocalTime gioRa,
             double tongTienGoc, double tienGiamGia, double tongThanhToan,
             PhuongThucTT phuongThucTT, TrangThaiHoaDon trangThaiThanhToan) {
         this(maHD, phieuDatBan, nhanVien, khuyenMai, thue,
@@ -58,108 +64,143 @@ public class HoaDon {
         this.tyLePhiDV = tyLePhiDV;
         this.tienPhiDV = tienPhiDV;
     }
+
     public String getMaHD() {
         return maHD;
     }
+
     public PhieuDatBan getPhieuDatBan() {
         return phieuDatBan;
     }
+
     public void setMaHD(String maHD) {
         this.maHD = maHD;
     }
+
     public void setPhieuDatBan(PhieuDatBan phieuDatBan) {
         this.phieuDatBan = phieuDatBan;
     }
+
     public NhanVien getNhanVien() {
         return nhanVien;
     }
+
     public void setNhanVien(NhanVien nhanVien) {
         this.nhanVien = nhanVien;
     }
+
     public KhuyenMai getKhuyenMai() {
         return khuyenMai;
     }
+
     public void setKhuyenMai(KhuyenMai khuyenMai) {
         this.khuyenMai = khuyenMai;
     }
+
     public Thue getThue() {
         return thue;
     }
+
     public void setThue(Thue thue) {
         this.thue = thue;
     }
+
     public double getThueSuat() {
         return thueSuat;
     }
+
     public void setThueSuat(double thueSuat) {
         this.thueSuat = thueSuat;
     }
+
     public double getTienThue() {
         return tienThue;
     }
+
     public void setTienThue(double tienThue) {
         this.tienThue = tienThue;
     }
+
     public double getTyLePhiDV() {
         return tyLePhiDV;
     }
+
     public void setTyLePhiDV(double tyLePhiDV) {
         this.tyLePhiDV = tyLePhiDV;
     }
+
     public double getTienPhiDV() {
         return tienPhiDV;
     }
+
     public void setTienPhiDV(double tienPhiDV) {
         this.tienPhiDV = tienPhiDV;
     }
-    public LocalDate getNgayTao() {
+
+    public LocalDateTime getNgayTao() {
         return ngayTao;
     }
-    public void setNgayTao(LocalDate ngayTao) {
+
+    public void setNgayTao(LocalDateTime ngayTao) {
         this.ngayTao = ngayTao;
     }
+
     public LocalTime getGioVao() {
         return gioVao;
     }
+
     public void setGioVao(LocalTime gioVao) {
         this.gioVao = gioVao;
     }
+
     public LocalTime getGioRa() {
         return gioRa;
     }
+
     public void setGioRa(LocalTime gioRa) {
         this.gioRa = gioRa;
     }
+
     public double getTongTienGoc() {
         return tongTienGoc;
     }
+
     public void setTongTienGoc(double tongTienGoc) {
         this.tongTienGoc = tongTienGoc;
     }
+
     public double getTienGiamGia() {
         return tienGiamGia;
     }
+
     public void setTienGiamGia(double tienGiamGia) {
         this.tienGiamGia = tienGiamGia;
     }
+
     public double getTongThanhToan() {
         return tongThanhToan;
     }
+
     public void setTongThanhToan(double tongThanhToan) {
         this.tongThanhToan = tongThanhToan;
     }
+
     public PhuongThucTT getPhuongThucTT() {
         return phuongThucTT;
     }
+
     public void setPhuongThucTT(PhuongThucTT phuongThucTT) {
         this.phuongThucTT = phuongThucTT;
     }
+
     public TrangThaiHoaDon getTrangThaiThanhToan() {
         return trangThaiThanhToan;
     }
+
     public void setTrangThaiThanhToan(TrangThaiHoaDon trangThaiThanhToan) {
         this.trangThaiThanhToan = trangThaiThanhToan;
     }
+
     public double tinhTongThanhToan() {
         double thuePhaiTra = 0;
         if (thue != null) {
@@ -173,12 +214,15 @@ public class HoaDon {
         this.tongThanhToan = tongTienGoc + thuePhaiTra - giamGia;
         return tongThanhToan;
     }
+
     public void inHoaDon() {
         System.out.println("In hóa đơn: " + maHD);
     }
+
     public void luuDoanhThu() {
         System.out.println("Lưu doanh thu cho hóa đơn: " + maHD);
     }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -186,6 +230,7 @@ public class HoaDon {
         result = prime * result + ((maHD == null) ? 0 : maHD.hashCode());
         return result;
     }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -202,6 +247,7 @@ public class HoaDon {
             return false;
         return true;
     }
+
     @Override
     public String toString() {
         return "HoaDon{" +
