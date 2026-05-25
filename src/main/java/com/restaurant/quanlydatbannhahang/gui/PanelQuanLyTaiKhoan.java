@@ -345,7 +345,7 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
                 pnlButton.add(pnlRightButtons, java.awt.BorderLayout.EAST);
                 add(pnlButton, java.awt.BorderLayout.PAGE_END);
         }// </editor-fold>//GEN-END:initComponents
-        private void btnResetPasswordActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnResetPasswordActionPerformed
+        private void btnResetPasswordActionPerformed(java.awt.event.ActionEvent evt) {
                 String username = txtTenTaiKhoan.getText().trim();
                 if (username.isEmpty()) {
                         JOptionPane.showMessageDialog(this, "Vui lòng chọn tài khoản cần reset mật khẩu.");
@@ -368,11 +368,11 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
                 } catch (Exception ex) {
                         JOptionPane.showMessageDialog(this, "Reset mật khẩu thất bại: " + ex.getMessage());
                 }
-        }// GEN-LAST:event_btnResetPasswordActionPerformed
-        private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaTrangActionPerformed
+        }
+        private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {
                 refreshData();
-        }// GEN-LAST:event_btnXoaTrangActionPerformed
-        private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCapNhatActionPerformed
+        }
+        private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {
                 String username = txtTenTaiKhoan.getText().trim();
                 String maNV = txtMaNhanVien.getText().trim();
                 String quyenHanDisplay = (String) cbQuyenHan.getSelectedItem();
@@ -392,8 +392,8 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
                 } catch (Exception ex) {
                         JOptionPane.showMessageDialog(this, "Cập nhật tài khoản thất bại: " + ex.getMessage());
                 }
-        }// GEN-LAST:event_btnCapNhatActionPerformed
-        private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaActionPerformed
+        }
+        private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {
                 String username = txtTenTaiKhoan.getText().trim();
                 if (username.isEmpty()) {
                         JOptionPane.showMessageDialog(this, "Vui lòng chọn tài khoản cần xóa.");
@@ -416,8 +416,8 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
                 } catch (Exception ex) {
                         JOptionPane.showMessageDialog(this, "Xóa tài khoản thất bại: " + ex.getMessage());
                 }
-        }// GEN-LAST:event_btnXoaActionPerformed
-        private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnThemActionPerformed
+        }
+        private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {
                 String username = txtTenTaiKhoan.getText().trim();
                 String maNV = txtMaNhanVien.getText().trim();
                 String password = new String(txtMatKhau.getPassword()).trim();
@@ -438,7 +438,7 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
                 } catch (Exception ex) {
                         JOptionPane.showMessageDialog(this, "Thêm tài khoản thất bại: " + ex.getMessage());
                 }
-        }// GEN-LAST:event_btnThemActionPerformed
+        }
         private void resetPlaceholder(JTextField textField, String placeholder) {
                 Color placeholderColor = new Color(153, 153, 153);
                 textField.setText(placeholder);
@@ -577,20 +577,20 @@ public class PanelQuanLyTaiKhoan extends javax.swing.JPanel implements MouseList
                         table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
                 }
         }
-        private void btnTrangChuActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTrangChuActionPerformed
+        private void btnTrangChuActionPerformed(java.awt.event.ActionEvent evt) {
                 java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
                 if (parentFrame instanceof MainForm) {
                         ((MainForm) parentFrame).goToTrangChuFromPanel();
                 }
-        }// GEN-LAST:event_btnTrangChuActionPerformed
-        private void txtMatKhauActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtMatKhauActionPerformed
-        }// GEN-LAST:event_txtMatKhauActionPerformed
-        private void cbFilterQuyenHanActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterQuyenHanActionPerformed
+        }
+        private void txtMatKhauActionPerformed(java.awt.event.ActionEvent evt) {
+        }
+        private void cbFilterQuyenHanActionPerformed(java.awt.event.ActionEvent evt) {
                 loadFilteredData();
-        }// GEN-LAST:event_cbFilterQuyenHanActionPerformed
-        private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTimKiemActionPerformed
+        }
+        private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {
                 searchByText();
-        }// GEN-LAST:event_btnTimKiemActionPerformed
+        }
         private void setupPlaceholder(JTextField textField, String placeholder) {
                 Color placeholderColor = new Color(153, 153, 153);
                 Color textColor = new Color(0, 0, 0);

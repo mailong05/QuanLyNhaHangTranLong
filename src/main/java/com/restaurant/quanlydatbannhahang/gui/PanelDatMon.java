@@ -82,10 +82,8 @@ public class PanelDatMon extends javax.swing.JPanel {
                     }
                     String maPhieuDatContext = HoaDonDraftSession.getCurrentMaPhieuDatContext();
                     if (datMonContext == null || datMonContext.isBlank()) {
-                        System.out.println("DEBUG: Thiếu maBanContext, không thể tự động lưu đầy đủ.");
                     } else if (maPhieuDatContext == null || maPhieuDatContext.isBlank()) {
-                        System.out.println("DEBUG: Thiếu maPhieuDat cho bàn " + datMonContext
-                                + ", chỉ lưu nháp vào bộ nhớ tạm, không lưu vào Database");
+                         
                     } else {
                         capNhatTrangThaiSauKhiLuu();
                     }
@@ -146,8 +144,7 @@ public class PanelDatMon extends javax.swing.JPanel {
             PhieuDatBan activePhieu = phieuDatBanService.getActivePhieuDatByBan(maBan);
             if (activePhieu != null) {
                 HoaDonDraftSession.setCurrentMaPhieuDatContext(activePhieu.getMaPhieuDat());
-                System.out.println("DEBUG: Đồng bộ maPhieuDatContext từ DB cho bàn " + datMonContext + " => "
-                        + activePhieu.getMaPhieuDat());
+
                 break;
             }
         }
@@ -424,14 +421,11 @@ public class PanelDatMon extends javax.swing.JPanel {
 
     private void saveDraftToSession() {
         if (datMonContext == null || datMonContext.isBlank()) {
-            System.out.println("DEBUG: Không thể lưu draft vì datMonContext rỗng.");
             return;
         }
         syncCurrentMaPhieuDatContext();
         if (HoaDonDraftSession.getCurrentMaPhieuDatContext() == null
-                || HoaDonDraftSession.getCurrentMaPhieuDatContext().isBlank()) {
-            System.out.println("DEBUG: Thiếu maPhieuDatContext cho bàn " + datMonContext
-                    + ", chỉ lưu nháp vào bộ nhớ tạm.");
+                || HoaDonDraftSession.getCurrentMaPhieuDatContext().isBlank()) {             
         }
         List<HoaDonDraftSession.DraftMonItem> draftItems = new ArrayList<>();
         for (OrderItem item : phieuGoiMonMap.values()) {
@@ -484,7 +478,6 @@ public class PanelDatMon extends javax.swing.JPanel {
     private void capNhatTrangThaiSauKhiLuu() {
         List<String> maBanList = getMaBanListFromContext();
         if (maBanList.isEmpty()) {
-            System.out.println("Mã bàn rỗng (method capNhatTrangThaiSauKhiLuu trong PanelDatMon)");
             return;
         }
         BanService banService = new BanService();
@@ -757,7 +750,7 @@ public class PanelDatMon extends javax.swing.JPanel {
 
         jPanel5.setBackground(new java.awt.Color(255, 251, 233));
 
-        lblPhieuGoiMon.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        lblPhieuGoiMon.setFont(new java.awt.Font("Segoe UI", 1, 16));
         lblPhieuGoiMon.setText("Phiếu gọi món");
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
@@ -804,11 +797,11 @@ public class PanelDatMon extends javax.swing.JPanel {
 
         jPanel2.add(scrTablePhieuGoiMon, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 510, 480));
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14));
         jLabel1.setText("Tổng tiền tạm tính:");
         jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 550, -1, -1));
 
-        lblTongTienTamTinh.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lblTongTienTamTinh.setFont(new java.awt.Font("Segoe UI", 1, 14));
         lblTongTienTamTinh.setForeground(new java.awt.Color(255, 0, 0));
         lblTongTienTamTinh.setText("0 VND");
         jPanel2.add(lblTongTienTamTinh, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 550, -1, -1));
@@ -934,19 +927,19 @@ public class PanelDatMon extends javax.swing.JPanel {
         add(jPanel1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtTimKiemActionPerformed
+    private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {
         filterTable();
-    }// GEN-LAST:event_txtTimKiemActionPerformed
+    }
 
-    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTimKiemActionPerformed
+    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {
         searchAndFilter();
-    }// GEN-LAST:event_btnTimKiemActionPerformed
+    }
 
-    private void cbFilterLoaiMonAnActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterLoaiMonAnActionPerformed
+    private void cbFilterLoaiMonAnActionPerformed(java.awt.event.ActionEvent evt) {
         filterTable();
-    }// GEN-LAST:event_cbFilterLoaiMonAnActionPerformed
+    }
 
-    private void btnDoiBanActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnDoiBanActionPerformed
+    private void btnDoiBanActionPerformed(java.awt.event.ActionEvent evt) {
         try {
             Set<String> oldBanSet = getMaBanSetFromContext();
             if (oldBanSet.isEmpty()) {
@@ -971,7 +964,7 @@ public class PanelDatMon extends javax.swing.JPanel {
             e.printStackTrace();
         }
         isChanged = true;
-    }// GEN-LAST:event_btnDoiBanActionPerformed
+    }
 
     private void onButtonGopBanClicked() {
     	try {
@@ -980,14 +973,11 @@ public class PanelDatMon extends javax.swing.JPanel {
                 return;
             }
             
-            // 🌟 BƯỚC 1: LƯU TOÀN BỘ MÓN ĂN VÀO SESSION TRƯỚC KHI CHUYỂN TRANG
             saveDraftToSession();
             
-            // 🌟 BƯỚC 2: Chuyển sang giao diện Sơ đồ bàn với chế độ Gộp
             Set<String> currentTables = HoaDonDraftSession.parseMaBanContextToSet(datMonContext);
                 MainForm mainForm = (MainForm) SwingUtilities.getWindowAncestor(this);
                 if (mainForm != null) {
-                    // Truyền PanelDatMon hiện tại làm callback để PanelDatBan có thể gọi lại
                     mainForm.startGopBanFlow(currentTables, this);
                 }
             
@@ -997,18 +987,18 @@ public class PanelDatMon extends javax.swing.JPanel {
         }
     }
 
-    private void btnChonMonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnChonMonActionPerformed
+    private void btnChonMonActionPerformed(java.awt.event.ActionEvent evt) {
         addSelectedMonToPhieuGoiMon();
         isChanged = true;
-    }// GEN-LAST:event_btnChonMonActionPerformed
+    }
 
     
-    private void btnQuayLaiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnQuayLaiActionPerformed
+    private void btnQuayLaiActionPerformed(java.awt.event.ActionEvent evt) {
         java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
         if (parentFrame instanceof MainForm) {
             ((MainForm) parentFrame).goBackToPreviousPanel();
         }
-    }// GEN-LAST:event_btnQuayLaiActionPerformed
+    }
      // Variables declaration - do not modify//GEN-BEGIN:variables
 
     private javax.swing.JButton btnChonMon;

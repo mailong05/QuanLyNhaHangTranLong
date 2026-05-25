@@ -1098,7 +1098,7 @@ public class MainForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void panelTaiKhoanMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_panelTaiKhoanMouseClicked
+    private void panelTaiKhoanMouseClicked(java.awt.event.MouseEvent evt) {
         TaiKhoanDialog popup = new TaiKhoanDialog(this, true);
         java.awt.Point location = panelTaiKhoan.getLocationOnScreen();
         int componentWidth = panelTaiKhoan.getWidth();
@@ -1107,11 +1107,11 @@ public class MainForm extends javax.swing.JFrame {
         int y = location.y + componentHeight;
         popup.setLocation(x, y);
         popup.setVisible(true);
-    }// GEN-LAST:event_panelTaiKhoanMouseClicked
+    }
 
-    private void lblMenuTrangChuMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_lblMenuTrangChuMouseClicked
+    private void lblMenuTrangChuMouseClicked(java.awt.event.MouseEvent evt) {
         new PanelTrangChu().setVisible(true);
-    }// GEN-LAST:event_lblMenuTrangChuMouseClicked
+    }
      // Variables declaration - do not modify//GEN-BEGIN:variables
 
     private javax.swing.JPanel PanelKhuyenMai;
@@ -1187,16 +1187,13 @@ public class MainForm extends javax.swing.JFrame {
     }
 
     public void startEditBanFromQuanLyDatTruoc() {
-        // Chỉ gọi hàm showPanel để hiển thị UI, TUYỆT ĐỐI KHÔNG simulate click menu (để
-        // tránh bị gọi refreshData)
         if (panelDatBan != null) {
             showPanel(panelDatBan);
-            lblTenTrang.setText("ĐỔI BÀN"); // Cập nhật lại tiêu đề trang cho đúng ngữ cảnh
+            lblTenTrang.setText("ĐỔI BÀN");
         }
     }
 
     public void startEditBanFromDatMon(Set<String> oldTables, PanelDatMon sourcePanel) {
-        // 🌟 FIX LỖI 2B: Truyền dữ liệu setup TRƯỚC
         panelDatBan.setFlowOrigin("DAT_MON");
         panelDatBan.setPanelDatMon(sourcePanel);
         panelDatBan.setSelectedTablesForEdit(oldTables, null);

@@ -22,7 +22,6 @@ public class PhuongThucTTDAO {
                 list.add(phuongThuc);
             }
         } catch (SQLException e) {
-            System.out.println("❌ Lỗi khi lấy danh sách phương thức thanh toán: " + e.getMessage());
             e.printStackTrace();
         }
         return list;
@@ -38,7 +37,6 @@ public class PhuongThucTTDAO {
                 }
             }
         } catch (SQLException e) {
-            System.out.println("❌ Lỗi khi tìm phương thức thanh toán: " + e.getMessage());
             e.printStackTrace();
         }
         return null;

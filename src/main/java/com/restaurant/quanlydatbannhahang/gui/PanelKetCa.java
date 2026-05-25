@@ -97,7 +97,6 @@ public class PanelKetCa extends JPanel {
         lblDoanhThuText.setFont(new Font("Segoe UI", Font.PLAIN, 16));
         infoPanel.add(lblDoanhThuText, gbc);
 
-        System.out.println("PanelKetCa: "+ currentCa.getThoiGianVaoCa().toString());
         double doanhThuTienMat = hoaDonService.getTongDoanhThuTienMatTheoCa(currentCa.getThoiGianVaoCa());
         lblDoanhThuTienMat = new JLabel(CurrencyUtility.formatVND(doanhThuTienMat));
         lblDoanhThuTienMat.setFont(new Font("Segoe UI", Font.BOLD, 16));

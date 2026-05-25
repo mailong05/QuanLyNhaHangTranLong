@@ -632,9 +632,9 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                 pnlButton.add(pnlRightButtons, java.awt.BorderLayout.EAST);
                 add(pnlButton, java.awt.BorderLayout.PAGE_END);
         }// </editor-fold>//GEN-END:initComponents
-        private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaTrangActionPerformed
+        private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {
                 refreshData();
-        }// GEN-LAST:event_btnXoaTrangActionPerformed
+        }
         private void centerTableColumns(JTable table) {
                 DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
                 centerRenderer.setHorizontalAlignment(JLabel.CENTER);
@@ -644,10 +644,10 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                         }
                 }
         }
-        private void cbFilterChucVuActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterChucVuActionPerformed
+        private void cbFilterChucVuActionPerformed(java.awt.event.ActionEvent evt) {
                 loadFilteredData();
-        }// GEN-LAST:event_cbFilterChucVuActionPerformed
-        private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaActionPerformed
+        }
+        private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {
                 String maNV = txtMaNhanVien.getText().trim();
                 if (maNV.isEmpty()) {
                         JOptionPane.showMessageDialog(this, "Vui lòng chọn nhân viên để cho nghỉ việc.");
@@ -676,8 +676,8 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                         JOptionPane.showMessageDialog(this,
                                         "Cập nhật trạng thái nhân viên thất bại: " + ex.getMessage());
                 }
-        }// GEN-LAST:event_btnXoaActionPerformed
-        private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCapNhatActionPerformed
+        }
+        private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {
                 try {
                         String maNV = txtMaNhanVien.getText().trim();
                         String hoTen = txtHoTen.getText().trim();
@@ -705,8 +705,8 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                 } catch (Exception ex) {
                         JOptionPane.showMessageDialog(this, "Cập nhật nhân viên thất bại: " + ex.getMessage());
                 }
-        }// GEN-LAST:event_btnCapNhatActionPerformed
-        private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnThemActionPerformed
+        }
+        private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {
                 try {
                         String maNV = txtMaNhanVien.getText().trim();
                         String hoTen = txtHoTen.getText().trim();
@@ -729,14 +729,14 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                 } catch (Exception ex) {
                         JOptionPane.showMessageDialog(this, "Thêm nhân viên thất bại: " + ex.getMessage());
                 }
-        }// GEN-LAST:event_btnThemActionPerformed
-        private void txtMaNhanVienActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtMaNhanVienActionPerformed
-        }// GEN-LAST:event_txtMaNhanVienActionPerformed
-        private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTimKiemActionPerformed
+        }
+        private void txtMaNhanVienActionPerformed(java.awt.event.ActionEvent evt) {
+        }
+        private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {
                 searchByText();
-        }// GEN-LAST:event_btnTimKiemActionPerformed
-        private void txtSoDienThoaiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtSoDienThoaiActionPerformed
-        }// GEN-LAST:event_txtSoDienThoaiActionPerformed
+        }
+        private void txtSoDienThoaiActionPerformed(java.awt.event.ActionEvent evt) {
+        }
         private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {
                 searchByText();
         }

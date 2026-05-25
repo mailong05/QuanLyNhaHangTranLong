@@ -142,15 +142,11 @@ public class PhieuDatBanService {
         return null;
     }
 
- // Thay thế hoàn toàn hàm cũ trong file PhieuDatBanService.java
     public List<String> getDanhSachBanTrongTheoThoiGian(LocalDateTime selectedTime) {
-        // 1. Kiểm tra đầu vào
         if (selectedTime == null) {
             return new ArrayList<>();
         }
         
-        // 2. Gọi thẳng xuống DAO để lấy danh sách (DAO đã xử lý SQL 1 lần duy nhất)
-        // Lưu ý: Đảm bảo class Service của bạn đã khởi tạo biến phieuDatBanDAO
         return phieuDatBanDAO.getDanhSachBanTrongTheoThoiGian(selectedTime);
     }
 
@@ -255,7 +251,6 @@ public class PhieuDatBanService {
                     banService.capNhatTrangThaiBanTrongChiTietPDB(chiTietList, TrangThaiBan.TRONG);
                     
                     coPhieuBiHuy = true;
-                    System.out.println("Hệ thống tự động hủy phiếu quá hạn: " + phieu.getMaPhieuDat());
                 }
             }
         } catch (Exception e) {
@@ -267,7 +262,6 @@ public class PhieuDatBanService {
 
 
 	public List<PhieuDatBan> getDanhSachPhieuDatBanTheoTrangThai(TrangThaiPhieuDat trangThai) {
-		// TODO Auto-generated method stub
 		return phieuDatBanDAO.getDanhSachPhieuDatBanTheoTrangThai(trangThai);
 	}
 
@@ -278,5 +272,7 @@ public class PhieuDatBanService {
 		return phieuDatBanDAO.hasReservationToday(maBanTrim);
 	}
 
-
+	public boolean kiemTraBanDaDuocDatTrongNgay(String maBan, java.time.LocalDate ngay, String maPhieuDatNgoaiLe) {
+        return phieuDatBanDAO.kiemTraBanDaDuocDatTrongNgay(maBan, ngay, maPhieuDatNgoaiLe);
+    }
 }

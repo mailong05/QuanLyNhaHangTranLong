@@ -216,11 +216,9 @@ public class HoaDon {
     }
 
     public void inHoaDon() {
-        System.out.println("In hóa đơn: " + maHD);
     }
 
     public void luuDoanhThu() {
-        System.out.println("Lưu doanh thu cho hóa đơn: " + maHD);
     }
 
     @Override

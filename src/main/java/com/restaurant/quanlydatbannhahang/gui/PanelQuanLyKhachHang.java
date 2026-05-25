@@ -466,13 +466,13 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseLis
         pnlButton.add(pnlRightButtons, java.awt.BorderLayout.EAST);
         add(pnlButton, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
-    private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaTrangActionPerformed
+    private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {
         refreshData();
-    }// GEN-LAST:event_btnXoaTrangActionPerformed
-    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTimKiemActionPerformed
+    }
+    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {
         searchByText();
-    }// GEN-LAST:event_btnTimKiemActionPerformed
-    private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaActionPerformed
+    }
+    private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {
         String maKH = txtMaKhachHang.getText().trim();
         if (maKH.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn khách hàng cần xóa.");
@@ -490,11 +490,11 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseLis
         } else {
             JOptionPane.showMessageDialog(this, "Xóa khách hàng thất bại.");
         }
-    }// GEN-LAST:event_btnXoaActionPerformed
-    private void cbFilterLoaiThanhVienActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterLoaiThanhVienActionPerformed
+    }
+    private void cbFilterLoaiThanhVienActionPerformed(java.awt.event.ActionEvent evt) {
         loadFilteredData();
-    }// GEN-LAST:event_cbFilterLoaiThanhVienActionPerformed
-    private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCapNhatActionPerformed
+    }
+    private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {
         try {
             String maKH = txtMaKhachHang.getText().trim();
             String hoTen = txtHoTen.getText().trim();
@@ -519,8 +519,8 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseLis
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Điểm tích lũy không hợp lệ.");
         }
-    }// GEN-LAST:event_btnCapNhatActionPerformed
-    private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnThemActionPerformed
+    }
+    private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {
         try {
             String maKH = txtMaKhachHang.getText().trim();
             String hoTen = txtHoTen.getText().trim();
@@ -543,11 +543,11 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseLis
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Không thể thêm khách hàng: " + ex.getMessage());
         }
-    }// GEN-LAST:event_btnThemActionPerformed
-    private void txtDiemTichLuyActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtDiemTichLuyActionPerformed
-    }// GEN-LAST:event_txtDiemTichLuyActionPerformed
-    private void txtMaKhachHangActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtMaKhachHangActionPerformed
-    }// GEN-LAST:event_txtMaKhachHangActionPerformed
+    }
+    private void txtDiemTichLuyActionPerformed(java.awt.event.ActionEvent evt) {
+    }
+    private void txtMaKhachHangActionPerformed(java.awt.event.ActionEvent evt) {
+    }
     private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {
         searchByText();
     }

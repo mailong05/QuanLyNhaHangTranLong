@@ -671,15 +671,15 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
         pnlButton.add(pnlRightButtons, java.awt.BorderLayout.EAST);
         add(pnlButton, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
-    private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtTimKiemActionPerformed
+    private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {
         searchByText();
-    }// GEN-LAST:event_txtTimKiemActionPerformed
-    private void cbFilterTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterTrangThaiActionPerformed
+    }
+    private void cbFilterTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {
         loadFilteredData();
-    }// GEN-LAST:event_cbFilterTrangThaiActionPerformed
-    private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaTrangActionPerformed
+    }
+    private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {
         refreshData();
-    }// GEN-LAST:event_btnXoaTrangActionPerformed
+    }
     private void centerTableColumns(JTable table) {
         ImageRenderer imageRenderer = new ImageRenderer();
         table.getColumnModel().getColumn(0).setCellRenderer(imageRenderer);
@@ -712,10 +712,10 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
             return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
         }
     }
-    private void cbFilterLoaiMonAnActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterLoaiMonAnActionPerformed
+    private void cbFilterLoaiMonAnActionPerformed(java.awt.event.ActionEvent evt) {
         loadFilteredData();
-    }// GEN-LAST:event_cbFilterLoaiMonAnActionPerformed
-    private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaActionPerformed
+    }
+    private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {
         String maMon = txtMaMon.getText().trim();
         if (maMon.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn món ăn để đặt trạng thái hết.");
@@ -733,17 +733,17 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Cập nhật trạng thái món ăn thất bại: " + ex.getMessage());
         }
-    }// GEN-LAST:event_btnXoaActionPerformed
-    private void txtMaMonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtMaMonActionPerformed
-    }// GEN-LAST:event_txtMaMonActionPerformed
-    private void txtDonGiaActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtDonGiaActionPerformed
-    }// GEN-LAST:event_txtDonGiaActionPerformed
-    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTimKiemActionPerformed
+    }
+    private void txtMaMonActionPerformed(java.awt.event.ActionEvent evt) {
+    }
+    private void txtDonGiaActionPerformed(java.awt.event.ActionEvent evt) {
+    }
+    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {
         searchByText();
-    }// GEN-LAST:event_btnTimKiemActionPerformed
-    private void txtTenMonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtTenMonActionPerformed
-    }// GEN-LAST:event_txtTenMonActionPerformed
-    private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCapNhatActionPerformed
+    }
+    private void txtTenMonActionPerformed(java.awt.event.ActionEvent evt) {
+    }
+    private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {
         try {
             String maMon = txtMaMon.getText().trim();
             String tenMon = txtTenMon.getText().trim();
@@ -768,8 +768,8 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Cập nhật món ăn thất bại: " + ex.getMessage());
         }
-    }// GEN-LAST:event_btnCapNhatActionPerformed
-    private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnThemActionPerformed
+    }
+    private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {
         try {
             String maMon = txtMaMon.getText().trim();
             String tenMon = txtTenMon.getText().trim();
@@ -789,10 +789,10 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Thêm món ăn thất bại: " + ex.getMessage());
         }
-    }// GEN-LAST:event_btnThemActionPerformed
-    private void scrTableMonAnMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_scrTableMonAnMouseClicked
-    }// GEN-LAST:event_scrTableMonAnMouseClicked
-    private void btnChonFileAnhActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnChonFileAnhActionPerformed
+    }
+    private void scrTableMonAnMouseClicked(java.awt.event.MouseEvent evt) {
+    }
+    private void btnChonFileAnhActionPerformed(java.awt.event.ActionEvent evt) {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Image Files", "jpg", "jpeg", "png", "gif", "bmp");
@@ -807,9 +807,9 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
             lblIconMonAn.setIcon(new ImageIcon(img));
             JOptionPane.showMessageDialog(this, "Chọn ảnh thành công: " + selectedFile.getName());
         }
-    }// GEN-LAST:event_btnChonFileAnhActionPerformed
-    private void cbDonViTinhActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbDonViTinhActionPerformed
-    }// GEN-LAST:event_cbDonViTinhActionPerformed
+    }
+    private void cbDonViTinhActionPerformed(java.awt.event.ActionEvent evt) {
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCapNhat;
     private javax.swing.JButton btnChonFileAnh;

@@ -5,19 +5,16 @@ public class AppConfig {
         String projectRoot = getProjectRoot();
         File externalFolder = new File(projectRoot + File.separator + "images" + File.separator + "monan");
         if (externalFolder.exists()) {
-            System.out.println("✓ Found images folder at: " + externalFolder.getAbsolutePath());
             return;
         }
         File resourcesFolder = new File(projectRoot + File.separator + "src" + File.separator + "main"
                 + File.separator + "resources" + File.separator + "images" + File.separator + "monan");
         if (resourcesFolder.exists()) {
-            System.out.println("✓ Found images folder at: " + resourcesFolder.getAbsolutePath());
             return;
         }
         File targetFolder = new File(projectRoot + File.separator + "target" + File.separator + "classes"
                 + File.separator + "images" + File.separator + "monan");
         if (targetFolder.exists()) {
-            System.out.println("✓ Found images folder at: " + targetFolder.getAbsolutePath());
             return;
         }
         System.err.println("⚠ WARNING: Không tìm thấy thư mục images/monan!");

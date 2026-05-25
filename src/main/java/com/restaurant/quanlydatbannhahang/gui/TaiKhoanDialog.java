@@ -156,9 +156,9 @@ public class TaiKhoanDialog extends javax.swing.JDialog {
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 580, 320));
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    private void txtQuyenHanActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtQuyenHanActionPerformed
-    }// GEN-LAST:event_txtQuyenHanActionPerformed
-    private void btnLuuThongTinCaNhanActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnLuuThongTinCaNhanActionPerformed
+    private void txtQuyenHanActionPerformed(java.awt.event.ActionEvent evt) {
+    }
+    private void btnLuuThongTinCaNhanActionPerformed(java.awt.event.ActionEvent evt) {
         if (currentTaiKhoan == null || currentTaiKhoan.getNhanVien() == null) {
             JOptionPane.showMessageDialog(this, "Không tìm thấy thông tin phiên đăng nhập.");
             return;
@@ -188,17 +188,17 @@ public class TaiKhoanDialog extends javax.swing.JDialog {
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Cập nhật thông tin thất bại: " + ex.getMessage());
         }
-    }// GEN-LAST:event_btnLuuThongTinCaNhanActionPerformed
-    private void txtHoTenActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtHoTenActionPerformed
-    }// GEN-LAST:event_txtHoTenActionPerformed
-    private void btnSuaThongTinCaNhanActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnSuaThongTinCaNhanActionPerformed
+    }
+    private void txtHoTenActionPerformed(java.awt.event.ActionEvent evt) {
+    }
+    private void btnSuaThongTinCaNhanActionPerformed(java.awt.event.ActionEvent evt) {
         luuAction();
-    }// GEN-LAST:event_btnSuaThongTinCaNhanActionPerformed
+    }
     private void luuAction() {
     }
-    private void txtSoDienThoaiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtSoDienThoaiActionPerformed
-    }// GEN-LAST:event_txtSoDienThoaiActionPerformed
-    private void btnDoiMatKhauActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnDoiMatKhauActionPerformed
+    private void txtSoDienThoaiActionPerformed(java.awt.event.ActionEvent evt) {
+    }
+    private void btnDoiMatKhauActionPerformed(java.awt.event.ActionEvent evt) {
         if (currentTaiKhoan == null) {
             JOptionPane.showMessageDialog(this, "Không tìm thấy thông tin phiên đăng nhập.");
             return;
@@ -219,7 +219,7 @@ public class TaiKhoanDialog extends javax.swing.JDialog {
             txtMatKhauMoi.setText("");
             txtXacNhanMatKhau.setText("");
         }
-    }// GEN-LAST:event_btnDoiMatKhauActionPerformed
+    }
     public static void main(String args[]) {
         UIConfiguration.setupUI();
         java.awt.EventQueue.invokeLater(new Runnable() {

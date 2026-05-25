@@ -22,7 +22,6 @@ public class ChiTietHoaDonDAO {
             pstm.setString(5, chiTiet.getGhiChu());
             return pstm.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.out.println("❌ Lỗi khi thêm chi tiết hóa đơn: " + e.getMessage());
             e.printStackTrace();
         }
         return false;
@@ -42,7 +41,6 @@ public class ChiTietHoaDonDAO {
                 }
             }
         } catch (SQLException e) {
-            System.out.println("❌ Lỗi khi lấy chi tiết hóa đơn: " + e.getMessage());
             e.printStackTrace();
         }
         return list;
@@ -59,7 +57,6 @@ public class ChiTietHoaDonDAO {
                 }
             }
         } catch (SQLException e) {
-            System.out.println("❌ Lỗi khi lấy chi tiết hóa đơn: " + e.getMessage());
             e.printStackTrace();
         }
         return null;
@@ -76,7 +73,6 @@ public class ChiTietHoaDonDAO {
             pstm.setString(5, chiTiet.getMonAn().getMaMon());
             return pstm.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.out.println("❌ Lỗi khi cập nhật chi tiết hóa đơn: " + e.getMessage());
             e.printStackTrace();
         }
         return false;
@@ -89,7 +85,6 @@ public class ChiTietHoaDonDAO {
             pstm.setString(2, maMon);
             return pstm.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.out.println("❌ Lỗi khi xóa chi tiết hóa đơn: " + e.getMessage());
             e.printStackTrace();
         }
         return false;
@@ -102,7 +97,6 @@ public class ChiTietHoaDonDAO {
             pstm.executeUpdate();
             return true;
         } catch (SQLException e) {
-            System.out.println("❌ Lỗi khi xóa tất cả chi tiết hóa đơn: " + e.getMessage());
             e.printStackTrace();
         }
         return false;
@@ -118,7 +112,6 @@ public class ChiTietHoaDonDAO {
                 }
             }
         } catch (SQLException e) {
-            System.out.println("❌ Lỗi khi tính tổng tiền: " + e.getMessage());
             e.printStackTrace();
         }
         return 0;
@@ -134,7 +127,6 @@ public class ChiTietHoaDonDAO {
                 }
             }
         } catch (SQLException e) {
-            System.out.println("❌ Lỗi khi đếm chi tiết hóa đơn: " + e.getMessage());
             e.printStackTrace();
         }
         return 0;
@@ -151,7 +143,6 @@ public class ChiTietHoaDonDAO {
             chiTiet.setGhiChu(rs.getString("GhiChu"));
             return chiTiet;
         } catch (Exception e) {
-            System.out.println("[ERROR] Loi khi build ChiTietHoaDon tu ResultSet: " + e.getMessage());
             e.printStackTrace();
         }
         return null;

@@ -151,12 +151,12 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
         pnlButton.add(btnXoaTrang, java.awt.BorderLayout.EAST);
         add(pnlButton, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
-    private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtTimKiemActionPerformed
+    private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {
         searchAndFilter();
-    }// GEN-LAST:event_txtTimKiemActionPerformed
-    private void cbFilterTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterTrangThaiActionPerformed
+    }
+    private void cbFilterTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {
         filterTable();
-    }// GEN-LAST:event_cbFilterTrangThaiActionPerformed
+    }
     private void customUI() {
         setupPlaceholder(txtTimKiem, "Nhập tên món ăn");
         this.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -402,18 +402,18 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
         java.awt.Point tablePoint = SwingUtilities.convertPoint(this, p, tableMonAn);
         return tableMonAn.getBounds().contains(tablePoint);
     }
-    private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaTrangActionPerformed
+    private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {
         refreshData();
         resetPlaceholder(txtTimKiem, "Nhập tên món ăn");
-    }// GEN-LAST:event_btnXoaTrangActionPerformed
-    private void cbFilterLoaiMonAnActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterLoaiMonAnActionPerformed
+    }
+    private void cbFilterLoaiMonAnActionPerformed(java.awt.event.ActionEvent evt) {
         filterTable();
-    }// GEN-LAST:event_cbFilterLoaiMonAnActionPerformed
-    private void scrTableMonAnMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_scrTableMonAnMouseClicked
-    }// GEN-LAST:event_scrTableMonAnMouseClicked
-    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTimKiemActionPerformed
+    }
+    private void scrTableMonAnMouseClicked(java.awt.event.MouseEvent evt) {
+    }
+    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {
         searchAndFilter();
-    }// GEN-LAST:event_btnTimKiemActionPerformed
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnTimKiem;
     private javax.swing.JButton btnTrangChu;

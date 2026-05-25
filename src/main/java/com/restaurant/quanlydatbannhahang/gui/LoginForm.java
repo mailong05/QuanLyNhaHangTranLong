@@ -254,7 +254,7 @@ public class LoginForm extends javax.swing.JFrame {
         );
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 0, 300, 400));
         pack();
-    }// </editor-fold>                        
+    }
     private void lblMinimizeMouseClicked(java.awt.event.MouseEvent evt) {
         this.setState(JFrame.ICONIFIED);
     }

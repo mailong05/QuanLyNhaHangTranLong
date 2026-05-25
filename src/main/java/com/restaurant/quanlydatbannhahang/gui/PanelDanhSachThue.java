@@ -225,15 +225,15 @@ public class PanelDanhSachThue extends javax.swing.JPanel {
         pnlButton.add(btnXoaTrang, java.awt.BorderLayout.EAST);
         add(pnlButton, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
-    private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTimKiemActionPerformed
+    private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {
         searchByText();
-    }//GEN-LAST:event_txtTimKiemActionPerformed
-    private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaTrangActionPerformed
+    }
+    private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {
         refreshData();
-    }// GEN-LAST:event_btnXoaTrangActionPerformed
-    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTimKiemActionPerformed
+    }
+    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {
         searchByText();
-    }// GEN-LAST:event_btnTimKiemActionPerformed
+    }
     private void filterByComboBoxes() {
         DefaultTableModel model = (DefaultTableModel) tableThue.getModel();
         model.setRowCount(0);
@@ -281,9 +281,9 @@ public class PanelDanhSachThue extends javax.swing.JPanel {
     private void filterTable() {
         filterByComboBoxes();
     }
-    private void cbFilterTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterTrangThaiActionPerformed
+    private void cbFilterTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {
         filterTable();
-    }// GEN-LAST:event_cbFilterTrangThaiActionPerformed
+    }
     public void refreshData() {
         resetPlaceholder(txtTimKiem, "Nhập tên hoặc mã thuế");
         cbFilterTrangThai.setSelectedIndex(0);

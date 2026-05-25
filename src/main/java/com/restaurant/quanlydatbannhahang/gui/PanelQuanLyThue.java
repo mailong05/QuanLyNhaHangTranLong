@@ -422,12 +422,12 @@ public class PanelQuanLyThue extends javax.swing.JPanel implements MouseListener
         pnlButton.add(pnlRightButtons, java.awt.BorderLayout.EAST);
         add(pnlButton, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
-    private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTimKiemActionPerformed
+    private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {
         searchByText();
-    }//GEN-LAST:event_txtTimKiemActionPerformed
-    private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaTrangActionPerformed
+    }
+    private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {
         refreshData();
-    }// GEN-LAST:event_btnXoaTrangActionPerformed
+    }
     private void centerTableColumns(JTable table) {
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
@@ -435,10 +435,10 @@ public class PanelQuanLyThue extends javax.swing.JPanel implements MouseListener
             table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
         }
     }
-    private void cbFilterTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterTrangThaiActionPerformed
+    private void cbFilterTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {
         loadFilteredData();
-    }// GEN-LAST:event_cbFilterTrangThaiActionPerformed
-    private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaActionPerformed
+    }
+    private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {
         String maThue = txtMaThue.getText().trim();
         if (maThue.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn thuế để ngừng áp dụng.");
@@ -457,11 +457,11 @@ public class PanelQuanLyThue extends javax.swing.JPanel implements MouseListener
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Cập nhật trạng thái thuế thất bại: " + ex.getMessage());
         }
-    }// GEN-LAST:event_btnXoaActionPerformed
-    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTimKiemActionPerformed
+    }
+    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {
         searchByText();
-    }// GEN-LAST:event_btnTimKiemActionPerformed
-    private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCapNhatActionPerformed
+    }
+    private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {
         try {
             String maThue = txtMaThue.getText().trim();
             String tenThue = txtTenThue.getText().trim();
@@ -483,8 +483,8 @@ public class PanelQuanLyThue extends javax.swing.JPanel implements MouseListener
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Cập nhật thuế thất bại: " + ex.getMessage());
         }
-    }// GEN-LAST:event_btnCapNhatActionPerformed
-    private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnThemActionPerformed
+    }
+    private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {
         try {
             String maThue = txtMaThue.getText().trim();
             String tenThue = txtTenThue.getText().trim();
@@ -506,13 +506,13 @@ public class PanelQuanLyThue extends javax.swing.JPanel implements MouseListener
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Thêm thuế thất bại: " + ex.getMessage());
         }
-    }// GEN-LAST:event_btnThemActionPerformed
-    private void txtMaThueActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtMaThueActionPerformed
-    }// GEN-LAST:event_txtMaThueActionPerformed
-    private void txtThueSuatActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtThueSuatActionPerformed
-    }// GEN-LAST:event_txtThueSuatActionPerformed
-    private void cbTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbTrangThaiActionPerformed
-    }// GEN-LAST:event_cbTrangThaiActionPerformed
+    }
+    private void txtMaThueActionPerformed(java.awt.event.ActionEvent evt) {
+    }
+    private void txtThueSuatActionPerformed(java.awt.event.ActionEvent evt) {
+    }
+    private void cbTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCapNhat;
     private javax.swing.JButton btnThem;

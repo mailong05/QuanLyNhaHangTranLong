@@ -253,7 +253,6 @@ public final class HoaDonDraftSession {
         String normalized = normalizeMaBanContext(maBanContext);
         if (!normalized.isEmpty() && gioVao != null) {
             gioVaoByMaBan.put(normalized, gioVao);
-            System.out.println("Session: Đã lưu giờ vào cho bàn [" + normalized + "] là: " + gioVao);
         }
     }
 
@@ -262,7 +261,6 @@ public final class HoaDonDraftSession {
         return normalized.isEmpty() ? null : gioVaoByMaBan.get(normalized);
     }
     
- // Thêm method này vào HoaDonDraftSession.java
     public static void mergeContexts(Set<String> sourceContexts, String finalContext) {
         String finalNormalized = normalizeMaBanContext(finalContext);
         if (finalNormalized.isEmpty()) return;
@@ -277,7 +275,6 @@ public final class HoaDonDraftSession {
             String sourceNormalized = normalizeMaBanContext(source);
             if (sourceNormalized.isEmpty()) continue;
 
-            // 1. Cộng dồn Món ăn (Nếu trùng mã thì cộng dồn số lượng)
             List<DraftMonItem> items = getMonItems(sourceNormalized);
             for (DraftMonItem item : items) {
                 if (mergedItems.containsKey(item.getMaMon())) {
@@ -289,12 +286,10 @@ public final class HoaDonDraftSession {
                 }
             }
 
-            // 2. Gom Metadata (Ưu tiên lấy cái nào có dữ liệu trước)
             if (mergedKH == null || mergedKH.isBlank()) mergedKH = getMaKH(sourceNormalized);
             if (mergedKM == null || mergedKM.isBlank()) mergedKM = getMaKM(sourceNormalized);
             mergedDiemDung = Math.max(mergedDiemDung, getDiemDung(sourceNormalized));
 
-            // 3. Gom Giờ vào (Lấy giờ vào sớm nhất của các bàn bị gộp)
             LocalDateTime gv = getGioVao(sourceNormalized);
             if (gv != null) {
                 if (earliestGioVao == null || gv.isBefore(earliestGioVao)) {
@@ -302,13 +297,11 @@ public final class HoaDonDraftSession {
                 }
             }
 
-            // Dọn dẹp session cũ
             if (!sourceNormalized.equals(finalNormalized)) {
                 clear(sourceNormalized);
             }
         }
 
-        // Lưu toàn bộ dữ liệu đã gộp vào Context mới
         setMonItems(finalNormalized, new ArrayList<>(mergedItems.values()));
         setInvoiceMetadata(finalNormalized, mergedKH, mergedKM, mergedDiemDung);
         if (earliestGioVao != null) {

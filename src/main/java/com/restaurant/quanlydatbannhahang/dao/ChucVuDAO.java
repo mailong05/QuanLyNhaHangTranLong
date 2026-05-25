@@ -22,7 +22,6 @@ public class ChucVuDAO {
                 list.add(chucVu);
             }
         } catch (SQLException e) {
-            System.out.println("❌ Lỗi khi lấy danh sách chức vụ: " + e.getMessage());
             e.printStackTrace();
         }
         return list;
@@ -38,7 +37,6 @@ public class ChucVuDAO {
                 }
             }
         } catch (SQLException e) {
-            System.out.println("❌ Lỗi khi tìm chức vụ: " + e.getMessage());
             e.printStackTrace();
         }
         return null;

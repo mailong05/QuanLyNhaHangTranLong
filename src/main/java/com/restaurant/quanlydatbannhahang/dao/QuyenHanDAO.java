@@ -22,7 +22,6 @@ public class QuyenHanDAO {
                 list.add(quyenHan);
             }
         } catch (SQLException e) {
-            System.out.println("❌ Lỗi khi lấy danh sách quyền hạn: " + e.getMessage());
             e.printStackTrace();
         }
         return list;
@@ -38,7 +37,6 @@ public class QuyenHanDAO {
                 }
             }
         } catch (SQLException e) {
-            System.out.println("❌ Lỗi khi tìm quyền hạn: " + e.getMessage());
             e.printStackTrace();
         }
         return null;

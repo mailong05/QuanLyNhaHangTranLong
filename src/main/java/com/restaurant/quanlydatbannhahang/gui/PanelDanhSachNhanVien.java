@@ -230,18 +230,18 @@ public class PanelDanhSachNhanVien extends javax.swing.JPanel {
         pnlButton.add(btnXoaTrang, java.awt.BorderLayout.EAST);
         add(pnlButton, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
-    private void btnXoaTrangActionPerformed( ActionEvent evt) {// GEN-FIRST:event_btnXoaTrangActionPerformed
+    private void btnXoaTrangActionPerformed( ActionEvent evt) {
         refreshData();
-    }// GEN-LAST:event_btnXoaTrangActionPerformed
-    private void btnTimKiemActionPerformed( ActionEvent evt) {// GEN-FIRST:event_btnTimKiemActionPerformed
+    }
+    private void btnTimKiemActionPerformed( ActionEvent evt) {
         searchByText();
-    }// GEN-LAST:event_btnTimKiemActionPerformed
-    private void cbFilterChucVuActionPerformed( ActionEvent evt) {// GEN-FIRST:event_cbFilterChucVuActionPerformed
+    }
+    private void cbFilterChucVuActionPerformed( ActionEvent evt) {
         filterTable();
-    }// GEN-LAST:event_cbFilterChucVuActionPerformed
-    private void txtTimKiemActionPerformed( ActionEvent evt) {// GEN-FIRST:event_txtTimKiemActionPerformed
+    }
+    private void txtTimKiemActionPerformed( ActionEvent evt) {
         searchByText();
-    }// GEN-LAST:event_txtTimKiemActionPerformed
+    }
     private void filterByComboBoxes() {
         DefaultTableModel model = (DefaultTableModel) tableNhanVien.getModel();
         model.setRowCount(0);

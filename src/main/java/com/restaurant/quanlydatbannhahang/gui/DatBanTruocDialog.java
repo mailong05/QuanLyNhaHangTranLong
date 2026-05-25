@@ -147,8 +147,8 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtTenKhachHangActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtTenKhachHangActionPerformed
-    }// GEN-LAST:event_txtTenKhachHangActionPerformed
+    private void txtTenKhachHangActionPerformed(java.awt.event.ActionEvent evt) {
+    }
 
     private void fillMaPhieuDat(JTextField txtMaKhuVuc) {
         String lastID = IDQueryHelper.getLastID("PhieuDatBan", "maPhieuDat");
@@ -161,7 +161,7 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
 		dtpThoiGianDen.setDateTimeStrict(ReservationSession.getTempSelectedDateTime());
 	}
 
-    private void btnDatBanActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnDatBanActionPerformed
+    private void btnDatBanActionPerformed(java.awt.event.ActionEvent evt) {
         try {
             String maPDB = txtMaPhieuDat.getText().trim();
             String soDienThoai = txtSoDienThoai.getText().trim();
@@ -208,10 +208,10 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
                     JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
-    }// GEN-LAST:event_btnDatBanActionPerformed
+    }
 
-    private void txtMaPhieuDatActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtMaPhieuDatActionPerformed
-    }// GEN-LAST:event_txtMaPhieuDatActionPerformed
+    private void txtMaPhieuDatActionPerformed(java.awt.event.ActionEvent evt) {
+    }
 
     public static void main(String args[]) {
         UIConfiguration.setupUI();

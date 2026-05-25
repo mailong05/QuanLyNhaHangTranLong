@@ -22,7 +22,6 @@ public class ImageUtil {
         externalMonanPath = AppConfig.getMonanFolder();
         if (externalMonanPath != null) {
             MONAN_IMAGE_FOLDER = externalMonanPath;
-            System.out.println("✓ ImageUtil initialized. Using: " + MONAN_IMAGE_FOLDER);
         }
     }
     private static final int MAX_CACHE_SIZE = 400;
@@ -226,6 +225,5 @@ public class ImageUtil {
         executor.shutdown();
     }
     public static void setMonanImageFolder(String folderPath) {
-        System.out.println("Note: Thư mục monan được set là: " + folderPath);
     }
 }

@@ -331,15 +331,15 @@ public class PanelQuanLyBan extends javax.swing.JPanel implements MouseListener 
                 : idGenerateHelper.generateNextIDFromFullID(lastMaBan);
         txtMaBan.setText(newMaBan);
     }
-    private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaTrangActionPerformed
+    private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {
         refreshData();
-    }// GEN-LAST:event_btnXoaTrangActionPerformed
-    private void btnTrangChuActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTrangChuActionPerformed
+    }
+    private void btnTrangChuActionPerformed(java.awt.event.ActionEvent evt) {
         java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
         if (parentFrame instanceof MainForm) {
             ((MainForm) parentFrame).goToTrangChuFromPanel();
         }
-    }// GEN-LAST:event_btnTrangChuActionPerformed
+    }
     private void loadDataToComboBoxes() {
         try {
             ActionListener[] khuVucListeners = cbFilterKhuVuc.getActionListeners();
@@ -458,15 +458,15 @@ public class PanelQuanLyBan extends javax.swing.JPanel implements MouseListener 
             JOptionPane.showMessageDialog(this, "Lỗi tìm kiếm dữ liệu: " + e.getMessage());
         }
     }
-    private void cbFilterTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterTrangThaiActionPerformed
+    private void cbFilterTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {
         loadFilteredData();
-    }// GEN-LAST:event_cbFilterTrangThaiActionPerformed
-    private void cbFilterKhuVucActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterKhuVucActionPerformed
+    }
+    private void cbFilterKhuVucActionPerformed(java.awt.event.ActionEvent evt) {
         loadFilteredData();
-    }// GEN-LAST:event_cbFilterKhuVucActionPerformed
-    private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaActionPerformed
+    }
+    private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {
         xoaAction();
-    }// GEN-LAST:event_btnXoaActionPerformed
+    }
     private void xoaAction() {
         try {
             String maBan = txtMaBan.getText().trim();
@@ -492,7 +492,7 @@ public class PanelQuanLyBan extends javax.swing.JPanel implements MouseListener 
             e.printStackTrace();
         }
     }
-    private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCapNhatActionPerformed
+    private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {
         try {
             String maBan = txtMaBan.getText().trim();
             String soGheText = spSoGhe.getValue().toString();
@@ -515,8 +515,8 @@ public class PanelQuanLyBan extends javax.swing.JPanel implements MouseListener 
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Cập nhật bàn thất bại: " + ex.getMessage());
         }
-    }// GEN-LAST:event_btnCapNhatActionPerformed
-    private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnThemActionPerformed
+    }
+    private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {
         try {
             String maBan = txtMaBan.getText().trim();
             String soGheText = spSoGhe.getValue().toString();
@@ -539,17 +539,17 @@ public class PanelQuanLyBan extends javax.swing.JPanel implements MouseListener 
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Thêm bàn thất bại: " + ex.getMessage());
         }
-    }// GEN-LAST:event_btnThemActionPerformed
-    private void txtMaBanActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtMaBanActionPerformed
-    }// GEN-LAST:event_txtMaBanActionPerformed
-    private void txtViTriActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtViTriActionPerformed
-    }// GEN-LAST:event_txtViTriActionPerformed
-    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTimKiemActionPerformed
+    }
+    private void txtMaBanActionPerformed(java.awt.event.ActionEvent evt) {
+    }
+    private void txtViTriActionPerformed(java.awt.event.ActionEvent evt) {
+    }
+    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {
         searchByText();
-    }// GEN-LAST:event_btnTimKiemActionPerformed
-    private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtTimKiemActionPerformed
+    }
+    private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {
         searchByText();
-    }// GEN-LAST:event_txtTimKiemActionPerformed
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCapNhat;
     private javax.swing.JButton btnThem;

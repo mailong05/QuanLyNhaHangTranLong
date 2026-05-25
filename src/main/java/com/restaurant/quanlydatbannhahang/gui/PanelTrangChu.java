@@ -29,7 +29,6 @@ public class PanelTrangChu extends javax.swing.JPanel {
         this.addHierarchyListener(e -> {
             if ((e.getChangeFlags() & java.awt.event.HierarchyEvent.SHOWING_CHANGED) != 0) {
                 if (this.isShowing()) {
-                    System.out.println("DEBUG: Trang chủ đang hiện, tự động refresh dữ liệu...");
                     refreshData();
                 }
             }

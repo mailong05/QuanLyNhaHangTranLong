@@ -20,7 +20,6 @@ public class ChiTietPhieuDatBanDAO {
             pstm.setString(3, chiTiet.getGhiChu());
             return pstm.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.out.println("❌ Lỗi khi thêm chi tiết phiếu đặt bàn: " + e.getMessage());
             e.printStackTrace();
         }
         return false;
@@ -40,7 +39,6 @@ public class ChiTietPhieuDatBanDAO {
                 }
             }
         } catch (SQLException e) {
-            System.out.println("❌ Lỗi khi lấy chi tiết phiếu đặt bàn: " + e.getMessage());
             e.printStackTrace();
         }
         return list;
@@ -70,7 +68,6 @@ public class ChiTietPhieuDatBanDAO {
             pstm.setString(3, chiTiet.getBan().getMaBan());
             return pstm.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.out.println("❌ Lỗi khi cập nhật chi tiết phiếu đặt bàn: " + e.getMessage());
             e.printStackTrace();
         }
         return false;
@@ -83,7 +80,6 @@ public class ChiTietPhieuDatBanDAO {
             pstm.setString(2, maBan);
             return pstm.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.out.println("❌ Lỗi khi xóa chi tiết phiếu đặt bàn: " + e.getMessage());
             e.printStackTrace();
         }
         return false;
@@ -98,7 +94,6 @@ public class ChiTietPhieuDatBanDAO {
             chiTiet.setGhiChu(rs.getString("GhiChu"));
             return chiTiet;
         } catch (SQLException e) {
-            System.out.println("❌ Lỗi khi xây dựng object từ ResultSet: " + e.getMessage());
             e.printStackTrace();
         }
         return null;
@@ -110,7 +105,6 @@ public class ChiTietPhieuDatBanDAO {
             pstm.setString(1, maPhieuDat);
             return pstm.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.out.println("❌ Lỗi khi xóa tất cả chi tiết phiếu: " + e.getMessage());
             e.printStackTrace();
         }
         return false;
@@ -129,7 +123,6 @@ public class ChiTietPhieuDatBanDAO {
                 }
             }
         } catch (SQLException e) {
-            System.out.println("Lỗi khi lấy danh sách chi tiết phiếu đặt bàn: " + e.getMessage());
             e.printStackTrace();
         }
         return list;

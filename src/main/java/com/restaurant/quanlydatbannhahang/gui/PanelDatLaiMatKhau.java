@@ -192,20 +192,20 @@ public class PanelDatLaiMatKhau extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-    private void txtMatKhauMoiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtMatKhauMoiActionPerformed
-    }// GEN-LAST:event_txtMatKhauMoiActionPerformed
-    private void txtPhoneActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtPhoneActionPerformed
-    }// GEN-LAST:event_txtPhoneActionPerformed
-    private void clickCLoseMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_clickCLoseMouseClicked
+    private void txtMatKhauMoiActionPerformed(java.awt.event.ActionEvent evt) {
+    }
+    private void txtPhoneActionPerformed(java.awt.event.ActionEvent evt) {
+    }
+    private void clickCLoseMouseClicked(java.awt.event.MouseEvent evt) {
         this.dispose();
         System.exit(0);
-    }// GEN-LAST:event_clickCLoseMouseClicked
-    private void clickMinimizeMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_clickMinimizeMouseClicked
+    }
+    private void clickMinimizeMouseClicked(java.awt.event.MouseEvent evt) {
         this.setState(JFrame.ICONIFIED);
-    }// GEN-LAST:event_clickMinimizeMouseClicked
-    private void txtUsernameActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtUsernameActionPerformed
-    }// GEN-LAST:event_txtUsernameActionPerformed
-    private void btnContinueActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnContinueActionPerformed
+    }
+    private void txtUsernameActionPerformed(java.awt.event.ActionEvent evt) {
+    }
+    private void btnContinueActionPerformed(java.awt.event.ActionEvent evt) {
         String newPassword = String.valueOf(txtMatKhauMoi.getPassword());
         String confirmPassword = String.valueOf(txtNhapLaiMatKhauMoi.getPassword());
         ValidationResult result = TaiKhoanService.updatePassword(username, newPassword, confirmPassword);
@@ -224,8 +224,8 @@ public class PanelDatLaiMatKhau extends javax.swing.JFrame {
                 JOptionPane.INFORMATION_MESSAGE);
         this.dispose();
         new LoginForm().setVisible(true);
-    }// GEN-LAST:event_btnContinueActionPerformed
-    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCancelActionPerformed
+    }
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {
         int confirm = JOptionPane.showConfirmDialog(this,
                 "Bạn có muốn quay lại đăng nhập?",
                 "Xác nhận",
@@ -234,11 +234,11 @@ public class PanelDatLaiMatKhau extends javax.swing.JFrame {
             this.dispose();
             new LoginForm().setVisible(true);
         }
-    }// GEN-LAST:event_btnCancelActionPerformed
-    private void txtMailActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtMailActionPerformed
-    }// GEN-LAST:event_txtMailActionPerformed
-    private void txtIdcardActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtIdcardActionPerformed
-    }// GEN-LAST:event_txtIdcardActionPerformed
+    }
+    private void txtMailActionPerformed(java.awt.event.ActionEvent evt) {
+    }
+    private void txtIdcardActionPerformed(java.awt.event.ActionEvent evt) {
+    }
     public static void main(String args[]) {
         UIConfiguration.setupUI();
         java.awt.EventQueue.invokeLater(new Runnable() {

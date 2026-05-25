@@ -116,8 +116,6 @@ public class PanelVaoCa extends JPanel {
         btnThoat.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btnThoat.setFocusPainted(false);
         btnThoat.addActionListener(e -> {
-            // Delegate closing to the parent frame so MainForm can enforce "finish shift"
-            // guard
             java.awt.Window w = SwingUtilities.getWindowAncestor(this);
             if (w instanceof java.awt.Frame) {
                 java.awt.Frame frame = (java.awt.Frame) w;
@@ -218,11 +216,10 @@ public class PanelVaoCa extends JPanel {
             JOptionPane.showMessageDialog(this, "Bắt đầu ca thành công.", "Thành công",
                     JOptionPane.INFORMATION_MESSAGE);
             java.awt.Frame parentFrame = (java.awt.Frame) SwingUtilities.getWindowAncestor(this);
-            // Đảm bảo trong PanelVaoCa.java đã có:
             if (parentFrame instanceof MainForm) {
                 MainForm mainForm = (MainForm) parentFrame;
-                mainForm.setMenuEnabled(true); // Mở khóa menu sau khi vào ca
-                mainForm.goToTrangChuFromPanel(); // Chuyển sang màn hình chính
+                mainForm.setMenuEnabled(true);
+                mainForm.goToTrangChuFromPanel();
             }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Lỗi khi vào ca: " + ex.getMessage(), "Lỗi",

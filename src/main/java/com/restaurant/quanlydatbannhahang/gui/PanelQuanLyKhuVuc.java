@@ -246,15 +246,15 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
         pnlButton.add(pnlRightButtons, java.awt.BorderLayout.EAST);
         add(pnlButton, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
-    private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTimKiemActionPerformed
+    private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {
     	searchByText();
-    }//GEN-LAST:event_txtTimKiemActionPerformed
-    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
+    }
+    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {
     	searchByText();
-    }//GEN-LAST:event_btnTimKiemActionPerformed
-    private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaTrangActionPerformed
+    }
+    private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {
         refreshData();
-    }// GEN-LAST:event_btnXoaTrangActionPerformed
+    }
     private void loadDataToTable() {
         loadFilteredData();
     }
@@ -309,7 +309,7 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
             table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
         }
     }
-    private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaActionPerformed
+    private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {
         String maKhuVuc = txtMaKhuVuc.getText().trim();
         if (maKhuVuc.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn khu vực cần xóa.");
@@ -328,8 +328,8 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Xóa khu vực thất bại: " + ex.getMessage());
         }
-    }// GEN-LAST:event_btnXoaActionPerformed
-    private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCapNhatActionPerformed
+    }
+    private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {
         String maKhuVuc = txtMaKhuVuc.getText().trim();
         String tenKhuVuc = txtTenKhuVuc.getText().trim();
         if (maKhuVuc.isEmpty() || tenKhuVuc.isEmpty()) {
@@ -345,8 +345,8 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Cập nhật khu vực thất bại: " + ex.getMessage());
         }
-    }// GEN-LAST:event_btnCapNhatActionPerformed
-    private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnThemActionPerformed
+    }
+    private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {
         String maKhuVuc = txtMaKhuVuc.getText().trim();
         String tenKhuVuc = txtTenKhuVuc.getText().trim();
         if (maKhuVuc.isEmpty() || tenKhuVuc.isEmpty()) {
@@ -362,9 +362,9 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Thêm khu vực thất bại: " + ex.getMessage());
         }
-    }// GEN-LAST:event_btnThemActionPerformed
-    private void txtMaKhuVucActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtMaKhuVucActionPerformed
-    }// GEN-LAST:event_txtMaKhuVucActionPerformed
+    }
+    private void txtMaKhuVucActionPerformed(java.awt.event.ActionEvent evt) {
+    }
     private void loadDataFromRow(int rowIndex) {
         try {
             String maKhuVuc = (String) tableKhuVuc.getValueAt(rowIndex, 0);

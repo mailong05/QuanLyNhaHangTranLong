@@ -652,7 +652,7 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                 pnlButton.add(pnlRightButtons, java.awt.BorderLayout.EAST);
                 add(pnlButton, java.awt.BorderLayout.PAGE_END);
         }// </editor-fold>//GEN-END:initComponents
-        private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaActionPerformed
+        private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {
                 String maKM = txtMaKhuyenMai.getText().trim();
                 if (maKM.isEmpty()) {
                         JOptionPane.showMessageDialog(this, "Vui lòng chọn khuyến mãi để ngừng áp dụng.");
@@ -674,10 +674,10 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                         JOptionPane.showMessageDialog(this,
                                         "Cập nhật trạng thái khuyến mãi thất bại: " + ex.getMessage());
                 }
-        }// GEN-LAST:event_btnXoaActionPerformed
-        private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaTrangActionPerformed
+        }
+        private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {
                 refreshData();
-        }// GEN-LAST:event_btnXoaTrangActionPerformed
+        }
         private void centerTableColumns(JTable table) {
                 DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
                 centerRenderer.setHorizontalAlignment(JLabel.CENTER);
@@ -687,17 +687,17 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                         }
                 }
         }
-        private void cbFilterTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbFilterTrangThaiActionPerformed
+        private void cbFilterTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {
                 loadDataToTable();
-        }// GEN-LAST:event_cbFilterTrangThaiActionPerformed
-        private void txtMaKhuyenMaiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtMaKhuyenMaiActionPerformed
-        }// GEN-LAST:event_txtMaKhuyenMaiActionPerformed
-        private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTimKiemActionPerformed
+        }
+        private void txtMaKhuyenMaiActionPerformed(java.awt.event.ActionEvent evt) {
+        }
+        private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {
                 searchByText();
-        }// GEN-LAST:event_btnTimKiemActionPerformed
-        private void txtGiaTriGiamActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtGiaTriGiamActionPerformed
-        }// GEN-LAST:event_txtGiaTriGiamActionPerformed
-        private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCapNhatActionPerformed
+        }
+        private void txtGiaTriGiamActionPerformed(java.awt.event.ActionEvent evt) {
+        }
+        private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {
                 try {
                         String maKM = txtMaKhuyenMai.getText().trim();
                         String tenKM = txtTenKhuyenMai.getText().trim();
@@ -728,8 +728,8 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                 } catch (Exception ex) {
                         JOptionPane.showMessageDialog(this, "Cập nhật khuyến mãi thất bại: " + ex.getMessage());
                 }
-        }// GEN-LAST:event_btnCapNhatActionPerformed
-        private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnThemActionPerformed
+        }
+        private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {
                 try {
                         String maKM = txtMaKhuyenMai.getText().trim();
                         String tenKM = txtTenKhuyenMai.getText().trim();
@@ -760,7 +760,7 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                 } catch (Exception ex) {
                         JOptionPane.showMessageDialog(this, "Thêm khuyến mãi thất bại: " + ex.getMessage());
                 }
-        }// GEN-LAST:event_btnThemActionPerformed
+        }
         // Variables declaration - do not modify//GEN-BEGIN:variables
         private javax.swing.JButton btnCapNhat;
         private javax.swing.JButton btnThem;

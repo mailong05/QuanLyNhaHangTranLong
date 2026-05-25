@@ -446,11 +446,11 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         add(panelTrungTam, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 20, -1, 740));
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtTimKiemActionPerformed
+    private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {
         searchKhachHang();
-    }// GEN-LAST:event_txtTimKiemActionPerformed
+    }
 
-    private void btnDungDiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnDungDiemActionPerformed
+    private void btnDungDiemActionPerformed(java.awt.event.ActionEvent evt) {
         if (selectedKhachHang == null) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn khách hàng trước khi dùng điểm.");
             return;
@@ -492,9 +492,9 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
             }
         }
         JOptionPane.showMessageDialog(this, "Đã trừ " + diemDaApDung + " điểm tích lũy khỏi khách hàng.");
-    }// GEN-LAST:event_btnDungDiemActionPerformed
+    }
 
-    private void cbKhuyenMaiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbKhuyenMaiActionPerformed
+    private void cbKhuyenMaiActionPerformed(java.awt.event.ActionEvent evt) {
         if (loadingKhuyenMai) {
             return;
         }
@@ -503,11 +503,11 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
             cbKhuyenMai.setToolTipText(selected.toString());
         }
         updateTongTienSummary();
-    }// GEN-LAST:event_cbKhuyenMaiActionPerformed
+    }
 
-    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTimKiemActionPerformed
+    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {
         searchKhachHang();
-    }// GEN-LAST:event_btnTimKiemActionPerformed
+    }
 
     private void performAutoSaveOnHide() {
         String context = HoaDonDraftSession.getCurrentMaBanContext();
@@ -516,21 +516,20 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
             try {
                 saveHoaDonDraftToSession();
                 thucHienLuuHoaDon(TrangThaiHoaDon.CHUA_THANH_TOAN);
-                System.out.println("Hệ thống: Tự động lưu hóa đơn nháp cho phiếu đặt bàn " + pdbContext);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
         }
     }
 
-    private void btnTaoTaiKhoanActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTaoTaiKhoanActionPerformed
+    private void btnTaoTaiKhoanActionPerformed(java.awt.event.ActionEvent evt) {
         Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
         if (parentFrame instanceof MainForm) {
             ((MainForm) parentFrame).openPanelQuanLyKhachHang();
         }
-    }// GEN-LAST:event_btnTaoTaiKhoanActionPerformed
+    }
 
-    private void btnInHoaDonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnInHoaDonActionPerformed
+    private void btnInHoaDonActionPerformed(java.awt.event.ActionEvent evt) {
         if (tableThongTinHoaDon.getRowCount() == 0) {
             JOptionPane.showMessageDialog(this, "Chưa có dữ liệu món ăn để in hóa đơn.");
             return;
@@ -551,7 +550,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
                     JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
         }
-    }// GEN-LAST:event_btnInHoaDonActionPerformed
+    }
 
     private void customUI() {
         setupPlaceholder(txtTimKiem, "Nhập số điện thoại khách hàng");
@@ -616,7 +615,6 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         }
         if (hdExisting != null) {
             txtMaHoaDon.setText(hdExisting.getMaHD());
-            System.out.println("DEBUG: Phát hiện hóa đơn nháp tồn tại. Tái sử dụng mã HD: " + hdExisting.getMaHD());
         } else {
             try {
                 String lastId = hoaDonService.getLastHoaDonID();
@@ -994,7 +992,6 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
             String currentMaPhieuDat = HoaDonDraftSession.getCurrentMaPhieuDatContext();
             String normalizedMaBan = HoaDonDraftSession.normalizeMaBanContext(currentMaBan);
             if (selectedKhachHang != null) {
-                System.out.println("PanelLapHoaDon: " + selectedKhachHang.getMaKH());
                 phieuDatBanService.capNhatKhachHangChoPhieu(currentMaPhieuDat, selectedKhachHang.getMaKH());
             }
             thucHienLuuHoaDon(TrangThaiHoaDon.DA_THANH_TOAN);
@@ -1099,18 +1096,15 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         double tongThanhToan = coSoTinhVAT + tienThueVAT;
         if (HoaDonDraftSession.getCurrentMaBanContext() == null
                 || HoaDonDraftSession.getCurrentMaBanContext().isBlank()) {
-            System.out.println("DEBUG: Mã bàn context rỗng, bỏ qua lưu hóa đơn.");
             return;
         }
         String currentMaPhieuDatContext = HoaDonDraftSession.getCurrentMaPhieuDatContext();
         if (currentMaPhieuDatContext == null || currentMaPhieuDatContext.isBlank()) {
-            System.out.println("DEBUG: Mã phiếu đặt context rỗng, chỉ lưu nháp vào RAM, không lưu vào Database.");
             return;
         }
         PhieuDatBan phieuDatBan = phieuDatBanService.getPhieuDatBanTheoMa(currentMaPhieuDatContext);
         if (phieuDatBan == null) {
-            System.out.println("DEBUG: Không tìm thấy PhiếuDatBan với mã " + currentMaPhieuDatContext
-                    + ", chỉ lưu nháp vào RAM, không lưu vào Database.");
+
             return;
         }
 

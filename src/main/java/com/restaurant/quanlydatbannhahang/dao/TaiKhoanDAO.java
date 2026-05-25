@@ -32,7 +32,6 @@ public class TaiKhoanDAO {
             try {
                 taiKhoan.setQuyenHan(QuyenHan.valueOf(quyenHanStr));
             } catch (IllegalArgumentException e) {
-                System.out.println("❌ Giá trị quền hạn không hợp lệ: " + quyenHanStr);
                 taiKhoan.setQuyenHan(QuyenHan.MANAGER);
             }
         }
@@ -50,7 +49,6 @@ public class TaiKhoanDAO {
                 }
             }
         } catch (SQLException e) {
-            System.out.println("❌ Lỗi khi tìm tài khoản: " + e.getMessage());
             e.printStackTrace();
         }
         return null;
@@ -66,7 +64,6 @@ public class TaiKhoanDAO {
                 }
             }
         } catch (SQLException e) {
-            System.out.println("❌ Lỗi khi tìm tài khoản theo username: " + e.getMessage());
             e.printStackTrace();
         }
         return null;
@@ -82,7 +79,6 @@ public class TaiKhoanDAO {
                 }
             }
         } catch (SQLException e) {
-            System.out.println("❌ Lỗi khi kiểm tra tài khoản: " + e.getMessage());
             e.printStackTrace();
         }
         return false;
@@ -152,7 +148,6 @@ public class TaiKhoanDAO {
                 }
             }
         } catch (SQLException e) {
-            System.out.println("❌ Lỗi khi tìm tài khoản: " + e.getMessage());
             e.printStackTrace();
         }
         return dsTaiKhoan;
