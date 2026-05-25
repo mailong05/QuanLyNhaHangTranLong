@@ -665,7 +665,7 @@ public class PanelLapHoaDon extends javax.swing.JPanel {
         loadHoaDonDraft();
         loadKhuyenMaiToComboBox();
         selectedKhachHang = null;
-        cbPTTT.setSelectedIndex(1);
+        cbPTTT.setSelectedIndex(2);
         populateCustomerInfoFromReservation();
         updateTongTienSummary();
     }
