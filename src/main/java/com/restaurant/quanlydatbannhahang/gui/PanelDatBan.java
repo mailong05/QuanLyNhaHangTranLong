@@ -81,6 +81,7 @@ public class PanelDatBan extends javax.swing.JPanel {
                         }
                     } else {
                         flowOrigin = "";
+                        btnDatBanTruoc.setText("Đặt bàn trước");
                         isMerging = false;
                         isSwitching = false;
                         editMode = false;
