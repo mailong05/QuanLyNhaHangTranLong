@@ -179,7 +179,11 @@ public class PanelKetCa extends JPanel {
         infoPanel.add(scrollGhiChu, gbc);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        add(infoPanel, BorderLayout.CENTER);
+        JScrollPane scrollPane = new JScrollPane(infoPanel);
+        scrollPane.setBorder(null);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        scrollPane.getViewport().setBackground(Color.WHITE);
+        add(scrollPane, BorderLayout.CENTER);
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
         buttonPanel.setBackground(Color.WHITE);
@@ -236,10 +240,18 @@ public class PanelKetCa extends JPanel {
             return 0;
         }
         try {
-            int count = Integer.parseInt(text);
-            return Math.max(count, 0);
+            long count = Long.parseLong(text); 
+            
+            if (count < 0) {
+                return -1; 
+            }
+            if (count > 100000) { 
+                return -2; 
+            }
+            
+            return (int) count;
         } catch (NumberFormatException ex) {
-            return -1;
+            return -1; 
         }
     }
 
@@ -251,18 +263,28 @@ public class PanelKetCa extends JPanel {
                 return;
             }
 
-            long actual = calculateActualCash();
+            long total = 0;
             for (int i = 0; i < DENOMINATIONS.length; i++) {
-                if (parseCount(txtDenomCounts[i].getText().trim()) < 0) {
+                int count = parseCount(txtDenomCounts[i].getText().trim());
+                
+                if (count == -1) {
                     JOptionPane.showMessageDialog(this,
-                            "Vui lòng nhập số tờ hợp lệ cho " + LABELS[i] + ".",
+                            "Vui lòng nhập số tờ hợp lệ (không được âm, phải là số) cho " + LABELS[i] + ".",
                             "Lỗi dữ liệu", JOptionPane.WARNING_MESSAGE);
                     txtDenomCounts[i].requestFocus();
                     return;
+                } else if (count == -2) {
+                    JOptionPane.showMessageDialog(this,
+                            "Số lượng " + LABELS[i] + " quá khổng lồ. Két tiền thu ngân không thể chứa số lượng này!",
+                            "Lỗi số tiền", JOptionPane.WARNING_MESSAGE);
+                    txtDenomCounts[i].requestFocus();
+                    return;
                 }
+                
+                total += (long) count * DENOMINATIONS[i];
             }
 
-            double diff = actual - tongTienHeThong;
+            double diff = (double) total - tongTienHeThong;
             if (diff != 0 && txtGhiChu.getText().trim().isBlank()) {
                 JOptionPane.showMessageDialog(this,
                         "Vui lòng ghi chú lý do chênh lệch tiền khi tổng thực tế không khớp với hệ thống.",
@@ -272,7 +294,7 @@ public class PanelKetCa extends JPanel {
             }
 
             currentCa.setThoiGianKetCa(LocalDateTime.now());
-            currentCa.setTienKetCa((double) actual);
+            currentCa.setTienKetCa((double) total);
             currentCa.setTrangThai(com.restaurant.quanlydatbannhahang.entity.TrangThaiCa.DA_KET_CA);
             currentCa.setGhiChu(txtGhiChu.getText().trim());
             caLamViecService.capNhatCaLamViec(currentCa);
