@@ -835,11 +835,6 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
 
         private void capNhatTrangThaiBanThongMinh(String maBan) {
                 try {
-                        Ban ban = banService.getBanTheoMa(maBan);
-                        if (ban != null && ban.getTrangThai() == TrangThaiBan.DANG_DUNG) {
-                                return;
-                        }
-
                         boolean hasToday = pdbService.hasReservationToday(maBan);
                         if (hasToday) {
                                 banService.capNhatTrangThaiBan(maBan, TrangThaiBan.DA_DAT);
@@ -1093,35 +1088,46 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
         }
 
         private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {
-                try {
-                        String maPDB = txtMaPhieuDat.getText().trim();
-                        if (maPDB.isEmpty()) {
-                                JOptionPane.showMessageDialog(this, "Vui lòng chọn phiếu đặt bàn để xóa", "Thông báo",
-                                                JOptionPane.WARNING_MESSAGE);
-                                return;
-                        }
-                        int result = JOptionPane.showConfirmDialog(this,
-                                        "Bạn có chắc chắn muốn xóa mềm phiếu đặt bàn " + maPDB
-                                                        + " bằng cách chuyển thành trạng thái 'Đã hủy' không?",
-                                        "Xác nhận xóa",
-                                        JOptionPane.YES_NO_OPTION);
-                        if (result == JOptionPane.YES_OPTION) {
-                                List<ChiTietPhieuDatBan> chiTietList = ctpdbService.getChiTietByMaPhieuDat(maPDB);
-                                pdbService.capNhatTrangThaiPhieu(maPDB, TrangThaiPhieuDat.DA_HUY);
-                                capNhatTrangThaiBan(chiTietList);
-                                if (panelDatBan != null) {
-                                        panelDatBan.updateAllTableStatusFromDatabase();
-                                }
-                                JOptionPane.showMessageDialog(this, "Xóa phiếu đặt bàn thành công", "Thành công",
-                                                JOptionPane.INFORMATION_MESSAGE);
-                                refreshData();
-                        }
-                } catch (Exception e) {
-                        JOptionPane.showMessageDialog(this, "Lỗi khi xóa: " + e.getMessage(), "Lỗi",
-                                        JOptionPane.ERROR_MESSAGE);
-                        e.printStackTrace();
-                }
-        }
+            try {
+                    String maPDB = txtMaPhieuDat.getText().trim();
+                    if (maPDB.isEmpty()) {
+                            JOptionPane.showMessageDialog(this, "Vui lòng chọn phiếu đặt bàn để xóa", "Thông báo",
+                                            JOptionPane.WARNING_MESSAGE);
+                            return;
+                    }
+                    int result = JOptionPane.showConfirmDialog(this,
+                                    "Bạn có chắc chắn muốn xóa mềm phiếu đặt bàn " + maPDB
+                                                    + " bằng cách chuyển thành trạng thái 'Đã hủy' không?",
+                                    "Xác nhận xóa",
+                                    JOptionPane.YES_NO_OPTION);
+                    if (result == JOptionPane.YES_OPTION) {
+                            List<ChiTietPhieuDatBan> chiTietList = ctpdbService.getChiTietByMaPhieuDat(maPDB);
+                            
+                            String maBanContextRaw = chiTietList.stream()
+                                             .map(ct -> ct.getBan().getMaBan())
+                                             .collect(Collectors.joining(","));
+                            String normalizedContext = HoaDonDraftSession.normalizeMaBanContext(maBanContextRaw);
+                            if (!normalizedContext.isEmpty()) {
+                                    HoaDonDraftSession.clear(normalizedContext); 
+                            }
+
+                            pdbService.capNhatTrangThaiPhieu(maPDB, TrangThaiPhieuDat.DA_HUY);
+                            
+                            capNhatTrangThaiBan(chiTietList);
+                            
+                            if (panelDatBan != null) {
+                                    panelDatBan.updateAllTableStatusFromDatabase();
+                            }
+                            JOptionPane.showMessageDialog(this, "Xóa phiếu đặt bàn và giải phóng bàn thành công", "Thành công",
+                                            JOptionPane.INFORMATION_MESSAGE);
+                            refreshData();
+                    }
+            } catch (Exception e) {
+                    JOptionPane.showMessageDialog(this, "Lỗi khi xóa: " + e.getMessage(), "Lỗi",
+                                    JOptionPane.ERROR_MESSAGE);
+                    e.printStackTrace();
+            }
+    }
 
         private void txtMaPhieuDatActionPerformed(java.awt.event.ActionEvent evt) {
         }
