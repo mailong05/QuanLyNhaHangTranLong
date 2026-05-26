@@ -49,7 +49,7 @@ public class PanelDatBan extends javax.swing.JPanel {
     private static final Color EDIT_MODE_VACATING_COLOR = Color.WHITE;
     private BanService banService;
     private Set<String> lockedOriginTables = new HashSet<>();
-
+    private PhieuDatBanService pdb_service;
 
     public PanelDatBan() {
         selectedTables = new HashSet<>();
@@ -58,6 +58,7 @@ public class PanelDatBan extends javax.swing.JPanel {
         tableTrangThai = new HashMap<>();
         tableLabelStatus = new HashMap<>();
         banService = new BanService();
+        pdb_service = new PhieuDatBanService();
         initComponents();
         customUI();
         setUpDatBanButton();
@@ -70,6 +71,7 @@ public class PanelDatBan extends javax.swing.JPanel {
             public void hierarchyChanged(java.awt.event.HierarchyEvent e) {
                 if ((e.getChangeFlags() & java.awt.event.HierarchyEvent.SHOWING_CHANGED) != 0) {
                     if (isShowing()) {
+                    	pdb_service.capNhatTrangThaiBanTheoPhieuDatHomNay();
                         syncButtonVisibilityAndState();
                         if (!editMode && !isMerging) {
                             refreshData();

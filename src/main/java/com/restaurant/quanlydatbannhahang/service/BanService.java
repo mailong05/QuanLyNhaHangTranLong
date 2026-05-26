@@ -1,5 +1,6 @@
 package com.restaurant.quanlydatbannhahang.service;
 import com.restaurant.quanlydatbannhahang.dao.BanDAO;
+import com.restaurant.quanlydatbannhahang.dao.PhieuDatBanDAO;
 import com.restaurant.quanlydatbannhahang.entity.Ban;
 import com.restaurant.quanlydatbannhahang.entity.ChiTietPhieuDatBan;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiBan;
@@ -9,6 +10,7 @@ public class BanService {
     private BanDAO banDAO;
     private static final String MABAN_PATTERN = "^B\\d{3}$";
     private static final Pattern maBanPattern = Pattern.compile(MABAN_PATTERN);
+   
     public BanService() {
         this.banDAO = new BanDAO();
     }
@@ -151,4 +153,6 @@ public class BanService {
             capNhatTrangThaiThongMinh(maBan.trim());
         }
     }
+    
+ 
 }

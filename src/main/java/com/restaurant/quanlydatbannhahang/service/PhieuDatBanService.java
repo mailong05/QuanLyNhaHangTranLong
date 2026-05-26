@@ -277,4 +277,8 @@ public class PhieuDatBanService {
 	public boolean kiemTraBanDaDuocDatTrongNgay(String maBan, java.time.LocalDate ngay, String maPhieuDatNgoaiLe) {
         return phieuDatBanDAO.kiemTraBanDaDuocDatTrongNgay(maBan, ngay, maPhieuDatNgoaiLe);
     }
+	
+	   public boolean capNhatTrangThaiBanTheoPhieuDatHomNay() {
+	        return phieuDatBanDAO.capNhatTrangThaiBanTheoPhieuDatHomNay();
+	    }
 }
