@@ -116,17 +116,18 @@ public class PanelVaoCa extends JPanel {
         btnThoat.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btnThoat.setFocusPainted(false);
         btnThoat.addActionListener(e -> {
-            java.awt.Window w = SwingUtilities.getWindowAncestor(this);
-            if (w instanceof java.awt.Frame) {
-                java.awt.Frame frame = (java.awt.Frame) w;
-                frame.dispatchEvent(new java.awt.event.WindowEvent(frame, java.awt.event.WindowEvent.WINDOW_CLOSING));
-            } else {
-                int res = JOptionPane.showConfirmDialog(this,
-                        "Bạn có muốn thoát chương trình?",
-                        "Xác nhận thoát",
-                        JOptionPane.YES_NO_OPTION,
-                        JOptionPane.QUESTION_MESSAGE);
-                if (res == JOptionPane.YES_OPTION) {
+            int res = JOptionPane.showConfirmDialog(this,
+                    "Bạn có muốn thoát chương trình?",
+                    "Xác nhận thoát",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE);
+            
+            if (res == JOptionPane.YES_OPTION) {
+                java.awt.Window w = SwingUtilities.getWindowAncestor(this);
+                if (w instanceof java.awt.Frame) {
+                    java.awt.Frame frame = (java.awt.Frame) w;
+                    frame.dispatchEvent(new java.awt.event.WindowEvent(frame, java.awt.event.WindowEvent.WINDOW_CLOSING));
+                } else {
                     System.exit(0);
                 }
             }
@@ -167,13 +168,20 @@ public class PanelVaoCa extends JPanel {
             return 0;
         }
         try {
-            int count = Integer.parseInt(text);
-            return Math.max(count, 0);
+            long count = Long.parseLong(text); 
+            
+            if (count < 0) {
+                return -1; 
+            }
+            if (count > 100000) { 
+                return -2; 
+            }
+            
+            return (int) count;
         } catch (NumberFormatException ex) {
-            return -1;
+            return -1; 
         }
     }
-
     private void vaoCa() {
         try {
             NhanVien nhanVien = SessionManager.getCurrentNhanVien();
@@ -186,13 +194,21 @@ public class PanelVaoCa extends JPanel {
             long total = 0;
             for (int i = 0; i < DENOMINATIONS.length; i++) {
                 int count = parseCount(txtDenomCounts[i].getText().trim());
-                if (count < 0) {
+                
+                if (count == -1) {
                     JOptionPane.showMessageDialog(this,
-                            "Vui lòng nhập số tờ hợp lệ cho " + LABELS[i] + ".",
+                            "Vui lòng nhập số tờ hợp lệ (không được âm, phải là số) cho " + LABELS[i] + ".",
                             "Lỗi dữ liệu", JOptionPane.WARNING_MESSAGE);
                     txtDenomCounts[i].requestFocus();
                     return;
+                } else if (count == -2) {
+                    JOptionPane.showMessageDialog(this,
+                            "Số lượng " + LABELS[i] + " quá khổng lồ. Két tiền thu ngân không thể chứa số lượng này!",
+                            "Lỗi số tiền", JOptionPane.WARNING_MESSAGE);
+                    txtDenomCounts[i].requestFocus();
+                    return;
                 }
+                
                 total += (long) count * DENOMINATIONS[i];
             }
 

@@ -54,7 +54,13 @@ public class PhieuDatBanService {
         phieu.setKhachHang(null);
         phieu.setNhanVien(nhanVienService.getNhanVienTheoMa(maNV));
         phieu.setThoiGianDen(LocalDateTime.now());
-        phieu.setSoLuongNguoi(0);
+        int soGhe = 0;
+        for (String maBan : dsMaBan) {
+          Ban ban = banService.getBanTheoMa(maBan);
+          if(ban!=null) 
+        	  soGhe += ban.getSoGhe();
+        }
+        phieu.setSoLuongNguoi(soGhe);
         phieu.setTrangThai(TrangThaiPhieuDat.DANG_SU_DUNG);
         if (!phieuDatBanDAO.themPhieuDatBan(phieu)) {
             throw new RuntimeException("Không thể khởi tạo phiếu đặt bàn cho khách");
@@ -98,8 +104,8 @@ public class PhieuDatBanService {
                 throw new IllegalArgumentException("Thời gian đến phải ở tương lai");
             }
         }
-        if (phieu.getSoLuongNguoi() < 0) {
-            throw new IllegalArgumentException("Số lượng người không được là số âm");
+        if (phieu.getSoLuongNguoi() <= 0) {
+            throw new IllegalArgumentException("Số lượng người phải lớn hơn 0");
         }
     }
 
@@ -171,6 +177,8 @@ public class PhieuDatBanService {
             kh = new KhachHang(newID, tenKhachHang, soDienThoai, 0, LoaiThanhVien.DONG);
             khService.themKhachHang(kh);
         }
+        
+      
         PhieuDatBan phieu = new PhieuDatBan();
         phieu.setMaPhieuDat(maPDB);
         phieu.setKhachHang(kh);
@@ -275,4 +283,13 @@ public class PhieuDatBanService {
 	public boolean kiemTraBanDaDuocDatTrongNgay(String maBan, java.time.LocalDate ngay, String maPhieuDatNgoaiLe) {
         return phieuDatBanDAO.kiemTraBanDaDuocDatTrongNgay(maBan, ngay, maPhieuDatNgoaiLe);
     }
+	
+	   public boolean capNhatTrangThaiBanTheoPhieuDatHomNay() {
+	        return phieuDatBanDAO.capNhatTrangThaiBanTheoPhieuDatHomNay();
+	    }
+
+	   public void capNhatThoiGianDen(String maPhieuDat, LocalDateTime thoiGianDen) {
+		// TODO Auto-generated method stub
+		phieuDatBanDAO.capNhatThoiGianDen(maPhieuDat, thoiGianDen);
+	   }
 }

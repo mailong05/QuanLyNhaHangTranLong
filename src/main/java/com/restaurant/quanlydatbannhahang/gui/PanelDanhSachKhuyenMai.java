@@ -28,21 +28,46 @@ public class PanelDanhSachKhuyenMai extends javax.swing.JPanel {
                 }
             }
         });
-        for (int i = 0; i < tableKhuyenMai.getColumnCount(); i++) {
-            tableKhuyenMai.getColumnModel().getColumn(i).setCellRenderer(new DefaultTableCellRenderer() {
-                @Override
-                public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-                        boolean hasFocus, int row, int column) {
-                    if (value != null && value instanceof Number) {
-                        value = CurrencyUtility
-                                .formatVND(((Number) value).doubleValue());
+
+        DefaultTableCellRenderer masterDanhSachKMRenderer = new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                    boolean hasFocus, int row, int column) {
+                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                
+                int modelRow = table.convertRowIndexToModel(row);
+                Object statusValue = table.getModel().getValueAt(modelRow, 6); 
+                String status = statusValue != null ? statusValue.toString() : "";
+                
+                if ("Ngừng áp dụng".equals(status)) {
+                    c.setForeground(new Color(153, 153, 153)); 
+                    c.setFont(c.getFont().deriveFont(Font.ITALIC));
+                } else {
+                    if (!isSelected) {
+                        c.setForeground(Color.BLACK);
                     }
-                    setHorizontalAlignment(JLabel.CENTER);
-                    return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                    c.setFont(c.getFont().deriveFont(Font.PLAIN));
                 }
-            });
+                
+                if (column == 2 || column == 5) {
+                    if (value != null && value instanceof Number) {
+                        setText(CurrencyUtility.formatVND(((Number) value).doubleValue()));
+                    }
+                    setHorizontalAlignment(JLabel.RIGHT); 
+                } else {
+                    setHorizontalAlignment(JLabel.CENTER); 
+                }
+                
+                return c;
+            }
+        };
+
+        for (int i = 0; i < tableKhuyenMai.getColumnCount(); i++) {
+            tableKhuyenMai.getColumnModel().getColumn(i).setCellRenderer(masterDanhSachKMRenderer);
         }
     }
+    
+    
     private void setupPlaceholder(JTextField textField, String placeholder) {
         Color placeholderColor = new Color(153, 153, 153);
         Color textColor = new Color(0, 0, 0);
@@ -117,13 +142,7 @@ public class PanelDanhSachKhuyenMai extends javax.swing.JPanel {
         }
     }
     private void centerTableColumns(JTable table) {
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        for (int i = 0; i < table.getColumnCount(); i++) {
-            if (i != 2 && i != 5) {
-                table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
-            }
-        }
+        
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated

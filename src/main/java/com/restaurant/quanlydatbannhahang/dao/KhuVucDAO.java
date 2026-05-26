@@ -109,4 +109,22 @@ public class KhuVucDAO {
         }
         return null;
     }
+    
+    public boolean kiemTraKhuVucCoChuaBan(String maKhuVuc) {
+        Connection connection = DatabaseConnection.getConnection();
+        String sql = "SELECT COUNT(*) FROM BanAn WHERE maKhuVuc = ?";
+        
+        try (PreparedStatement pstm = connection.prepareStatement(sql)) {
+            pstm.setString(1, maKhuVuc);
+            
+            try (ResultSet rs = pstm.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0; 
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

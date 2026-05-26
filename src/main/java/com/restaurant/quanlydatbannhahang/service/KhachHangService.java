@@ -145,4 +145,11 @@ public class KhachHangService {
     public List<Object[]> getTopKhachHangThongKe(LocalDate startDate) {
         return khachHangDAO.getTopKhachHangThongKe(startDate);
     }
+    
+    public boolean kiemTraKhachHangCoLichSuDat(String maKH) {
+        if (maKH == null || maKH.isBlank()) {
+            throw new IllegalArgumentException("Mã khách hàng không được để trống");
+        }
+        return khachHangDAO.kiemTraKhachHangCoLichSuDat(maKH);
+    }
 }

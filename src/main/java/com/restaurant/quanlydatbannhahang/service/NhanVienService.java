@@ -133,4 +133,11 @@ public class NhanVienService {
     public String getLastNhanVienID() {
         return nhanVienDAO.getLastNhanVienID();
     }
+    
+    public boolean kiemTraNhanVienCoRangBuocActive(String maNV) {
+        if (maNV == null || maNV.isBlank()) {
+            throw new IllegalArgumentException("Mã nhân viên không được để trống");
+        }
+        return nhanVienDAO.kiemTraNhanVienCoRangBuocActive(maNV);
+    }
 }

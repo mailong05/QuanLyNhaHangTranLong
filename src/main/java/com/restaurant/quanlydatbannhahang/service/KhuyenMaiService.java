@@ -63,16 +63,33 @@ public class KhuyenMaiService {
     }
     public void themKhuyenMai(KhuyenMai khuyenMai) {
         validateKhuyenMai(khuyenMai);
+        
+        LocalDate homNay = LocalDate.now();
+        if (khuyenMai.getNgayBatDau().isBefore(homNay)) {
+            throw new IllegalArgumentException("Ngày bắt đầu phải từ ngày hiện tại trở về sau!");
+        }
+        if (khuyenMai.getNgayKetThuc().isBefore(homNay)) {
+            throw new IllegalArgumentException("Ngày kết thúc phải từ ngày hiện tại trở về sau!");
+        }
+        
         if (!khuyenMaiDAO.themKhuyenMai(khuyenMai)) {
             throw new RuntimeException("Thêm khuyến mãi thất bại");
         }
     }
+
     public void capNhatKhuyenMai(KhuyenMai khuyenMai) {
         validateKhuyenMai(khuyenMai);
+        
+        LocalDate homNay = LocalDate.now();
+        if (khuyenMai.getNgayKetThuc().isBefore(homNay)) {
+            throw new IllegalArgumentException("Ngày kết thúc phải từ ngày hiện tại trở về sau!");
+        }
+        
         if (!khuyenMaiDAO.capNhatKhuyenMai(khuyenMai)) {
             throw new RuntimeException("Cập nhật khuyến mãi thất bại");
         }
     }
+    
     public void xoaKhuyenMai(String maKM) {
         if (maKM == null || maKM.isBlank()) {
             throw new IllegalArgumentException("Mã khuyến mại không được để trống");
@@ -131,5 +148,9 @@ public class KhuyenMaiService {
     }
     public String getLastKhuyenMaiID() {
         return khuyenMaiDAO.getLastKhuyenMaiID();
+    }
+    
+    public boolean tuDongCapNhatHetHanKhuyenMai() {
+        return khuyenMaiDAO.tuDongCapNhatHetHanKhuyenMai();
     }
 }

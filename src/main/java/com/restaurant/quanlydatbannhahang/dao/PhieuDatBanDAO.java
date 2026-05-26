@@ -430,5 +430,62 @@ public class PhieuDatBanDAO {
         }
         return false;
     }
+    
+    public boolean capNhatTrangThaiBanTheoPhieuDatHomNay() {
+        String sqlClean = "UPDATE BanAn " +
+                          "SET trangThai = 'TRONG' " +
+                          "WHERE trangThai = 'DA_DAT' " +
+                          "AND maBan NOT IN (" +
+                          "    SELECT DISTINCT ct.maBan " +
+                          "    FROM PhieuDatBan pdb " +
+                          "    JOIN ChiTietPhieuDatBan ct ON pdb.maPhieuDat = ct.maPhieuDat " +
+                          "    WHERE CAST(pdb.thoiGianDen AS DATE) = CAST(GETDATE() AS DATE) " +
+                          "    AND pdb.trangThai = 'DANG_CHO'" +
+                          ")";
+                          
+        String sqlApply = "UPDATE BanAn " +
+                          "SET trangThai = 'DA_DAT' " +
+                          "WHERE maBan IN (" +
+                          "    SELECT DISTINCT ct.maBan " +
+                          "    FROM PhieuDatBan pdb " +
+                          "    JOIN ChiTietPhieuDatBan ct ON pdb.maPhieuDat = ct.maPhieuDat " +
+                          "    WHERE CAST(pdb.thoiGianDen AS DATE) = CAST(GETDATE() AS DATE) " +
+                          "    AND pdb.trangThai = 'DANG_CHO'" +
+                          ") AND trangThai = 'TRONG'"; 
+                          
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            conn.setAutoCommit(false); 
+            try (PreparedStatement pstmClean = conn.prepareStatement(sqlClean);
+                 PreparedStatement pstmApply = conn.prepareStatement(sqlApply)) {
+                 
+                pstmClean.executeUpdate(); 
+                pstmApply.executeUpdate(); 
+                
+                conn.commit();
+                return true;
+            } catch (Exception e) {
+                conn.rollback(); 
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+	public boolean capNhatThoiGianDen(String maPhieuDat, LocalDateTime thoiGianDen) {
+		 Connection connection = DatabaseConnection.getConnection();
+	        String sql = "update PhieuDatBan set thoiGianDen = ? where maPhieuDat = ?";
+	        try {
+	            PreparedStatement pstm = connection.prepareStatement(sql);
+	           
+	            pstm.setTimestamp(1, java.sql.Timestamp.valueOf(thoiGianDen));
+	            pstm.setString(2, maPhieuDat);
+	            return pstm.executeUpdate() > 0;
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	        return false;
+	}
 	
 }

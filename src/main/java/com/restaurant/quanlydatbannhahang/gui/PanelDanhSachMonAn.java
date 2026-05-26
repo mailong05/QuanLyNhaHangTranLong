@@ -168,18 +168,60 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
                 }
             }
         });
-        tableMonAn.getColumnModel().getColumn(3).setCellRenderer(new DefaultTableCellRenderer() {
+
+        DefaultTableCellRenderer masterDanhSachMonAnRenderer = new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
                     boolean hasFocus, int row, int column) {
-                if (value != null && value instanceof Number) {
-                    value = com.restaurant.quanlydatbannhahang.util.CurrencyUtility
-                            .formatVND(((Number) value).doubleValue());
+                
+                if (column == 0 && value instanceof ImageIcon) {
+                    JLabel label = new JLabel((ImageIcon) value);
+                    label.setHorizontalAlignment(JLabel.CENTER);
+                    label.setVerticalAlignment(JLabel.CENTER);
+                    label.setOpaque(true);
+                    label.setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
+                    label.setBorder(BorderFactory.createEmptyBorder(TABLE_IMAGE_VERTICAL_PADDING, 0,
+                            TABLE_IMAGE_VERTICAL_PADDING, 0));
+                    return label;
                 }
-                setHorizontalAlignment(JLabel.CENTER);
-                return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                
+                int modelRow = table.convertRowIndexToModel(row);
+                Object statusValue = table.getModel().getValueAt(modelRow, 6); 
+                String status = statusValue != null ? statusValue.toString() : "";
+                
+                if ("Hết".equals(status)) {
+                    c.setForeground(new Color(153, 153, 153)); 
+                    c.setFont(c.getFont().deriveFont(Font.ITALIC));
+                } else {
+                    if (!isSelected) {
+                        c.setForeground(Color.BLACK);
+                    }
+                    c.setFont(c.getFont().deriveFont(Font.PLAIN));
+                }
+                
+                
+                if (column == 3) {
+                    if (value != null && value instanceof Number) {
+                        setText(com.restaurant.quanlydatbannhahang.util.CurrencyUtility
+                                .formatVND(((Number) value).doubleValue()));
+                    }
+                    setHorizontalAlignment(JLabel.RIGHT); 
+                } else {
+                    setHorizontalAlignment(JLabel.CENTER); 
+                }
+                
+                return c;
             }
-        });
+        };
+
+        tableMonAn.setRowHeight(TABLE_IMAGE_ROW_HEIGHT);
+        for (int i = 0; i < tableMonAn.getColumnCount(); i++) {
+            tableMonAn.getColumnModel().getColumn(i).setCellRenderer(masterDanhSachMonAnRenderer);
+        }
+        tableMonAn.getColumnModel().getColumn(0).setPreferredWidth(100);
+
         MainForm.attachGoHomeListener(btnTrangChu, this);
     }
     private void loadDataToComboBoxes() {
@@ -287,17 +329,7 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
         }
     }
     private void centerTableColumns(JTable table) {
-        ImageRenderer imageRenderer = new ImageRenderer();
-        table.getColumnModel().getColumn(0).setCellRenderer(imageRenderer);
-        table.getColumnModel().getColumn(0).setPreferredWidth(100);
-        table.setRowHeight(TABLE_IMAGE_ROW_HEIGHT);
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        for (int i = 0; i < table.getColumnCount(); i++) {
-            if (i != 0 && i != 3) {
-                table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
-            }
-        }
+      
     }
     @Deprecated
     private ImageIcon loadImageIcon(String imagePath) {
@@ -388,6 +420,7 @@ public class PanelDanhSachMonAn extends javax.swing.JPanel {
     }
     public void refreshData() {
         cbFilterLoaiMonAn.setSelectedIndex(0);
+        cbFilterTrangThai.setSelectedIndex(1);
         resetPlaceholder(txtTimKiem, "Nhập tên món ăn");
         loadDataToComboBoxes();
         loadDataToTable();

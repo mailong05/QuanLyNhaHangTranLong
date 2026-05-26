@@ -220,4 +220,22 @@ public class KhachHangDAO {
 
         return result;
     }
+    
+    public boolean kiemTraKhachHangCoLichSuDat(String maKH) {
+        Connection connection = DatabaseConnection.getConnection();
+        String sql = "SELECT COUNT(*) FROM PhieuDatBan WHERE maKH = ?";
+        
+        try (PreparedStatement pstm = connection.prepareStatement(sql)) {
+            pstm.setString(1, maKH);
+            
+            try (ResultSet rs = pstm.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0; 
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

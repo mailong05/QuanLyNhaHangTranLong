@@ -4,6 +4,9 @@ import java.time.LocalDateTime;
 import java.util.Set;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+
+import com.restaurant.quanlydatbannhahang.entity.Ban;
+import com.restaurant.quanlydatbannhahang.service.BanService;
 import com.restaurant.quanlydatbannhahang.service.PhieuDatBanService;
 import com.restaurant.quanlydatbannhahang.session.ReservationSession;
 import com.restaurant.quanlydatbannhahang.util.CurrencyUtility;
@@ -17,6 +20,7 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
     private Set<String> selectedTables;
     private PanelDatBan panelDatBan;
     private PanelQuanLyDatBanTruoc panelQuanLyDatBanTruoc;
+    private BanService banService;
 
     public DatBanTruocDialog(java.awt.Frame parent, boolean modal, Set<String> selectedTables,
             PanelDatBan panelDatBan, PanelQuanLyDatBanTruoc panelQuanLyDatBanTruoc) {
@@ -24,6 +28,7 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
         this.selectedTables = selectedTables;
         this.panelDatBan = panelDatBan;
         this.panelQuanLyDatBanTruoc = panelQuanLyDatBanTruoc;
+        this.banService = new BanService();
         helper = new IDGeneratorHelper();
         pdbService = new PhieuDatBanService();
         initComponents();
@@ -169,6 +174,31 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
             String ghiChu = txtGhiChu.getText().trim();
             int soLuongNguoi = (int) spSoLuong.getValue();
             LocalDateTime thoiGianDen = dtpThoiGianDen.getDateTimeStrict();
+
+            if (soLuongNguoi <= 0) {
+                JOptionPane.showMessageDialog(this, 
+                        "Số lượng người phải lớn hơn 0.", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+           
+            BanService banService = new BanService();
+            int tongSucChua = 0;
+            for (String maBan : selectedTables) {
+                Ban ban = banService.getBanTheoMa(maBan);
+                if (ban != null) {
+                    tongSucChua += ban.getSoGhe(); 
+                }
+            }
+
+            if (soLuongNguoi > tongSucChua) {
+                JOptionPane.showMessageDialog(this,
+                        "Số lượng vượt quá số lượng của bàn. Vui lòng chọn lại bàn hoặc thêm bàn.",
+                        "Cảnh báo sức chứa",
+                        JOptionPane.WARNING_MESSAGE);
+                return; 
+            }
+
             java.util.Set<String> invalidTables = new java.util.HashSet<>();
             java.util.List<String> availableTables = pdbService.getDanhSachBanTrongTheoThoiGian(thoiGianDen);
             for (String maBan : selectedTables) {
@@ -185,8 +215,10 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
                         JOptionPane.ERROR_MESSAGE);
                 return;
             }
+            
             String maPhieuDat = pdbService.themPhieuDatBan(maPDB, tenKhachHang, soDienThoai, soLuongNguoi,
                     thoiGianDen, ghiChu, selectedTables);
+                    
             if (panelDatBan != null) {
                 panelDatBan.updateAllTableStatusFromDatabase();
             }
@@ -198,6 +230,7 @@ public class DatBanTruocDialog extends javax.swing.JDialog {
                     "Đặt bàn thành công!\nMã phiếu: " + maPhieuDat, "Thành công",
                     JOptionPane.INFORMATION_MESSAGE);
             this.dispose();
+            
         } catch (IllegalArgumentException e) {
             JOptionPane.showMessageDialog(this,
                     e.getMessage(), "Lỗi xác thực",

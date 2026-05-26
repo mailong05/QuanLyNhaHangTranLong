@@ -1,4 +1,5 @@
 package com.restaurant.quanlydatbannhahang.gui;
+
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -16,6 +17,7 @@ import com.restaurant.quanlydatbannhahang.entity.NhanVien;
 import com.restaurant.quanlydatbannhahang.entity.TrangThaiNhanVien;
 import java.util.List;
 import java.time.LocalDate;
+
 public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseListener {
         public PanelQuanLyNhanVien() {
                 initComponents();
@@ -23,68 +25,98 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                 loadDataToComboBoxes();
                 loadDataToTable();
         }
+
         private void customUI() {
-                setupPlaceholder(txtTimKiem, "Nhập tên hoặc số điện thoại");
-                fillTxtMaNhanVien();
-                MainForm.attachGoHomeListener(btnTrangChu, this);
-                if (dpNgayVaoLam != null) {
-                        dpNgayVaoLam.setDate(LocalDate.now());
-                }
-                this.addMouseListener(new java.awt.event.MouseAdapter() {
-                        @Override
-                        public void mousePressed(java.awt.event.MouseEvent evt) {
-                                if (evt.getSource() != tableNhanVien && !isMouseOverTable(evt)) {
-                                        tableNhanVien.clearSelection();
-                                        clearFields();
-                                        fillTxtMaNhanVien();
-                                        syncButtonState();
-                                }
-                        }
-                });
-                tableNhanVien.addMouseListener(this);
-                tableNhanVien.getSelectionModel().addListSelectionListener(e -> {
-                        if (!e.getValueIsAdjusting()) {
-                                int row = tableNhanVien.getSelectedRow();
-                                if (row >= 0) {
-                                        loadDataFromRow(row);
-                                }
-                                syncButtonState();
-                        }
-                });
-                tableNhanVien.getColumnModel().getColumn(5).setCellRenderer(new DefaultTableCellRenderer() {
-                        @Override
-                        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-                                        boolean hasFocus, int row, int column) {
-                                if (value != null && value instanceof Number) {
-                                        value = com.restaurant.quanlydatbannhahang.util.CurrencyUtility
-                                                        .formatVND(((Number) value).doubleValue());
-                                }
-                                setHorizontalAlignment(JLabel.CENTER);
-                                return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row,
-                                                column);
-                        }
-                });
-                txtLuongCoBan.addFocusListener(new java.awt.event.FocusAdapter() {
-                        @Override
-                        public void focusGained(java.awt.event.FocusEvent evt) {
-                                String currentText = txtLuongCoBan.getText();
-                                if (!currentText.isEmpty()) {
-                                        txtLuongCoBan.setText(currentText.replaceAll("[^\\d.]", ""));
-                                }
-                        }
-                        @Override
-                        public void focusLost(java.awt.event.FocusEvent evt) {
-                                String text = txtLuongCoBan.getText();
-                                if (!text.isEmpty()) {
-                                        double value = com.restaurant.quanlydatbannhahang.util.CurrencyUtility
-                                                        .parseVND(text);
-                                        txtLuongCoBan.setText(com.restaurant.quanlydatbannhahang.util.CurrencyUtility
-                                                        .formatVND(value));
-                                }
-                        }
-                });
-                syncButtonState();
-        }
+            setupPlaceholder(txtTimKiem, "Nhập tên hoặc số điện thoại");
+            fillTxtMaNhanVien();
+            MainForm.attachGoHomeListener(btnTrangChu, this);
+            if (dpNgayVaoLam != null) {
+                    dpNgayVaoLam.setDate(LocalDate.now());
+            }
+            this.addMouseListener(new java.awt.event.MouseAdapter() {
+                    @Override
+                    public void mousePressed(java.awt.event.MouseEvent evt) {
+                            if (evt.getSource() != tableNhanVien && !isMouseOverTable(evt)) {
+                                    tableNhanVien.clearSelection();
+                                    clearFields();
+                                    fillTxtMaNhanVien();
+                                    syncButtonState();
+                            }
+                    }
+            });
+            tableNhanVien.addMouseListener(this);
+            tableNhanVien.getSelectionModel().addListSelectionListener(e -> {
+                    if (!e.getValueIsAdjusting()) {
+                            int row = tableNhanVien.getSelectedRow();
+                            if (row >= 0) {
+                                    loadDataFromRow(row);
+                            }
+                            syncButtonState();
+                    }
+            });
+            
+            txtLuongCoBan.addFocusListener(new java.awt.event.FocusAdapter() {
+                    @Override
+                    public void focusGained(java.awt.event.FocusEvent evt) {
+                            String currentText = txtLuongCoBan.getText();
+                            if (!currentText.isEmpty()) {
+                                    txtLuongCoBan.setText(currentText.replaceAll("[^\\d.]", ""));
+                            }
+                    }
+
+                    @Override
+                    public void focusLost(java.awt.event.FocusEvent evt) {
+                            String text = txtLuongCoBan.getText();
+                            if (!text.isEmpty()) {
+                                    double value = com.restaurant.quanlydatbannhahang.util.CurrencyUtility
+                                                    .parseVND(text);
+                                    txtLuongCoBan.setText(com.restaurant.quanlydatbannhahang.util.CurrencyUtility
+                                                    .formatVND(value));
+                            }
+                    }
+            });
+
+            DefaultTableCellRenderer masterNhanVienRenderer = new DefaultTableCellRenderer() {
+                    @Override
+                    public Component getTableCellRendererComponent(JTable table, Object value,
+                                    boolean isSelected, boolean hasFocus, int row, int column) {
+                            Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                            
+                            int modelRow = table.convertRowIndexToModel(row);
+                            Object statusValue = table.getModel().getValueAt(modelRow, 6); 
+                            String status = statusValue != null ? statusValue.toString() : "";
+                            String activeStatusStr = com.restaurant.quanlydatbannhahang.entity.TrangThaiNhanVien.DANG_LAM_VIEC.getDisplayName();
+                            
+                            if (!activeStatusStr.equals(status)) {
+                                    c.setForeground(new Color(153, 153, 153));
+                                    c.setFont(c.getFont().deriveFont(Font.ITALIC));
+                            } else {
+                                    if (!isSelected) {
+                                            c.setForeground(Color.BLACK);
+                                    }
+                                    c.setFont(c.getFont().deriveFont(Font.PLAIN));
+                            }
+                            
+                            if (column == 5) {
+                                    if (value != null && value instanceof Number) {
+                                            setText(com.restaurant.quanlydatbannhahang.util.CurrencyUtility
+                                                            .formatVND(((Number) value).doubleValue()));
+                                    }
+                                    setHorizontalAlignment(JLabel.RIGHT); 
+                            } else {
+                                    setHorizontalAlignment(JLabel.CENTER); 
+                            }
+                            return c;
+                    }
+            };
+            
+            for (int i = 0; i < tableNhanVien.getColumnCount(); i++) {
+                    tableNhanVien.getColumnModel().getColumn(i).setCellRenderer(masterNhanVienRenderer);
+            }
+
+            syncButtonState();
+    }
+
         private void loadDataToComboBoxes() {
                 try {
                         ActionListener[] chucVuListeners = cbFilterChucVu.getActionListeners();
@@ -104,86 +136,100 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                         JOptionPane.showMessageDialog(this, "Lỗi load dữ liệu filter: " + e.getMessage());
                 }
         }
+
         private void loadDataToTable() {
                 loadFilteredData();
         }
+
         private void loadFilteredData() {
-                try {
-                        NhanVienService service = new NhanVienService();
-                        List<NhanVien> list = service.getAllNhanVien();
-                        String selectedChucVu = (String) cbFilterChucVu.getSelectedItem();
-                        DefaultTableModel model = (DefaultTableModel) tableNhanVien.getModel();
-                        model.setRowCount(0);
-                        for (NhanVien nv : list) {
-                                if (nv.getTrangThai() != TrangThaiNhanVien.DANG_LAM_VIEC) {
-                                        continue;
-                                }
-                                if (selectedChucVu != null && !selectedChucVu.equals("Chức vụ")) {
-                                        if (nv.getChucVu() == null
-                                                        || !nv.getChucVu().getDisplayName().equals(selectedChucVu)) {
-                                                continue;
-                                        }
-                                }
-                                model.addRow(new Object[] {
-                                                nv.getMaNV(),
-                                                nv.getHoTen(),
-                                                nv.getSdt(),
-                                                nv.getChucVu().getDisplayName(),
-                                                nv.getNgayVaoLam(),
-                                                nv.getLuongCoBan(),
-                                                nv.getTrangThai().getDisplayName()
-                                });
-                        }
-                        centerTableColumns(tableNhanVien);
-                } catch (Exception e) {
-                        e.printStackTrace();
-                        JOptionPane.showMessageDialog(this, "Lỗi load dữ liệu: " + e.getMessage());
-                }
-        }
+            try {
+                    NhanVienService service = new NhanVienService();
+                    List<NhanVien> list = service.getAllNhanVien();
+                    String selectedChucVu = (String) cbFilterChucVu.getSelectedItem();
+                    DefaultTableModel model = (DefaultTableModel) tableNhanVien.getModel();
+                    model.setRowCount(0);
+                    for (NhanVien nv : list) {
+                            
+                            if (selectedChucVu != null && !selectedChucVu.equals("Chức vụ")) {
+                                    if (nv.getChucVu() == null
+                                                    || !nv.getChucVu().getDisplayName().equals(selectedChucVu)) {
+                                            continue;
+                                    }
+                            }
+                            model.addRow(new Object[] {
+                                            nv.getMaNV(),
+                                            nv.getHoTen(),
+                                            nv.getSdt(),
+                                            nv.getChucVu().getDisplayName(),
+                                            nv.getNgayVaoLam(),
+                                            nv.getLuongCoBan(),
+                                            nv.getTrangThai() != null ? nv.getTrangThai().getDisplayName() : ""
+                            });
+                    }
+            } catch (Exception e) {
+                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(this, "Lỗi load dữ liệu: " + e.getMessage());
+            }
+    }
+
         private void searchByText() {
-                try {
-                        NhanVienService service = new NhanVienService();
-                        List<NhanVien> list = service.getAllNhanVien();
-                        String searchText = txtTimKiem.getText().trim().toLowerCase();
-                        String selectedChucVu = (String) cbFilterChucVu.getSelectedItem();
-                        DefaultTableModel model = (DefaultTableModel) tableNhanVien.getModel();
-                        model.setRowCount(0);
-                        for (NhanVien nv : list) {
-                                if (nv.getTrangThai() != TrangThaiNhanVien.DANG_LAM_VIEC) {
-                                        continue;
-                                }
-                                if (selectedChucVu != null && !selectedChucVu.equals("Chức vụ")) {
-                                        if (nv.getChucVu() == null
-                                                        || !nv.getChucVu().getDisplayName().equals(selectedChucVu)) {
-                                                continue;
-                                        }
-                                }
-                                if (!searchText.isEmpty()) {
-                                        String maNV = nv.getMaNV() != null ? nv.getMaNV().toLowerCase()
-                                                        : "";
-                                        String hoTen = nv.getHoTen() != null ? nv.getHoTen().toLowerCase() : "";
-                                        String sdt = nv.getSdt() != null ? nv.getSdt().toLowerCase() : "";
-                                        if (!maNV.contains(searchText) && !hoTen.contains(searchText)
-                                                        && !sdt.contains(searchText)) {
-                                                continue;
-                                        }
-                                }
-                                model.addRow(new Object[] {
-                                                nv.getMaNV(),
-                                                nv.getHoTen(),
-                                                nv.getSdt(),
-                                                nv.getChucVu() != null ? nv.getChucVu().getDisplayName() : "",
-                                                nv.getNgayVaoLam(),
-                                                nv.getLuongCoBan(),
-                                                nv.getTrangThai() != null ? nv.getTrangThai().getDisplayName() : ""
-                                });
-                        }
-                        centerTableColumns(tableNhanVien);
-                } catch (Exception e) {
-                        e.printStackTrace();
-                        JOptionPane.showMessageDialog(this, "Lỗi tìm kiếm dữ liệu: " + e.getMessage());
+            try {
+                    NhanVienService service = new NhanVienService();
+                    List<NhanVien> list = service.getAllNhanVien();
+                    String searchText = getActualSearchText();
+                    String selectedChucVu = (String) cbFilterChucVu.getSelectedItem();
+                    DefaultTableModel model = (DefaultTableModel) tableNhanVien.getModel();
+                    model.setRowCount(0);
+                    for (NhanVien nv : list) {
+                            
+                            if (selectedChucVu != null && !selectedChucVu.equals("Chức vụ")) {
+                                    if (nv.getChucVu() == null
+                                                    || !nv.getChucVu().getDisplayName().equals(selectedChucVu)) {
+                                            continue;
+                                    }
+                            }
+                            if (!searchText.isEmpty()) {
+                                    String maNV = nv.getMaNV() != null ? nv.getMaNV().toLowerCase()
+                                                    : "";
+                                    String hoTen = nv.getHoTen() != null ? nv.getHoTen().toLowerCase() : "";
+                                    String sdt = nv.getSdt() != null ? nv.getSdt().toLowerCase() : "";
+                                    if (!maNV.contains(searchText) && !hoTen.contains(searchText)
+                                                    && !sdt.contains(searchText)) {
+                                            continue;
+                                    }
+                            }
+                            model.addRow(new Object[] {
+                                            nv.getMaNV(),
+                                            nv.getHoTen(),
+                                            nv.getSdt(),
+                                            nv.getChucVu() != null ? nv.getChucVu().getDisplayName() : "",
+                                            nv.getNgayVaoLam(),
+                                            nv.getLuongCoBan(),
+                                            nv.getTrangThai() != null ? nv.getTrangThai().getDisplayName() : ""
+                            });
+                    }
+            } catch (Exception e) {
+                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(this, "Lỗi tìm kiếm dữ liệu: " + e.getMessage());
+            }
+    }
+
+        private String getActualSearchText() {
+                String text = txtTimKiem.getText().trim();
+                if (text.equals("Nhập tên hoặc số điện thoại")) {
+                        return "";
+                }
+                return text.toLowerCase();
+        }
+
+        private void applyFilterAndSearch() {
+                if (!getActualSearchText().isEmpty()) {
+                        searchByText();
+                } else {
+                        loadFilteredData();
                 }
         }
+
         private void loadDataFromRow(int rowIndex) {
                 try {
                         String maNhanVien = tableNhanVien.getValueAt(rowIndex, 0).toString();
@@ -210,6 +256,7 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                         System.err.println("Lỗi chọn dòng: " + e.getMessage());
                 }
         }
+
         private void clearFields() {
                 txtHoTen.setText("");
                 txtSoDienThoai.setText("");
@@ -220,12 +267,14 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                         dpNgayVaoLam.setDate(LocalDate.now());
                 }
         }
+
         private void fillTxtMaNhanVien() {
                 String lastID = IDQueryHelper.getLastID("NhanVien", "maNV");
                 String maNVNew = (lastID == null || lastID.isEmpty()) ? IDGeneratorHelper.generateDefaultID("NV")
                                 : IDGeneratorHelper.generateNextIDFromFullID(lastID);
                 txtMaNhanVien.setText(maNVNew);
         }
+
         public void refreshData() {
                 clearFields();
                 fillTxtMaNhanVien();
@@ -236,17 +285,21 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                 tableNhanVien.clearSelection();
                 syncButtonState();
         }
+  
+
         private void syncButtonState() {
                 btnCapNhat.setEnabled(tableNhanVien.getSelectedRow() >= 0);
                 btnXoa.setEnabled(tableNhanVien.getSelectedRow() >= 0);
                 btnThem.setEnabled(tableNhanVien.getSelectedRow() == -1);
 
         }
+
         private boolean isMouseOverTable(java.awt.event.MouseEvent evt) {
                 java.awt.Point p = evt.getPoint();
                 java.awt.Point tablePoint = SwingUtilities.convertPoint(this, p, tableNhanVien);
                 return tableNhanVien.getBounds().contains(tablePoint);
         }
+
         private void setupPlaceholder(JTextField textField, String placeholder) {
                 Color placeholderColor = new Color(153, 153, 153);
                 Color textColor = new Color(0, 0, 0);
@@ -260,6 +313,7 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                                         textField.setForeground(textColor);
                                 }
                         }
+
                         @Override
                         public void focusLost(java.awt.event.FocusEvent evt) {
                                 if (textField.getText().isEmpty()) {
@@ -269,11 +323,13 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                         }
                 });
         }
+
         private void resetPlaceholder(JTextField textField, String placeholder) {
                 Color placeholderColor = new Color(153, 153, 153);
                 textField.setText(placeholder);
                 textField.setForeground(placeholderColor);
         }
+
         // <editor-fold defaultstate="collapsed" desc="Generated
         // <editor-fold defaultstate="collapsed" desc="Generated
         // <editor-fold defaultstate="collapsed" desc="Generated
@@ -580,9 +636,11 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                         boolean[] canEdit = new boolean[] {
                                         false, false, false, false, false, false, false
                         };
+
                         public Class getColumnClass(int columnIndex) {
                                 return types[columnIndex];
                         }
+
                         public boolean isCellEditable(int rowIndex, int columnIndex) {
                                 return canEdit[columnIndex];
                         }
@@ -632,21 +690,16 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                 pnlButton.add(pnlRightButtons, java.awt.BorderLayout.EAST);
                 add(pnlButton, java.awt.BorderLayout.PAGE_END);
         }// </editor-fold>//GEN-END:initComponents
+
         private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {
                 refreshData();
         }
-        private void centerTableColumns(JTable table) {
-                DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-                centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-                for (int i = 0; i < table.getColumnCount(); i++) {
-                        if (i != 5) {
-                                table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
-                        }
-                }
-        }
+
+       
         private void cbFilterChucVuActionPerformed(java.awt.event.ActionEvent evt) {
-                loadFilteredData();
+                applyFilterAndSearch();
         }
+
         private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {
                 String maNV = txtMaNhanVien.getText().trim();
                 if (maNV.isEmpty()) {
@@ -660,23 +713,38 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                                         "Cảnh báo", JOptionPane.WARNING_MESSAGE);
                         return;
                 }
-                int choice = JOptionPane.showConfirmDialog(this,
-                                "Bạn có chắc chắn muốn cho nhân viên này nghỉ việc không?",
-                                "Xác nhận", JOptionPane.YES_NO_OPTION);
-                if (choice != JOptionPane.YES_OPTION) {
-                        return;
-                }
+               
                 try {
-                        NhanVienService service = new NhanVienService();
-                        service.xoaNhanVien(maNV);
-                        JOptionPane.showMessageDialog(this,
-                                        "Đã cập nhật trạng thái nhân viên sang nghỉ việc thành công.");
-                        refreshData();
-                } catch (Exception ex) {
-                        JOptionPane.showMessageDialog(this,
-                                        "Cập nhật trạng thái nhân viên thất bại: " + ex.getMessage());
-                }
+                    NhanVienService service = new NhanVienService();
+                    
+                    if (service.kiemTraNhanVienCoRangBuocActive(maNV)) {
+                            JOptionPane.showMessageDialog(this, 
+                                    "Không thể cho nhân viên này nghỉ việc vì:\n" +
+                                    "- Họ đang trong một ca làm việc chưa kết ca.\n" +
+                                    "- Hoặc họ đang chịu trách nhiệm phiếu đặt bàn ở trạng thái 'Đang chờ'.\n\n" +
+                                    "Vui lòng kiểm tra lại tình trạng kết ca hoặc bàn giao phiếu đặt trước!", 
+                                    "Lỗi ràng buộc nghiệp vụ", 
+                                    JOptionPane.ERROR_MESSAGE);
+                            return; 
+                    }
+                    
+                    int choice = JOptionPane.showConfirmDialog(this,
+                                    "Bạn có chắc chắn muốn cho nhân viên này nghỉ việc không?",
+                                    "Xác nhận", JOptionPane.YES_NO_OPTION);
+                    if (choice != JOptionPane.YES_OPTION) {
+                            return;
+                    }
+                    
+                    service.xoaNhanVien(maNV);
+                    JOptionPane.showMessageDialog(this,
+                                    "Đã cập nhật trạng thái nhân viên sang nghỉ việc thành công.");
+                    refreshData();
+            } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this,
+                                    "Cập nhật trạng thái nhân viên thất bại: " + ex.getMessage());
+            }
         }
+
         private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {
                 try {
                         String maNV = txtMaNhanVien.getText().trim();
@@ -706,6 +774,7 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                         JOptionPane.showMessageDialog(this, "Cập nhật nhân viên thất bại: " + ex.getMessage());
                 }
         }
+
         private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {
                 try {
                         String maNV = txtMaNhanVien.getText().trim();
@@ -730,16 +799,21 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                         JOptionPane.showMessageDialog(this, "Thêm nhân viên thất bại: " + ex.getMessage());
                 }
         }
+
         private void txtMaNhanVienActionPerformed(java.awt.event.ActionEvent evt) {
         }
+
         private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {
-                searchByText();
+                applyFilterAndSearch();
         }
+
         private void txtSoDienThoaiActionPerformed(java.awt.event.ActionEvent evt) {
         }
+
         private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {
-                searchByText();
+                applyFilterAndSearch();
         }
+
         // Variables declaration - do not modify//GEN-BEGIN:variables
         private javax.swing.JButton btnCapNhat;
         private javax.swing.JButton btnThem;
@@ -770,19 +844,24 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
         private javax.swing.JTextField txtMaNhanVien;
         private javax.swing.JTextField txtSoDienThoai;
         private javax.swing.JTextField txtTimKiem;
+
         // End of variables declaration//GEN-END:variables
         @Override
         public void mouseClicked(MouseEvent e) {
         }
+
         @Override
         public void mousePressed(MouseEvent e) {
         }
+
         @Override
         public void mouseReleased(MouseEvent e) {
         }
+
         @Override
         public void mouseEntered(MouseEvent e) {
         }
+
         @Override
         public void mouseExited(MouseEvent e) {
         }

@@ -277,6 +277,14 @@ public class LoginForm extends javax.swing.JFrame {
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {
         String username = getTxtUsername().getText().trim();
         String password = String.valueOf(getTxtPassword().getPassword()).trim();
+      
+        if (username.equals("Username")) {
+            username = "";
+        }
+        if (password.equals("Password")) {
+            password = "";
+        }
+        
         AuthService.ValidationResult userValidation = AuthService.validateUsername(username);
         if (!userValidation.success) {
             JOptionPane.showMessageDialog(this, userValidation.message, "Lỗi tên đăng nhập", JOptionPane.ERROR_MESSAGE);
@@ -297,11 +305,12 @@ public class LoginForm extends javax.swing.JFrame {
             new MainForm(taiKhoan).setVisible(true);
         } else {
             JOptionPane.showMessageDialog(this, "Tên đăng nhập hoặc mật khẩu không đúng!", "Lỗi đăng nhập", JOptionPane.ERROR_MESSAGE);
+            
             getTxtPassword().setText("");
             getTxtPassword().setEchoChar((char) 0);
             getTxtPassword().setText("Password");
             getTxtPassword().setForeground(new Color(102, 102, 102));
-            getTxtUsername().requestFocus();
+            getTxtPassword().requestFocus();
         }
     }
     private void lblIconEyeMousePressed(java.awt.event.MouseEvent evt) {

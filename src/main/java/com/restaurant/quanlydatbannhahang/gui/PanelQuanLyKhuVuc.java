@@ -13,7 +13,11 @@ import com.restaurant.quanlydatbannhahang.util.IDQueryHelper;
 import com.restaurant.quanlydatbannhahang.entity.KhuVuc;
 import java.util.List;
 public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListener {
-    public PanelQuanLyKhuVuc() {
+    
+	private KhuVucService khuVucService;
+	
+	public PanelQuanLyKhuVuc() {
+		khuVucService = new KhuVucService();
         initComponents();
         customUI();
         loadDataToTable();
@@ -303,11 +307,7 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
         }
     }
     private void centerTableColumns(JTable table) {
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        for (int i = 0; i < table.getColumnCount(); i++) {
-            table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
-        }
+       
     }
     private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {
         String maKhuVuc = txtMaKhuVuc.getText().trim();
@@ -315,20 +315,29 @@ public class PanelQuanLyKhuVuc extends javax.swing.JPanel implements MouseListen
             JOptionPane.showMessageDialog(this, "Vui lòng chọn khu vực cần xóa.");
             return;
         }
-        int choice = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa khu vực này không?",
-                "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
-        if (choice != JOptionPane.YES_OPTION) {
-            return;
-        }
+       
         try {
-            KhuVucService service = new KhuVucService();
-            service.xoaKhuVuc(maKhuVuc);
-            JOptionPane.showMessageDialog(this, "Xóa khu vực thành công.");
-            refreshData();
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Xóa khu vực thất bại: " + ex.getMessage());
+            if (khuVucService.kiemTraKhuVucCoChuaBan(maKhuVuc)) {
+                JOptionPane.showMessageDialog(this, 
+                    "Không thể xóa khu vực này vì hiện đang có bàn ăn thuộc khu vực!\n" +
+                    "Vui lòng xóa các bàn ăn đó hoặc đổi khu vực cho bàn trước khi thực hiện xóa.", 
+                    "Lỗi ràng buộc dữ liệu", 
+                    JOptionPane.ERROR_MESSAGE);
+                return; 
+            }
+            
+            int choice = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa khu vực này?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+            if (choice == JOptionPane.YES_OPTION) {
+                khuVucService.xoaKhuVuc(maKhuVuc);
+                JOptionPane.showMessageDialog(this, "Xóa khu vực thành công!");
+                refreshData();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Lỗi hệ thống: " + e.getMessage());
         }
     }
+    
     private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {
         String maKhuVuc = txtMaKhuVuc.getText().trim();
         String tenKhuVuc = txtTenKhuVuc.getText().trim();

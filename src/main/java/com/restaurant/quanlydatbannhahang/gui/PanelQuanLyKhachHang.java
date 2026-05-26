@@ -478,17 +478,27 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel implements MouseLis
             JOptionPane.showMessageDialog(this, "Vui lòng chọn khách hàng cần xóa.");
             return;
         }
-        int choice = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa khách hàng này không?",
-                "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
-        if (choice != JOptionPane.YES_OPTION) {
-            return;
-        }
-        KhachHangService service = new KhachHangService();
-        if (service.xoaKhachHang(maKH)) {
-            JOptionPane.showMessageDialog(this, "Xóa khách hàng thành công.");
-            refreshData();
-        } else {
-            JOptionPane.showMessageDialog(this, "Xóa khách hàng thất bại.");
+        try {
+            KhachHangService service = new KhachHangService();
+            
+            if (service.kiemTraKhachHangCoLichSuDat(maKH)) {
+                JOptionPane.showMessageDialog(this, 
+                    "Không thể xóa khách hàng này vì họ đã có lịch sử đặt bàn trong hệ thống!\n" +
+                    "Hệ thống bắt buộc phải giữ lại thông tin để đối soát báo cáo doanh thu và điểm tích lũy.", 
+                    "Lỗi ràng buộc dữ liệu", 
+                    JOptionPane.ERROR_MESSAGE);
+                return; 
+            }
+            
+            int choice = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa tài khoản khách hàng này khỏi hệ thống?", "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
+            if (choice == JOptionPane.YES_OPTION) {
+                service.xoaKhachHang(maKH);
+                JOptionPane.showMessageDialog(this, "Xóa thông tin khách hàng thành công!");
+                refreshData();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Lỗi hệ thống khi xóa: " + e.getMessage());
         }
     }
     private void cbFilterLoaiThanhVienActionPerformed(java.awt.event.ActionEvent evt) {

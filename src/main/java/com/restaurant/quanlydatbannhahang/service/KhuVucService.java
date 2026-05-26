@@ -75,4 +75,11 @@ public class KhuVucService {
     public String getLastKhuVucID() {
         return khuVucDAO.getLastKhuVucID();
     }
+    
+    public boolean kiemTraKhuVucCoChuaBan(String maKhuVuc) {
+        if (maKhuVuc == null || maKhuVuc.isBlank()) {
+            throw new IllegalArgumentException("Mã khu vực kiểm tra không được để trống");
+        }
+        return khuVucDAO.kiemTraKhuVucCoChuaBan(maKhuVuc);
+    }
 }
