@@ -13,7 +13,7 @@ public class AuthService {
         this.taiKhoanDAO = new TaiKhoanDAO();
     }
     public static ValidationResult validateUsername(String username) {
-        if (isEmpty(username)) {
+        if (username.isBlank()) {
             return new ValidationResult(false, "Tên đăng nhập không được để trống");
         }
         if (username.length() < 3) {
@@ -24,7 +24,7 @@ public class AuthService {
         }
         if (username.matches(".*[A-Z].*")) {
             return new ValidationResult(false,
-                    "Tên đăng nhập không được chứa chữ hoa. Chỉ dùng chữ thường (a-z) và dấu gạch dưới (_)");
+                    "Tên đăng nhập không được chứa chữ hoa hoặc bỏ dấu. Chỉ dùng chữ thường (a-z) và dấu gạch dưới (_)");
         }
         if (username.contains(" ")) {
             return new ValidationResult(false, "Tên đăng nhập không được chứa dấu cách");
@@ -35,7 +35,7 @@ public class AuthService {
         return new ValidationResult(true, "Tên đăng nhập hợp lệ");
     }
     public static ValidationResult validatePassword(String password) {
-        if (isEmpty(password)) {
+        if (password.isBlank()) {
             return new ValidationResult(false, "Mật khẩu không được để trống");
         }
         if (password.length() < 6) {
