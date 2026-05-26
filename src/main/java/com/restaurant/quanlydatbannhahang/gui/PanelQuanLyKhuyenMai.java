@@ -1,4 +1,5 @@
 package com.restaurant.quanlydatbannhahang.gui;
+
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -14,174 +15,212 @@ import com.restaurant.quanlydatbannhahang.util.IDQueryHelper;
 import com.restaurant.quanlydatbannhahang.entity.KhuyenMai;
 import java.util.List;
 import java.time.LocalDate;
+
 public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseListener {
         private ActionListener cbFilterTrangThaiListener;
+
         public PanelQuanLyKhuyenMai() {
                 initComponents();
                 customUI();
                 loadDataToComboBoxes();
                 loadDataToTable();
                 fillTxtMaKhuyenMai();
+                applyFilterAndSearch();
+
         }
+
         private void customUI() {
-                setupPlaceholder(txtTimKiem, "Nhập tên hoặc mã khuyến mãi");
-                ComboBoxEnumLoader.loadTrangThaiKhuyenMaiToComboBox(cbFilterTrangThai);
-                if (dpNgayBatDau != null) {
-                        dpNgayBatDau.setDate(LocalDate.now());
-                }
-                if (dbNgayKetThuc != null) {
-                        dbNgayKetThuc.setDate(LocalDate.now());
-                }
-                this.addMouseListener(new java.awt.event.MouseAdapter() {
-                        @Override
-                        public void mousePressed(java.awt.event.MouseEvent evt) {
-                                if (evt.getSource() != tableKhuyenMai && !isMouseOverTable(evt)) {
-                                        tableKhuyenMai.clearSelection();
-                                        clearFields();
-                                        fillTxtMaKhuyenMai();
-                                        syncButtonState();
-                                }
-                        }
-                });
-                tableKhuyenMai.addMouseListener(this);
-                tableKhuyenMai.getSelectionModel().addListSelectionListener(e -> {
-                        if (!e.getValueIsAdjusting()) {
-                                int row = tableKhuyenMai.getSelectedRow();
-                                if (row >= 0) {
-                                        loadDataFromRow(row);
-                                }
-                                syncButtonState();
-                        }
-                });
-                for (int i = 0; i < tableKhuyenMai.getColumnCount(); i++) {
-                        tableKhuyenMai.getColumnModel().getColumn(i).setCellRenderer(new DefaultTableCellRenderer() {
-                                @Override
-                                public Component getTableCellRendererComponent(JTable table, Object value,
-                                                boolean isSelected,
-                                                boolean hasFocus, int row, int column) {
-                                        if (value != null && value instanceof Number) {
-                                                value = com.restaurant.quanlydatbannhahang.util.CurrencyUtility
-                                                                .formatVND(((Number) value).doubleValue());
-                                        }
-                                        setHorizontalAlignment(JLabel.CENTER);
-                                        return super.getTableCellRendererComponent(table, value, isSelected, hasFocus,
-                                                        row, column);
-                                }
-                        });
-                }
-                MainForm.attachGoHomeListener(btnTrangChu, this);
-                syncButtonState();
-        }
+            setupPlaceholder(txtTimKiem, "Nhập tên hoặc mã khuyến mãi");
+            ComboBoxEnumLoader.loadTrangThaiKhuyenMaiToComboBox(cbFilterTrangThai);
+            if (dpNgayBatDau != null) {
+                    dpNgayBatDau.setDate(LocalDate.now());
+            }
+            if (dbNgayKetThuc != null) {
+                    dbNgayKetThuc.setDate(LocalDate.now());
+            }
+            this.addMouseListener(new java.awt.event.MouseAdapter() {
+                    @Override
+                    public void mousePressed(java.awt.event.MouseEvent evt) {
+                            if (evt.getSource() != tableKhuyenMai && !isMouseOverTable(evt)) {
+                                    tableKhuyenMai.clearSelection();
+                                    clearFields();
+                                    fillTxtMaKhuyenMai();
+                                    syncButtonState();
+                            }
+                    }
+            });
+            tableKhuyenMai.addMouseListener(this);
+            tableKhuyenMai.getSelectionModel().addListSelectionListener(e -> {
+                    if (!e.getValueIsAdjusting()) {
+                            int row = tableKhuyenMai.getSelectedRow();
+                            if (row >= 0) {
+                                    loadDataFromRow(row);
+                            }
+                            syncButtonState();
+                    }
+            });
+
+            DefaultTableCellRenderer masterKhuyenMaiRenderer = new DefaultTableCellRenderer() {
+                    @Override
+                    public Component getTableCellRendererComponent(JTable table, Object value,
+                                    boolean isSelected, boolean hasFocus, int row, int column) {
+                            Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                            
+                            int modelRow = table.convertRowIndexToModel(row);
+                            Object statusValue = table.getModel().getValueAt(modelRow, 6); 
+                            String status = statusValue != null ? statusValue.toString() : "";
+                            
+                            if ("Ngừng áp dụng".equals(status)) {
+                                    c.setForeground(new Color(153, 153, 153)); 
+                                    c.setFont(c.getFont().deriveFont(Font.ITALIC));
+                            } else {
+                                    if (!isSelected) {
+                                            c.setForeground(Color.BLACK);
+                                    }
+                                    c.setFont(c.getFont().deriveFont(Font.PLAIN));
+                            }
+                            
+                            if (column == 2 || column == 5) {
+                                    if (value != null && value instanceof Number) {
+                                            setText(com.restaurant.quanlydatbannhahang.util.CurrencyUtility
+                                                            .formatVND(((Number) value).doubleValue()));
+                                    }
+                                    setHorizontalAlignment(JLabel.RIGHT); 
+                            } else {
+                                    setHorizontalAlignment(JLabel.CENTER); 
+                            }
+                            return c;
+                    }
+            };
+            
+            for (int i = 0; i < tableKhuyenMai.getColumnCount(); i++) {
+                    tableKhuyenMai.getColumnModel().getColumn(i).setCellRenderer(masterKhuyenMaiRenderer);
+            }
+
+
+            MainForm.attachGoHomeListener(btnTrangChu, this);
+            syncButtonState();
+    }
+
         private void loadDataToComboBoxes() {
-                try {
-                        ActionListener[] trangThaiListeners = cbFilterTrangThai.getActionListeners();
-                        for (ActionListener listener : trangThaiListeners) {
-                                cbFilterTrangThai.removeActionListener(listener);
-                        }
-                        ComboBoxEnumLoader.loadTrangThaiKhuyenMaiToComboBox(cbTrangThai);
-                        for (ActionListener listener : trangThaiListeners) {
-                                cbFilterTrangThai.addActionListener(listener);
-                        }
-                } catch (Exception e) {
-                        e.printStackTrace();
-                        JOptionPane.showMessageDialog(this, "Lỗi load dữ liệu filter: " + e.getMessage());
-                }
-        }
+            try {
+                    ActionListener[] trangThaiListeners = cbFilterTrangThai.getActionListeners();
+                    for (ActionListener listener : trangThaiListeners) {
+                            cbFilterTrangThai.removeActionListener(listener);
+                    }
+                    
+                    ComboBoxEnumLoader.loadTrangThaiKhuyenMaiToComboBox(cbFilterTrangThai); 
+                    ComboBoxEnumLoader.loadTrangThaiKhuyenMaiToComboBox(cbTrangThai);
+                    
+                    for (int i = 0; i < cbFilterTrangThai.getItemCount(); i++) {
+                            if ("Còn áp dụng".equals(cbFilterTrangThai.getItemAt(i))) {
+                                    cbFilterTrangThai.setSelectedIndex(i);
+                                    break;
+                            }
+                    }
+
+                    for (ActionListener listener : trangThaiListeners) {
+                            cbFilterTrangThai.addActionListener(listener);
+                    }
+            } catch (Exception e) {
+                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(this, "Lỗi load dữ liệu filter: " + e.getMessage());
+            }
+    }
         private void loadDataToTable() {
                 loadFilteredData();
         }
+
         private void loadFilteredData() {
-                try {
-                        KhuyenMaiService service = new KhuyenMaiService();
-                        List<KhuyenMai> list = service.getAllKhuyenMai();
-                        String selectedTrangThai = (String) cbFilterTrangThai.getSelectedItem();
-                        DefaultTableModel model = (DefaultTableModel) tableKhuyenMai.getModel();
-                        model.setRowCount(0);
-                        for (KhuyenMai km : list) {
-                                if (km.getTrangThai() != com.restaurant.quanlydatbannhahang.entity.TrangThaiKhuyenMai.CON_AP_DUNG) {
-                                        continue;
-                                }
-                                model.addRow(new Object[] {
-                                                km.getMaKM(),
-                                                km.getTenKM(),
-                                                km.getGiaTriGiam(),
-                                                km.getNgayBatDau(),
-                                                km.getNgayKetThuc(),
-                                                km.getDieuKienToiThieu(),
-                                                km.getTrangThai() != null ? km.getTrangThai().getDisplayName() : ""
-                                });
-                        }
-                        centerTableColumns(tableKhuyenMai);
-                        DefaultTableCellRenderer currencyRenderer = new DefaultTableCellRenderer() {
-                                @Override
-                                protected void setValue(Object value) {
-                                        if (value instanceof Double) {
-                                                setText(com.restaurant.quanlydatbannhahang.util.CurrencyUtility
-                                                                .formatVND((Double) value));
-                                        } else {
-                                                super.setValue(value);
-                                        }
-                                }
-                        };
-                        currencyRenderer.setHorizontalAlignment(JLabel.RIGHT);
-                        tableKhuyenMai.getColumnModel().getColumn(2).setCellRenderer(currencyRenderer);
-                        tableKhuyenMai.getColumnModel().getColumn(5).setCellRenderer(currencyRenderer);
-                } catch (Exception e) {
-                        e.printStackTrace();
-                        JOptionPane.showMessageDialog(this, "Lỗi load dữ liệu: " + e.getMessage());
-                }
-        }
+            try {
+                    KhuyenMaiService service = new KhuyenMaiService();
+                    List<KhuyenMai> list = service.getAllKhuyenMai();
+                    String selectedTrangThai = (String) cbFilterTrangThai.getSelectedItem();
+                    DefaultTableModel model = (DefaultTableModel) tableKhuyenMai.getModel();
+                    model.setRowCount(0);
+                    
+                    for (KhuyenMai km : list) {
+                            if (selectedTrangThai != null && !selectedTrangThai.equals("Trạng thái")) {
+                                    if (km.getTrangThai() == null || !km.getTrangThai().getDisplayName().equals(selectedTrangThai)) {
+                                            continue; 
+                                    }
+                            }
+                            
+                            model.addRow(new Object[] {
+                                            km.getMaKM(),
+                                            km.getTenKM(),
+                                            km.getGiaTriGiam(),
+                                            km.getNgayBatDau(),
+                                            km.getNgayKetThuc(),
+                                            km.getDieuKienToiThieu(),
+                                            km.getTrangThai() != null ? km.getTrangThai().getDisplayName() : ""
+                            });
+                    }
+                    
+            } catch (Exception e) {
+                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(this, "Lỗi load dữ liệu: " + e.getMessage());
+            }
+    }
+
         private void searchByText() {
-                try {
-                        KhuyenMaiService service = new KhuyenMaiService();
-                        List<KhuyenMai> list = service.getAllKhuyenMai();
-                        String searchText = txtTimKiem.getText().trim().toLowerCase();
-                        String selectedTrangThai = (String) cbFilterTrangThai.getSelectedItem();
-                        DefaultTableModel model = (DefaultTableModel) tableKhuyenMai.getModel();
-                        model.setRowCount(0);
-                        for (KhuyenMai km : list) {
-                                if (km.getTrangThai() != com.restaurant.quanlydatbannhahang.entity.TrangThaiKhuyenMai.CON_AP_DUNG) {
-                                        continue;
-                                }
-                                if (!searchText.isEmpty()) {
-                                        String maKM = km.getMaKM() != null ? km.getMaKM().toLowerCase()
-                                                        : "";
-                                        String tenKM = km.getTenKM() != null ? km.getTenKM().toLowerCase()
-                                                        : "";
-                                        if (!maKM.contains(searchText) && !tenKM.contains(searchText)) {
-                                                continue;
-                                        }
-                                }
-                                model.addRow(new Object[] {
-                                                km.getMaKM(),
-                                                km.getTenKM(),
-                                                km.getGiaTriGiam(),
-                                                km.getNgayBatDau(),
-                                                km.getNgayKetThuc(),
-                                                km.getDieuKienToiThieu(),
-                                                km.getTrangThai() != null ? km.getTrangThai().getDisplayName() : ""
-                                });
-                        }
-                        centerTableColumns(tableKhuyenMai);
-                        DefaultTableCellRenderer currencyRenderer = new DefaultTableCellRenderer() {
-                                @Override
-                                protected void setValue(Object value) {
-                                        if (value instanceof Double) {
-                                                setText(com.restaurant.quanlydatbannhahang.util.CurrencyUtility
-                                                                .formatVND((Double) value));
-                                        } else {
-                                                super.setValue(value);
-                                        }
-                                }
-                        };
-                        currencyRenderer.setHorizontalAlignment(JLabel.RIGHT);
-                        tableKhuyenMai.getColumnModel().getColumn(2).setCellRenderer(currencyRenderer);
-                        tableKhuyenMai.getColumnModel().getColumn(5).setCellRenderer(currencyRenderer);
-                } catch (Exception e) {
-                        e.printStackTrace();
-                        JOptionPane.showMessageDialog(this, "Lỗi tìm kiếm dữ liệu: " + e.getMessage());
+            try {
+                    KhuyenMaiService service = new KhuyenMaiService();
+                    List<KhuyenMai> list = service.getAllKhuyenMai();
+                    String searchText = getActualSearchText();
+                    String selectedTrangThai = (String) cbFilterTrangThai.getSelectedItem();
+                    DefaultTableModel model = (DefaultTableModel) tableKhuyenMai.getModel();
+                    model.setRowCount(0);
+                    
+                    for (KhuyenMai km : list) {
+                            if (selectedTrangThai != null && !selectedTrangThai.equals("Trạng thái")) {
+                                    if (km.getTrangThai() == null || !km.getTrangThai().getDisplayName().equals(selectedTrangThai)) {
+                                            continue;
+                                    }
+                            }
+                            
+                            if (!searchText.isEmpty()) {
+                                    String maKM = km.getMaKM() != null ? km.getMaKM().toLowerCase()
+                                                    : "";
+                                    String tenKM = km.getTenKM() != null ? km.getTenKM().toLowerCase()
+                                                    : "";
+                                    if (!maKM.contains(searchText) && !tenKM.contains(searchText)) {
+                                            continue;
+                                    }
+                            }
+                            model.addRow(new Object[] {
+                                            km.getMaKM(),
+                                            km.getTenKM(),
+                                            km.getGiaTriGiam(),
+                                            km.getNgayBatDau(),
+                                            km.getNgayKetThuc(),
+                                            km.getDieuKienToiThieu(),
+                                            km.getTrangThai() != null ? km.getTrangThai().getDisplayName() : ""
+                            });
+                    }
+                    
+            } catch (Exception e) {
+                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(this, "Lỗi tìm kiếm dữ liệu: " + e.getMessage());
+            }
+    }
+
+        private String getActualSearchText() {
+                String text = txtTimKiem.getText().trim();
+                if (text.equals("Nhập tên hoặc mã khuyến mãi")) {
+                        return "";
+                }
+                return text.toLowerCase();
+        }
+
+        private void applyFilterAndSearch() {
+                if (!getActualSearchText().isEmpty()) {
+                        searchByText();
+                } else {
+                        loadFilteredData();
                 }
         }
+
         private void loadDataFromRow(int rowIndex) {
                 try {
                         String maKM = (String) tableKhuyenMai.getValueAt(rowIndex, 0);
@@ -202,7 +241,8 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                                 dbNgayKetThuc.setDate((LocalDate) ngayKTObj);
                         }
                         if (dieuKienObj != null) {
-                                txtDieuKienToiThieu.setText(CurrencyUtility.formatVND(Double.valueOf(dieuKienObj.toString())));
+                                txtDieuKienToiThieu.setText(
+                                                CurrencyUtility.formatVND(Double.valueOf(dieuKienObj.toString())));
                         } else {
                                 txtDieuKienToiThieu.setText("");
                         }
@@ -212,6 +252,7 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                         JOptionPane.showMessageDialog(this, "Lỗi khi load dữ liệu từ row: " + e.getMessage());
                 }
         }
+
         private void clearFields() {
                 txtTenKhuyenMai.setText("");
                 txtGiaTriGiam.setText("");
@@ -224,33 +265,39 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                         dbNgayKetThuc.setDate(LocalDate.now());
                 }
         }
+
         private void syncButtonState() {
                 btnCapNhat.setEnabled(tableKhuyenMai.getSelectedRow() >= 0);
                 btnXoa.setEnabled(tableKhuyenMai.getSelectedRow() >= 0);
                 btnThem.setEnabled(tableKhuyenMai.getSelectedRow() == -1);
 
         }
+
         public void refreshData() {
                 clearFields();
                 fillTxtMaKhuyenMai();
                 resetPlaceholder(txtTimKiem, "Nhập tên hoặc mã khuyến mãi");
                 cbFilterTrangThai.setSelectedIndex(0);
-                loadDataToComboBoxes();
                 loadDataToTable();
+                loadDataToComboBoxes(); 
+                applyFilterAndSearch(); 
                 tableKhuyenMai.clearSelection();
                 syncButtonState();
         }
+
         private void fillTxtMaKhuyenMai() {
                 String lastID = IDQueryHelper.getLastID("KhuyenMai", "maKM");
                 String maKMNew = (lastID == null || lastID.isEmpty()) ? IDGeneratorHelper.generateDefaultID("KM")
                                 : IDGeneratorHelper.generateNextIDFromFullID(lastID);
                 txtMaKhuyenMai.setText(maKMNew);
         }
+
         private boolean isMouseOverTable(java.awt.event.MouseEvent evt) {
                 java.awt.Point p = evt.getPoint();
                 java.awt.Point tablePoint = SwingUtilities.convertPoint(this, p, tableKhuyenMai);
                 return tableKhuyenMai.getBounds().contains(tablePoint);
         }
+
         private void setupPlaceholder(JTextField textField, String placeholder) {
                 Color placeholderColor = new Color(153, 153, 153);
                 Color textColor = new Color(0, 0, 0);
@@ -264,6 +311,7 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                                         textField.setForeground(textColor);
                                 }
                         }
+
                         @Override
                         public void focusLost(java.awt.event.FocusEvent evt) {
                                 if (textField.getText().isEmpty()) {
@@ -273,11 +321,13 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                         }
                 });
         }
+
         private void resetPlaceholder(JTextField textField, String placeholder) {
                 Color placeholderColor = new Color(153, 153, 153);
                 textField.setText(placeholder);
                 textField.setForeground(placeholderColor);
         }
+
         // <editor-fold defaultstate="collapsed" desc="Generated
         // <editor-fold defaultstate="collapsed" desc="Generated
         // <editor-fold defaultstate="collapsed" desc="Generated
@@ -600,9 +650,11 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                         boolean[] canEdit = new boolean[] {
                                         false, false, false, false, false, false, false
                         };
+
                         public Class getColumnClass(int columnIndex) {
                                 return types[columnIndex];
                         }
+
                         public boolean isCellEditable(int rowIndex, int columnIndex) {
                                 return canEdit[columnIndex];
                         }
@@ -652,6 +704,7 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                 pnlButton.add(pnlRightButtons, java.awt.BorderLayout.EAST);
                 add(pnlButton, java.awt.BorderLayout.PAGE_END);
         }// </editor-fold>//GEN-END:initComponents
+
         private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {
                 String maKM = txtMaKhuyenMai.getText().trim();
                 if (maKM.isEmpty()) {
@@ -675,28 +728,26 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                                         "Cập nhật trạng thái khuyến mãi thất bại: " + ex.getMessage());
                 }
         }
+
         private void btnXoaTrangActionPerformed(java.awt.event.ActionEvent evt) {
                 refreshData();
         }
-        private void centerTableColumns(JTable table) {
-                DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-                centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-                for (int i = 0; i < table.getColumnCount(); i++) {
-                        if (i != 2 && i != 5) {
-                                table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
-                        }
-                }
-        }
+
+
         private void cbFilterTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {
-                loadDataToTable();
+                applyFilterAndSearch();
         }
+
         private void txtMaKhuyenMaiActionPerformed(java.awt.event.ActionEvent evt) {
         }
+
         private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {
-                searchByText();
+                applyFilterAndSearch();
         }
+
         private void txtGiaTriGiamActionPerformed(java.awt.event.ActionEvent evt) {
         }
+
         private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {
                 try {
                         String maKM = txtMaKhuyenMai.getText().trim();
@@ -729,6 +780,7 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                         JOptionPane.showMessageDialog(this, "Cập nhật khuyến mãi thất bại: " + ex.getMessage());
                 }
         }
+
         private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {
                 try {
                         String maKM = txtMaKhuyenMai.getText().trim();
@@ -761,6 +813,7 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
                         JOptionPane.showMessageDialog(this, "Thêm khuyến mãi thất bại: " + ex.getMessage());
                 }
         }
+
         // Variables declaration - do not modify//GEN-BEGIN:variables
         private javax.swing.JButton btnCapNhat;
         private javax.swing.JButton btnThem;
@@ -791,19 +844,24 @@ public class PanelQuanLyKhuyenMai extends javax.swing.JPanel implements MouseLis
         private javax.swing.JTextField txtMaKhuyenMai;
         private javax.swing.JTextField txtTenKhuyenMai;
         private javax.swing.JTextField txtTimKiem;
+
         // End of variables declaration//GEN-END:variables
         @Override
         public void mouseClicked(MouseEvent e) {
         }
+
         @Override
         public void mousePressed(MouseEvent e) {
         }
+
         @Override
         public void mouseReleased(MouseEvent e) {
         }
+
         @Override
         public void mouseEntered(MouseEvent e) {
         }
+
         @Override
         public void mouseExited(MouseEvent e) {
         }

@@ -54,7 +54,13 @@ public class PhieuDatBanService {
         phieu.setKhachHang(null);
         phieu.setNhanVien(nhanVienService.getNhanVienTheoMa(maNV));
         phieu.setThoiGianDen(LocalDateTime.now());
-        phieu.setSoLuongNguoi(0);
+        int soGhe = 0;
+        for (String maBan : dsMaBan) {
+          Ban ban = banService.getBanTheoMa(maBan);
+          if(ban!=null) 
+        	  soGhe += ban.getSoGhe();
+        }
+        phieu.setSoLuongNguoi(soGhe);
         phieu.setTrangThai(TrangThaiPhieuDat.DANG_SU_DUNG);
         if (!phieuDatBanDAO.themPhieuDatBan(phieu)) {
             throw new RuntimeException("Không thể khởi tạo phiếu đặt bàn cho khách");

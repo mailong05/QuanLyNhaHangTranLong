@@ -56,6 +56,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                 fillMaDatBan(txtMaPhieuDat);
                 pushDataToComboBox(cbFilterTrangThai);
                 pushDataToComboBox(cbTrangThai);
+                selectDefaultActiveStatus();
                 applyFilterAndSearch();
         }
 
@@ -85,34 +86,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                 }
                 MainForm.attachGoHomeListener(btnTrangChu, this);
                 
-                tableBan.setSelectionModel(new DefaultListSelectionModel() {
-                        @Override
-                        public void setSelectionInterval(int index0, int index1) {
-                                if (isValidSelection(index0)) {
-                                        super.setSelectionInterval(index0, index1);
-                                }
-                        }
-
-                        @Override
-                        public void addSelectionInterval(int index0, int index1) {
-                                if (isValidSelection(index0)) {
-                                        super.addSelectionInterval(index0, index1);
-                                }
-                        }
-
-                        private boolean isValidSelection(int index) {
-                                if (index >= 0 && index < tableBan.getRowCount()) {
-                                        int modelRow = tableBan.convertRowIndexToModel(index);
-                                        Object statusValue = tableBan.getModel().getValueAt(modelRow, 8); 
-                                        String status = statusValue != null ? statusValue.toString() : "";
-                                        
-                                        if ("Đã hủy".equals(status) || "Đã sử dụng".equals(status)) {
-                                                return false; 
-                                        }
-                                }
-                                return true;
-                        }
-                });
+               
                 tableBan.addMouseListener(this);
                 tableBan.getSelectionModel().addListSelectionListener(e -> {
                         if (!e.getValueIsAdjusting()) {
