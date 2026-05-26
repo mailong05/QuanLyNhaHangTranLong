@@ -1127,11 +1127,14 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                 String maPhieuDat = String.valueOf(tableBan.getModel().getValueAt(modelRow, 0));
                 String maBanContext = String.valueOf(tableBan.getModel().getValueAt(modelRow, 3));
                 String soDienThoai = String.valueOf(tableBan.getModel().getValueAt(modelRow, 1));
+                LocalDateTime thoiGianDen =  dtpThoiGianDen.getDateTimeStrict();
                 HoaDonDraftSession.luuGioVao(maBanContext, LocalDateTime.now());
 
                 HoaDonDraftSession.setCurrentMaBanContext(maBanContext);
                 HoaDonDraftSession.setCurrentMaPhieuDatContext(maPhieuDat);
                 HoaDonDraftSession.setCurrentPhoneNumber(soDienThoai);
+                pdbService.capNhatThoiGianDen(maPhieuDat, thoiGianDen);
+                
                 java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
                 if (parentFrame instanceof MainForm) {
                         ((MainForm) parentFrame).openPanelDatMon(maBanContext);
