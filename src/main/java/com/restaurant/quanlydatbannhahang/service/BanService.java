@@ -128,10 +128,6 @@ public class BanService {
             Ban ban = banDAO.getBanTheoMa(maBan);
             if (ban == null) return;
 
-            if (ban.getTrangThai() == TrangThaiBan.DANG_DUNG) {
-                return; 
-            }
-
             PhieuDatBanService pdb_service = new PhieuDatBanService();
             boolean hasFutureReservation = pdb_service.hasReservationToday(maBan);
 
