@@ -18,6 +18,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.AbstractBorder;
 import com.restaurant.quanlydatbannhahang.entity.QuyenHan;
 import com.restaurant.quanlydatbannhahang.entity.TaiKhoan;
+import com.restaurant.quanlydatbannhahang.service.KhuyenMaiService;
 import com.restaurant.quanlydatbannhahang.session.HoaDonDraftSession;
 import com.restaurant.quanlydatbannhahang.session.SessionManager;
 import com.restaurant.quanlydatbannhahang.util.AppConfig;
@@ -103,6 +104,11 @@ public class MainForm extends javax.swing.JFrame {
         setMenuEnabled(false);
         showVaoCaPanel();
         initializePanelsEarly();
+        try {
+            new KhuyenMaiService().tuDongCapNhatHetHanKhuyenMai();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         this.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override

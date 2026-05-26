@@ -213,4 +213,16 @@ public class KhuyenMaiDAO {
         }
         return dsKhuyenMai;
     }
+    
+    public boolean tuDongCapNhatHetHanKhuyenMai() {
+        String sql = "UPDATE KhuyenMai SET trangThai = 'NGUNG_AP_DUNG' " +
+                     "WHERE ngayKetThuc < CAST(GETDATE() AS DATE) AND trangThai = 'CON_AP_DUNG'";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstm = conn.prepareStatement(sql)) {
+            return pstm.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

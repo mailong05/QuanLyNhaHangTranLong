@@ -132,4 +132,8 @@ public class KhuyenMaiService {
     public String getLastKhuyenMaiID() {
         return khuyenMaiDAO.getLastKhuyenMaiID();
     }
+    
+    public boolean tuDongCapNhatHetHanKhuyenMai() {
+        return khuyenMaiDAO.tuDongCapNhatHetHanKhuyenMai();
+    }
 }
