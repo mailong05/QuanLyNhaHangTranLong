@@ -287,4 +287,9 @@ public class PhieuDatBanService {
 	   public boolean capNhatTrangThaiBanTheoPhieuDatHomNay() {
 	        return phieuDatBanDAO.capNhatTrangThaiBanTheoPhieuDatHomNay();
 	    }
+
+	   public void capNhatThoiGianDen(String maPhieuDat, LocalDateTime thoiGianDen) {
+		// TODO Auto-generated method stub
+		phieuDatBanDAO.capNhatThoiGianDen(maPhieuDat, thoiGianDen);
+	   }
 }
