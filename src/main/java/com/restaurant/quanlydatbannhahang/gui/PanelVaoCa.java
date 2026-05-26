@@ -116,17 +116,18 @@ public class PanelVaoCa extends JPanel {
         btnThoat.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btnThoat.setFocusPainted(false);
         btnThoat.addActionListener(e -> {
-            java.awt.Window w = SwingUtilities.getWindowAncestor(this);
-            if (w instanceof java.awt.Frame) {
-                java.awt.Frame frame = (java.awt.Frame) w;
-                frame.dispatchEvent(new java.awt.event.WindowEvent(frame, java.awt.event.WindowEvent.WINDOW_CLOSING));
-            } else {
-                int res = JOptionPane.showConfirmDialog(this,
-                        "Bạn có muốn thoát chương trình?",
-                        "Xác nhận thoát",
-                        JOptionPane.YES_NO_OPTION,
-                        JOptionPane.QUESTION_MESSAGE);
-                if (res == JOptionPane.YES_OPTION) {
+            int res = JOptionPane.showConfirmDialog(this,
+                    "Bạn có muốn thoát chương trình?",
+                    "Xác nhận thoát",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE);
+            
+            if (res == JOptionPane.YES_OPTION) {
+                java.awt.Window w = SwingUtilities.getWindowAncestor(this);
+                if (w instanceof java.awt.Frame) {
+                    java.awt.Frame frame = (java.awt.Frame) w;
+                    frame.dispatchEvent(new java.awt.event.WindowEvent(frame, java.awt.event.WindowEvent.WINDOW_CLOSING));
+                } else {
                     System.exit(0);
                 }
             }
@@ -168,7 +169,10 @@ public class PanelVaoCa extends JPanel {
         }
         try {
             int count = Integer.parseInt(text);
-            return Math.max(count, 0);
+            if (count < 0) {
+                return -1;
+            }
+            return count;
         } catch (NumberFormatException ex) {
             return -1;
         }
