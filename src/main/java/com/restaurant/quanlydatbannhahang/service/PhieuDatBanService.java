@@ -98,8 +98,8 @@ public class PhieuDatBanService {
                 throw new IllegalArgumentException("Thời gian đến phải ở tương lai");
             }
         }
-        if (phieu.getSoLuongNguoi() < 0) {
-            throw new IllegalArgumentException("Số lượng người không được là số âm");
+        if (phieu.getSoLuongNguoi() <= 0) {
+            throw new IllegalArgumentException("Số lượng người phải lớn hơn 0");
         }
     }
 
@@ -171,6 +171,8 @@ public class PhieuDatBanService {
             kh = new KhachHang(newID, tenKhachHang, soDienThoai, 0, LoaiThanhVien.DONG);
             khService.themKhachHang(kh);
         }
+        
+      
         PhieuDatBan phieu = new PhieuDatBan();
         phieu.setMaPhieuDat(maPDB);
         phieu.setKhachHang(kh);
