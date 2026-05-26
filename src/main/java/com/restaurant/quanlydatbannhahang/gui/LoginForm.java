@@ -277,6 +277,14 @@ public class LoginForm extends javax.swing.JFrame {
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {
         String username = getTxtUsername().getText().trim();
         String password = String.valueOf(getTxtPassword().getPassword()).trim();
+      
+        if (username.equals("Username")) {
+            username = "";
+        }
+        if (password.equals("Password")) {
+            password = "";
+        }
+        
         AuthService.ValidationResult userValidation = AuthService.validateUsername(username);
         if (!userValidation.success) {
             JOptionPane.showMessageDialog(this, userValidation.message, "Lỗi tên đăng nhập", JOptionPane.ERROR_MESSAGE);
