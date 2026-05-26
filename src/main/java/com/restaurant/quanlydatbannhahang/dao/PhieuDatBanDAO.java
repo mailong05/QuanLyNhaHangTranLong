@@ -472,5 +472,20 @@ public class PhieuDatBanDAO {
         }
         return false;
     }
+
+	public boolean capNhatThoiGianDen(String maPhieuDat, LocalDateTime thoiGianDen) {
+		 Connection connection = DatabaseConnection.getConnection();
+	        String sql = "update PhieuDatBan set thoiGianDen = ? where maPhieuDat = ?";
+	        try {
+	            PreparedStatement pstm = connection.prepareStatement(sql);
+	           
+	            pstm.setTimestamp(1, java.sql.Timestamp.valueOf(thoiGianDen));
+	            pstm.setString(2, maPhieuDat);
+	            return pstm.executeUpdate() > 0;
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	        return false;
+	}
 	
 }
