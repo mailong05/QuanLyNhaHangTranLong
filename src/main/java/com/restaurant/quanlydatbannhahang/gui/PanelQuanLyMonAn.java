@@ -765,17 +765,7 @@ public class PanelQuanLyMonAn extends javax.swing.JPanel implements MouseListene
         refreshData();
     }
 
-    private void centerTableColumns(JTable table) {
-        ImageRenderer imageRenderer = new ImageRenderer();
-        table.getColumnModel().getColumn(0).setCellRenderer(imageRenderer);
-        table.getColumnModel().getColumn(0).setPreferredWidth(100);
-        table.setRowHeight(TABLE_IMAGE_ROW_HEIGHT);
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        for (int i = 1; i < table.getColumnCount(); i++) {
-            table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
-        }
-    }
+ 
 
     @Deprecated
     private ImageIcon loadImageIcon(String imagePath) {

@@ -695,16 +695,7 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                 refreshData();
         }
 
-        private void centerTableColumns(JTable table) {
-                DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-                centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-                for (int i = 0; i < table.getColumnCount(); i++) {
-                        if (i != 5) {
-                                table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
-                        }
-                }
-        }
-
+       
         private void cbFilterChucVuActionPerformed(java.awt.event.ActionEvent evt) {
                 applyFilterAndSearch();
         }
@@ -722,22 +713,36 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel implements MouseList
                                         "Cảnh báo", JOptionPane.WARNING_MESSAGE);
                         return;
                 }
-                int choice = JOptionPane.showConfirmDialog(this,
-                                "Bạn có chắc chắn muốn cho nhân viên này nghỉ việc không?",
-                                "Xác nhận", JOptionPane.YES_NO_OPTION);
-                if (choice != JOptionPane.YES_OPTION) {
-                        return;
-                }
+               
                 try {
-                        NhanVienService service = new NhanVienService();
-                        service.xoaNhanVien(maNV);
-                        JOptionPane.showMessageDialog(this,
-                                        "Đã cập nhật trạng thái nhân viên sang nghỉ việc thành công.");
-                        refreshData();
-                } catch (Exception ex) {
-                        JOptionPane.showMessageDialog(this,
-                                        "Cập nhật trạng thái nhân viên thất bại: " + ex.getMessage());
-                }
+                    NhanVienService service = new NhanVienService();
+                    
+                    if (service.kiemTraNhanVienCoRangBuocActive(maNV)) {
+                            JOptionPane.showMessageDialog(this, 
+                                    "Không thể cho nhân viên này nghỉ việc vì:\n" +
+                                    "- Họ đang trong một ca làm việc chưa kết ca.\n" +
+                                    "- Hoặc họ đang chịu trách nhiệm phiếu đặt bàn ở trạng thái 'Đang chờ'.\n\n" +
+                                    "Vui lòng kiểm tra lại tình trạng kết ca hoặc bàn giao phiếu đặt trước!", 
+                                    "Lỗi ràng buộc nghiệp vụ", 
+                                    JOptionPane.ERROR_MESSAGE);
+                            return; 
+                    }
+                    
+                    int choice = JOptionPane.showConfirmDialog(this,
+                                    "Bạn có chắc chắn muốn cho nhân viên này nghỉ việc không?",
+                                    "Xác nhận", JOptionPane.YES_NO_OPTION);
+                    if (choice != JOptionPane.YES_OPTION) {
+                            return;
+                    }
+                    
+                    service.xoaNhanVien(maNV);
+                    JOptionPane.showMessageDialog(this,
+                                    "Đã cập nhật trạng thái nhân viên sang nghỉ việc thành công.");
+                    refreshData();
+            } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this,
+                                    "Cập nhật trạng thái nhân viên thất bại: " + ex.getMessage());
+            }
         }
 
         private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {

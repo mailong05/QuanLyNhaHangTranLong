@@ -30,6 +30,37 @@ public class PanelDanhSachThue extends javax.swing.JPanel {
                 }
             }
         });
+
+        DefaultTableCellRenderer masterDanhSachThueRenderer = new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                    boolean hasFocus, int row, int column) {
+                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                
+                int modelRow = table.convertRowIndexToModel(row);
+                Object statusValue = table.getModel().getValueAt(modelRow, 3); 
+                String status = statusValue != null ? statusValue.toString() : "";
+                
+                if ("Ngưng áp dụng".equals(status) || "Ngừng áp dụng".equals(status)) {
+                    c.setForeground(new Color(153, 153, 153)); 
+                    c.setFont(c.getFont().deriveFont(Font.ITALIC));
+                } else {
+                    if (!isSelected) {
+                        c.setForeground(Color.BLACK);
+                    }
+                    c.setFont(c.getFont().deriveFont(Font.PLAIN));
+                }
+                
+                setHorizontalAlignment(JLabel.CENTER);
+                
+                return c;
+            }
+        };
+
+        for (int i = 0; i < tableThue.getColumnCount(); i++) {
+            tableThue.getColumnModel().getColumn(i).setCellRenderer(masterDanhSachThueRenderer);
+        }
+
         MainForm.attachGoHomeListener(btnTrangChu, this);
     }
     private void setupPlaceholder(JTextField textField, String placeholder) {
@@ -111,11 +142,7 @@ public class PanelDanhSachThue extends javax.swing.JPanel {
         }
     }
     private void centerTableColumns(JTable table) {
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        for (int i = 0; i < table.getColumnCount(); i++) {
-            table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
-        }
+        
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated

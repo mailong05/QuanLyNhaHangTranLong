@@ -305,11 +305,12 @@ public class LoginForm extends javax.swing.JFrame {
             new MainForm(taiKhoan).setVisible(true);
         } else {
             JOptionPane.showMessageDialog(this, "Tên đăng nhập hoặc mật khẩu không đúng!", "Lỗi đăng nhập", JOptionPane.ERROR_MESSAGE);
+            
             getTxtPassword().setText("");
             getTxtPassword().setEchoChar((char) 0);
             getTxtPassword().setText("Password");
             getTxtPassword().setForeground(new Color(102, 102, 102));
-            getTxtUsername().requestFocus();
+            getTxtPassword().requestFocus();
         }
     }
     private void lblIconEyeMousePressed(java.awt.event.MouseEvent evt) {

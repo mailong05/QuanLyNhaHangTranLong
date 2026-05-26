@@ -134,4 +134,35 @@ public class NhanVienDAO {
 		}
 		return list;
 	}
+	
+	public boolean kiemTraNhanVienCoRangBuocActive(String maNV) {
+        Connection connection = DatabaseConnection.getConnection();
+        
+        String sqlCheckCa = "SELECT COUNT(*) FROM CaLamViec WHERE maNV = ? AND trangThai = 'DANG_LAM_VIEC'";
+        
+        String sqlCheckPhieu = "SELECT COUNT(*) FROM PhieuDatBan WHERE maNV = ? AND trangThai = 'DANG_CHO'";
+        
+        try {
+            try (PreparedStatement pstm = connection.prepareStatement(sqlCheckCa)) {
+                pstm.setString(1, maNV);
+                try (ResultSet rs = pstm.executeQuery()) {
+                    if (rs.next() && rs.getInt(1) > 0) {
+                        return true; 
+                    }
+                }
+            }
+            
+            try (PreparedStatement pstm = connection.prepareStatement(sqlCheckPhieu)) {
+                pstm.setString(1, maNV);
+                try (ResultSet rs = pstm.executeQuery()) {
+                    if (rs.next() && rs.getInt(1) > 0) {
+                        return true; 
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
