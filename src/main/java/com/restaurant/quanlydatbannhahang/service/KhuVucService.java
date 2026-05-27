@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 public class KhuVucService {
     private KhuVucDAO khuVucDAO;
     private static final String MAKV_PATTERN = "^KV\\d{3}$";
-    private static final String TENKV_PATTERN = "^[\\p{Lu}][\\p{Ll}\\d\\s]*$";
+    private static final String TENKV_PATTERN = "^[\\p{Lu}].*$";
     private static final Pattern maKVPattern = Pattern.compile(MAKV_PATTERN);
     private static final Pattern tenKVPattern = Pattern.compile(TENKV_PATTERN);
     public KhuVucService() {
