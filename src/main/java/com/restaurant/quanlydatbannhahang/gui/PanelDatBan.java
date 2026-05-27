@@ -1124,9 +1124,9 @@ public class PanelDatBan extends javax.swing.JPanel {
             }
             boolean needUpdateMaster = false;
             for (String maBan : newTables) {
-            	if (existingBans.contains(maBan)) {
-                    continue; 
-                }
+//            	if (existingBans.contains(maBan)) {
+//                    continue; 
+//                }
             	PhieuDatBan pKhac = pService.getActivePhieuDatByBan(maBan);
                 if (pKhac != null && !pKhac.getMaPhieuDat().equals(currentMaPhieuDat)) {
                 	if (masterPhieu.getKhachHang() == null && pKhac.getKhachHang() != null) {
@@ -1138,15 +1138,21 @@ public class PanelDatBan extends javax.swing.JPanel {
                         needUpdateMaster = true;
                     }
                 	pService.capNhatTrangThaiPhieu(pKhac.getMaPhieuDat(), TrangThaiPhieuDat.DA_HUY);
+                	
+                	HoaDonDraftSession.clearByMaPhieu(pKhac.getMaPhieuDat()); 
+                    
+                    ctpService.xoaAllChiTietByMaPhieuDat(pKhac.getMaPhieuDat());
                 }
 
-                ChiTietPhieuDatBan ct = new ChiTietPhieuDatBan();
-                ct.setPhieuDatBan(masterPhieu);
-                ct.setBan(banService.getBanTheoMa(maBan));
-                ctpService.themChiTietPhieuDatBan(ct);
+                if (!existingBans.contains(maBan)) {
+                    ChiTietPhieuDatBan ct = new ChiTietPhieuDatBan();
+                    ct.setPhieuDatBan(masterPhieu);
+                    ct.setBan(banService.getBanTheoMa(maBan));
+                    ctpService.themChiTietPhieuDatBan(ct);
+                    existingBans.add(maBan);
+                }
                 
                 banService.capNhatTrangThaiBan(maBan, TrangThaiBan.DANG_DUNG);
-                existingBans.add(maBan); 
             }
             
             if (needUpdateMaster) {
@@ -1179,6 +1185,7 @@ public class PanelDatBan extends javax.swing.JPanel {
             }
 
             JOptionPane.showMessageDialog(this, "Gộp bàn thành công!");
+            
 
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Lỗi gộp bàn: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
@@ -1188,9 +1195,7 @@ public class PanelDatBan extends javax.swing.JPanel {
         }
     }
     
-    /**
-     * Thực hiện logic ĐỔI BÀN: XÓA bàn cũ + THÊM bàn mới
-     */
+
     private void executeSwitchTableFlow() {
         if (panelDatMon == null && panelQuanLyDatBanTruoc == null) {
             JOptionPane.showMessageDialog(this, "Không tìm thấy panel callback.",

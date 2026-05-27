@@ -308,5 +308,21 @@ public final class HoaDonDraftSession {
             luuGioVao(finalNormalized, earliestGioVao);
         }
     }
+    
+    public static void clearByMaPhieu(String maPhieuDat) {
+        if (maPhieuDat == null || maPhieuDat.isBlank()) return;
+
+        List<String> contextsToClear = new ArrayList<>();
+        
+        for (Map.Entry<String, String> entry : maPhieuDatByMaBan.entrySet()) {
+            if (maPhieuDat.equals(entry.getValue())) {
+                contextsToClear.add(entry.getKey());
+            }
+        }
+
+        for (String context : contextsToClear) {
+            clear(context);
+        }
+    }
   
 }

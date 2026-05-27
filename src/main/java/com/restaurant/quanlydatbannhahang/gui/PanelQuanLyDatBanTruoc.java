@@ -1085,6 +1085,7 @@ public class PanelQuanLyDatBanTruoc extends javax.swing.JPanel implements MouseL
                                     HoaDonDraftSession.clear(normalizedContext); 
                             }
 
+                            HoaDonDraftSession.clearByMaPhieu(maPDB);
                             pdbService.capNhatTrangThaiPhieu(maPDB, TrangThaiPhieuDat.DA_HUY);
                             
                             capNhatTrangThaiBan(chiTietList);
