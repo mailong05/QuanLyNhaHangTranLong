@@ -484,14 +484,9 @@ public class PanelDatBan extends javax.swing.JPanel {
                 pnlTables.setPreferredSize(new Dimension(1200, 200));
 
                 for (Ban ban : banByKhuVucForDisplay.get(khuVuc)) {
-                    TrangThaiBan displayStatus = ban.getTrangThai();
-
-                    if (ban.getTrangThai() == TrangThaiBan.DA_DAT) {
-                        if (availableBans.contains(ban.getMaBan())) {
-                            displayStatus = TrangThaiBan.TRONG;
-                        }
-                    }
-
+                	TrangThaiBan displayStatus = getDisplayStatusForTable(ban, availableBans, targetTime);
+                	
+            
                     boolean isOriginal = (originalTablesForEdit != null
                             && originalTablesForEdit.contains(ban.getMaBan()));
                     if (isOriginal) {
@@ -616,6 +611,15 @@ public class PanelDatBan extends javax.swing.JPanel {
                 card.repaint();
                 return;
             }
+            
+            if (isSwitching) {
+                if (originalTablesForEdit.contains(maBan)) {
+                    JOptionPane.showMessageDialog(this, 
+                        "Đây là bàn gốc khách đang ngồi. Nghiệp vụ đổi bàn yêu cầu chuyển sang vị trí hoàn toàn mới. Vui lòng click chọn bàn trống khác!", 
+                        "Thông báo nghiệp vụ", JOptionPane.WARNING_MESSAGE);
+                    return; 
+                }
+            }
 
             if (selectedTables.contains(maBan)) {
                 selectedTables.remove(maBan);
@@ -723,6 +727,30 @@ public class PanelDatBan extends javax.swing.JPanel {
 
         return ban.getTrangThai();
     }
+    
+    
+    private TrangThaiBan getDisplayStatusForTable(Ban ban, java.util.List<String> availableBans, LocalDateTime targetTime) {
+        boolean isOriginal = (originalTablesForEdit != null && originalTablesForEdit.contains(ban.getMaBan()));
+        if (isOriginal) {
+            return ban.getTrangThai();
+        }
+
+        java.time.LocalDate targetDate = targetTime.toLocalDate();
+        java.time.LocalDate today = java.time.LocalDate.now();
+
+        if (availableBans.contains(ban.getMaBan())) {
+            return TrangThaiBan.TRONG;
+        } 
+        
+        if (targetDate.equals(today)) {
+            if (ban.getTrangThai() == TrangThaiBan.DANG_DUNG) {
+                return TrangThaiBan.DANG_DUNG;
+            }
+        }
+        
+
+        return TrangThaiBan.DA_DAT; 
+    }
 
     private void setTableCardBackground(String maBan, JPanel card, TrangThaiBan trangThai) {
     	if (isMerging) {
@@ -745,6 +773,8 @@ public class PanelDatBan extends javax.swing.JPanel {
         }
 
         if (isSwitching) {
+        	
+        	
             if (selectedTables.contains(maBan)) {
                 if (originalTablesForEdit.contains(maBan)) {
                     card.setBackground(new Color(173, 216, 230));
@@ -1124,30 +1154,37 @@ public class PanelDatBan extends javax.swing.JPanel {
             }
             boolean needUpdateMaster = false;
             for (String maBan : newTables) {
-//            	if (existingBans.contains(maBan)) {
-//                    continue; 
-//                }
-            	PhieuDatBan pKhac = pService.getActivePhieuDatByBan(maBan);
-                if (pKhac != null && !pKhac.getMaPhieuDat().equals(currentMaPhieuDat)) {
-                	if (masterPhieu.getKhachHang() == null && pKhac.getKhachHang() != null) {
-                        masterPhieu.setKhachHang(pKhac.getKhachHang());
-                        needUpdateMaster = true;
-                    }
-                    if (pKhac.getTienDatCoc() > 0) {
-                        masterPhieu.setTienDatCoc(masterPhieu.getTienDatCoc() + pKhac.getTienDatCoc());
-                        needUpdateMaster = true;
-                    }
-                	pService.capNhatTrangThaiPhieu(pKhac.getMaPhieuDat(), TrangThaiPhieuDat.DA_HUY);
-                	
-                	HoaDonDraftSession.clearByMaPhieu(pKhac.getMaPhieuDat()); 
-                    
-                    ctpService.xoaAllChiTietByMaPhieuDat(pKhac.getMaPhieuDat());
-                }
+            	Ban banEntity = banService.getBanTheoMa(maBan);
+                if (banEntity == null) continue;
+                
+                TrangThaiBan trangThaiHienTai = banEntity.getTrangThai();
 
-                if (!existingBans.contains(maBan)) {
+                if (trangThaiHienTai == TrangThaiBan.DANG_DUNG) {
+                    PhieuDatBan pKhac = pService.getActivePhieuDatByBan(maBan);
+                    
+                    if (pKhac != null && !pKhac.getMaPhieuDat().equals(currentMaPhieuDat)) {
+                        if (masterPhieu.getKhachHang() == null && pKhac.getKhachHang() != null) {
+                            masterPhieu.setKhachHang(pKhac.getKhachHang());
+                            needUpdateMaster = true;
+                        }
+                        if (pKhac.getTienDatCoc() > 0) {
+                            masterPhieu.setTienDatCoc(masterPhieu.getTienDatCoc() + pKhac.getTienDatCoc());
+                            needUpdateMaster = true;
+                        }
+                        
+                        pService.capNhatTrangThaiPhieu(pKhac.getMaPhieuDat(), TrangThaiPhieuDat.DA_HUY);
+                        
+                        HoaDonDraftSession.clearByMaPhieu(pKhac.getMaPhieuDat()); 
+                        
+                        ctpService.xoaAllChiTietByMaPhieuDat(pKhac.getMaPhieuDat());
+                    }
+                }
+                
+                 if (!existingBans.contains(maBan)) {
                     ChiTietPhieuDatBan ct = new ChiTietPhieuDatBan();
                     ct.setPhieuDatBan(masterPhieu);
-                    ct.setBan(banService.getBanTheoMa(maBan));
+                    ct.setBan(banEntity);
+                    ct.setGhiChu("Bàn được gộp thêm");
                     ctpService.themChiTietPhieuDatBan(ct);
                     existingBans.add(maBan);
                 }
@@ -1202,8 +1239,20 @@ public class PanelDatBan extends javax.swing.JPanel {
                     "Lỗi", JOptionPane.ERROR_MESSAGE);
             return;
         }
+        
+        Set<String> checkNewTables = new HashSet<>(selectedTables);
+        checkNewTables.removeAll(originalTablesForEdit); 
+        if (checkNewTables.isEmpty()) {
+            JOptionPane.showMessageDialog(this, 
+                "Vui lòng chọn ít nhất một chiếc bàn trống khác trên sơ đồ để thực hiện đổi bàn!", 
+                "Yêu cầu nghiệp vụ", JOptionPane.WARNING_MESSAGE);
+            return; 
+        }
 
         try {
+        	
+        	selectedTables.removeAll(originalTablesForEdit);
+        	
             if (flowOrigin.equals("DAT_MON") || flowOrigin.isEmpty()) {
                 if (panelDatMon != null) {
                     panelDatMon.updateMaBanContextForEdit(new HashSet<>(selectedTables));
