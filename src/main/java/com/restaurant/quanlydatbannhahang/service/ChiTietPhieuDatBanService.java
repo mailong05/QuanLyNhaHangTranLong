@@ -109,7 +109,6 @@ public class ChiTietPhieuDatBanService {
             }
         }
         BanService banService = new BanService();
-        List<String> availableBans = pdbService.getDanhSachBanTrongTheoThoiGian(phieu.getThoiGianDen());
         for (String maBan : banCanThem) {
             if (chiTietMap.containsKey(maBan)) {
                 throw new IllegalArgumentException("Bàn " + maBan + " đã tồn tại trong phiếu này");
@@ -118,13 +117,18 @@ public class ChiTietPhieuDatBanService {
             if (ban == null) {
                 throw new IllegalArgumentException("Bàn " + maBan + " không tồn tại");
             }
-            if (!availableBans.contains(maBan)) {
-                if (!oldBanSet.contains(maBan)) { 
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-                    throw new IllegalArgumentException("Bàn " + maBan + " đã được đặt lịch bởi người khác vào lúc " 
-                            + phieu.getThoiGianDen().format(formatter) + " hoặc đang có khách ngồi.");
-                }
+            
+            if (pdbService.kiemTraBanCoPhieuDangSuDung(maBan)) {
+                throw new IllegalArgumentException("Bàn " + maBan + " hiện đang có khách ngồi thực tế.");
             }
+            
+            java.time.LocalDate ngayCuaPhieu = phieu.getThoiGianDen().toLocalDate();
+            if (pdbService.kiemTraBanDaDuocDatTrongNgay(maBan, ngayCuaPhieu, maPDB)) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                throw new IllegalArgumentException("Bàn " + maBan + " đã được đặt lịch bởi người khác vào ngày " 
+                        + ngayCuaPhieu.format(formatter));
+            }
+            
         }
         for (String maBan : banCanThem) {
             Ban ban = banService.getBanTheoMa(maBan);

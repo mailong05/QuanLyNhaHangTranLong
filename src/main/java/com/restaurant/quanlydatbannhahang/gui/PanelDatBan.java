@@ -140,12 +140,7 @@ public class PanelDatBan extends javax.swing.JPanel {
         repaintAllUI();
     }
 
-    /**
-     * Hàm dọn dẹp và reset toàn bộ trạng thái (State) của sơ đồ bàn về mặc định.
-     * Giúp triệt tiêu hoàn toàn xung đột dữ liệu khi nhân viên chuyển đổi qua lại
-     * giữa các luồng:
-     * Đặt bàn trước, Vào ăn ngay, Đổi bàn, Gộp bàn.
-     */
+
     public void clearAllState() {
         this.flowOrigin = "";
         this.isMerging = false;
@@ -1105,9 +1100,7 @@ public class PanelDatBan extends javax.swing.JPanel {
         }
     }
 
-    /**
-     * Thực hiện logic GỘP BÀN: Chỉ THÊM bàn mới, KHÔNG xóa bàn cũ
-     */
+
     private void executeMergeTableFlow() {
         String currentMaPhieuDat = HoaDonDraftSession.getCurrentMaPhieuDatContext();
         if (currentMaPhieuDat == null || currentMaPhieuDat.isEmpty()) {

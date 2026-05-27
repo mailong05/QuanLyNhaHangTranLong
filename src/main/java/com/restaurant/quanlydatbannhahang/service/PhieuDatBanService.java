@@ -200,7 +200,11 @@ public class PhieuDatBanService {
             ct.setBan(banService.getBanTheoMa(maBan));
             ct.setGhiChu("");
             chiTietPhieuDatBanDAO.themChiTietPhieuDatBan(ct);
-            banService.capNhatTrangThaiBan(maBan, TrangThaiBan.DA_DAT);
+            if (!kiemTraBanCoPhieuDangSuDung(maBan)) {
+                if (thoiGianDen.toLocalDate().equals(java.time.LocalDate.now())) {
+                    banService.capNhatTrangThaiBan(maBan, TrangThaiBan.DA_DAT);
+                }
+            }
         }
         return "Đặt bàn thành công cho khách hàng " + tenKhachHang;
     }
@@ -292,4 +296,11 @@ public class PhieuDatBanService {
 		// TODO Auto-generated method stub
 		phieuDatBanDAO.capNhatThoiGianDen(maPhieuDat, thoiGianDen);
 	   }
+	   
+	   public boolean kiemTraBanCoPhieuDangSuDung(String maBan) {
+	        if (maBan == null || maBan.isBlank()) {
+	            return false;
+	        }
+	        return phieuDatBanDAO.kiemTraBanCoPhieuDangSuDung(maBan);
+	    }
 }

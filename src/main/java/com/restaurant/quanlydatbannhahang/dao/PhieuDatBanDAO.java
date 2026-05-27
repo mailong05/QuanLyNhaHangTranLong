@@ -215,16 +215,29 @@ public class PhieuDatBanDAO {
         List<String> dsBanTrong = new ArrayList<>();
         Connection connection = DatabaseConnection.getConnection();
         
-        String sql = "SELECT maBan FROM BanAn WHERE maBan NOT IN (" +
-                     "    SELECT ctpdb.maBan FROM ChiTietPhieuDatBan ctpdb " +
-                     "    INNER JOIN PhieuDatBan pdb ON ctpdb.maPhieuDat = pdb.maPhieuDat " +
-                     "    WHERE CONVERT(date, pdb.thoiGianDen) = ? " +
-                     "    AND pdb.trangThai = N'DANG_CHO'" +
-                     ") AND trangThai != N'DANG_SU_DUNG'"; 
+        java.time.LocalDate targetDate = targetTime.toLocalDate();
+        java.time.LocalDate today = java.time.LocalDate.now();
+        
+        String sql;
+        if (targetDate.equals(today)) {
+            sql = "SELECT maBan FROM BanAn WHERE maBan NOT IN (" +
+                  "    SELECT ctpdb.maBan FROM ChiTietPhieuDatBan ctpdb " +
+                  "    INNER JOIN PhieuDatBan pdb ON ctpdb.maPhieuDat = pdb.maPhieuDat " +
+                  "    WHERE CONVERT(date, pdb.thoiGianDen) = ? " +
+                  "    AND pdb.trangThai = N'DANG_CHO'" +
+                  ") AND trangThai != N'DANG_DUNG'";
+        } else {
+              sql = "SELECT maBan FROM BanAn WHERE maBan NOT IN (" +
+                  "    SELECT ctpdb.maBan FROM ChiTietPhieuDatBan ctpdb " +
+                  "    INNER JOIN PhieuDatBan pdb ON ctpdb.maPhieuDat = pdb.maPhieuDat " +
+                  "    WHERE CONVERT(date, pdb.thoiGianDen) = ? " +
+                  "    AND pdb.trangThai = N'DANG_CHO'" +
+                  ")";
+        }
                      
         try {
             PreparedStatement pstm = connection.prepareStatement(sql);
-            pstm.setDate(1, java.sql.Date.valueOf(targetTime.toLocalDate()));
+            pstm.setDate(1, java.sql.Date.valueOf(targetDate));
             ResultSet rs = pstm.executeQuery();
             
             while (rs.next()) {
@@ -488,4 +501,23 @@ public class PhieuDatBanDAO {
 	        return false;
 	}
 	
+	
+	public boolean kiemTraBanCoPhieuDangSuDung(String maBan) {
+        Connection connection = DatabaseConnection.getConnection();
+        String sql = "SELECT COUNT(*) FROM ChiTietPhieuDatBan ct " +
+                     "INNER JOIN PhieuDatBan p ON ct.maPhieuDat = p.maPhieuDat " +
+                     "WHERE ct.maBan = ? AND p.trangThai = N'DANG_SU_DUNG'";
+        
+        try (PreparedStatement pstm = connection.prepareStatement(sql)) {
+            pstm.setString(1, maBan);
+            try (ResultSet rs = pstm.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0; 
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
